@@ -5,12 +5,14 @@ cluster = MongoClient("mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/t
 db = cluster["shifter_db"]
 collection = db["users"]
 
-def doLogin(username, password):
-    result = collection.find_one({"email": username})
+def doLogin( username, password):
+    try:
+        result = collection.find_one({"email": username})
+    except:
+        return {'status': False, 'msg': 'DB Error'}
     if not result:
-        return "Not found user"
+        return {'status': False, 'msg': 'User not found'}
     if result["password"] == password:
-        return "Login succsesfully"
+        return {'status': True, 'data': result}
     else:
-        return "Wrong password"
-    return "User found"
+        return {'status': False, 'msg': 'Wrong Password'}
