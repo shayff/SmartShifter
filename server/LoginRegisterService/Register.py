@@ -1,33 +1,24 @@
 import LoginRegisterService
 import json
+from pymongo import MongoClient
+cluster = MongoClient("mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority")
+db = cluster["shifter_db"]
+collection = db["users"]
 
 
-json_string = """
-{
-"type": "object",
-    "properties": {
-        "Email":"aaaaa" ,
-        "Password": "aaaa",
-        "Id Number": "21312414",
-        "Phone": "0542011196",
-        "First Name": "aaaa",
-        "Last Name": "aadc",
-        "Address": "AvdvsdV",
-        "Date of birth":"20.11.1990" 
-}
-"""
 
-def insert_New_User(myjson,count):
-   result = records.find_one({'Email': myjson["Email"]})
+def insert_New_User(myjson):
+   myjson['Email']=myjson['Email'].lower()
+   print(myjson)
+   result = collection.find_one({'Email': myjson["Email"]})
    if result:
-       return False
+       return "There is already user with this email"
    else:
-       temp = myjson['properties']
-       y = {"_id":count+1}
-       temp.update(y)
-       collection.insertOne(myjson)
+      count_doc = collection.count_documents({})
+      y = {"_id": count_doc+1}
+      myjson.update(y)
+      collection.insert_one(myjson)
+      return "succses"
 
 
-count_doc = collection.count_documents({})
-insert_New_User(json_string,count_doc)
 

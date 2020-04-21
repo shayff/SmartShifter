@@ -1,9 +1,10 @@
-from config import FlaskConfig
+#from config import FlaskConfig
 from flask import Flask, request, jsonify
 import datetime
 from flask_jwt_extended import JWTManager, jwt_required, create_refresh_token
 from schemas import validate_register
 from LoginRegisterService.Login import doLogin
+from LoginRegisterService.Register import insert_New_User
 #from LoginRegisterService.Register import doRegister
 
 
@@ -39,7 +40,7 @@ def profile():
 def Register():
     data = validate_register(request.get_json())
     if data["status"]:
-        return "valid"
+        return insert_New_User(data["data"])
     else:
         return "error"
 '''
