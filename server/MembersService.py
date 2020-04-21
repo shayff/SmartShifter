@@ -1,11 +1,24 @@
 #from config import FlaskConfig
 from flask import Flask, request, jsonify
 import datetime
+import json
 from flask_jwt_extended import JWTManager, jwt_required, create_refresh_token
-from schemas import validate_register
-from LoginRegisterService.Login import doLogin
-from LoginRegisterService.Register import insert_New_User
-#from LoginRegisterService.Register import doRegister
+from MembersService.Login import doLogin
+from MembersService.Register import doRegister
+from bson.objectid import ObjectId
+
+#from MembersService.Register import doRegister
+
+class JSONEncoder(json.JSONEncoder):
+    ''' extend json-encoder class'''
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        if isinstance(o, set):
+            return list(o)
+        if isinstance(o, datetime.datetime):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
 
 
 app = Flask(__name__)
@@ -13,22 +26,18 @@ app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['JWT_SECRET_KEY'] = "1asdasd#$$!1ddX"
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 jwt = JWTManager(app)
-
+app.json_encoder = JSONEncoder
 
 @app.route("/")
 def Home():
     return "home"
 
-
 @app.route("/login", methods=['POST'])
 def Login():
-    result = doLogin(request.headers.get('username'), request.headers.get('password'))
-    if(result['status']):
-        create_refresh_token(identity=result['data']['_id'])
-        return "connected"
-    else:
-        return "not"
-
+    #varo = doLogin(request.get_json())
+    #print("varo");
+    #return "bla"
+    return doLogin(request.get_json())
 
 @app.route("/profile")
 @jwt_required
@@ -38,11 +47,7 @@ def profile():
 
 @app.route("/register", methods=['POST'])
 def Register():
-    data = validate_register(request.get_json())
-    if data["status"]:
-        return insert_New_User(data["data"])
-    else:
-        return "error"
+    return doRegister(request.get_json())
 '''
 @app.route("/logout", methods=['POST'])
 def Logout():

@@ -5,42 +5,42 @@ from jsonschema.exceptions import SchemaError
 register_schema = {
     "type": "object",
     "properties": {
-        "Email": {
+        "email": {
             "type": "string",
             "format": "email"
         },
-        "Password": {
+        "password": {
+            "type": "string",
+            "minLength": 5
+        },
+        "id number": {
             "type": "string",
             "minLength": 8
         },
-        "Id Number": {
-            "type": "string",
-            "minLength": 8
-        },
-        "Phone": {
+        "phone": {
             "type": "string"
         },
-        "First Name": {
+        "first name": {
             "type": "string"
         },
-        "Last Name": {
+        "last name": {
             "type": "string"
         },
-        "Address": {
+        "address": {
             "type": "string"
         },
-        "Date of birth": {
+        "date of birth": {
             "type": "string"
         }
 
     },
     "required": [
-        "Email",
-        "Password",
-        "Id Number",
-        "Phone",
-        "First Name",
-        "Last Name"
+        "email",
+        "password",
+        "id number",
+        "phone",
+        "first name",
+        "last name"
     ],
     "additionalProperties": False
 }
@@ -49,7 +49,7 @@ def validate_register(data):
     try:
         validate(data, register_schema)
     except ValidationError as e:
-        return {'status': False, 'message': e}
+        return {'ok': False, 'msg': e}
     except SchemaError as e:
-        return {'status': False, 'message': e}
-    return {'status': True, 'data': data}
+        return {'ok': False, 'msg': e}
+    return {'ok': True, 'data': data}
