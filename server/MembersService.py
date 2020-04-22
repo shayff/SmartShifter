@@ -2,12 +2,11 @@
 from flask import Flask, request, jsonify
 import datetime
 import json
-from flask_jwt_extended import JWTManager, jwt_required, create_refresh_token
+from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity
 from MembersService.Login import doLogin
 from MembersService.Register import doRegister
 from bson.objectid import ObjectId
 
-#from MembersService.Register import doRegister
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -28,31 +27,33 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 jwt = JWTManager(app)
 app.json_encoder = JSONEncoder
 
+@jwt.unauthorized_loader
+def unauthorized_response(callback):
+    return jsonify({
+        'ok': False,
+        'message': 'Missing Authorization Header'
+    }), 401
+
 @app.route("/")
 def Home():
     return "home"
 
 @app.route("/login", methods=['POST'])
 def Login():
-    #varo = doLogin(request.get_json())
-    #print("varo");
-    #return "bla"
     return doLogin(request.get_json())
 
 @app.route("/profile")
 @jwt_required
 def profile():
+    current_user = get_jwt_identity()
+    print(current_user)
     return "hello";
 
 
 @app.route("/register", methods=['POST'])
 def Register():
     return doRegister(request.get_json())
-'''
-@app.route("/logout", methods=['POST'])
-def Logout():
-    return doLogout()
-'''
+
 
 #for dubg
 if __name__== '__main__':

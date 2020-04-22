@@ -7,7 +7,6 @@ cluster = MongoClient("mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/t
 db = cluster["shifter_db"]
 collection = db["users"]
 
-#def doLogin( username, password):
 def doLogin(userInput):
     data=validate_login(userInput)
     if data['ok']:
