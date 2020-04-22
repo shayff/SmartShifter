@@ -34,12 +34,12 @@ def unauthorized_response(callback):
         'message': 'Missing Authorization Header'
     }), 401
 
-@app.route("/")
-def Home():
-    return "home"
-
 @app.route("/login", methods=['POST'])
 def Login():
+    return doLogin(request.get_json())
+
+@app.route("/logout")
+def Logout():
     return doLogin(request.get_json())
 
 @app.route("/profile")
@@ -49,11 +49,14 @@ def profile():
     print(current_user)
     return "hello";
 
-
 @app.route("/register", methods=['POST'])
 def Register():
     return doRegister(request.get_json())
 
+#@app.route("/updateprofile", methods=['POST'])
+#@jwt_required
+#def profileUpdate():
+    #return doUpdateProfile(request.get_json())
 
 #for dubg
 if __name__== '__main__':
