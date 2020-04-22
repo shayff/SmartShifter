@@ -3,12 +3,13 @@ from .schemas.register import validate_register
 from flask import jsonify
 from pymongo import ReturnDocument
 from datetime import datetime
+from config import MongoConfig
 
-cluster = MongoClient("mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority")
-db = cluster["shifter_db"]
+#connect to database
+cluster = MongoClient(MongoConfig['ConnectionString'])
+db = cluster[MongoConfig['ClusterName']]
 collection = db["users"]
 counter = db["counters"]
-
 
 def doRegister(data):
    data = validate_register(data)
