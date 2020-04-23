@@ -20,8 +20,8 @@ def doLogin(userInput):
             del user['password']
 
             #create jwt token
-            access_token = create_access_token(identity=data)
-            refresh_token = create_refresh_token(identity=data)
+            access_token = create_access_token(identity=user)
+            refresh_token = create_refresh_token(identity=user)
             user['token'] = access_token
             user['refresh'] = refresh_token
             return jsonify({'ok': True, 'data': user}), 200
