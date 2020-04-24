@@ -3,14 +3,14 @@ import { StyleSheet, Text, View, TextInput, Button, FlatList, Alert, TouchableWi
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import User_registration from '../component/comp_enter_screen/user_registration';
 
-class Enter_screen extends Component {
+export default class Enter_screen extends Component {
 
 
 
   render() {  
         return(
         <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
-            <View>
+            <View style={Styles.user_input}>
                 <User_registration/>
             </View>
         </TouchableWithoutFeedback>
@@ -20,4 +20,16 @@ class Enter_screen extends Component {
 
 }
 
-export default Enter_screen;
+const Styles = StyleSheet.create({
+
+    user_input:
+    {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#FF9999',
+        borderWidth:10,
+        flex: 1,
+    },
+
+        
+    });
