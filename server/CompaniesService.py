@@ -5,6 +5,7 @@ import json
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity,get_raw_jwt
 from bson.objectid import ObjectId
 from CompaniesService.Create import doCreate
+from CompaniesService.AddEmployees import doAddEmployees
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -42,8 +43,13 @@ def check_if_token_in_blacklist(decrypted_token):
 
 @app.route("/create", methods=['POST'])
 @jwt_required
-def Login():
+def Create():
     return doCreate(request.get_json())
+
+@app.route("/companies/addemployees", methods=['POST'])
+@jwt_required
+def AddEmployees():
+    return doAddEmployees(request.get_json())
 
 #for dubg
 if __name__== '__main__':
