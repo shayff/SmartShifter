@@ -2,10 +2,11 @@
 from flask import Flask, request, jsonify
 import datetime
 import json
-from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity,get_raw_jwt
+from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
 from CompaniesService.Create import doCreate
 from CompaniesService.AddEmployees import doAddEmployees
+from CompaniesService.RemoveEmployees import doRemoveEmployees
 from CompaniesService.Update import doUpdate
 
 class JSONEncoder(json.JSONEncoder):
@@ -51,6 +52,11 @@ def Create():
 @jwt_required
 def AddEmployees():
     return doAddEmployees(request.get_json())
+
+@app.route("/companies/removeemployees", methods=['POST'])
+@jwt_required
+def RemoveEmployees():
+    return doRemoveEmployees(request.get_json())
 
 @app.route("/companies/update", methods=['POST'])
 @jwt_required
