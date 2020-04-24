@@ -17,14 +17,13 @@ def doCreate(data):
    data = validate_create(data)
    if data["ok"]:
       data=data["data"]
-      #data['email'] = data['email'].lower()
       current_user = get_jwt_identity()
       result = users_collection.find_one({'_id': current_user['_id']})
-      if result["company"]:
+      if "company" in result:
          return jsonify({'ok': False, 'msg': 'User has already company'}), 401
       else:
          # update counter Companies
-         doc = counter.find_one_and_update({}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
+         doc = counter.find_one_and_update({"_id":"companyid"}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
          countId = doc['value']
          data.update({"_id": countId})
 
