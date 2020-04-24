@@ -21,7 +21,7 @@ def doRegister(data):
          return jsonify({'ok': False, 'msg': 'User with email address already exists'}), 401
       else:
          # update counter Users
-         doc = counter.find_one_and_update({}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
+         doc = counter.find_one_and_update({'_id': 'userid'}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
          countId = doc['value']
          data.update({"_id": countId})
 

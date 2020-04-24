@@ -7,6 +7,8 @@ from MembersService.Login import doLogin
 from MembersService.Register import doRegister
 from bson.objectid import ObjectId
 
+from server.MembersService.UpdateProfile import doUpdateProfile
+
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
