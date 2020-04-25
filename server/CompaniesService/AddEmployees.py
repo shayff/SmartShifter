@@ -24,17 +24,17 @@ def doAddEmployees(data):
 
          #iterate for each epmloye, check if he has company and add if not
          for employe in employees:
-            user_result = users_collection.find_one({"_id":employe})
+            user_result = users_collection.find_one({"_id":employe["id"]})
             if user_result and "company" not in user_result:
-               users_collection.find_one_and_update({"_id":employe},{"$set": {"company": company_id}})
+               users_collection.find_one_and_update({"_id":employe["id"]},{"$set": {"company": company_id}})
             else:
                employees_not_updated.append(employe)
 
          #remove employees that already have company
          employees = [x for x in employees if x not in employees_not_updated]
-
+         print(employees)
          # update employees in the company
-         companies_collection.find_one_and_update({'_id': company_id}, {"$addToSet": {'employees': {"$each": data["employees"]}}})
+         companies_collection.find_one_and_update({'_id': company_id}, {"$addToSet": {'employees': {"$each": employees}}})
          return jsonify({'ok': True, 'msg': 'Added employees', 'added': employees, 'not added': employees_not_updated}), 200
       else:
          return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401

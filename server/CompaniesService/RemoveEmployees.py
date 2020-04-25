@@ -25,19 +25,15 @@ def doRemoveEmployees(data):
 
          # check if the relevance employees in the company
          company = companies_collection.find_one({'_id': company_id})
-         employees_not_updated = [x for x in employees if x not in company["employees"]]
+         employees_id_list = [employee["id"] for employee in company["employees"]]
+         employees_not_updated = [x for x in employees if x not in employees_id_list]
          employees = [x for x in employees if x not in employees_not_updated]
-
-         print(employees_not_updated)
-         print(employees)
 
          #iterate for each epmloye, remove his company id
          for employe in employees:
             users_collection.find_one_and_update({"_id":employe},{"$unset": {"company": ""}})
+            companies_collection.find_one_and_update({"_id": company_id}, {"$pull": {"employees": {"id": employe}}})
 
-
-         # update employees in the company
-         companies_collection.find_one_and_update({"_id": company_id}, {"$pull": {"employees": {"$in": employees}}})
          return jsonify({'ok': True, 'msg': 'Removed employees', 'removed': employees, 'not removed': employees_not_updated}), 200
       else:
          return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401
