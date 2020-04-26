@@ -1,4 +1,6 @@
 
+
+company_id = 2
 # get list of shifts
 
 # get list of employees
