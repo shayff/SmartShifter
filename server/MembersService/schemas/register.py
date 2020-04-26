@@ -32,7 +32,6 @@ register_schema = {
         "date of birth": {
             "type": "string"
         }
-
     },
     "required": [
         "email",
