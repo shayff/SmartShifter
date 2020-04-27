@@ -46,7 +46,19 @@ def isEmployeeCanWork(shift,employee):
 
 def rankShift(shift,dictOfEmployees):
     for employee in shift["employees_can_work"]:
-        print(dictOfEmployees[employee["id"]])
+        rank=0
+        for employePrefenceOfDay in dictOfEmployees[employee["id"]]["prefence"]:
+
+            #check if employee prefer or available to the shift
+            if employePrefenceOfDay["day"] == shift["day"]:
+                if shift["day part"] in employePrefenceOfDay["prefer"]:
+                    rank+=3
+                elif shift["day part"] in employePrefenceOfDay["available"]:
+                    rank+=1
+        #add the employee rank given by manager
+        rank+=dictOfEmployees[employee["id"]]["rank"]
+
+        employee["rank"]=rank
         #print(employee)
     return
 
@@ -56,12 +68,28 @@ def dictFromListOfEmployees(list_of_employees):
         result[employee["id"]] = employee
     return result
 
+def updateShiftCount(dictOfEmployees):
+    for key in dictOfEmployees:
+        preferCount=0
+        availableCount=0
+        for prefenceOfDay in dictOfEmployees[key]["prefence"]:
+            preferCount += len(prefenceOfDay["prefer"])
+            availableCount += len(prefenceOfDay["available"])
+        dictOfEmployees[key]["count of given prefence"] = preferCount
+        dictOfEmployees[key]["count of shift scheduled"] = availableCount
+    print(dictOfEmployees)
+    return
+
 def buildShifts():
     # fot each shift, add the employee that "available" or "prefer"
     listOfCompleteShift = []
     list_of_shifts = get_list_of_shifts()
     list_of_employees = get_list_of_employees()
     dictOfEmployees = dictFromListOfEmployees(list_of_employees)
+
+    #for each employee update how many shift he asked for, and add a place to count how many he got
+    updateShiftCount(dictOfEmployees)
+
     for shift in list_of_shifts:
         shift["employees_can_work"] = []
         for employee in list_of_employees:
@@ -74,8 +102,8 @@ def buildShifts():
             listOfCompleteShift.append(shift)
             list_of_shifts.remove(shift)
 
-    print(listOfCompleteShift)
-    print(list_of_shifts)
+    #print(listOfCompleteShift)
+    #print(list_of_shifts)
 
     #while there are shifts with "available" or "prefer" employee
     for shift in list_of_shifts:
