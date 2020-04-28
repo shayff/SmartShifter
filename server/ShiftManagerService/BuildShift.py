@@ -126,7 +126,10 @@ def rankShift(shift,dictOfEmployees):
                 elif shift['day part'] in employePrefenceOfDay['available']:
                     rank += 1
         #add the employee rank given by manager
-        rank+=dictOfEmployees[employee['id']]['rank']
+        rank += dictOfEmployees[employee['id']]['rank']
+
+        #add the shift rank
+        rank += shift['difficulty']
 
         #add the
         rank += dictOfEmployees[employee['id']]['count of given prefence']-dictOfEmployees[employee['id']]['count of shift scheduled']
