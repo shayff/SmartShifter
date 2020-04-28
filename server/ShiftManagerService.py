@@ -150,6 +150,10 @@ def buildShifts():
             # pass shit to completed
             listOfCompleteShift.append(shift)
             listOfShifts.remove(shift)
+    print("shift that didnt completed:")
+    print(listOfShifts)
+    print("list of finish shifts:")
+    print(listOfCompleteShift)
     return
 
 
