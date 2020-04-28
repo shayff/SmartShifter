@@ -103,27 +103,27 @@ def getListOfEmployees(companyId):
     list_of_employees = company['employees']
     return list_of_employees
 
-def getThePrefenceByDay(employeePrefence, day):
-    #return the employee prefence of given day
-    for x in employeePrefence:
+def getThepreferenceByDay(employeepreference, day):
+    #return the employee preference of given day
+    for x in employeepreference:
         if(x['day'] == day):
             return x
     return None
 
 def isEmployeeCanWork(shift,employee):
-    prefnceForTheShiftDay = getThePrefenceByDay(employee['prefence'], shift['day'])
+    prefnceForTheShiftDay = getThepreferenceByDay(employee['preference'], shift['day'])
     return shift['day part'] in prefnceForTheShiftDay['prefer'] or shift['day part'] in prefnceForTheShiftDay['available']
 
 def rankShift(shift,dictOfEmployees):
     for employee in shift['employees_can_work']:
         rank = 0
-        for employePrefenceOfDay in dictOfEmployees[employee['id']]['prefence']:
+        for employepreferenceOfDay in dictOfEmployees[employee['id']]['preference']:
 
             #check if employee prefer or available to the shift
-            if employePrefenceOfDay['day'] == shift['day']:
-                if shift['day part'] in employePrefenceOfDay['prefer']:
+            if employepreferenceOfDay['day'] == shift['day']:
+                if shift['day part'] in employepreferenceOfDay['prefer']:
                     rank += 3
-                elif shift['day part'] in employePrefenceOfDay['available']:
+                elif shift['day part'] in employepreferenceOfDay['available']:
                     rank += 1
         #add the employee rank given by manager
         rank += dictOfEmployees[employee['id']]['rank']
@@ -132,7 +132,7 @@ def rankShift(shift,dictOfEmployees):
         rank += shift['difficulty']
 
         #add the
-        rank += dictOfEmployees[employee['id']]['count of given prefence']-dictOfEmployees[employee['id']]['count of shift scheduled']
+        rank += dictOfEmployees[employee['id']]['count of given preference']-dictOfEmployees[employee['id']]['count of shift scheduled']
 
         employee['rank'] = rank
     return
@@ -147,10 +147,10 @@ def updateShiftCount(dictOfEmployees):
     for key in dictOfEmployees:
         preferCount = 0
         availableCount = 0
-        for prefenceOfDay in dictOfEmployees[key]['prefence']:
-            preferCount += len(prefenceOfDay['prefer'])
-            availableCount += len(prefenceOfDay['available'])
-        dictOfEmployees[key]['count of given prefence'] = preferCount + availableCount
+        for preferenceOfDay in dictOfEmployees[key]['preference']:
+            preferCount += len(preferenceOfDay['prefer'])
+            availableCount += len(preferenceOfDay['available'])
+        dictOfEmployees[key]['count of given preference'] = preferCount + availableCount
         dictOfEmployees[key]['count of shift scheduled'] = 0
     return
 
