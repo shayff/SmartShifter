@@ -16,7 +16,7 @@ export default class Login extends Component {
                 <Text style={Styles.smallTitle}>Make It Simple</Text>
                 </View>
                 <View>
-                    <LoginForm/>
+                    <LoginForm fatherProps={this.props}/>
                 </View>
             </View>
         

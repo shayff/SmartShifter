@@ -12,25 +12,26 @@ export default class LoginForm extends Component {
     }
   }
   
-  check_password()
+  check_password= () =>
   {
-    if (this.state.password.length > 3)
+    if (this.state.password.length >= 3)
     {
       return true;
     }
     else {return false;}
   }
 
-  confirm_input_data_user()
+  confirm_input_data_user = () =>
   {
     
     if (this.check_password())
     {
-      console.log('password in good go to check data');
+      Alert.alert('password in good go to check data');
+      this.props.fatherProps.navigation.navigate('ReviewDetails');
     }
     else
     {
-      Alert.alert('oops','the gole need to be atlist 3 char');
+      Alert.alert('the gole need to be atlist 3 char');
     }
 
   }

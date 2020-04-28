@@ -17,7 +17,7 @@ export default function Navigator_stack() {
           headerStyle: {
             backgroundColor: '#0048BA', 
           }, headerTintColor: '#fff',alignItems:'center',}} name='Home' component={Login} />
-        <Stack.Screen name='ReviewDetails' component={Cross_screen} />
+        <Stack.Screen name='Cross_screen' component={Cross_screen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
