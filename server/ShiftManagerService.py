@@ -18,14 +18,12 @@ def get_list_of_shifts():
     list_of_shifts = company['shifts']
     return list_of_shifts
 
-
 def getPartOfDayToTime():
     company = companies_collection.find_one({'_id': company_id})
     PartOfDayToTimeDict = dict()
     for daypart in company["day parts"]:
         PartOfDayToTimeDict[daypart["id"]] = {"start time": datetime.strptime(daypart["start time"], "%H:%M"), "end time": datetime.strptime(daypart["end time"])}
     return PartOfDayToTimeDict
-
 
 # get list of employees
 def get_list_of_employees():
@@ -58,8 +56,10 @@ def rankShift(shift,dictOfEmployees):
         #add the employee rank given by manager
         rank+=dictOfEmployees[employee["id"]]["rank"]
 
+        #add the
+        rank+= dictOfEmployees[employee["id"]]["count of given prefence"]-dictOfEmployees[employee["id"]]["count of shift scheduled"]
+
         employee["rank"]=rank
-        #print(employee)
     return
 
 def dictFromListOfEmployees(list_of_employees):
@@ -75,44 +75,81 @@ def updateShiftCount(dictOfEmployees):
         for prefenceOfDay in dictOfEmployees[key]["prefence"]:
             preferCount += len(prefenceOfDay["prefer"])
             availableCount += len(prefenceOfDay["available"])
-        dictOfEmployees[key]["count of given prefence"] = preferCount
-        dictOfEmployees[key]["count of shift scheduled"] = availableCount
-    print(dictOfEmployees)
+        dictOfEmployees[key]["count of given prefence"] = preferCount + availableCount
+        dictOfEmployees[key]["count of shift scheduled"] = 0
+    return
+
+def getEmployeeByHigestRank(listOfShifts):
+    maxRank=float('-inf')
+    maxRankEmployee=None
+    for shift in listOfShifts:
+        for employee in shift["employees_can_work"]:
+            if employee["rank"] > maxRank:
+                maxRank=employee["rank"]
+                maxRankEmployee=employee
+                maxShift = shift
+    return maxShift, maxRankEmployee
+
+def scheduleAllEmployeesToShift(shift, dictOfEmployees, listOfShifts):
+    while(shift["employees_can_work"]):
+        scheduleEmployeeToShift(shift["employees_can_work"][0], shift, dictOfEmployees, listOfShifts)
+    return
+
+def scheduleEmployeeToShift(employee, shiftToSchedule, dictOfEmployees, listOfShifts):
+    dictOfEmployees[employee["id"]]["count of shift scheduled"]+=1
+    for shift in listOfShifts:
+        if shift["day"] == shiftToSchedule["day"]:
+            shift["employees_can_work"].remove(employee)
+    shiftToSchedule["employees"].append(employee["id"])
     return
 
 def buildShifts():
     # fot each shift, add the employee that "available" or "prefer"
     listOfCompleteShift = []
-    list_of_shifts = get_list_of_shifts()
+    listOfShifts = get_list_of_shifts()
     list_of_employees = get_list_of_employees()
     dictOfEmployees = dictFromListOfEmployees(list_of_employees)
 
     #for each employee update how many shift he asked for, and add a place to count how many he got
     updateShiftCount(dictOfEmployees)
 
-    for shift in list_of_shifts:
+    for shift in listOfShifts:
         shift["employees_can_work"] = []
         for employee in list_of_employees:
             if isEmployeeCanWork(shift,employee):
                 shift["employees_can_work"].append({"id": employee["id"], "rank":0})
 
-    # remove the shifts that have the right amount of people
-    for shift in list_of_shifts:
-        if shift["amount"] >= len(shift["employees_can_work"]):
-            listOfCompleteShift.append(shift)
-            list_of_shifts.remove(shift)
+    # while there are shifts with "available" or "prefer" employee
+    while listOfShifts:
+        # remove the shifts that have the right amount of people
 
-    #print(listOfCompleteShift)
-    #print(list_of_shifts)
+        isChanged=True
+        while isChanged:
+            isChanged = False
+            for shift in listOfShifts:
+                if shift["amount"] >= len(shift["employees_can_work"]):
+                    scheduleAllEmployeesToShift(shift,dictOfEmployees, listOfShifts)
+                    listOfCompleteShift.append(shift)
+                    listOfShifts.remove(shift)
+                    isChanged=True
+                    break
 
-    #while there are shifts with "available" or "prefer" employee
-    for shift in list_of_shifts:
-        rankShift(shift,dictOfEmployees)
+        # check if there is no more shifts
+        if not listOfShifts:
+            break
+
         # rank each employee match to a shift
+        for shift in listOfShifts:
+            rankShift(shift,dictOfEmployees)
 
         # scehdule the employee with the higest rank
+        shiftToSched, employeeToSched = getEmployeeByHigestRank(listOfShifts)
+        scheduleEmployeeToShift(employeeToSched, shiftToSched, dictOfEmployees, listOfShifts)
 
-        # remove the shift
+        if shiftToSched["amount"] >= len(shiftToSched["employees"]):
+            # pass shit to completed
+            listOfCompleteShift.append(shift)
+            listOfShifts.remove(shift)
     return
 
 
