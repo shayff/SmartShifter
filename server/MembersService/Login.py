@@ -17,8 +17,9 @@ def doLogin(userInput):
         #Search for user in database
         user = collection.find_one({'email': data['email']})
         if user and user['password'] == data['password']:
+            del user["password"]
+            # create jwt token
             token = {'_id': user['_id'], 'email': user['email']}
-            #create jwt token
             access_token = create_access_token(identity=user)
             refresh_token = create_refresh_token(identity=user)
             user['token'] = access_token
