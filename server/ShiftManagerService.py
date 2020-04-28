@@ -80,7 +80,7 @@ def updateShiftCount(dictOfEmployees):
     return
 
 def getEmployeeByHigestRank(listOfShifts):
-    maxRank=float('-inf')
+    maxRank = float('-inf')
     maxRankEmployee = None
     for shift in listOfShifts:
         for employee in shift["employees_can_work"]:
@@ -154,7 +154,7 @@ def buildShifts():
             del shift["employees_can_work"]
             listOfCompleteShift.append(shift)
             listOfShifts.remove(shift)
-    print("shift that didnt completed:")
+    print("shift that did'nt completed:")
     print(listOfShifts)
     print("list of finish shifts:")
     print(listOfCompleteShift)
