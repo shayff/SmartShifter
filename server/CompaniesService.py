@@ -8,6 +8,7 @@ from CompaniesService.Create import doCreate
 from CompaniesService.AddEmployees import doAddEmployees
 from CompaniesService.RemoveEmployees import doRemoveEmployees
 from CompaniesService.Update import doUpdate
+from CompaniesService.ListOfEmployees import doListOfEmployees
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -35,7 +36,7 @@ blacklist = set()
 def unauthorized_response(callback):
     return jsonify({
         'ok': False,
-        'message': 'Missing Authorization Header'
+        'msg': 'Missing Authorization Header'
     }), 401
 
 @jwt.token_in_blacklist_loader
@@ -63,6 +64,10 @@ def RemoveEmployees():
 def Update():
     return doUpdate(request.get_json())
 
+@app.route("/companies/listofemployees", methods=['GET'])
+@jwt_required
+def ListOfEmployees():
+    return doListOfEmployees()
 
 #for dubg
 if __name__== '__main__':

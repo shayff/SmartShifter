@@ -71,11 +71,16 @@ def profile():
 def Register():
     return doRegister(request.get_json())
 
-@app.route("/updateprofile", methods=['POST'])
+@app.route('/updateprofile', methods=['POST'])
 @jwt_required
 def profileUpdate():
     return doUpdateProfile(request.get_json())
 
-#for dubg
+@app.route('/listofemployees', methods=['GET'])
+@jwt_required
+def listOfEmployees():
+    return doListOfEmployees()
+
+#for debug
 if __name__== '__main__':
     app.run(debug=True, port=5000)
