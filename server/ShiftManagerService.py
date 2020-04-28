@@ -129,6 +129,8 @@ def buildShifts():
             for shift in listOfShifts:
                 if shift["amount"] >= len(shift["employees_can_work"]):
                     scheduleAllEmployeesToShift(shift,dictOfEmployees, listOfShifts)
+                    # pass shift to completed
+                    del shift["employees_can_work"]
                     listOfCompleteShift.append(shift)
                     listOfShifts.remove(shift)
                     isChanged=True
@@ -146,8 +148,10 @@ def buildShifts():
         shiftToSched, employeeToSched = getEmployeeByHigestRank(listOfShifts)
         scheduleEmployeeToShift(employeeToSched, shiftToSched, dictOfEmployees, listOfShifts)
 
-        if shiftToSched["amount"] >= len(shiftToSched["employees"]):
-            # pass shit to completed
+        if shiftToSched["amount"] >= len(shiftToSched["employees_can_work"]) or shiftToSched["amount"] == len(shiftToSched["employees"]):
+            print("test")
+            # pass shift to completed
+            del shift["employees_can_work"]
             listOfCompleteShift.append(shift)
             listOfShifts.remove(shift)
     print("shift that didnt completed:")
