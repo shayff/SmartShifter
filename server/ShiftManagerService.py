@@ -19,7 +19,7 @@ class JSONEncoder(json.JSONEncoder):
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
-app.config['JWT_SECRET_KEY'] = "1asdasd#$$!1ddX"
+app.config['JWT_SECRET_KEY'] = '1asdasd#$$!1ddX'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
@@ -32,7 +32,7 @@ blacklist = set()
 def unauthorized_response(callback):
     return jsonify({
         'ok': False,
-        'msgs': 'Missing Authorization Header'
+        'msg': 'Missing Authorization Header'
     }), 401
 
 @jwt.token_in_blacklist_loader
@@ -40,7 +40,7 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route("/buildshift", methods=['GET'])
+@app.route('/buildshift', methods=['GET'])
 @jwt_required
 def buildShift():
     return doBuildShift()
