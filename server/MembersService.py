@@ -5,7 +5,7 @@ import json
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity,get_raw_jwt
 from MembersService.Login import doLogin
 from MembersService.Register import doRegister
-from MembersService.SendMessage import doSendMessage
+from MembersService.sendMessage import doSendMessage
 from bson.objectid import ObjectId
 
 from server.MembersService.UpdateProfile import doUpdateProfile
@@ -76,15 +76,16 @@ def Register():
 @jwt_required
 def profileUpdate():
     return doUpdateProfile(request.get_json())
-
+''''
 @app.route('/listofemployees', methods=['GET'])
 @jwt_required
 def listOfEmployees():
     return doListOfEmployees()
+'''
 
 @app.route('/sendmessage', methods=['POST'])
 @jwt_required
-def listOfEmployees():
+def SendMessage():
     return doSendMessage(request.get_json())
 
 
