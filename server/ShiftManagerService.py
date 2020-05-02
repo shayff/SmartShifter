@@ -4,12 +4,8 @@ import datetime
 import json
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
-from CompaniesService.Create import doCreate
-from CompaniesService.AddEmployees import doAddEmployees
-from CompaniesService.RemoveEmployees import doRemoveEmployees
-from CompaniesService.Update import doUpdate
-from CompaniesService.ListOfEmployees import doListOfEmployees
-
+from ShiftManagerService.BuildShift import doBuildShift
+from ShiftManagerService.AskToChangeShift import doAskToChangeShift
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
     def default(self, o):
@@ -23,7 +19,7 @@ class JSONEncoder(json.JSONEncoder):
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
-app.config['JWT_SECRET_KEY'] = "1asdasd#$$!1ddX"
+app.config['JWT_SECRET_KEY'] = '1asdasd#$$!1ddX'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
@@ -44,31 +40,16 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route("/create", methods=['POST'])
+@app.route('/buildshift', methods=['GET'])
 @jwt_required
-def Create():
-    return doCreate(request.get_json())
+def buildShift():
+    return doBuildShift()
 
-@app.route("/companies/addemployees", methods=['POST'])
+@app.route('/asktochangeshift', methods=['POST'])
 @jwt_required
-def AddEmployees():
-    return doAddEmployees(request.get_json())
-
-@app.route("/companies/removeemployees", methods=['POST'])
-@jwt_required
-def RemoveEmployees():
-    return doRemoveEmployees(request.get_json())
-
-@app.route("/companies/update", methods=['POST'])
-@jwt_required
-def Update():
-    return doUpdate(request.get_json())
-
-@app.route("/companies/listofemployees", methods=['GET'])
-@jwt_required
-def ListOfEmployees():
-    return doListOfEmployees()
+def askToChangeShift():
+    return doAskToChangeShift(request.get_json())
 
 #for dubg
 if __name__== '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5002)

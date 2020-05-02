@@ -14,7 +14,7 @@ counter = db["counters"]
 def doAddEmployees(data):
    data = validate_addemployees(data)
    if data["ok"]:
-      data=data["data"]
+      data = data["data"]
       current_user = get_jwt_identity()
       result = users_collection.find_one({'_id': current_user['_id']})
       if "company" in result:

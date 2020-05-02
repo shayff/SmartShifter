@@ -25,9 +25,10 @@ def doRegister(data):
          countId = doc['value']
          data.update({"_id": countId})
 
-         # update time created
+         # update time created and messages
          date = datetime.now()
          data.update({"time_created": date.ctime()})
+         data.update({"messages": []})
 
          # insert to db
          collection.insert_one(data)

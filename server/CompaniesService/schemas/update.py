@@ -31,7 +31,11 @@ update_schema = {
                     },
                     "required": ["id","name","start time", "end time"]
                   }
-                }
+                },
+        "shifts":
+            {
+                "type": "array"
+            }
     },
     "required": [],
     "additionalProperties": False
