@@ -25,7 +25,6 @@ def doBuildShift():
 def buildShifts(companyId):
     # fot each shift, add the employee that "available" or "prefer"
     listOfCompleteShift = []
-    listOfCompleteShift = []
     listOfShifts = getListOfShifts(companyId)
     listOfEmployees = getListOfEmployees(companyId)
     dictOfEmployees = dictFromListOfEmployees(listOfEmployees)
@@ -74,7 +73,7 @@ def buildShifts(companyId):
             del shift['employees_can_work']
             listOfCompleteShift.append(shift)
             listOfShifts.remove(shift)
-    print('shift that didnt completed:')
+    print('shift that did not completed:')
     print(listOfShifts)
     print('list of finish shifts:')
     print(listOfCompleteShift)
