@@ -23,6 +23,7 @@ def doListOfEmployees():
         for employee in employees:
             employeeFromDb = users_collection.find_one({'_id': employee['id']})
             employeeFromDb['job type'] = employee['job type']
+            employeeFromDb['rank'] = employee['rank']
             del employeeFromDb['password']
             del employeeFromDb['company']
             employeesResult.append(employeeFromDb)
