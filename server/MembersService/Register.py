@@ -21,14 +21,14 @@ def doRegister(data):
          return jsonify({'ok': False, 'msg': 'User with email address already exists'}), 401
       else:
          # update counter Users
-         doc = counters_collection.find_one_and_update({'_id': 'userid'}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
+         doc = counters_collection.find_one_and_update({'_id': 'userid'}, {'$inc': {'value': 1}}, return_document=ReturnDocument.AFTER)
          count_id = doc['value']
-         data.update({"_id": count_id})
+         data.update({'_id': count_id})
 
          # update time created and messages
          date = datetime.now()
-         data.update({"time_created": date.ctime()})
-         data.update({"messages": []})
+         data.update({'time_created': date.ctime()})
+         data.update({'messages': []})
 
          # insert to db
          users_collection.insert_one(data)

@@ -7,7 +7,7 @@ from config import MongoConfig
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
-users_collection = db["users"]
+users_collection = db['users']
 
 def doLogin(userInput):
     data = validate_login(userInput)
@@ -17,7 +17,7 @@ def doLogin(userInput):
         #Search for user in database
         user = users_collection.find_one({'email': data['email']})
         if user and user['password'] == data['password']:
-            del user["password"]
+            del user['password']
             # create jwt token
             token = {'_id': user['_id'], 'email': user['email']}
             access_token = create_access_token(identity=user)
