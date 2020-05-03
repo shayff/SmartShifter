@@ -2,15 +2,15 @@
 from flask import Flask, request, jsonify
 import datetime
 import json
-from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity,get_raw_jwt
+from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt
 from MembersService.Login import doLogin
 from MembersService.Register import doRegister
 from MembersService.SendMessage import doSendMessage
 from MembersService.GetMessage import doGetMessages
+from MembersService.Profile import doProfile
+
 from bson.objectid import ObjectId
-
 from server.MembersService.UpdateProfile import doUpdateProfile
-
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -34,7 +34,6 @@ app.json_encoder = JSONEncoder
 
 blacklist = set()
 
-
 @jwt.unauthorized_loader
 def unauthorized_response(callback):
     return jsonify({
@@ -49,7 +48,7 @@ def check_if_token_in_blacklist(decrypted_token):
 
 @app.route("/")
 def main():
-    return "hello eliran"
+    return 'hello eliran'
 
 @app.route("/login", methods=['POST'])
 def Login():
@@ -62,14 +61,12 @@ def Logout():
     blacklist.add(jti)
     return jsonify({"msg": "Successfully logged out"}), 200
 
-@app.route("/profile")
+@app.route("/profile", methods=['GET'])
 @jwt_required
 def profile():
-    current_user = get_jwt_identity()
-    print(current_user)
-    return "hello2";
+    return doProfile()
 
-@app.route("/register", methods=['POST'])
+@app.route('/register', methods=['POST'])
 def Register():
     return doRegister(request.get_json())
 
@@ -77,12 +74,6 @@ def Register():
 @jwt_required
 def profileUpdate():
     return doUpdateProfile(request.get_json())
-''''
-@app.route('/listofemployees', methods=['GET'])
-@jwt_required
-def listOfEmployees():
-    return doListOfEmployees()
-'''
 
 @app.route('/sendmessage', methods=['POST'])
 @jwt_required
@@ -93,7 +84,6 @@ def SendMessage():
 @jwt_required
 def GetMessages():
     return doGetMessages()
-
 
 #for debug
 if __name__== '__main__':
