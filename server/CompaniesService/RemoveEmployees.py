@@ -9,12 +9,12 @@ cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
 companies_collection = db["companies"]
 users_collection = db["users"]
-counter = db["counters"]
+counters_collection = db["counters"]
 
 def doRemoveEmployees(data):
    data = validate_removeemployees(data)
    if data["ok"]:
-      data=data["data"]
+      data = data["data"]
 
       #check if user has company
       current_user = get_jwt_identity()
@@ -31,7 +31,7 @@ def doRemoveEmployees(data):
 
          #iterate for each epmloye, remove his company id
          for employe in employees:
-            users_collection.find_one_and_update({"_id":employe},{"$unset": {"company": ""}})
+            users_collection.find_one_and_update({"_id": employe}, {"$unset": {"company": ""}})
             companies_collection.find_one_and_update({"_id": company_id}, {"$pull": {"employees": {"id": employe}}})
 
          return jsonify({'ok': True, 'msg': 'Removed employees', 'removed': employees, 'not removed': employees_not_updated}), 200

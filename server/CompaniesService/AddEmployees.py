@@ -9,7 +9,7 @@ cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
 companies_collection = db["companies"]
 users_collection = db["users"]
-counter = db["counters"]
+counters_collection = db["counters"]
 
 def doAddEmployees(data):
    data = validate_addemployees(data)
@@ -20,13 +20,13 @@ def doAddEmployees(data):
       if "company" in result:
          company_id = result["company"]
          employees = data["employees"]
-         employees_not_updated=[]
+         employees_not_updated = []
 
          #iterate for each epmloye, check if he has company and add if not
          for employe in employees:
-            user_result = users_collection.find_one({"_id":employe["id"]})
+            user_result = users_collection.find_one({"_id": employe["id"]})
             if user_result and "company" not in user_result:
-               users_collection.find_one_and_update({"_id":employe["id"]},{"$set": {"company": company_id}})
+               users_collection.find_one_and_update({"_id": employe["id"]}, {"$set": {"company": company_id}})
             else:
                employees_not_updated.append(employe)
 
