@@ -47,7 +47,7 @@ def Login():
 def profile():
     current_user = get_jwt_identity()
     print(current_user)
-    return "hello";
+    return "hello"
 
 
 @app.route("/register", methods=['POST'])

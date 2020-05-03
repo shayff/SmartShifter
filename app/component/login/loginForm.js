@@ -1,5 +1,7 @@
 import React, {useState, Component} from 'react';
 import { StyleSheet,Alert, Text, View, TextInput,TouchableOpacity, KeyboardAvoidingView,StatusBar } from 'react-native';
+import {Get_Server_login_to_app} from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/Server'
+
 
 export default class LoginForm extends Component {
 
@@ -27,7 +29,26 @@ export default class LoginForm extends Component {
     if (this.check_password())
     {
       Alert.alert('password in good go to check data');
-      this.props.fatherProps.navigation.navigate('ReviewDetails');
+      let data_send = {
+        email: this.state.userName,
+        password: this.state.password
+      };
+      console.log('1res');
+
+      Get_Server_login_to_app(data_send).then((res)=>{
+
+        if(res === 'true')
+        {
+          Alert.alert('data good');
+          this.props.fatherProps.navigation.navigate('Cross screen');
+  
+        }
+        else
+        {
+          Alert.alert('worng password OR username');
+        }
+
+      });
     }
     else
     {
@@ -35,6 +56,7 @@ export default class LoginForm extends Component {
     }
 
   }
+
 
 
   save_input_user_name = (val) =>
@@ -62,7 +84,7 @@ export default class LoginForm extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={Styles.SIGNUPContainer}>
-                    <Text style={Styles.textSighUp}>Sign Up</Text>
+                    <Text style={Styles.textSighUp} onPress={()=>{this.props.fatherProps.navigation.navigate('Registration');}}>Sign Up</Text>
                 </TouchableOpacity>
             
             </View>

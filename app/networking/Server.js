@@ -1,21 +1,28 @@
 import React from 'react';
 import {AppRegistry, SectionList ,StyleSheet, Text, View } from 'react-native';
 
-const ServerUrlGetLogin = 'http://127.0.0.1:5000/login';
+const ServerUrlGetLogin = '127.0.0.1:5000/login';
 
-async function getServer_login_to_app(params) {
+async function Get_Server_login_to_app(params) {
     try {
+        console.log('a1');
         response = await fetch(ServerUrlGetLogin,{
             method: 'POST',
             hesders: {
-                'Accept': 'app'
-            }
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params)
 
 
-        })
+        });
+        let responseJson = await response.json();
+        return responseJson.ok;
     } catch (error) {
-        Alert.alert('disable connect to server');
+        console.log('disable connect to server '+ error);
     }
 
 
 }
+
+export {Get_Server_login_to_app};

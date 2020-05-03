@@ -30,7 +30,7 @@ export default class Login extends Component {
     container:
     {
         flex:1,
-        backgroundColor:'#3498db',
+        backgroundColor:'#36485f',
     },
     smallTitle:
     {
@@ -46,7 +46,7 @@ export default class Login extends Component {
     {
         color: '#fff',
         fontSize:30,
-        opacity: 0.8,
+        opacity: 1,
     },
     logo_container:
     {
