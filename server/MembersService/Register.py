@@ -8,7 +8,7 @@ from config import MongoConfig
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
-users_collection = db["users"]
+usersCollection = db["users"]
 counters_collection = db["counters"]
 
 def doRegister(data):
@@ -16,7 +16,7 @@ def doRegister(data):
    if data["ok"]:
       data = data["data"]
       data['email'] = data['email'].lower()
-      result = users_collection.find_one({'email': data['email']})
+      result = usersCollection.find_one({'email': data['email']})
       if result:
          return jsonify({'ok': False, 'msg': 'User with email address already exists'}), 401
       else:
@@ -31,7 +31,7 @@ def doRegister(data):
          data.update({'messages': []})
 
          # insert to db
-         users_collection.insert_one(data)
+         usersCollection.insert_one(data)
          return jsonify({'ok': True, 'msg': 'user registered successfully'}), 200
 
    else:
