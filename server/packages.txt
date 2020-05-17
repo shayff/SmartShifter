@@ -5,3 +5,4 @@ flask_jwt_extended-3.24.1
 bson-0.5.9
 jsonschema-3.2.0
 dnspython-1.16.0
+pandas-1.0.3

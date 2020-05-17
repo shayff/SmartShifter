@@ -21,6 +21,7 @@ rank_of_prefer = 3
 rank_of_available = 1
 rank_of_not = 0
 
+'''
 def doBuildShift():
     current_user = get_jwt_identity()
     result = users_collection.find_one({'_id': current_user['_id']})
@@ -31,7 +32,7 @@ def doBuildShift():
 
     shifts = buildShifts(companyId)
     return jsonify({'ok': True, 'msg': 'build shift', 'data': shifts}), 200
-
+'''
 
 def build_rank_matrix(companyId):
     # fot each shift, add the employee that "available" or "prefer"
@@ -119,3 +120,5 @@ def get_list_of_employees(companyId):
     company =companies_collection.find_one({'_id': companyId})
     list_of_employees = company['employees']
     return list_of_employees
+
+print(build_rank_matrix(1))
