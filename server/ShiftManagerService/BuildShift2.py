@@ -16,17 +16,29 @@ db = cluster[MongoConfig['ClusterName']]
 companies_collection = db['companies']
 users_collection = db['users']
 
+#rank of availble/prefer
+rank_of_prefer = 3
+rank_of_available = 1
+rank_of_not = 0
+
+def doBuildShift():
+    current_user = get_jwt_identity()
+    result = users_collection.find_one({'_id': current_user['_id']})
+    if 'company' not in result:
+        return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
+    else:
+        companyId = result['company']
+
+    shifts = buildShifts(companyId)
+    return jsonify({'ok': True, 'msg': 'build shift', 'data': shifts}), 200
 
 
-def buildShifts(companyId):
+def build_rank_matrix(companyId):
     # fot each shift, add the employee that "available" or "prefer"
     listOfCompleteShift = []
 
-    listOfShifts = getListOfShifts(companyId)
-    listOfEmployees = getListOfEmployees(companyId)
-    #print(listOfShifts)
-    #print("####")
-    #print(listOfEmployees)
+    listOfShifts = get_list_of_shifts(companyId)
+    listOfEmployees = get_list_of_employees(companyId)
 
     #create shift difficulty matrix
     shift_difficulty_array=[]
@@ -38,75 +50,72 @@ def buildShifts(companyId):
     employee_rank_array = []
     for employee in listOfEmployees:
         employee_rank_array.append(employee['rank'])
-    rank_matrix=np.vstack([employee_rank_array]*len(listOfShifts))
-    rank_matrix=rank_matrix.transpose()
-    print(rank_matrix)
+    emp_rank_matrix=np.vstack([employee_rank_array]*len(listOfShifts))
+    emp_rank_matrix=emp_rank_matrix.transpose()
 
-    '''
-    dictOfEmployees = dictFromListOfEmployees(listOfEmployees)
-    
-    #for each employee update how many shift he asked for, and add a place to count how many he got
-    updateShiftCount(dictOfEmployees)
+    rank_matrix = emp_rank_matrix + difficulty_matrix
 
-    for shift in listOfShifts:
-        shift['employees_can_work'] = []
-        for employee in listOfEmployees:
-            if isEmployeeCanWork(shift, employee):
-                shift['employees_can_work'].append({'id': employee['id'], 'rank': 0})
+    #add the rank of employee prefence for a shift
+    for y in range(len(listOfEmployees)):
+        for x in range(len(listOfShifts)):
 
-    # while there are shifts with "available" or "prefer" employee
-    while listOfShifts:
-        # remove the shifts that have the right amount of people
+            #look for the prefence of the employee for the current shift
+            day = listOfShifts[x]['day']
+            prefence_of_employee_to_shift = next((z for z in listOfEmployees[y]['preference'] if z['day'] == day), None)
 
-        isChanged = True
-        while isChanged:
-            isChanged = False
-            for shift in listOfShifts:
-                if shift['amount'] >= len(shift['employees_can_work']):
-                    scheduleAllEmployeesToShift(shift, dictOfEmployees, listOfShifts)
-                    # pass shift to completed
-                    del shift['employees_can_work']
-                    listOfCompleteShift.append(shift)
-                    listOfShifts.remove(shift)
-                    isChanged = True
-                    break
+            #if there are prefence for the current shift check if it's 'prefer' or 'available' or 'not'
+            if(prefence_of_employee_to_shift != None):
+                if(listOfShifts[x]['day part'] in prefence_of_employee_to_shift['prefer']):
+                    rank_to_add = rank_of_prefer
+                elif(listOfShifts[x]['day part'] in prefence_of_employee_to_shift['available']):
+                    rank_to_add = rank_of_available
+                else:
+                    rank_to_add = rank_of_not
+            else:
+                rank_to_add = rank_of_not
 
-        # check if there is no more shifts
-        if not listOfShifts:
-            break
+            #add the current rank for the rank matrix
+            rank_matrix[y, x] += rank_to_add
 
-        # rank each employee match to a shift
-        for shift in listOfShifts:
-            rankShift(shift, dictOfEmployees)
+    return rank_matrix
 
-        # schedule the employee with the highest rank
-        shiftToSched, employeeToSched = getEmployeeByHigestRank(listOfShifts)
-        scheduleEmployeeToShift(employeeToSched, shiftToSched, dictOfEmployees, listOfShifts)
+def build_available_matrix(companyId):
+    listOfShifts = get_list_of_shifts(companyId)
+    listOfEmployees = get_list_of_employees(companyId)
 
-        if shiftToSched['amount'] >= len(shiftToSched['employees_can_work']) or shiftToSched['amount'] == len(shiftToSched['employees']):
-            print('test')
-            # pass shift to completed
-            del shift['employees_can_work']
-            listOfCompleteShift.append(shift)
-            listOfShifts.remove(shift)
-    print('shift that did not completed:')
-    print(listOfShifts)
-    print('list of finish shifts:')
-    print(listOfCompleteShift)
-    return listOfCompleteShift
-'''
+    available_matrix = np.zeros((len(listOfEmployees),len(listOfShifts)))
+
+    # add the rank of employee prefence for a shift
+    for y in range(len(listOfEmployees)):
+        for x in range(len(listOfShifts)):
+
+            # look for the prefence of the employee for the current shift
+            day = listOfShifts[x]['day']
+            prefence_of_employee_to_shift = next((z for z in listOfEmployees[y]['preference'] if z['day'] == day), None)
+
+            # if there are prefence for the current shift check if it's 'prefer' or 'available' or 'not'
+            if (prefence_of_employee_to_shift != None):
+                if (listOfShifts[x]['day part'] in prefence_of_employee_to_shift['prefer']):
+                    rank_to_add = 1
+                elif (listOfShifts[x]['day part'] in prefence_of_employee_to_shift['available']):
+                    rank_to_add = 1
+                else:
+                    rank_to_add = 0
+            else:
+                rank_to_add = 0
+
+            # add the current rank for the rank matrix
+            available_matrix[y, x] += rank_to_add
+    return available_matrix
 
 # get list of shifts
-def getListOfShifts(companyId):
+def get_list_of_shifts(companyId):
     company =companies_collection.find_one({'_id': companyId})
     list_of_shifts = company['shifts']
     return list_of_shifts
 
 # get list of employees
-def getListOfEmployees(companyId):
+def get_list_of_employees(companyId):
     company =companies_collection.find_one({'_id': companyId})
     list_of_employees = company['employees']
     return list_of_employees
-
-
-buildShifts(1)
