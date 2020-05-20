@@ -5,6 +5,8 @@ from flask import Flask, request, jsonify
 from datetime import time, datetime, timedelta
 import numpy as np
 
+from server.ShiftManagerService.BL.BuildShiftLogic import ShiftBuilderLogic
+
 MongoConfig ={
     "ConnectionString": "mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority",
     "ClusterName": "shifter_db"
@@ -34,8 +36,23 @@ def doBuildShift():
     return jsonify({'ok': True, 'msg': 'build shift', 'data': shifts}), 200
 '''
 
+def build_shift_start_by_day_list(listOfShifts):
+    shift_start_by_day_list = []
+    current_day_start = 0
+    for shift_index in range(len(listOfShifts)):
+        if (listOfShifts[shift_index]['day'] != listOfShifts[current_day_start]['day']):
+            current_day_start=shift_index
+        shift_start_by_day_list.append(current_day_start)
+    return shift_start_by_day_list
+
+def build_worker_amount_in_shift_list(listOfShifts):
+    list_worker_amount_in_shift = []
+    for shift in listOfShifts:
+        list_worker_amount_in_shift.append(shift['amount'])
+    return list_worker_amount_in_shift
+
 def build_rank_matrix(companyId):
-    # fot each shift, add the employee that "available" or "prefer"
+    # for each shift, add the employee that "available" or "prefer"
     listOfCompleteShift = []
 
     listOfShifts = get_list_of_shifts(companyId)
@@ -121,4 +138,20 @@ def get_list_of_employees(companyId):
     list_of_employees = company['employees']
     return list_of_employees
 
-print(build_rank_matrix(1))
+compid=2
+#print(build_rank_matrix(1))
+list_of_shifts = get_list_of_shifts(compid)
+matrix = build_available_matrix(compid)
+rank_matrix= build_rank_matrix(compid)
+shift_start_by_day = build_shift_start_by_day_list(list_of_shifts)
+amount_of_worker_in_shift = build_worker_amount_in_shift_list(list_of_shifts)
+
+print(matrix)
+print(rank_matrix)
+print(shift_start_by_day)
+print(amount_of_worker_in_shift)
+
+
+a = ShiftBuilderLogic(matrix, rank_matrix, amount_of_worker_in_shift, shift_start_by_day)
+
+print(a.BuildShift())
