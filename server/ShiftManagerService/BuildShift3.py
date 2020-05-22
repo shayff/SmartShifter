@@ -1,41 +1,128 @@
+from pymongo import MongoClient
 import numpy as np
-
-class Hungarian:
-    def __init__(self,input_matrix):
-        self.input_matrix=input_matrix
-        self.column_size = input_matrix.shape[1]
-        self.row_size = input_matrix.shape[0]
-        self.matrix_size = max(self.column_size, self.row_size)
-
-    def run(self):
-        #Step 1: subsract the minimum element from each row
-        min_elem_in_row = np.amin(self.input_matrix, axis=1)
-        self.input_matrix -= np.vstack(min_elem_in_row)
-
-        #Step 2: subsract the minimum element from each column
-        min_elem_in_col = np.amin(self.input_matrix, axis=0)
-        self.input_matrix -= min_elem_in_col
-
-        #Step 3: Cover all zero's with minimum number of lines
-        #If the number of lines not equal to the
-        number_of_lines = 0
-        while number_of_lines < self.matrix_size:
-            number_of_lines+=1
-        print(self.input_matrix)
-
-    class CoverZeros:
-        def __init__(self, input_matrix):
-            self.input_matrix = input_matrix
-            self.zero_matrix = input_matrix == 0
-            self._marked_rows = []
-            self._marked_columns = []
+from BL.Hungarian import Hungarian
 
 
-example = np.array([ [0,83,69,92],[77,37,49,92],[11,69,5,86],[8,9,98,23] ])
-#example = np.array([ [82,83,69,92],[77,37,49,92],[11,69,5,86],[8,9,98,23] ])
-print(example == 0)
+MongoConfig ={
+    "ConnectionString": "mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority",
+    "ClusterName": "shifter_db"
+}
+
+#connect to database
+cluster = MongoClient(MongoConfig['ConnectionString'])
+db = cluster[MongoConfig['ClusterName']]
+companies_collection = db['companies']
+users_collection = db['users']
+
+#rank of availble/prefer
+rank_of_prefer = 13
+rank_of_available = 11
+rank_of_not = 0
+
 '''
-print(example)
-test_class = Hungarian(example)
-test_class.run()
+def doBuildShift():
+    current_user = get_jwt_identity()
+    result = users_collection.find_one({'_id': current_user['_id']})
+    if 'company' not in result:
+        return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
+    else:
+        companyId = result['company']
+
+    shifts = buildShifts(companyId)
+    return jsonify({'ok': True, 'msg': 'build shift', 'data': shifts}), 200
 '''
+
+
+def build_rank_matrix(companyId, date):
+    # for each shift, add the employee that "available" or "prefer"
+    listOfCompleteShift = []
+
+    listOfShifts = get_list_of_shifts(companyId, date)
+    listOfEmployees = get_list_of_employees(companyId,date)
+
+    if not listOfShifts or not listOfEmployees:
+        return None
+
+    #create shift difficulty matrix
+    shift_difficulty_array=[]
+    for shift in listOfShifts:
+        shift_difficulty_array.append(shift['difficulty'])
+    difficulty_matrix=np.vstack([shift_difficulty_array]*len(listOfEmployees))
+
+    #create employee rank matrix
+    employee_rank_array = []
+    for employee in listOfEmployees:
+        employee_rank_array.append(employee['rank'])
+    emp_rank_matrix=np.vstack([employee_rank_array]*len(listOfShifts))
+    emp_rank_matrix=emp_rank_matrix.transpose()
+
+    rank_matrix = emp_rank_matrix + difficulty_matrix
+
+    #add the rank of employee prefence for a shift
+    for y in range(len(listOfEmployees)):
+        for x in range(len(listOfShifts)):
+
+            #look for the prefence of the employee for the current shift
+            date = listOfShifts[x]['date']
+            prefence_of_employee_to_shift = next((z for z in listOfEmployees[y]['preference'] if z['date'] == date), None)
+
+            #if there are prefence for the current shift check if it's 'prefer' or 'available' or 'not'
+            if(prefence_of_employee_to_shift != None):
+                if(listOfShifts[x]['day part'] in prefence_of_employee_to_shift['prefer']):
+                    rank_to_add = rank_of_prefer
+                elif(listOfShifts[x]['day part'] in prefence_of_employee_to_shift['available']):
+                    rank_to_add = rank_of_available
+                else:
+                    rank_to_add = rank_of_not
+            else:
+                rank_to_add = rank_of_not
+
+            #add the current rank for the rank matrix
+            rank_matrix[y, x] += rank_to_add
+
+    return rank_matrix
+
+# get list of shifts
+def get_list_of_shifts(companyId,date):
+    company =companies_collection.find_one({'_id': companyId})
+    list_of_shifts = company['shifts']
+    list_of_shifts = [x for x in list_of_shifts if x['date'] == date]
+
+    #get list where each shift duplicate by the shift['amount']
+    result = []
+    for shift in list_of_shifts:
+        for i in range(shift['amount']):
+            result.append(shift)
+    return result
+
+# get list of employees
+def get_list_of_employees(companyId,date):
+    company =companies_collection.find_one({'_id': companyId})
+    list_of_employees = company['employees']
+    return [x for x in list_of_employees if is_prefence_for_given_date(x['preference'],date)]
+
+def is_prefence_for_given_date(preference,date):
+    for x in preference:
+        if(x['date'] == date):
+            #check if there is atleast one prefence or aviable
+            if(x['prefer'] or x['available']):
+                return True
+    return False
+
+def BuildShift(date_array):
+    compid=2
+    for date in date_array:
+        rank_matrix = build_rank_matrix(compid,date)
+        print(rank_matrix)
+        if rank_matrix is None:
+            print("No shifts or employees")
+        else:
+            print(rank_matrix)
+            hungarian = Hungarian(rank_matrix, is_profit_matrix = True)
+            hungarian.calculate()
+            print("Calculated value:\t", hungarian.get_total_potential())  # = 543
+            print("Results:\n\t", hungarian.get_results())
+            print("-" * 80)
+
+date_array = ['12/4/20','13/4/20']
+BuildShift(date_array)
