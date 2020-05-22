@@ -3,7 +3,7 @@ from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from pymongo import collection, MongoClient, ReturnDocument
 from server.config import MongoConfig
-from .schemas.sendmessage import validate_sendMessage
+from .schemas.sendMessage import validate_sendMessage
 
 # connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
@@ -45,9 +45,6 @@ def doSendMessage(data):
             date = datetime.now()
             data.update({'time_created': date.ctime()})
 
-            # update status - ("read" / "unread")
-            data.update({'status': 'unread'})
-
             # update from in message
             data.update({'from': current_user['_id']})
 
@@ -56,7 +53,7 @@ def doSendMessage(data):
 
             # insert to db.users_collection
             for user_id in array_to_send:
-                users_collection.update({'_id': user_id}, {'$push': {'messages': {'$each': [data['_id']],
+                users_collection.update({'_id': user_id}, {'$push': {'messages': {'$each': [{'id': data['_id'], 'status':'unread'}],
                                                                                  '$position': 0}}})
 
             return jsonify({'ok': True, 'msg': 'The message sending successfully!'}), 401

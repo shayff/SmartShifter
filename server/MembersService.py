@@ -8,9 +8,12 @@ from MembersService.Register import doRegister
 from MembersService.SendMessage import doSendMessage
 from MembersService.GetMessage import doGetMessages
 from MembersService.Profile import doProfile
+from MembersService.UpdatMessage import doUpdateMessage
+from MembersService.UpdateProfile import doUpdateProfile
 
 from bson.objectid import ObjectId
-from server.MembersService.UpdateProfile import doUpdateProfile
+
+
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -84,6 +87,11 @@ def SendMessage():
 @jwt_required
 def GetMessages():
     return doGetMessages()
+
+@app.route('/updatemessage',methods=['POST'])
+@jwt_required
+def UpdatMessage():
+    return doUpdateMessage(request.get_json())
 
 #for debug
 if __name__== '__main__':
