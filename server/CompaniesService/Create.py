@@ -29,7 +29,13 @@ def doCreate(data):
 
          # update time created
          date = datetime.now()
-         data.update({"managers":[current_user['_id']], "employees": [], "time_created": date.ctime()})
+         data.update({"time_created": date.ctime()})
+
+         # add the current manager and employees:
+         data.update({"managers": [current_user['_id']], "employees": []})
+
+         # add shifts_counter
+         data.update({'shifts_counter':0})
 
          # insert to db
          companies_collection.insert_one(data)
