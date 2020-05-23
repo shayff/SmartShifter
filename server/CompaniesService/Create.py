@@ -38,7 +38,7 @@ def doCreate(data):
          data.update({'shifts_counter':0})
 
          # add an array of shift swaps
-         data.update({'shift_swaps':[]})
+         data.update({'shifts_swaps':[]})
 
          # insert to db
          companies_collection.insert_one(data)
