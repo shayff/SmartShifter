@@ -1,3 +1,4 @@
-import pandas as pd
-print('hello')
-#data = pd.read_csv('data.csv')
+import numpy as np
+
+a =np.array([1,1])
+print(a)

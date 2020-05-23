@@ -8,7 +8,7 @@ cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
 companies_collection = db['companies']
 users_collection = db['users']
-counter = db['counters']
+counters_collection = db['counters']
 
 def doListOfEmployees():
     current_user = get_jwt_identity()

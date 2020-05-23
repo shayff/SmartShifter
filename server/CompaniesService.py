@@ -23,7 +23,7 @@ class JSONEncoder(json.JSONEncoder):
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
-app.config['JWT_SECRET_KEY'] = "1asdasd#$$!1ddX"
+app.config['JWT_SECRET_KEY'] = '1asdasd#$$!1ddX'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']

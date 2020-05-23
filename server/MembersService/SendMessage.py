@@ -1,10 +1,9 @@
-
 from datetime import datetime
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from pymongo import collection, MongoClient, ReturnDocument
 from server.config import MongoConfig
-from .schemas.sendmessage import validate_sendMessage
+from .schemas.sendMessage import validate_sendMessage
 
 # connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
@@ -18,36 +17,33 @@ def doSendMessage(data):
     current_user = get_jwt_identity()
     array_id_not_exists = []
     array_to_send = []
-    notexist = False
+    not_exist = False
     if data["ok"]:
         # Check if all users exist
         print(data)
         data = data['data']
         print(data)
-        for userid in data['to']:
-            result = users_collection.find_one({'_id': userid})
+        for user_id in data['to']:
+            result = users_collection.find_one({'_id': user_id})
             if not result:
-                notexist = True
-                array_id_not_exists.append(userid)
+                not_exist = True
+                array_id_not_exists.append(user_id)
             else:
-                array_to_send.append(userid)
+                array_to_send.append(user_id)
 
-        if notexist:
+        if not_exist:
             return jsonify({'ok': False, 'msg': 'User not exists:', 'id': array_id_not_exists}), 401
 
         else:
             # update counter message id
             doc = counter.find_one_and_update({'_id': 'messageid'}, {'$inc': {'value': 1}},
                                               return_document=ReturnDocument.AFTER)
-            countId = doc['value']
-            data.update({"_id": countId})
+            count_id = doc['value']
+            data.update({'_id': count_id})
 
             # update time created
             date = datetime.now()
             data.update({'time_created': date.ctime()})
-
-            # update status - ("read" / "unread")
-            data.update({'status': 'unread'})
 
             # update from in message
             data.update({'from': current_user['_id']})
@@ -56,8 +52,8 @@ def doSendMessage(data):
             messages_collection.insert_one(data)
 
             # insert to db.users_collection
-            for userid in array_to_send:
-                users_collection.update({'_id': userid}, {'$push': {'messages': {'$each': [data['_id']],
+            for user_id in array_to_send:
+                users_collection.update({'_id': user_id}, {'$push': {'messages': {'$each': [{'id': data['_id'], 'status':'unread'}],
                                                                                  '$position': 0}}})
 
             return jsonify({'ok': True, 'msg': 'The message sending successfully!'}), 401
