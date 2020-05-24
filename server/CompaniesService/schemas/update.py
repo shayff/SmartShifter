@@ -3,7 +3,6 @@ from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
 
 
-
 update_schema = {
     "type": "object",
     "properties": {
