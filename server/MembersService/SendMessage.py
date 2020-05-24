@@ -12,6 +12,7 @@ users_collection = db['users']
 messages_collection = db['messages']
 counter = db['counters']
 
+
 def doSendMessage(data):
     data = validate_sendMessage(data)
     current_user = get_jwt_identity()
@@ -53,8 +54,9 @@ def doSendMessage(data):
 
             # insert to db.users_collection
             for user_id in array_to_send:
-                users_collection.update({'_id': user_id}, {'$push': {'messages': {'$each': [{'id': data['_id'], 'status':'unread'}],
-                                                                                 '$position': 0}}})
+                users_collection.update({'_id': user_id}, {'$push': {'messages': {'$each': [{'id': data['_id'],
+                                                                                             'status': 'unread'}],
+                                                                                  '$position': 0}}})
 
             return jsonify({'ok': True, 'msg': 'The message sending successfully!'}), 401
 
