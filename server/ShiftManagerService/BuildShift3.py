@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 import numpy as np
-from BL.Hungarian import Hungarian
+from .BL.Hungarian import Hungarian
+from flask_jwt_extended import get_jwt_identity
+from flask import jsonify
 
 
 MongoConfig ={
@@ -19,19 +21,22 @@ rank_of_prefer = 13
 rank_of_available = 11
 rank_of_not = 0
 
-'''
-def doBuildShift():
+
+def doBuildShift(data):
+    dates=data['dates']
+    #dates=data['data']['dates']
     current_user = get_jwt_identity()
     result = users_collection.find_one({'_id': current_user['_id']})
     if 'company' not in result:
         return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
     else:
-        companyId = result['company']
+        company_id = result['company']
 
-    shifts = buildShifts(companyId)
-    return jsonify({'ok': True, 'msg': 'build shift', 'data': shifts}), 200
-'''
+        #company_id = 2
+        #date_array = ['12/4/20', '13/4/20']
+        scheduled_shifts = build_shifts(dates, company_id)
 
+    return jsonify({'ok': True, 'msg': 'build shift', 'data': scheduled_shifts}), 200
 
 def build_rank_matrix(companyId, date,listOfShifts, listOfEmployees):
     # for each shift, add the employee that "available" or "prefer"
@@ -137,7 +142,3 @@ def build_shifts(date_array,company_id):
 
     return scheduled_shifts
 
-company_id = 1
-date_array = ['12/4/20','13/4/20']
-scheduled_shifts = build_shifts(date_array,company_id)
-print(scheduled_shifts)
