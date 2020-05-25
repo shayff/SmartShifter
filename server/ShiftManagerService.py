@@ -5,7 +5,7 @@ import json
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift3 import doBuildShift
-from ShiftManagerService.AskToChangeShift import doAskToChangeShift
+from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
     def default(self, o):
@@ -45,10 +45,10 @@ def check_if_token_in_blacklist(decrypted_token):
 def buildShift():
     return doBuildShift(request.get_json())
 
-@app.route('/asktochangeshift', methods=['POST'])
+@app.route('/AskShiftSwap', methods=['POST'])
 @jwt_required
-def askToChangeShift():
-    return doAskToChangeShift(request.get_json())
+def AskShiftSwap():
+    return doAskShiftSwap(request.get_json())
 
 #for dubg
 if __name__== '__main__':

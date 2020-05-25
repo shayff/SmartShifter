@@ -38,6 +38,9 @@ def doCreate(data):
          # add shifts_counter
          data.update({'shifts_counter': 0})
 
+         # add shifts_swaps_counter
+         data.update({'shifts_swaps_counter': 0})
+
          # add an array of shift swaps
          data.update({'shifts_swaps':[]})
 
