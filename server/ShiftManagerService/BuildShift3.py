@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 import numpy as np
-from BL.Hungarian import Hungarian
+from .BL.Hungarian import Hungarian
+from flask_jwt_extended import get_jwt_identity
+from flask import jsonify
 
 
 MongoConfig ={
@@ -19,29 +21,25 @@ rank_of_prefer = 13
 rank_of_available = 11
 rank_of_not = 0
 
-'''
-def doBuildShift():
+
+def doBuildShift(data):
+    dates=data['dates']
+    #dates=data['data']['dates']
     current_user = get_jwt_identity()
     result = users_collection.find_one({'_id': current_user['_id']})
     if 'company' not in result:
         return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
     else:
-        companyId = result['company']
+        company_id = result['company']
 
-    shifts = buildShifts(companyId)
-    return jsonify({'ok': True, 'msg': 'build shift', 'data': shifts}), 200
-'''
+        #company_id = 2
+        #date_array = ['12/4/20', '13/4/20']
+        scheduled_shifts = build_shifts(dates, company_id)
 
+    return jsonify({'ok': True, 'msg': 'build shift', 'data': scheduled_shifts}), 200
 
-def build_rank_matrix(companyId, date):
+def build_rank_matrix(companyId, date,listOfShifts, listOfEmployees):
     # for each shift, add the employee that "available" or "prefer"
-    listOfCompleteShift = []
-
-    listOfShifts = get_list_of_shifts(companyId, date)
-    listOfEmployees = get_list_of_employees(companyId,date)
-
-    if not listOfShifts or not listOfEmployees:
-        return None
 
     #create shift difficulty matrix
     shift_difficulty_array=[]
@@ -79,12 +77,11 @@ def build_rank_matrix(companyId, date):
 
             #add the current rank for the rank matrix
             rank_matrix[y, x] += rank_to_add
-
     return rank_matrix
 
 # get list of shifts
 def get_list_of_shifts(companyId,date):
-    company =companies_collection.find_one({'_id': companyId})
+    company = companies_collection.find_one({'_id': companyId})
     list_of_shifts = company['shifts']
     list_of_shifts = [x for x in list_of_shifts if x['date'] == date]
 
@@ -109,20 +106,39 @@ def is_prefence_for_given_date(preference,date):
                 return True
     return False
 
-def BuildShift(date_array):
-    compid=2
-    for date in date_array:
-        rank_matrix = build_rank_matrix(compid,date)
-        print(rank_matrix)
-        if rank_matrix is None:
-            print("No shifts or employees")
-        else:
-            print(rank_matrix)
-            hungarian = Hungarian(rank_matrix, is_profit_matrix = True)
-            hungarian.calculate()
-            print("Calculated value:\t", hungarian.get_total_potential())  # = 543
-            print("Results:\n\t", hungarian.get_results())
-            print("-" * 80)
+def build_shifts(date_array,company_id):
+    scheduled_shifts = dict()
 
-date_array = ['12/4/20','13/4/20']
-BuildShift(date_array)
+    for date in date_array:
+        # get the employess and shift that relevant for current date
+        # Possible to improve by get the list all shift once and filter it each time
+        listOfShifts = get_list_of_shifts(company_id, date)
+        listOfEmployees = get_list_of_employees(company_id, date)
+
+        #check if there is atleast 1 employe and 1 shift
+        if not listOfShifts or not listOfEmployees:
+            print("No shifts or employees")
+
+        # build rank matrix
+        rank_matrix = build_rank_matrix(company_id,date,listOfShifts,listOfEmployees)
+
+        # Run the hungarian algorithm
+        hungarian = Hungarian(rank_matrix, is_profit_matrix = True)
+        hungarian.calculate()
+
+        for employee,shift in hungarian.get_results():
+            shift_id = listOfShifts[shift]['id']
+            employee_id = listOfEmployees[employee]['id']
+            print("worker:", employee_id, "scheduled for shift: ", shift_id)
+
+            # add the employe shifted to the scheduled_shifts dict
+            if shift_id in scheduled_shifts:
+                scheduled_shifts[shift_id].append(employee_id)
+            else:
+                scheduled_shifts[shift_id] = [employee_id]
+
+        print("Build shift for date:",date, "With the total rank:",hungarian.get_total_potential())
+        print("-" * 60)
+
+    return scheduled_shifts
+

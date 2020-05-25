@@ -23,7 +23,8 @@ def doCreate(data):
          return jsonify({'ok': False, 'msg': 'User has already company'}), 401
       else:
          # update counter Companies
-         doc = counters_collection.find_one_and_update({"_id": "companyid"}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
+         doc = counters_collection.find_one_and_update({"_id": "companyid"}, {"$inc": {"value": 1}},
+                                                       return_document=ReturnDocument.AFTER)
          countId = doc['value']
          data.update({"_id": countId})
 
@@ -35,7 +36,13 @@ def doCreate(data):
          data.update({"managers": [current_user['_id']], "employees": []})
 
          # add shifts_counter
-         data.update({'shifts_counter':0})
+         data.update({'shifts_counter': 0})
+
+         # add shifts_swaps_counter
+         data.update({'shifts_swaps_counter': 0})
+
+         # add an array of shift swaps
+         data.update({'shifts_swaps':[]})
 
          # insert to db
          companies_collection.insert_one(data)

@@ -7,8 +7,13 @@ from bson.objectid import ObjectId
 from CompaniesService.Create import doCreate
 from CompaniesService.AddEmployees import doAddEmployees
 from CompaniesService.RemoveEmployees import doRemoveEmployees
-from CompaniesService.Update import doUpdate
 from CompaniesService.ListOfEmployees import doListOfEmployees
+from CompaniesService.Update import doUpdate
+from CompaniesService.UpdateShift import doUpdateShift
+from CompaniesService.addshifts import doAddShifts
+
+from server.CompaniesService.DeleteShift import doDeleteShift
+
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -58,6 +63,21 @@ def AddEmployees():
 @jwt_required
 def RemoveEmployees():
     return doRemoveEmployees(request.get_json())
+
+@app.route("/companies/updateshift", methods=['POST'])
+@jwt_required
+def UpdateShift():
+    return doUpdateShift(request.get_json())
+
+@app.route("/companies/addshift", methods=['POST'])
+@jwt_required
+def AddShifts():
+    return doAddShifts(request.get_json())
+
+@app.route("/companies/deleteshift", methods=['POST'])
+@jwt_required
+def DeleteShift():
+    return doDeleteShift(request.get_json())
 
 @app.route("/companies/update", methods=['POST'])
 @jwt_required
