@@ -28,7 +28,7 @@ export default class LoginForm extends Component {
     
     if (this.check_password())
     {
-      Alert.alert('password in good go to check data');
+      console.log('password in good go to check data');
       let data_send = {
         email: this.state.userName,
         password: this.state.password
@@ -36,17 +36,18 @@ export default class LoginForm extends Component {
       console.log('1res');
 
       Get_Server_login_to_app(data_send).then((res)=>{
-
-        if(res === 'true')
-        {
-          Alert.alert('data good');
           this.props.fatherProps.navigation.navigate('Cross screen');
-  
-        }
-        else
-        {
-          Alert.alert('worng password OR username');
-        }
+
+       // if(res === 'true')
+       // {
+       //   Alert.alert('data good');
+       //   this.props.fatherProps.navigation.navigate('Cross screen');
+  //
+       // }
+       // else
+       // {
+       //   Alert.alert('worng password OR username');
+       // }
 
       });
     }

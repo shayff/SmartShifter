@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AppRegistry, SectionList ,StyleSheet, Text, View,TextInput, TouchableOpacity, } from 'react-native';
+import {AppRegistry, SectionList ,StyleSheet, Text, View,TextInput, TouchableOpacity,KeyboardAvoidingView,Keyboard } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 export default class Regform extends Component {
@@ -7,36 +7,54 @@ export default class Regform extends Component {
     constructor(inside){
       super(inside);
       this.state = {
-          userName:'',
+          firstName:'',
+          lestName:'',
+          address:'',
+          ID:0,
+          phoneNumber:0,
+          email:'',
           password:0
       }
     }
+    confirm_input_data_user = () =>
+    {
+
+      
+    }  
 
       render() {  
           return(
-              
-              <View  style={Styles.container}>
-                <View>
-                  
-                    <TextInput style={Styles.textInput} placeholder="First name" underlineColorAndroid={'transparent'} />
-                    <TextInput style={Styles.textInput} placeholder="Lest name" underlineColorAndroid={'transparent'} />
-                    <TextInput style={Styles.textInput} placeholder="Full address" underlineColorAndroid={'transparent'} />
-
-                    <TextInput style={Styles.textInput} placeholder="ID number" keyboardType={'numeric'} underlineColorAndroid={'transparent'} />
-                    <TextInput style={Styles.textInput} placeholder="Phone number" keyboardType={'numeric'} underlineColorAndroid={'transparent'} />
-                    <TextInput  style={Styles.textInput} placeholder="Email"  keyboardType={'email-address'} underlineColorAndroid={'transparent'}/>
-
-                    <TextInput style={Styles.textInput} placeholder="password" secureTextEntry={true} underlineColorAndroid={'transparent'} />
-                    <TextInput style={Styles.textInput} placeholder="Enter password to confirm" secureTextEntry={true} underlineColorAndroid={'transparent'} />
-                  
+            <View  style={Styles.container}>
+            <KeyboardAvoidingView behavior="padding">
+             
+                <View style={Styles.line}>
+                    <TextInput style={Styles.secendTextInput} placeholder="Lest name" underlineColorAndroid={'transparent'} />
+                    
+                    <TextInput style={Styles.firstTextInput} placeholder="First name" underlineColorAndroid={'transparent'} />
                 </View>
 
+                <View style={Styles.line}>
+                    <TextInput style={Styles.secendTextInput} placeholder="Full address" underlineColorAndroid={'transparent'} />
+                    <TextInput style={Styles.firstTextInput} placeholder="ID number" keyboardType={'numeric'} underlineColorAndroid={'transparent'} />
+                </View>
+                
+                <View style={Styles.line}>
+                    <TextInput style={Styles.secendTextInput} placeholder="Phone number" keyboardType={'numeric'} underlineColorAndroid={'transparent'} />
+                    <TextInput  style={Styles.firstTextInput} placeholder="Email"  keyboardType={'email-address'} underlineColorAndroid={'transparent'}/>
+                </View>
+
+                <View style={Styles.line}>
+                    <TextInput style={Styles.secendTextInput} placeholder="password" secureTextEntry={true} underlineColorAndroid={'transparent'} />
+                    <TextInput style={Styles.firstTextInput} placeholder="Enter password to confirm" secureTextEntry={true} underlineColorAndroid={'transparent'} />
+                </View>
+                  
+
+            </KeyboardAvoidingView>
                 <View>
                   <TouchableOpacity style={Styles.touchUP}>
                     <Text style={Styles.btnUP}>Sign Up</Text>
                   </TouchableOpacity>
                 </View>
-              
               </View>
           );
       }
@@ -47,8 +65,13 @@ export default class Regform extends Component {
   
       container:
       {
-       alignSelf: 'stretch',
-       
+        alignSelf: 'stretch',
+      },
+      line:
+      {
+        flexDirection : 'row',
+        alignItems: 'stretch',
+        justifyContent: 'space-between'
       },
       header:
       {
@@ -59,8 +82,27 @@ export default class Regform extends Component {
         borderBottomColor: '#199187',
         borderBottomWidth:1,
       },
+      secendTextInput:
+      {
+        paddingLeft:80,
+        height: 30,
+        marginBottom:30,
+        color: '#fff',
+        borderBottomColor:'#f8f8f8',
+        borderBottomWidth:1,
+      },
+      firstTextInput:
+      {
+        paddingRight:80,
+        height: 30,
+        marginBottom:30,
+        color: '#fff',
+        borderBottomColor:'#f8f8f8',
+        borderBottomWidth:1,
+      },
       textInput:
       {
+
         alignSelf:'stretch',
         height: 30,
         marginBottom:30,

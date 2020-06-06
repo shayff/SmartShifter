@@ -5,7 +5,7 @@ const ServerUrlGetLogin = '127.0.0.1:5000/login';
 
 async function Get_Server_login_to_app(params) {
     try {
-        console.log('a1');
+        console.log('a10');
         response = await fetch(ServerUrlGetLogin,{
             method: 'POST',
             hesders: {
