@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift3 import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
+from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
     def default(self, o):
@@ -49,6 +50,12 @@ def buildShift():
 @jwt_required
 def AskShiftSwap():
     return doAskShiftSwap(request.get_json())
+
+@app.route('/ConfirmShiftSwap', methods=['POST'])
+@jwt_required
+def ConfirmShiftSwap():
+    return doConfirmShiftSwap(request.get_json())
+
 
 #for dubg
 if __name__== '__main__':

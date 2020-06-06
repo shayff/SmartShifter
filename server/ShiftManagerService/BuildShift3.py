@@ -141,4 +141,3 @@ def build_shifts(date_array,company_id):
         print("-" * 60)
 
     return scheduled_shifts
-
