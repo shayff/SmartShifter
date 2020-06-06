@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {AppRegistry, SectionList ,StyleSheet, Text, View,TextInput, TouchableOpacity,KeyboardAvoidingView,Keyboard } from 'react-native';
+import {AppRegistry, SectionList ,StyleSheet, Text, View,TextInput, TouchableOpacity,KeyboardAvoidingView,Keyboard, Alert } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+
 
 export default class Regform extends Component {
 
@@ -13,13 +14,28 @@ export default class Regform extends Component {
           ID:0,
           phoneNumber:0,
           email:'',
-          password:0
+          password:0,
+          confirmePassword:0
       }
     }
-    confirm_input_data_user = () =>
+    check_input_user = () =>
     {
+      if (this.state.password.length >= 3)
+      {
+        if (this.state.password == this.state.confirmePassword)
+        {
+          Alert.alert('good to get in...');
+        }
+        else
+        {
+          Alert.alert('Your passwords not equal');
+        }
+      }
+      else
+      {
+        Alert.alert('The password need to be at least 3 char');
+      }
 
-      
     }  
 
       render() {  
@@ -28,31 +44,31 @@ export default class Regform extends Component {
             <KeyboardAvoidingView behavior="padding">
              
                 <View style={Styles.line}>
-                    <TextInput style={Styles.secendTextInput} placeholder="Lest name" underlineColorAndroid={'transparent'} />
+                    <TextInput style={Styles.secendTextInput} placeholder="Lest name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.lestName = val}/>
                     
-                    <TextInput style={Styles.firstTextInput} placeholder="First name" underlineColorAndroid={'transparent'} />
+                    <TextInput style={Styles.firstTextInput} placeholder="First name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.firstName = val} />
                 </View>
 
                 <View style={Styles.line}>
-                    <TextInput style={Styles.secendTextInput} placeholder="Full address" underlineColorAndroid={'transparent'} />
-                    <TextInput style={Styles.firstTextInput} placeholder="ID number" keyboardType={'numeric'} underlineColorAndroid={'transparent'} />
+                    <TextInput style={Styles.secendTextInput} placeholder="Full address" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.address = val} />
+                    <TextInput style={Styles.firstTextInput} placeholder="ID number" keyboardType={'numeric'} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.ID = val} />
                 </View>
                 
                 <View style={Styles.line}>
-                    <TextInput style={Styles.secendTextInput} placeholder="Phone number" keyboardType={'numeric'} underlineColorAndroid={'transparent'} />
-                    <TextInput  style={Styles.firstTextInput} placeholder="Email"  keyboardType={'email-address'} underlineColorAndroid={'transparent'}/>
+                    <TextInput style={Styles.secendTextInput} placeholder="Phone number" keyboardType={'numeric'} underlineColorAndroid={'transparent'}  onChangeText={(val) => this.state.phoneNumber = val} />
+                    <TextInput  style={Styles.firstTextInput} placeholder="Email"  keyboardType={'email-address'} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.email = val} />
                 </View>
 
                 <View style={Styles.line}>
-                    <TextInput style={Styles.secendTextInput} placeholder="password" secureTextEntry={true} underlineColorAndroid={'transparent'} />
-                    <TextInput style={Styles.firstTextInput} placeholder="Enter password to confirm" secureTextEntry={true} underlineColorAndroid={'transparent'} />
+                    <TextInput style={Styles.secendTextInput} placeholder="password" secureTextEntry={true} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.password = val} />
+                    <TextInput style={Styles.firstTextInput} placeholder="Enter password to confirm" secureTextEntry={true} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.confirmePassword = val} />
                 </View>
                   
 
             </KeyboardAvoidingView>
                 <View>
                   <TouchableOpacity style={Styles.touchUP}>
-                    <Text style={Styles.btnUP}>Sign Up</Text>
+                    <Text style={Styles.btnUP} onPress={this.check_input_user}>Sign Up</Text>
                   </TouchableOpacity>
                 </View>
               </View>

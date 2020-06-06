@@ -53,7 +53,7 @@ export default class LoginForm extends Component {
     }
     else
     {
-      Alert.alert('the gole need to be atlist 3 char');
+      Alert.alert('The password need to be at least 3 char');
     }
 
   }
@@ -67,7 +67,7 @@ export default class LoginForm extends Component {
 
   save_input_password = (val) =>
   {
-    this.state.password=val;
+    this.state.password = val;
   }
 
 
