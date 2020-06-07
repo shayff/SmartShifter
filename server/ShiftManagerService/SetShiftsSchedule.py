@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
-from .schemas.setshiftsschedule import validate_setshiftsschedule
 from ..config import MongoConfig
 
 
@@ -13,10 +12,6 @@ users_collection = db['users']
 
 
 def doSetShiftsSchedule(data):
-     # data = validate_setshiftsschedule(data)
-     # if data["ok"]:
-     #    data = data["data"]
-
         #check if user has company
         current_user = get_jwt_identity()
         result = users_collection.find_one({'_id': current_user['_id']})
