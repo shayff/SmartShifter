@@ -33,10 +33,12 @@ def doAddEmployees(data):
          #remove employees that already have company
          employees = [x for x in employees if x not in employees_not_updated]
          print(employees)
+
          # update employees in the company
-         companies_collection.find_one_and_update({'_id': company_id}, {"$addToSet": {'employees': {"$each": employees}}})
-         return jsonify({'ok': True, 'msg': 'Added employees', 'added': employees, 'not added': employees_not_updated}), 200
-      else:
-         return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401
+         doc = companies_collection.find_one_and_update({'_id': company_id}, {"$addToSet": {'employees': {"$each": employees}}})
+         if doc != None:
+             return jsonify({'ok': True, 'msg': 'Added employees', 'added': employees, 'not added': employees_not_updated}), 200
+         else:
+             return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401
    else:
       return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400

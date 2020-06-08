@@ -9,6 +9,11 @@ from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
 from flask_cors import CORS
 
+
+from server.ShiftManagerService.GetShiftScheduled import DoGetShiftScheduled
+from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
+
+
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
     def default(self, o):
@@ -49,10 +54,22 @@ def check_if_token_in_blacklist(decrypted_token):
 def buildShift():
     return doBuildShift(request.get_json())
 
+@app.route('/SetShiftsSchedule', methods= ['POST'])
+@jwt_required
+def SetShiftsSchedule():
+    return doSetShiftsSchedule(request.get_json())
+
 @app.route('/AskShiftSwap', methods=['POST'])
 @jwt_required
 def AskShiftSwap():
     return doAskShiftSwap(request.get_json())
+
+
+@app.route('/GetShiftScheduled', methods= ['POST'])
+@jwt_required
+def GetShiftScheduled():
+    return DoGetShiftScheduled(request.get_json())
+
 
 @app.route('/ConfirmShiftSwap', methods=['POST'])
 @jwt_required
