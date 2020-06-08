@@ -7,12 +7,9 @@ from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift3 import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
-from flask_cors import CORS
-
-
 from server.ShiftManagerService.GetShiftScheduled import DoGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
-
+from flask_cors import CORS
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
