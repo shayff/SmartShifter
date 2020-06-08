@@ -6,10 +6,10 @@ from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift3 import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
-
+from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
 from server.ShiftManagerService.GetShiftScheduled import DoGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
-
+from flask_cors import CORS
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -23,6 +23,7 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['JWT_SECRET_KEY'] = '1asdasd#$$!1ddX'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
@@ -60,10 +61,19 @@ def SetShiftsSchedule():
 def AskShiftSwap():
     return doAskShiftSwap(request.get_json())
 
+
 @app.route('/GetShiftScheduled', methods= ['POST'])
 @jwt_required
 def GetShiftScheduled():
     return DoGetShiftScheduled(request.get_json())
+
+
+@app.route('/ConfirmShiftSwap', methods=['POST'])
+@jwt_required
+def ConfirmShiftSwap():
+    return doConfirmShiftSwap(request.get_json())
+
+
 #for dubg
 if __name__== '__main__':
     app.run(debug=True, port=5002)
