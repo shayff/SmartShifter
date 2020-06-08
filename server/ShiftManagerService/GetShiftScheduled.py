@@ -18,7 +18,6 @@ def DoGetShiftScheduled(data):
     #     data = data['data']
         current_user = get_jwt_identity()
         user = users_collection.find_one({'_id': current_user['_id']})
-        print(user)
         shiftScheduled = dict()
 
         # check if user has company
@@ -29,10 +28,15 @@ def DoGetShiftScheduled(data):
             list_of_shifts = company['shifts']
 
             for shift in list_of_shifts:
-                if shift['date'] in shiftScheduled:
-                    shiftScheduled[shift['date']].append(shift)
-                else:
+               print(shift)
+               for id_employee in shift['employees']:
+                   name_employee = users_collection.find_one({'_id': id_employee})
+                   shift['employees']
+               if shift['date'] in shiftScheduled:
+                   shiftScheduled[shift['date']].append(shift)
+               else:
                     shiftScheduled[shift['date']] = [shift]
+
 
 
 
