@@ -7,6 +7,7 @@ from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift3 import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 
+from server.ShiftManagerService.GetShiftScheduled import DoGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
 
 
@@ -59,6 +60,10 @@ def SetShiftsSchedule():
 def AskShiftSwap():
     return doAskShiftSwap(request.get_json())
 
+@app.route('/GetShiftScheduled', methods= ['POST'])
+@jwt_required
+def GetShiftScheduled():
+    return DoGetShiftScheduled(request.get_json())
 #for dubg
 if __name__== '__main__':
     app.run(debug=True, port=5002)
