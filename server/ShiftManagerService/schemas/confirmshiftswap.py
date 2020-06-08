@@ -2,22 +2,22 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
 
-asktochangeshift_schema = {
+confirmshiftswap_schema = {
     "type": "object",
     "properties": {
-        "shift": {
+        "id": {
             "type": "integer"
         }
     },
     "required": [
-        "shift"
+        "id"
     ],
     "additionalProperties": False
 }
 
-def validate_askToChangeShift(data):
+def validate_confirmShiftSwap(data):
     try:
-        validate(data, asktochangeshift_schema)
+        validate(data, confirmshiftswap_schema)
     except ValidationError as e:
         return {'ok': False, 'msg': e}
     except SchemaError as e:
