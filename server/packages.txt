@@ -6,3 +6,4 @@ bson-0.5.9
 jsonschema-3.2.0
 dnspython-1.16.0
 pandas-1.0.3
+Flask-CORS-3.0.8

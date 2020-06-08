@@ -7,6 +7,8 @@ from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift3 import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
+from flask_cors import CORS
+
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
     def default(self, o):
@@ -19,6 +21,7 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['JWT_SECRET_KEY'] = '1asdasd#$$!1ddX'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
