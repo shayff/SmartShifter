@@ -12,6 +12,8 @@ from CompaniesService.Update import doUpdate
 from CompaniesService.UpdateShift import doUpdateShift
 from CompaniesService.addshifts import doAddShifts
 from CompaniesService.Profile import doProfile
+#from CompaniesService.UpdateProfile import doUpdateProfile
+from CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.DeleteShift import doDeleteShift
 from flask_cors import CORS
 
@@ -95,6 +97,11 @@ def ListOfEmployees():
 @jwt_required
 def profile():
     return doProfile()
+
+@app.route("/companies/updateemployee", methods=['POST'])
+@jwt_required
+def updateemployee():
+    return doUpdateEmployee(request.get_json())
 
 #for dubg
 if __name__== '__main__':
