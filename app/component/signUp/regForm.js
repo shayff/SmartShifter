@@ -9,7 +9,7 @@ export default class Regform extends Component {
       super(inside);
       this.state = {
           firstName:'',
-          lestName:'',
+          lastName:'',
           address:'',
           ID:0,
           phoneNumber:0,
@@ -20,11 +20,11 @@ export default class Regform extends Component {
     }
     check_input_user = () =>
     {
-      if (this.state.password.length >= 3)
+      if (this.state.password.length >= 3) // correct email && all the form neet to be full
       {
         if (this.state.password == this.state.confirmePassword)
         {
-          Alert.alert('good to get in...');
+          this.props.fatherProps.navigation.navigate('Cross_screen');
         }
         else
         {
@@ -44,7 +44,7 @@ export default class Regform extends Component {
             <KeyboardAvoidingView behavior="padding">
              
                 <View style={Styles.line}>
-                    <TextInput style={Styles.secendTextInput} placeholder="Lest name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.lestName = val}/>
+                    <TextInput style={Styles.secendTextInput} placeholder="Last name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.lastName = val}/>
                     
                     <TextInput style={Styles.firstTextInput} placeholder="First name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.firstName = val} />
                 </View>

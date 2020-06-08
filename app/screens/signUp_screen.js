@@ -11,13 +11,13 @@ export default class SignUp extends Component {
 
             <View style={Styles.container}>
 
-                <View style={global_styles.logo_container }>
+                <View style={global_styles.logo_container}>
                 <Image style={global_styles.image} source={require('../component/login/images/pngguru.com.png')}/>
                 <Text style={global_styles.smallTitle, Styles.smallTitle}>Happy to see you joining</Text>
                 </View>
 
-                <View  style={Styles.reg}>
-                    <Regform/>
+                <View style={Styles.reg}>
+                    <Regform fatherProps={this.props}/>
                 </View>
             </View>
         

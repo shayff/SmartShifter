@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { StyleSheet,Alert, Text, View, TextInput,TouchableOpacity, KeyboardAvoidingView,StatusBar } from 'react-native';
+import { StyleSheet, Alert, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native';
 import {Get_Server_login_to_app} from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/Server'
 
 
@@ -16,7 +16,7 @@ export default class LoginForm extends Component {
   
   check_password= () =>
   {
-    if (this.state.password.length >= 3)
+    if (this.state.password.length >= 3) // correct email
     {
       return true;
     }
