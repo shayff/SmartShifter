@@ -11,6 +11,7 @@ from server.ShiftManagerService.GetShiftScheduled import DoGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
 from flask_cors import CORS
 
+
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
     def default(self, o):
