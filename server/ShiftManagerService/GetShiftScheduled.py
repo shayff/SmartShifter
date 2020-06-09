@@ -10,7 +10,7 @@ companies_collection = db['companies']
 users_collection = db['users']
 
 #data= {"start_date": "2020-04-12", "end_date": "2020-04-14"}
-def DoGetShiftScheduled(data):
+def doGetShiftScheduled(data):
 
     current_user = get_jwt_identity()
     user = users_collection.find_one({'_id': current_user['_id']})

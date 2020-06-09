@@ -33,9 +33,12 @@ def doAddEmployees(data):
             else:
                employees_not_updated.append(employe)
 
+            #switch the email given from the user to the id
+            employe["id"] = user_result["_id"]
+            del employe["email"]
+
          #remove employees that already have company
          employees = [x for x in employees if x not in employees_not_updated]
-         print(employees)
 
          # update employees in the company
          doc = companies_collection.find_one_and_update({'_id': company_id}, {'$addToSet': {'employees': {'$each': employees}}})

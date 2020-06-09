@@ -7,6 +7,9 @@ create_schema = {
     "properties": {
         "company name": {
             "type": "string"
+        },
+        "address":{
+            "type": "string"
         }
     },
     "required": [

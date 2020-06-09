@@ -6,9 +6,6 @@ from jsonschema.exceptions import SchemaError
 addshifts_schema = {
     "type": "object",
     "properties": {
-        "day": {
-             "type": "string"
-        },
         "name": {
             "type": "string"
         },

@@ -12,6 +12,7 @@ counters_collection = db['counters']
 
 def doListOfEmployees():
     current_user = get_jwt_identity()
+    print(current_user)
     result = users_collection.find_one({'_id': current_user['_id']})
     if 'company' not in result:
         return jsonify({'ok': False, 'msg': 'User has no company'}), 401

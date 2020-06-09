@@ -91,6 +91,8 @@ def Update():
 @app.route("/companies/listofemployees", methods=['GET'])
 @jwt_required
 def ListOfEmployees():
+    #print("test")
+    #return
     return doListOfEmployees()
 
 @app.route("/companies/profile", methods=['GET'])

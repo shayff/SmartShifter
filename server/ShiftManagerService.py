@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift3 import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
-from server.ShiftManagerService.GetShiftScheduled import DoGetShiftScheduled
+from server.ShiftManagerService.GetShiftScheduled import doGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
 from flask_cors import CORS
 
@@ -66,7 +66,7 @@ def AskShiftSwap():
 @app.route('/GetShiftScheduled', methods= ['POST'])
 @jwt_required
 def GetShiftScheduled():
-    return DoGetShiftScheduled(request.get_json())
+    return doGetShiftScheduled(request.get_json())
 
 
 @app.route('/ConfirmShiftSwap', methods=['POST'])
