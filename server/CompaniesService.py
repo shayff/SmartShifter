@@ -11,8 +11,9 @@ from CompaniesService.ListOfEmployees import doListOfEmployees
 from CompaniesService.Update import doUpdate
 from CompaniesService.UpdateShift import doUpdateShift
 from CompaniesService.addshifts import doAddShifts
-
+from CompaniesService.Profile import doProfile
 from server.CompaniesService.DeleteShift import doDeleteShift
+from flask_cors import CORS
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -27,6 +28,7 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['JWT_SECRET_KEY'] = '1asdasd#$$!1ddX'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
@@ -88,6 +90,11 @@ def Update():
 @jwt_required
 def ListOfEmployees():
     return doListOfEmployees()
+
+@app.route("/companies/profile", methods=['GET'])
+@jwt_required
+def profile():
+    return doProfile()
 
 #for dubg
 if __name__== '__main__':

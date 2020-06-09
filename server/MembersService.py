@@ -10,7 +10,7 @@ from MembersService.GetMessage import doGetMessages
 from MembersService.Profile import doProfile
 from MembersService.UpdatMessage import doUpdateMessage
 from MembersService.UpdateProfile import doUpdateProfile
-
+from flask_cors import CORS
 from bson.objectid import ObjectId
 
 
@@ -27,6 +27,7 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['JWT_SECRET_KEY'] = "1asdasd#$$!1ddX"
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
