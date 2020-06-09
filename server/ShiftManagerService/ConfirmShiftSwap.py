@@ -20,15 +20,23 @@ def doConfirmShiftSwap(userInput):
         #check if user has company
         if 'company' in result:
             company_id = result['company']
-            shift_swap = companies_collection.find_one({'_id': company_id, 'shifts_swaps.id': data['id']},{'shifts_swaps.$':1})
-            shift_swap = shift_swap['shifts_swaps'][0]
-            ##            shift_swap = companies_collection.find_one({"$and": [{'_id': company_id}, {'shifts_swaps.id': data['id']}]})
-            print(shift_swap)
+            user_id = result['_id']
+            #swap employees  id-employee_ask
+            employee_ask = companies_collection.find_one({'_id': company_id, 'shifts_swaps.id': data['swap_id']},{'shifts_swaps.$.employee_ask'})
+            print("employee_ask")
+            print(employee_ask)
 
+            #Update status to 'Confirmed'
+            shift_swap = companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},{'$set': {'shifts_swaps.$.status': 'Confirmed'}})
 
-            #need to finish update of shift
+            #print(shift_swap)
 
-            return jsonify({'ok': True, 'msg': 'Created shift swap request successfully'}), 200
+            if shift_swap: #Exists
+                return jsonify({'ok': True, 'msg': 'Created shift swap request successfully'}), 200
+            else:
+                return jsonify({'ok': False, 'msg': 'there is not swap with this id '}), 401
         else:
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
+    else:
+        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
 
