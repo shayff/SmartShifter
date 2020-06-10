@@ -6,14 +6,17 @@ from jsonschema.exceptions import SchemaError
 updateemployee_schema = {
     "type": "object",
     "properties": {
-        "employee": {
+        "id": {
             "type": "integer"
         },
-        "data":{
-            "type": "object"
+        "rank":{
+            "type": "integer"
+        },
+        "job type":{
+            "type": "array"
         }
     },
-    "required": ["employee"],
+    "required": ["id"],
     "additionalProperties": False
 }
 

@@ -18,24 +18,31 @@ counters_collection = db["counters"]
 def doUpdateEmployee(data):
    data = validate_updateemployee(data)
    if data["ok"]:
-      data = data["data"]
+      employee = data["data"]
 
       #check if user has company
-      current_user = get_jwt_identity()
-      result = users_collection.find_one({'_id': current_user['_id']})
+      logged_in_user = get_jwt_identity()
+      result = users_collection.find_one({'_id': logged_in_user['_id']})
       if "company" in result:
          company_id = result["company"]
-         employee = data["employee"]
 
-         # check if the relevance employees in the company
+         #search if the given employee in the company
          company = companies_collection.find_one({'_id': company_id})
-         if employee in company["employees"]:
-             message = companies_collection.find_one_and_update({'_id': company_id, 'employees.id': employee},
-                                                            {'$addFields': {'employees.$': data['data']}})
+         employee_to_update = next((x for x in company["employees"] if x["id"] == employee["id"]), None)
+
+         if(employee_to_update):
+
+            # update the relevant fields in the object
+            for key in employee:
+               employee_to_update[key] = employee[key]
+
+            # update object in mongo
+            companies_collection.update({'_id': company_id, 'employees.id': employee_to_update["id"]},
+                                                            {'$set': {'employees.$': employee_to_update}})
          else:
              return jsonify({'ok': False, 'msg': 'User is not in company'}), 400
 
-         return jsonify({'ok': True, 'msg': 'Removed employees', 'removed': employees, 'not removed': employees_not_updated}), 200
+         return jsonify({'ok': True, 'msg': 'Updated successfully'}), 200
       else:
          return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401
    else:
