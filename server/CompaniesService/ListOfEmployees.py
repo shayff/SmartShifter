@@ -26,6 +26,7 @@ def doListOfEmployees():
             employeeFromDb['job type'] = employee['job type']
             employeeFromDb['rank'] = employee['rank']
             del employeeFromDb['password']
-            del employeeFromDb['company']
+            if 'company' in employeeFromDb:
+                del employeeFromDb['company']
             employeesResult.append(employeeFromDb)
         return jsonify({'ok': True, 'msg': 'Successfully', 'data': employeesResult}), 200
