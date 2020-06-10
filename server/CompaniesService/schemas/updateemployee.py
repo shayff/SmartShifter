@@ -14,6 +14,9 @@ updateemployee_schema = {
         },
         "job type":{
             "type": "array"
+        },
+        "time of joining":{
+            "type": "integer"
         }
     },
     "required": ["id"],
