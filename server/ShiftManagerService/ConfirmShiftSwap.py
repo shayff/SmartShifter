@@ -21,20 +21,33 @@ def doConfirmShiftSwap(userInput):
         if 'company' in result:
             company_id = result['company']
             user_id = result['_id']
-            #swap employees  id-employee_ask
-            employee_ask = companies_collection.find_one({'_id': company_id, 'shifts_swaps.id': data['swap_id']},{'shifts_swaps.$.employee_ask'})
-            print("employee_ask")
-            print(employee_ask)
+            shift_swap = companies_collection.find_one({'_id': company_id , 'shifts_swaps.id': data['swap_id']},{"shifts_swaps.$": data['swap_id']})
 
-            #Update status to 'Confirmed'
-            shift_swap = companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},{'$set': {'shifts_swaps.$.status': 'Confirmed'}})
-
-            #print(shift_swap)
 
             if shift_swap: #Exists
-                return jsonify({'ok': True, 'msg': 'Created shift swap request successfully'}), 200
+                shift_swap = shift_swap["shifts_swaps"][0]
+                if (shift_swap["status"] == "wait_for_swap"):
+
+                    # search for the employees in the given shift
+                    data = companies_collection.find_one({'_id': company_id, 'shifts.id': shift_swap["shift_id"]},{"shifts": {"$elemMatch": {"id":shift_swap["shift_id"]} },"shifts.employees":1})
+                    employees = data["shifts"][0]["employees"]
+
+                    # switch the employees
+                    employees = [user_id if x==shift_swap["employee_ask"] else x for x in employees]
+
+                    # update the new employes list in database
+                    companies_collection.update({'_id': company_id, 'shifts.id': shift_swap["shift_id"]},
+                                                                            {'$set': {'shifts.$.employees': employees}})
+
+                    # Update status to 'Confirmed'
+                    companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
+                                                {'$set': {'shifts_swaps.$.status': 'Confirmed'}})
+
+                else:
+                    return jsonify({'ok': False, 'msg': 'there is no need for swap'}), 401
+                return jsonify({'ok': True, 'msg': 'Confirm swap request successfully'}), 200
             else:
-                return jsonify({'ok': False, 'msg': 'there is not swap with this id '}), 401
+                return jsonify({'ok': False, 'msg': 'there is no swap with this id '}), 401
         else:
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
     else:
