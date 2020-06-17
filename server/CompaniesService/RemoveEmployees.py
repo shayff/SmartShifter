@@ -17,8 +17,8 @@ def doRemoveEmployees(data):
       data = data["data"]
 
       #check if user has company
-      current_user = get_jwt_identity()
-      result = users_collection.find_one({'_id': current_user['_id']})
+      logged_in_user = get_jwt_identity()
+      result = users_collection.find_one({'_id': logged_in_user['_id']})
       if "company" in result:
          company_id = result["company"]
          employees = data["employees"]
@@ -30,6 +30,7 @@ def doRemoveEmployees(data):
          employees = [x for x in employees if x not in employees_not_updated]
 
          #iterate for each epmloye, remove his company id
+         print(employees)
          for employe in employees:
             users_collection.find_one_and_update({"_id": employe}, {"$unset": {"company": ""}})
             companies_collection.find_one_and_update({"_id": company_id}, {"$pull": {"employees": {"id": employe}}})

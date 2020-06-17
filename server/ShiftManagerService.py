@@ -4,7 +4,7 @@ import datetime
 import json
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
-from ShiftManagerService.BuildShift3 import doBuildShift
+from ShiftManagerService.BuildShift import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
 from server.ShiftManagerService.GetShiftScheduled import doGetShiftScheduled
