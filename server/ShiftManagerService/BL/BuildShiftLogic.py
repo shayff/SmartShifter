@@ -1,4 +1,4 @@
-
+import numpy as np
 from .Hungarian import Hungarian
 
 #rank of availble/prefer
@@ -30,7 +30,7 @@ class buildshiftclass:
                 return None
             else:
                 # build rank matrix
-                rank_matrix = build_rank_matrix(company_id, date, listOfShifts, listOfEmployees)
+                rank_matrix = build_rank_matrix(date, listOfShifts, listOfEmployees)
 
                 # Run the hungarian algorithm
                 hungarian = Hungarian(rank_matrix, is_profit_matrix=True)
@@ -78,7 +78,7 @@ def is_prefence_for_given_date(preference,date):
     return False
 
 
-def build_rank_matrix(companyId, date,listOfShifts, listOfEmployees):
+def build_rank_matrix(date,listOfShifts, listOfEmployees):
     # for each shift, add the employee that "available" or "prefer"
 
     #create shift difficulty matrix
