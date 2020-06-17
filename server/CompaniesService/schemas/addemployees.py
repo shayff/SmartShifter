@@ -20,7 +20,7 @@ addemployees_schema = {
                     "type": "array"
                 },
                 "time of joining": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "preference" : {
                     "type": "array"
