@@ -12,7 +12,8 @@ from CompaniesService.Update import doUpdate
 from CompaniesService.UpdateShift import doUpdateShift
 from CompaniesService.addshifts import doAddShifts
 from CompaniesService.Profile import doProfile
-#from CompaniesService.UpdateProfile import doUpdateProfile
+from CompaniesService.GetPreferences import doGetPreferences
+from CompaniesService.PrefenceFromManager import doPrefenceFromManager
 from CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.DeleteShift import doDeleteShift
 from flask_cors import CORS
@@ -104,6 +105,21 @@ def profile():
 @jwt_required
 def updateemployee():
     return doUpdateEmployee(request.get_json())
+
+
+
+@app.route("/companies/PrefenceFromManager", methods=['POST'])
+@jwt_required
+def PrefenceFromManager():
+    return doPrefenceFromManager(request.get_json())
+
+
+@app.route("/companies/GetPreferences", methods=['GET'])
+@jwt_required
+def GetPreferences():
+    return doGetPreferences()
+
+
 
 #for dubg
 if __name__== '__main__':
