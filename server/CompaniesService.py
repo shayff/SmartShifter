@@ -54,7 +54,7 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route("/create", methods=['POST'])
+@app.route("/companies/create", methods=['POST'])
 @jwt_required
 def Create():
     return doCreate(request.get_json())

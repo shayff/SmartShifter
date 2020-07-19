@@ -34,7 +34,7 @@ updateshift_schema = {
             "type": "integer"
         },
         "day part": {
-            "type": "integer"
+            "type": "array"
         },
         "employees": {
           "type": "array"
