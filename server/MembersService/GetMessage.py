@@ -23,10 +23,6 @@ def doGetMessages():
 
     for item in array_id_msg:
         msg = messages_collection.find_one({'_id': item['id']})
-        id_sender = msg['from']
-        sender =users_collection.find_one({'_id': id_sender})
-        full_name = sender['first name'] + " " + sender['last name']
-        msg['name_sender'] = full_name
         list_messages.append(msg)
 
     print(list_messages)

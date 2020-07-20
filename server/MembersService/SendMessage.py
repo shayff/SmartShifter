@@ -48,6 +48,7 @@ def doSendMessage(data):
 
             # update from in message
             data.update({'from': current_user['_id']})
+            data.update({'name_sender' : current_user['first name']+ ' ' + current_user['last name']})
 
             # insert to db.users_collection
             messages_collection.insert_one(data)
