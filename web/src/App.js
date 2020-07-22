@@ -1,97 +1,49 @@
-import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Platform,
-  TouchableHighlight,
-  Animated,
-  Easing,
-} from 'react-native';
-import logo from './logo.png';
-
-
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import NavBar from './Components/NavBar'
+import Home from './Components/Home'
+import Login from './Components/Login'
+import Register from './Components/Register'
+import Profile from './Components/Profile'
+import Employees from './Components/Employees'
+import Shifts from './Components/Shifts'
+import Settings from './Components/Settings'
+import Messages from './Components/Messages'
+import Switch from './Components/Switch'
+import UpdateProfile from './Components/UpdateProfile'
+import AddEmployee from './Components/AddEmployee'
+import UpdateSettings from './Components/UpdateSettings'
+import UpdateEmployeeInfo from './Components/UpdateEmployeeInfo'
+import GenerateShifts from './Components/GenerateShifts'
+import EditShifts from './Components/EditShifts'
 
 class App extends Component {
-  state = {
-    spinValue: new Animated.Value(0),
-  };
-
-  onClick = () => {
-    const wasRotated = this.state.spinValue._value === 1;
-    Animated.timing(this.state.spinValue, {
-      toValue: wasRotated ? 0 : 1,
-      duration: 250,
-      easing: Easing.linear,
-    }).start();
-  };
-
-  render() {
-    const spin = this.state.spinValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '360deg'],
-    });
-
+  render () {
     return (
-      <View style={styles.container}>
-        <Animated.Image
-          source={logo}
-          style={[styles.logo, {transform: [{rotate: spin}]}]}
-        />
-        <Text style={styles.title}>Create React Native Web App</Text>
-        <Text style={styles.text}>
-          Open up src/App.js to start working on your app!
-        </Text>
-        <Text style={styles.text}>
-          Changes you make will automatically reload.
-        </Text>
-        {Platform.OS !== 'web' && (
-          <Text style={styles.text}>
-            Shake your phone to open the developer menu.
-          </Text>
-        )}
-        <TouchableHighlight
-          onPress={this.onClick}
-          style={styles.button}
-          underlayColor={'#0A84D0'}>
-          <Text style={styles.buttonText}>Rotate Logo</Text>
-        </TouchableHighlight>
-      </View>
+      <Router>
+        <div className="App">
+          <NavBar />
+          <Route exact path="/" component={Home} />
+          <div className="container">
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/employees" component={Employees} />
+            <Route exact path="/shifts" component={Shifts} />
+            <Route exact path="/settings" component={Settings} />
+            <Route exact path="/messages" component={Messages} />
+            <Route exact path="/switch" component={Switch} />
+            <Route exact path="/updateProfile" component={UpdateProfile} />
+            <Route exact path="/addEmployee" component={AddEmployee} />
+            <Route exact path="/updateSettings" component={UpdateSettings} />
+            <Route exact path="/updateEmployeeInfo" component={UpdateEmployeeInfo} />
+            <Route exact path="/editShifts" component={EditShifts} />
+            <Route exact path="/generateShifts" component={GenerateShifts} />
+          </div>
+        </div>
+      </Router>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#282c34',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 300,
-    height: 300,
-  },
-  title: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  text: {
-    color: '#fff',
-  },
-  button: {
-    borderRadius: 3,
-    padding: 20,
-    marginVertical: 10,
-    marginTop: 10,
-    backgroundColor: '#1B95E0',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
 
 export default App;
