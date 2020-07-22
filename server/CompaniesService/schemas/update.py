@@ -34,6 +34,10 @@ update_schema = {
         "shifts":
             {
                 "type": "array"
+            },
+        "settings":
+            {
+                "type": "object"
             }
     },
     "required": [],
