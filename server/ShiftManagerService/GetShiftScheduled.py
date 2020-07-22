@@ -26,6 +26,7 @@ def doGetShiftScheduled(data):
         for shift in list_of_shifts:
             dic_employees = {}
             if shift['date']>=data['start_date'] and shift['date']<=data['end_date']:
+
                 #Add a employee list on each shift
                 for id_employee in shift['employees']:
                     employee_db = users_collection.find_one({'_id': id_employee},{'first name','last name'})
