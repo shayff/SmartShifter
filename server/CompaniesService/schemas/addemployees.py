@@ -6,12 +6,33 @@ addemployees_schema = {
     "type": "object",
     "properties": {
         "employees": {
-            "type": "array"
+            "type": "array",
+            "items":{
+                "type" : "object",
+                "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "job type": {
+                    "type": "array"
+                },
+                "time of joining": {
+                    "type": "string"
+                },
+                "preference" : {
+                    "type": "array"
+                }
+            },
+                "required": ["email"],
+                "additionalProperties": False
+            }
+
         }
     },
-    "required": [
-        "employees"
-    ],
+    "required": ["employees"],
     "additionalProperties": False
 }
 

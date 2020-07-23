@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from config import MongoConfig
+from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 
 
@@ -10,7 +11,7 @@ companies_collection = db['companies']
 users_collection = db['users']
 
 #data= {"start_date": "2020-04-12", "end_date": "2020-04-14"}
-def DoGetShiftScheduled(data):
+def doGetShiftScheduled(data):
 
     current_user = get_jwt_identity()
     user = users_collection.find_one({'_id': current_user['_id']})
@@ -25,6 +26,7 @@ def DoGetShiftScheduled(data):
         for shift in list_of_shifts:
             dic_employees = {}
             if shift['date']>=data['start_date'] and shift['date']<=data['end_date']:
+
                 #Add a employee list on each shift
                 for id_employee in shift['employees']:
                     employee_db = users_collection.find_one({'_id': id_employee},{'first name','last name'})
@@ -41,7 +43,7 @@ def DoGetShiftScheduled(data):
                     shiftScheduled[shift['date']] = [shift]
 
         print(shiftScheduled)
-        return jsonify({'ok': True, 'msg': 'Created shift Scheduled successfully'}), 200
+        return jsonify({'ok': True, 'data': shiftScheduled}), 200
     else:
         return jsonify({'ok': True, 'msg': 'User don\'t have company'}), 401
 

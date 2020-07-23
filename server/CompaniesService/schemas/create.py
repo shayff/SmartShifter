@@ -7,6 +7,15 @@ create_schema = {
     "properties": {
         "company name": {
             "type": "string"
+        },
+        "address":{
+            "type": "string"
+        },
+        "switch_shift":{
+            "type": "boolean"
+        },
+        "amout_of_shidts": {
+            "type": "integer"
         }
     },
     "required": [

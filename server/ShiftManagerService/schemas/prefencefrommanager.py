@@ -2,22 +2,25 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
 
-confirmshiftswap_schema = {
+PrefenceFromManager_schema = {
     "type": "object",
     "properties": {
-        "swap_id": {
-            "type": "integer"
+        "dates": {
+            {
+                "type": "array"
+                "items":
+
+            }
         }
     },
-    "required": [
-        "swap_id"
-    ],
     "additionalProperties": False
 }
 
-def validate_confirmShiftSwap(data):
+
+
+def validate_PrefenceFromManager(data):
     try:
-        validate(data, confirmshiftswap_schema)
+        validate(data, PrefenceFromManager_schema)
     except ValidationError as e:
         return {'ok': False, 'msg': e}
     except SchemaError as e:

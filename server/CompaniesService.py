@@ -12,6 +12,9 @@ from CompaniesService.Update import doUpdate
 from CompaniesService.UpdateShift import doUpdateShift
 from CompaniesService.addshifts import doAddShifts
 from CompaniesService.Profile import doProfile
+from CompaniesService.GetPreferences import doGetPreferences
+from CompaniesService.PrefenceFromManager import doPrefenceFromManager
+from CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.DeleteShift import doDeleteShift
 from flask_cors import CORS
 
@@ -51,7 +54,7 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route("/create", methods=['POST'])
+@app.route("/companies/create", methods=['POST'])
 @jwt_required
 def Create():
     return doCreate(request.get_json())
@@ -89,12 +92,34 @@ def Update():
 @app.route("/companies/listofemployees", methods=['GET'])
 @jwt_required
 def ListOfEmployees():
+    #print("test")
+    #return
     return doListOfEmployees()
 
 @app.route("/companies/profile", methods=['GET'])
 @jwt_required
 def profile():
     return doProfile()
+
+@app.route("/companies/updateemployee", methods=['POST'])
+@jwt_required
+def updateemployee():
+    return doUpdateEmployee(request.get_json())
+
+
+
+@app.route("/companies/PrefenceFromManager", methods=['POST'])
+@jwt_required
+def PrefenceFromManager():
+    return doPrefenceFromManager(request.get_json())
+
+
+@app.route("/companies/GetPreferences", methods=['GET'])
+@jwt_required
+def GetPreferences():
+    return doGetPreferences()
+
+
 
 #for dubg
 if __name__== '__main__':

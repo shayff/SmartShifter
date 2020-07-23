@@ -13,16 +13,24 @@ messages_collection = db['messages']
 
 
 def doGetMessages():
+    list_messages = []
     current_user = get_jwt_identity()
     user_in_db = users_collection.find_one({'_id': current_user['_id']})
     array_id_msg = user_in_db['messages']
+    print(array_id_msg)
 
     #Search for id_messages in all messages
-    msg = messages_collection.find({'_id': {'$in': array_id_msg}})
-    msg = loads(dumps(msg))
+
+    for item in array_id_msg:
+        msg = messages_collection.find_one({'_id': item['id']})
+        list_messages.append(msg)
+
+    print(list_messages)
+
 
     #check if List is empty
-    if not msg:
+    if not list_messages:
         return jsonify({'ok': True, 'msg': 'The messages list is empty'}), 200
     else:
-        return jsonify({'ok': True, 'msg': 'list of messages:', 'data': msg}), 200
+        return jsonify({'ok': True, 'msg': 'list of messages:', 'data': list_messages}), 200
+

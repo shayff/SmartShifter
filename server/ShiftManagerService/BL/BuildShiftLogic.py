@@ -1,133 +1,139 @@
-from copy import copy
 import numpy as np
-import pandas as pd
-from operator import itemgetter
-import datetime
+from .Hungarian import Hungarian
 
-class ShiftBuilderLogic:
-    def __init__(self, matrix, rank_matrix, amount_of_worker_in_shift, shift_start_by_day):
-        self.matrix = matrix
-        self.rank_matrix = rank_matrix
-        self.amount_of_worker_in_shift = amount_of_worker_in_shift
-        self.shift_start_by_day = shift_start_by_day
-        self.list_possible_matrix = []
-
-    def travel_matrix(self, matrix, x, y):
-        if (y == matrix.shape[0]):
-            self.list_possible_matrix.append(matrix)
-            return
-
-        if matrix[y, x] == 1:
-            copy_of_matrix = np.copy(matrix)
-            copy_of_matrix[y, x] = 0
-            self.travel_matrix(copy_of_matrix, x, y)
-            if not self.validate_matrix(matrix, x, y):
-                return
-
-        if (x < matrix.shape[1] - 1):
-            x += 1
-        else:
-            y += 1
-            x = 0
-        self.travel_matrix(matrix, x, y)
-        return
-
-    def create_list_matrix_and_count_shift(self):
-        list_matrix_shift_count = []
-        for matrix in self.list_possible_matrix:
-            list_matrix_shift_count.append((np.sum(matrix), matrix))
-        return list_matrix_shift_count
-
-    def get_list_of_max_matrix(self, tupple_count_matrix):
-        list_matrix_with_max_count = []
-        # find the maximum count in a matrix list
-        count_max = max(tupple_count_matrix, key=itemgetter(0))[0]
-        for tupple in tupple_count_matrix:
-            if (tupple[0] == count_max):
-                list_matrix_with_max_count.append(tupple[1])
-        return list_matrix_with_max_count
-
-    def get_max_rank_matrix(self, list_of_matrix):
-        return max(list_of_matrix, key=lambda m: np.sum(np.multiply(m, self.rank_matrix)))
-
-    def validate_matrix(self, matrix, x, y):
-        if (matrix[y, x] == 0):
-            print("warning")
-
-        workers_in_x_shift = matrix[:, x][:y]  # get the x'th column, until y'th worker (not included)
-        if (sum(workers_in_x_shift) > self.amount_of_worker_in_shift[
-            x] - 1):  # include the x,y one #to add amount of change the zero to the amount-1
-            return False
-
-        begin_of_day_by_shift = self.shift_start_by_day[x]
-        shift_in_one_day_by_worker = matrix[y, begin_of_day_by_shift:x]
-        if (sum(shift_in_one_day_by_worker) > 0):
-            return False;
-        return True
-
-    ###For test only###
-    '''
-    def print_list_as_matrix(self, test_list):
-        for exp in test_list:
-            self.print_matrix(exp)
-
-    def print_matrix(self, matrix):
-        df = pd.DataFrame(matrix, columns=cols, index=rows)
-        print(df)
-        print("########")
-    '''
-
-    def create_cols_and_rows(self):
-        rows = []
-        cols = []
-
-        for i in range(self.matrix.shape[0] + 1):
-            cols.append("shift" + str(i))
-
-        # for j in range(matrix.shape[1]+1):
-        #    rows.append("shift"+str(j))
-        rows = ["worker1", "worker2"]  # , "worker3", "worker4", "worker5","worker6"]
-        return rows, cols
-
-    ###End Of Test ONLY###
-
-    def BuildShift(self):
-        start = datetime.datetime.now()
-
-        #rows, cols = self.create_cols_and_rows()
-
-        # create all the possible matrix
-        self.travel_matrix(self.matrix, 0, 0)
-
-        print(len(self.list_possible_matrix))
-
-        # count for each matrix how many worker shifted in
-        tupple_count_matrix = self.create_list_matrix_and_count_shift()
-
-        print(tupple_count_matrix)
-
-        # get list of matrix with higest number of worker shifted
-        result = self.get_list_of_max_matrix(tupple_count_matrix)
-
-        # self.print_list_as_matrix(result)
-
-        max_rank_martrix = self.get_max_rank_matrix(result)
-        print(max_rank_martrix)
-        # print time calculated
-        end = datetime.datetime.now()
-        elapsed = end - start
-        print(elapsed.seconds, ":", elapsed.microseconds)
-
-'''
-# example = np.array([[0,0,1,1,0,0],[0,1,0,1,1,0],[0,0,0,1,0,1],[0,1,0,1,0,1],[1,1,0,1,0,0],[0,0,1,0,0,0]])
-example = np.array([[1, 1, 1], [1, 0, 1]])
-rank_matrix = np.array([[3, 3, 5], [1, 2, 8]])
-
-amount_of_worker_in_shift = [1, 1, 1]
-shift_start_by_day = [0, 0, 2]
-
-classtest = ShiftBuilderLogic(example, rank_matrix, amount_of_worker_in_shift, shift_start_by_day)
-classtest.BuildShift()
+#rank of availble/prefer
+rank_of_prefer = 13
+rank_of_available = 11
+rank_of_not = 0
 
 
-'''
+class buildshiftclass:
+    def __init__(self,list_of_shifts,list_of_employees,dates):
+        self.list_of_employees = list_of_employees
+        self.list_of_shifts = list_of_shifts
+        self.dates = dates
+
+    def buildShift(self):
+
+    #def build_shifts(date_array, company_id):
+        scheduled_shifts = dict()
+
+        for date in self.dates:
+            # get the employess and shift that relevant for current date
+            # Possible to improve by get the list all shift once and filter it each time
+            listOfShifts = self.get_list_of_shifts(date)
+            listOfEmployees = self.get_list_of_employees(date)
+
+            # check if there is atleast 1 employe and 1 shift
+            if not listOfShifts or not listOfEmployees:
+                print("No shifts or employees")
+                return None
+            else:
+                # build rank matrix
+                rank_matrix = self.build_rank_matrix(date, listOfShifts, listOfEmployees)
+
+                # Run the hungarian algorithm
+                hungarian = Hungarian(rank_matrix, is_profit_matrix=True)
+                hungarian.calculate()
+
+                for employee, shift in hungarian.get_results():
+                    shift_id = listOfShifts[shift]['id']
+                    employee_id = listOfEmployees[employee]['id']
+                    print("worker:", employee_id, "scheduled for shift: ", shift_id)
+
+                    # add the employe shifted to the scheduled_shifts dict
+                    if shift_id in scheduled_shifts:
+                        scheduled_shifts[shift_id].append(employee_id)
+                    else:
+                        scheduled_shifts[shift_id] = [employee_id]
+
+                print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
+                print("-" * 60)
+
+        return scheduled_shifts
+
+
+
+    # get list of shifts
+    def get_list_of_shifts(self, date):
+        list_of_shifts_by_date = [x for x in self.list_of_shifts if x['date'] == date]
+
+        #get list where each shift duplicate by the shift['amount']
+        result = []
+        for shift in list_of_shifts_by_date:
+            for i in range(shift['amount']):
+                result.append(shift)
+        return result
+
+    # get list of employees
+    def get_list_of_employees(self, date):
+
+        return [x for x in self.list_of_employees if self.is_prefence_for_given_date(x['preference'],date)]
+
+    def is_prefence_for_given_date(self, preference, date):
+        for x in preference:
+            if(x['date'] == date):
+                #check if there is atleast one prefence or aviable
+                if(x['prefer'] or x['available']):
+                    return True
+        return False
+
+
+    def build_rank_matrix(self, date,listOfShifts, listOfEmployees):
+        # for each shift, add the employee that "available" or "prefer"
+
+        #create shift difficulty matrix
+        shift_difficulty_array=[]
+        for shift in listOfShifts:
+            shift_difficulty_array.append(shift['difficulty'])
+        difficulty_matrix=np.vstack([shift_difficulty_array]*len(listOfEmployees))
+
+        #create employee rank matrix
+        employee_rank_array = []
+        for employee in listOfEmployees:
+            employee_rank_array.append(employee['rank'])
+        emp_rank_matrix=np.vstack([employee_rank_array]*len(listOfShifts))
+        emp_rank_matrix=emp_rank_matrix.transpose()
+
+        rank_matrix = emp_rank_matrix + difficulty_matrix
+
+        #add the rank of employee prefence for a shift
+        for y in range(len(listOfEmployees)):
+            for x in range(len(listOfShifts)):
+
+                #look for the prefence of the employee for the current shift
+                date = listOfShifts[x]['date']
+                prefence_of_employee_to_shift = next((z for z in listOfEmployees[y]['preference'] if z['date'] == date), None)
+
+                #if there are prefence for the current shift check if it's 'prefer' or 'available' or 'not'
+                rank_to_add = rank_of_not
+                if(prefence_of_employee_to_shift != None):
+
+                    #Check if employee has prefence for all prefence needed for the shift
+                    big  = prefence_of_employee_to_shift['prefer'] + prefence_of_employee_to_shift['available']
+                    small = listOfShifts[x]['day part']
+                    result = all(elem in big for elem in small)
+
+                    #debug
+                    print("shift: ", listOfShifts[x]['id'])
+                    print("employee: ", listOfEmployees[y]['id'])
+                    print(result)
+                    print("#####")
+                    if result:
+
+                        #for each part of the shift we check employee prefence and set the rank
+                        for prefer in listOfShifts[x]['day part']:
+                            if(prefer in prefence_of_employee_to_shift['prefer']):
+                                rank_to_add += rank_of_prefer
+                            elif(prefer in prefence_of_employee_to_shift['available']):
+                                rank_to_add += rank_of_available
+                            else:
+                                rank_to_add += rank_of_not
+
+                #add the current rank for the rank matrix
+                rank_matrix[y, x] += rank_to_add
+        return rank_matrix
+
+
+
+

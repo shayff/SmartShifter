@@ -48,6 +48,7 @@ def doSendMessage(data):
 
             # update from in message
             data.update({'from': current_user['_id']})
+            data.update({'name_sender' : current_user['first name']+ ' ' + current_user['last name']})
 
             # insert to db.users_collection
             messages_collection.insert_one(data)
@@ -58,7 +59,7 @@ def doSendMessage(data):
                                                                                              'status': 'unread'}],
                                                                                   '$position': 0}}})
 
-            return jsonify({'ok': True, 'msg': 'The message sending successfully!'}), 401
+            return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
 
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400

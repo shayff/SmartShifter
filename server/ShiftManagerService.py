@@ -4,12 +4,14 @@ import datetime
 import json
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
-from ShiftManagerService.BuildShift3 import doBuildShift
+from ShiftManagerService.BuildShift import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
-from server.ShiftManagerService.GetShiftScheduled import DoGetShiftScheduled
+from server.ShiftManagerService.GetShiftScheduled import doGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
+from ShiftManagerService.GetShiftsSwaps import doGetShiftsSwaps
 from flask_cors import CORS
+
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -65,13 +67,18 @@ def AskShiftSwap():
 @app.route('/GetShiftScheduled', methods= ['POST'])
 @jwt_required
 def GetShiftScheduled():
-    return DoGetShiftScheduled(request.get_json())
+    return doGetShiftScheduled(request.get_json())
 
 
 @app.route('/ConfirmShiftSwap', methods=['POST'])
 @jwt_required
 def ConfirmShiftSwap():
     return doConfirmShiftSwap(request.get_json())
+
+@app.route('/GetShiftsSwaps', methods=['POST'])
+@jwt_required
+def GetShiftsSwaps():
+    return doGetShiftsSwaps(request.get_json())
 
 
 #for dubg
