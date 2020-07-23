@@ -94,6 +94,7 @@ def GetMessages():
 def UpdatMessage():
     return doUpdateMessage(request.get_json())
 
+
 #for debug
 if __name__== '__main__':
     app.run(debug=True, port=5000)

@@ -16,6 +16,7 @@ from CompaniesService.GetPreferences import doGetPreferences
 from CompaniesService.PrefenceFromManager import doPrefenceFromManager
 from CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.DeleteShift import doDeleteShift
+from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
 from flask_cors import CORS
 
 
@@ -119,6 +120,10 @@ def PrefenceFromManager():
 def GetPreferences():
     return doGetPreferences()
 
+@app.route("/companies/PrefenceFromWorker", methods=['POST'])
+@jwt_required
+def PrefenceFromWorker():
+    return doPrefenceFromWorker(request.get_json())
 
 
 #for dubg

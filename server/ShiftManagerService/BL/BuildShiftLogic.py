@@ -17,8 +17,9 @@ class buildshiftclass:
 
     #def build_shifts(date_array, company_id):
         scheduled_shifts = dict()
-
+        print(self.dates)
         for date in self.dates:
+            print(date)
             # get the employess and shift that relevant for current date
             # Possible to improve by get the list all shift once and filter it each time
             listOfShifts = self.get_list_of_shifts(date)
@@ -50,7 +51,7 @@ class buildshiftclass:
                 print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
                 print("-" * 60)
 
-            return scheduled_shifts
+        return scheduled_shifts
 
 
 
