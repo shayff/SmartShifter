@@ -9,7 +9,11 @@ class Shifts extends Component {
     constructor() {
         super();
      this.state = {
-        data : [],
+        // data: [
+        //     { start_date:'2020-07-22 6:00', end_date:'2020-07-22 8:00', text:'waiter: eliran, shay', id: 1 },
+        //     { start_date:'2020-07-24 10:00', end_date:'2020-07-24 18:00', text:'waiter: daniel, nely', id: 2 }
+        // ],
+        weeklyShifts : [],
         sunday:moment().day(0),
         monday:moment().day(1),
         tuesday:moment().day(2),
@@ -18,7 +22,9 @@ class Shifts extends Component {
         friday:moment().day(5),
         saturday:moment().day(6),
         thisSunday:moment().day(0),
-        today:moment()
+        today:moment(),
+        hours:["00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00",
+               "12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00","24:00"]
         };
     }
 
@@ -109,25 +115,8 @@ class Shifts extends Component {
         });
     }
 
-    componentDidMount()
+    initializeTable()
     {
-        this.colorToday()
-        const shifts ={
-            start_date: "2020-04-22", 
-            end_date: "2020-04-24"
-        }
-        getShifts(shifts).then(shifts =>{
-        console.log(shifts);
-        if(shifts){
-            console.log(shifts);
-         this.setState({
-            StartTime:shifts["start_date"],
-            EndTime:shifts["end_date"]});
-             }
-        })
-    };
-
-    render () {
         const sunday= "table-light shifts 1";
         const monday= "table-light shifts 2";
         const tuesday= "table-light shifts 3";
@@ -135,8 +124,68 @@ class Shifts extends Component {
         const thursday= "table-light shifts 5";
         const friday= "table-light shifts 6";
         const saturday= "table-light shifts 7";
+        const hoursColor= "table-info";
 
-        const hours= "table-info";
+       return this.state.hours.map((hours,index) => (
+            <tr key={index}>
+            <th scope="row" className={hoursColor}>{hours}</th>
+            <th scope="row" className={sunday}>{this.initializeShifts(this.state.sunday.format('YYYY-MM-DD'),hours)}</th>
+            <th scope="row" className={monday}>{this.initializeShifts(this.state.monday.format('YYYY-MM-DD'),hours)}</th>
+            <th scope="row" className={tuesday}>{this.initializeShifts(this.state.tuesday.format('YYYY-MM-DD'),hours)}</th>
+            <th scope="row" className={wednesday}>{this.initializeShifts(this.state.wednesday.format('YYYY-MM-DD'),hours)}</th>
+            <th scope="row" className={thursday}>{this.initializeShifts(this.state.thursday.format('YYYY-MM-DD'),hours)}</th>
+            <th scope="row" className={friday}>{this.initializeShifts(this.state.friday.format('YYYY-MM-DD'),hours)}</th>
+            <th scope="row" className={saturday}>{this.initializeShifts(this.state.saturday.format('YYYY-MM-DD'),hours)}</th>
+            </tr>
+            ));
+    }
+//
+    initializeShifts(day,hour)
+    {   
+        if(this.state.weeklyShifts[day])
+        {
+            for(let i=0; i<this.state.weeklyShifts[day].length; i++)
+            {
+                if((this.state.weeklyShifts[day][i])["start time"]<= hour && (this.state.weeklyShifts[day][i])["end time"]> hour )
+                {
+                    return (                  
+                    <div className = "badge badge-primary text-wrap" style = { { width: '100%', height: '100%'} } >
+                        <p className="font-weight-bold text-center" style = { {fontSize:'18px'} } >
+                          <u>{(this.state.weeklyShifts[day][i])["start time"]} - {(this.state.weeklyShifts[day][i])["end time"]}</u>
+                        </p>
+                        <p className="font-weight-normal text-left" style = { {fontSize:'17px'} }>
+                        <u>{(this.state.weeklyShifts[day][i])["job type"]}s:</u>
+                        </p>
+                        <p className="font-weight-normal text-left " style = { {fontSize:'15px'} }>
+                        {(this.state.weeklyShifts[day][i])["employees"].map((employee) => 
+                            <p>
+                                {employee["first name"]} {employee["last name"]}
+                            </p>)}
+                        </p>
+                    </div>
+                    )
+                }
+            }
+        }
+    }
+
+    componentDidMount()
+    {
+        this.colorToday();
+
+        const shifts ={
+            start_date: this.state.sunday.format('YYYY-MM-DD'), 
+            end_date: this.state.saturday.format('YYYY-MM-DD')
+        }
+
+        getShifts(shifts).then(shifts =>{
+        if(shifts){
+            this.setState({ weeklyShifts:shifts},() => console.log(this.state.weeklyShifts));
+          }
+        })
+    };
+
+    render () {
         return (
             <div className="container">
                 <div className="jumbotron mt-5">
@@ -185,260 +234,11 @@ class Shifts extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                            <th scope="row" id="Sunday"className={hours}>00:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>01:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>02:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>03:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>04:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>05:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>06:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>07:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>08:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>09:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>10:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>11:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>12:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>13:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>14:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>15:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>16:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>17:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>18:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>19:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>20:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>21:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>22:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>23:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
-                            <tr>
-                            <th scope="row" className={hours}>24:00</th>
-                            <th scope="row" className={sunday}></th>
-                            <th scope="row" className={monday}></th>
-                            <th scope="row" className={tuesday}></th>
-                            <th scope="row" className={wednesday}></th>
-                            <th scope="row" className={thursday}></th>
-                            <th scope="row" className={friday}></th>
-                            <th scope="row" className={saturday}></th>
-                            </tr>
+                        {this.initializeTable()}
                         </tbody>
                         </table>
-                 {/* </div>  */}
-                </div> 
+                 </div> 
+                {/* </div>  */}
                 <button type="submit" className="btn btn-lg btn-primary btn-block" onClick={() => this.onEditShifts(`/editShifts`)}>
                                 Edit Submission Of Shifts
                     </button>   

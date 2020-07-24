@@ -16,23 +16,30 @@ class UpdateSettings extends Component {
     }
 
 
-    validateRegisterForm() {
+    validateRegisterForm() 
+    {
         const company_name = document.forms["MyForm5"]["company_name"].value;
         const company_address = document.forms["MyForm5"]["company_address"].value;
         const amout_of_shifts = document.forms["MyForm5"]["amout_of_shifts"].value;
         let validate = true;
 
         if (company_name === "" || company_address === "" || amout_of_shifts === "")
-         {
+        {
           alert("All Fields Must Be Filled");
           validate = false;
         }
 
         return validate;
-      }
+    }
 
-      onChange (e) {
+
+    onChange(e)
+    {
         this.setState({ [e.target.name]: e.target.value })
+    }
+
+    handleChange = () => {
+        this.setState({ switch_shifts: !this.state.switch_shifts });
     }
 
     onSubmit (e) {
@@ -50,8 +57,8 @@ class UpdateSettings extends Component {
         if(this.validateRegisterForm()) {
             updateSettings(newSettings).then(res => {
             this.props.history.push(`/settings`)
-        })
-    }
+          })
+        }
     }
 
     componentDidMount(){
@@ -94,8 +101,8 @@ class UpdateSettings extends Component {
                                  <input type="checkbox"
                                     className="form-check-input"
                                     name="switch_shifts"
-                                    onChange={this.onChange} 
-                                    checked={this.state.switch_shifts}/>
+                                    onChange={this.handleChange}
+                                    checked={this.state.switch_shifts} /> 
                                 <label htmlFor="switch_shifts">Can Employees Switch Shifts?</label>
                             </div>
                             <div className="form-group">

@@ -13,7 +13,7 @@ class Messages extends Component {
         }
 
         this.onChange = this.onChange.bind(this)
-      //  this.onSubmit = this.onSubmit.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
 
     }
 
@@ -58,9 +58,8 @@ class Messages extends Component {
         return validate;
       }
 
-      onSubmitButton () {
-        //e.preventDefault()
-        console.log(this.state.arrEmployees)
+      onSubmit (e) {
+        e.preventDefault()
 
         let who=[];
         if(this.state.toWhoToSend[0] ==='All')
@@ -82,17 +81,12 @@ class Messages extends Component {
             attached: this.state.attached,
         }
 
-         if(this.validateMessage()) {
-            console.log(meesage)
-             sendMessage(meesage)
-         }   
-
-        // console.log(meesage)
-        // if(this.validateMessage()) {
-        //     sendMessage(meesage).then(res => {
-        //     this.props.history.push(`/meesages`)
-        //    })
-        // }
+        console.log(meesage)
+        if(this.validateMessage()) {
+            sendMessage(meesage).then(res => {
+            this.props.history.push(`/meesages`)
+           })
+        }
     }
 
     componentDidMount ()
@@ -149,7 +143,7 @@ class Messages extends Component {
                 <label htmlFor="comment">Write Here The Message</label>
                 <textarea className="form-control" name="textMessage" rows="5" id="comment" placeholder="Message" onChange={this.onChange}></textarea>
                 </div>          
-                <button type="button" className="btn-lg btn-primary btn-block" onClick= {()=>this.onSubmitButton()}>
+                <button type="submit" className="btn-lg btn-primary btn-block">
                                 Send Message
                 </button>
                 </form>

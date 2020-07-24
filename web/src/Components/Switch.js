@@ -4,8 +4,16 @@ import { getSwitches,approveSwitches } from './UserFunctions'
 class Switch extends Component {
     constructor() {
         super()
-        this.state = { switchData: []
+        this.state = { 
+            switchData: [],
+            filter: "All",
         }
+        this.onChange = this.onChange.bind(this)
+
+    }
+
+    onChange (e) {
+        this.setState({ [e.target.name]: e.target.value })
     }
 
     componentDidMount ()
@@ -63,15 +71,28 @@ class Switch extends Component {
                             <tr>
                             <th scope="col">#</th>
                             <th scope="col">The Shift</th>
-                            <th scope="col">The One Who Want To Switch</th>
-                            <th scope="col">The One Who Want To Get</th>
+                            <th scope="col">The One Who Want To Switch The Shift</th>
+                            <th scope="col">The One Who Want To Get The Shift</th>
                             <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                        {this.initializeTable(/**/)}
-                        </tbody>
+                            <tbody>
+                                {this.initializeTable(/**/)}
+                            </tbody>
                         </table>
+                        <form name="myForm9">
+                            <div className="input-group mb-3">
+                                <select className="custom-select" id="inputGroupSelect02" name="filter" onChange={this.onChange}>
+                                    <option value="All">All</option >
+                                    <option value="Not Approved">Not Approved</option >
+                                    <option value="Approved">Approved</option >
+
+                                </select>
+                                <div className="input-group-append">
+                                    <label className="input-group-text" htmlFor="inputGroupSelect02"> Switching Shifts Filter </label>
+                                </div>
+                            </div>
+                        </form>
                 </div>
             </div>
         )

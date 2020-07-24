@@ -196,8 +196,8 @@ export const ListOfEmployees = () => {
 export const getShifts = date => {
     return axios
         .post("http://localhost:5002/GetShiftScheduled",{ 
-                "start_date": "2020-04-22", 
-                "end_date": "2020-04-24"
+                "start_date": date.start_date, 
+                "end_date": date.end_date
         },
         {
             headers: {
@@ -232,7 +232,7 @@ export const approveSwitches = data => {
 
 export const getSwitches = () => {
     return axios
-        .get("http://localhost:5002/1111111111",
+        .post("http://localhost:5002/GetShiftsSwaps",
         {
             headers: {
                 Authorization: "Bearer " + localStorage.usertoken
