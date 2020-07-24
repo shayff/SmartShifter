@@ -43,7 +43,7 @@ def doGetShiftScheduled(data):
                     shiftScheduled[shift['date']] = [shift]
 
         print(shiftScheduled)
-        return jsonify({'ok': True, 'msg': 'Created shift Scheduled successfully'}), 200
+        return jsonify({'ok': True, 'data': shiftScheduled}), 200
     else:
         return jsonify({'ok': True, 'msg': 'User don\'t have company'}), 401
 

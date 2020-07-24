@@ -59,7 +59,7 @@ def doSendMessage(data):
                                                                                              'status': 'unread'}],
                                                                                   '$position': 0}}})
 
-            return jsonify({'ok': True, 'msg': 'The message sending successfully!'}), 401
+            return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
 
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400

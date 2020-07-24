@@ -107,15 +107,29 @@ class buildshiftclass:
                 prefence_of_employee_to_shift = next((z for z in listOfEmployees[y]['preference'] if z['date'] == date), None)
 
                 #if there are prefence for the current shift check if it's 'prefer' or 'available' or 'not'
+                rank_to_add = rank_of_not
                 if(prefence_of_employee_to_shift != None):
-                    if(listOfShifts[x]['day part'] in prefence_of_employee_to_shift['prefer']):
-                        rank_to_add = rank_of_prefer
-                    elif(listOfShifts[x]['day part'] in prefence_of_employee_to_shift['available']):
-                        rank_to_add = rank_of_available
-                    else:
-                        rank_to_add = rank_of_not
-                else:
-                    rank_to_add = rank_of_not
+
+                    #Check if employee has prefence for all prefence needed for the shift
+                    big  = prefence_of_employee_to_shift['prefer'] + prefence_of_employee_to_shift['available']
+                    small = listOfShifts[x]['day part']
+                    result = all(elem in big for elem in small)
+
+                    #debug
+                    print("shift: ", listOfShifts[x]['id'])
+                    print("employee: ", listOfEmployees[y]['id'])
+                    print(result)
+                    print("#####")
+                    if result:
+
+                        #for each part of the shift we check employee prefence and set the rank
+                        for prefer in listOfShifts[x]['day part']:
+                            if(prefer in prefence_of_employee_to_shift['prefer']):
+                                rank_to_add += rank_of_prefer
+                            elif(prefer in prefence_of_employee_to_shift['available']):
+                                rank_to_add += rank_of_available
+                            else:
+                                rank_to_add += rank_of_not
 
                 #add the current rank for the rank matrix
                 rank_matrix[y, x] += rank_to_add

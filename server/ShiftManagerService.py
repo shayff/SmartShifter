@@ -9,6 +9,7 @@ from ShiftManagerService.AskShiftSwap import doAskShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
 from server.ShiftManagerService.GetShiftScheduled import doGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
+from ShiftManagerService.GetShiftsSwaps import doGetShiftsSwaps
 from flask_cors import CORS
 
 
@@ -73,6 +74,11 @@ def GetShiftScheduled():
 @jwt_required
 def ConfirmShiftSwap():
     return doConfirmShiftSwap(request.get_json())
+
+@app.route('/GetShiftsSwaps', methods=['POST'])
+@jwt_required
+def GetShiftsSwaps():
+    return doGetShiftsSwaps(request.get_json())
 
 
 #for dubg
