@@ -27,14 +27,13 @@ def doGetShiftScheduled(data):
             dic_employees = {}
             if shift['date']>=data['start_date'] and shift['date']<=data['end_date']:
 
-                #Add a employee list on each shift
-                for id_employee in shift['employees']:
-                    employee_db = users_collection.find_one({'_id': id_employee},{'first name','last name'})
-                    x = {id_employee : employee_db}
-                    dic_employees.update(x)
-                shift['employees'] = dic_employees
+                #For each employee id we get frmo DB the name and appened to the employees array of the shift
+                employee_full_details_array = []
+                for id_employee in shift["employees"]:
+                    employee_db = users_collection.find_one({'_id': id_employee},{"first name","last name"})
+                    employee_full_details_array.append(employee_db)
+                shift["employees"] = employee_full_details_array
 
-                #del - del object["last name"]
                 del shift["difficulty"]
 
                 if shift['date'] in shiftScheduled:
@@ -42,7 +41,6 @@ def doGetShiftScheduled(data):
                 else:
                     shiftScheduled[shift['date']] = [shift]
 
-        print(shiftScheduled)
         return jsonify({'ok': True, 'data': shiftScheduled}), 200
     else:
         return jsonify({'ok': True, 'msg': 'User don\'t have company'}), 401
