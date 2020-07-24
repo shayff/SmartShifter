@@ -40,6 +40,8 @@ def doConfirmShiftSwap(userInput):
                                                                             {'$set': {'shifts.$.employees': employees}})
 
                     # Update status to 'Confirmed'
+                    print(data)
+                    print(data['swap_id'])
                     companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
                                                 {'$set': {'shifts_swaps.$.status': 'Confirmed'}})
 

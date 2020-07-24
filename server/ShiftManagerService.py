@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
 from ShiftManagerService.BuildShift import doBuildShift
 from ShiftManagerService.AskShiftSwap import doAskShiftSwap
+from ShiftManagerService.CanShiftSwap import doCanShiftSwap
 from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
 from server.ShiftManagerService.GetShiftScheduled import doGetShiftScheduled
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
@@ -62,6 +63,11 @@ def SetShiftsSchedule():
 @jwt_required
 def AskShiftSwap():
     return doAskShiftSwap(request.get_json())
+
+@app.route('/CanShiftSwap', methods=['POST'])
+@jwt_required
+def CanShiftSwap():
+    return doCanShiftSwap(request.get_json())
 
 
 @app.route('/GetShiftScheduled', methods= ['POST'])

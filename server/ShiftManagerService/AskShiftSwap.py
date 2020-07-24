@@ -29,7 +29,9 @@ def doAskShiftSwap(userInput):
             data.update({'id': shifts_swaps_id})
 
             # update the employee ask for
-            data.update({"employee_ask": current_user['_id']})
+            data.update({"id_employee_ask": current_user['_id']})
+            data.update({"name_employee_ask": current_user['first name']+" "+ current_user['last name']})
+
 
             # update time created
             date = datetime.now()
