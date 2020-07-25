@@ -156,12 +156,12 @@ class Shifts extends Component {
                         <p className="font-weight-normal text-left" style = { {fontSize:'17px'} }>
                         <u>{(this.state.weeklyShifts[day][i])["job type"]}s:</u>
                         </p>
-                        <p className="font-weight-normal text-left " style = { {fontSize:'15px'} }>
-                        {(this.state.weeklyShifts[day][i])["employees"].map((employee) => 
-                            <p>
+                        <span className="font-weight-normal text-left " style = { {fontSize:'15px'} }>
+                        {(this.state.weeklyShifts[day][i])["employees"].map((employee,index) => 
+                            <p key={index}>
                                 {employee["first name"]} {employee["last name"]}
                             </p>)}
-                        </p>
+                        </span>
                     </div>
                     )
                 }
