@@ -23,10 +23,9 @@ def doGetMessages():
 
     for item in array_id_msg:
         msg = messages_collection.find_one({'_id': item['id']})
+        #add the status
+        msg["status"] = item["status"]
         list_messages.append(msg)
-
-    print(list_messages)
-
 
     #check if List is empty
     if not list_messages:

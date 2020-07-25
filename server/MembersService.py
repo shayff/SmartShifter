@@ -8,7 +8,7 @@ from MembersService.Register import doRegister
 from MembersService.SendMessage import doSendMessage
 from MembersService.GetMessage import doGetMessages
 from MembersService.Profile import doProfile
-from MembersService.UpdatMessage import doUpdateMessage
+from MembersService.UpdateMessage import doUpdateMessage
 from MembersService.UpdateProfile import doUpdateProfile
 from flask_cors import CORS
 from bson.objectid import ObjectId
@@ -91,7 +91,7 @@ def GetMessages():
 
 @app.route('/updatemessage',methods=['POST'])
 @jwt_required
-def UpdatMessage():
+def UpdateMessage():
     return doUpdateMessage(request.get_json())
 
 
