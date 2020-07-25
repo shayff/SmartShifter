@@ -14,12 +14,8 @@ class buildshiftclass:
         self.dates = dates
 
     def buildShift(self):
-
-    #def build_shifts(date_array, company_id):
         scheduled_shifts = dict()
-        print(self.dates)
         for date in self.dates:
-            print(date)
             # get the employess and shift that relevant for current date
             # Possible to improve by get the list all shift once and filter it each time
             listOfShifts = self.get_list_of_shifts(date)
@@ -53,8 +49,6 @@ class buildshiftclass:
 
         return scheduled_shifts
 
-
-
     # get list of shifts
     def get_list_of_shifts(self, date):
         list_of_shifts_by_date = [x for x in self.list_of_shifts if x['date'] == date]
@@ -62,14 +56,25 @@ class buildshiftclass:
         #get list where each shift duplicate by the shift['amount']
         result = []
         for shift in list_of_shifts_by_date:
-            for i in range(shift['amount']):
+            #Check how many employees already in shift
+            num_of_employees_to_sched = shift['amount'] - len(shift["employees"])
+            for i in range(num_of_employees_to_sched):
                 result.append(shift)
         return result
 
     # get list of employees
     def get_list_of_employees(self, date):
+        list_of_shifts_by_date = [x for x in self.list_of_shifts if x['date'] == date]
+        employees_that_work_already = []
+        for shift in self.list_of_shifts:
+            for employee in shift["employees"]:
+                employees_that_work_already.append(employee)
 
-        return [x for x in self.list_of_employees if self.is_prefence_for_given_date(x['preference'],date)]
+        #get list of employees that have prefence for the current date
+        employees = [x for x in self.list_of_employees if self.is_prefence_for_given_date(x['preference'],date)]
+
+        #remove employees that already work
+        return [x for x in employees if x["id"] not in employees_that_work_already]
 
     def is_prefence_for_given_date(self, preference, date):
         for x in preference:
@@ -116,10 +121,12 @@ class buildshiftclass:
                     result = all(elem in big for elem in small)
 
                     #debug
+                    '''
                     print("shift: ", listOfShifts[x]['id'])
                     print("employee: ", listOfEmployees[y]['id'])
                     print(result)
                     print("#####")
+                    '''
                     if result:
 
                         #for each part of the shift we check employee prefence and set the rank
@@ -131,7 +138,7 @@ class buildshiftclass:
                             else:
                                 rank_to_add += rank_of_not
 
-                #add the current rank for the rank matrix
+               #add the current rank for the rank matrix
                 rank_matrix[y, x] += rank_to_add
         return rank_matrix
 
