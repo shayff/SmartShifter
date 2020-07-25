@@ -44,6 +44,19 @@ def doAskShiftSwap(userInput):
         else:
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
 
+            #update shift
+            print(data['shift_id'])
+
+            company = companies_collection.find_one({'_id': company_id},{'shifts':1})
+            print(company)
+            for x in company['shifts']:
+                if data['shift_id'] == x['id']:
+                    print(x)
+
+
+            data.update({'date_shift':shift['date']})
+            data.update({'start time':shift['start time']})
+            data.update({'end time':shift['end time']})
 
 '''
 {
