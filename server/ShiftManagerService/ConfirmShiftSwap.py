@@ -22,28 +22,34 @@ def doConfirmShiftSwap(userInput):
             company_id = result['company']
             user_id = result['_id']
             shift_swap = companies_collection.find_one({'_id': company_id , 'shifts_swaps.id': data['swap_id']},{"shifts_swaps.$": data['swap_id']})
-
+            print(shift_swap)
 
             if shift_swap: #Exists
                 shift_swap = shift_swap["shifts_swaps"][0]
-                if (shift_swap["status"] == "wait_for_swap"):
+                if (shift_swap["status"] == "wait_for_confirm"):
+                    if(data["status"] ==  "confirmed"):
+                        # search for the employees in the given shift
+                        data = companies_collection.find_one({'_id': company_id, 'shifts.id': shift_swap["shift_id"]},{"shifts": {"$elemMatch": {"id":shift_swap["shift_id"]} },"shifts.employees":1})
+                        employees = data["shifts"][0]["employees"]
 
-                    # search for the employees in the given shift
-                    data = companies_collection.find_one({'_id': company_id, 'shifts.id': shift_swap["shift_id"]},{"shifts": {"$elemMatch": {"id":shift_swap["shift_id"]} },"shifts.employees":1})
-                    employees = data["shifts"][0]["employees"]
+                        # switch the employees
+                        employees = [user_id if x==shift_swap["employee_ask"] else x for x in employees]
 
-                    # switch the employees
-                    employees = [user_id if x==shift_swap["employee_ask"] else x for x in employees]
+                        # update the new employes list in database
+                        companies_collection.update({'_id': company_id, 'shifts.id': shift_swap["shift_id"]},
+                                                                                {'$set': {'shifts.$.employees': employees}})
 
-                    # update the new employes list in database
-                    companies_collection.update({'_id': company_id, 'shifts.id': shift_swap["shift_id"]},
-                                                                            {'$set': {'shifts.$.employees': employees}})
+                        new_status = "confirmed"
 
-                    # Update status to 'Confirmed'
-                    print(data)
-                    print(data['swap_id'])
+                    else:
+                        new_status = "wait_for_swap"
+                        doc = companies_collection.find_one_and_update(
+                            {'_id': company_id, 'shifts_swaps.shift_id': data['shift_id']},
+                            {'$set': {'shifts_swaps.$.id_employee_can': current_user['_id']}}) #need to delete
+
+                    #change the status of the shiftswap
                     companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
-                                                {'$set': {'shifts_swaps.$.status': 'Confirmed'}})
+                                                {'$set': {'shifts_swaps.$.status': new_status}})
 
                 else:
                     return jsonify({'ok': False, 'msg': 'there is no need for swap'}), 401

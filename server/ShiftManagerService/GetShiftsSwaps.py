@@ -25,9 +25,23 @@ def doGetShiftsSwaps(userInput):
         else:
             company_id = user["company"]
             company = companies_collection.find_one({'_id': company_id})
-            swaps = company["shifts_swaps"]
-            print(swaps[0])
-            swaps_filtered = [x for x in swaps if x["status"] in statuses]
+            shifts_swaps = company["shifts_swaps"]
+            swaps_filtered = [x for x in shifts_swaps if x["status"] in statuses]
+
+            #updates the names and the shift detailes for each swap
+            for swap in swaps_filtered:
+
+                #update the name of employees
+                doc = users_collection.find_one({'_id': swap["id_employee_ask"]},{"first name","last name"})
+                swap["name_employee_ask"] = doc["first name"] + " " + doc["last name"]
+                if "employee_can_id" in swap:
+                    doc = users_collection.find_one({'_id': swap["id_employee_can"]}, {"first name", "last name"})
+                    swap["name_employee_can"] = doc["first name"] + " " + doc["last name"]
+
+                #update the shift details
+                doc = companies_collection.find_one({'_id': company_id},{"shifts": { "$elemMatch" : {"id":swap["shift_id"]}}} )
+                doc = doc["shifts"][0]
+                swap.update({"shift_details":doc})
             return jsonify({"ok": True, "data": swaps_filtered}), 200
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
