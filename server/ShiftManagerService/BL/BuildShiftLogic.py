@@ -67,8 +67,9 @@ class buildshiftclass:
         list_of_shifts_by_date = [x for x in self.list_of_shifts if x['date'] == date]
         employees_that_work_already = []
         for shift in self.list_of_shifts:
-            for employee in shift["employees"]:
-                employees_that_work_already.append(employee)
+            if(date == shift["date"]):
+                for employee in shift["employees"]:
+                    employees_that_work_already.append(employee)
 
         #get list of employees that have prefence for the current date
         employees = [x for x in self.list_of_employees if self.is_prefence_for_given_date(x['preference'],date)]
