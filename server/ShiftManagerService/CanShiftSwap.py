@@ -23,9 +23,9 @@ def doCanShiftSwap(userInput):
         #check if user has company
         if 'company' in result:
             company_id = result['company']
-            shift_swap = companies_collection.find_one({'_id': company_id},
-                                                       {'shifts_swap': {'$elemMatch': {'shift_id': data['shift_id']}}})
-
+        #    shift_swap = companies_collection.find_one({'_id': company_id},
+         #                                              {'shifts_swap': {'$elemMatch': {'shift_id': data['shift_id']}}})
+            shift_swap = companies_collection.find_one({'_id': company_id},{'shifts_swap.shift_id': data['shift_id'],'shifts_swap':1})
             print(shift_swap)
             status = shift_swap['status']
             print(status)

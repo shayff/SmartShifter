@@ -20,4 +20,4 @@ def doGetPreferences():
         companyId = result['company']
         company = companies_collection.find_one({'_id': companyId})
         preferences = company['prefence_from_manager']
-        return preferences
+        return jsonify({'ok': True, 'msg': 'Successfully', 'data': preferences}), 200
