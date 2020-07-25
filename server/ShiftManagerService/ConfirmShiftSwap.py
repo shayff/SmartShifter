@@ -33,7 +33,7 @@ def doConfirmShiftSwap(userInput):
                         employees = shifts['shifts'][0]['employees']
 
                         # switch the employees
-                        employees = [user_id if x==shift_swap['id_employee_ask'] else x for x in employees]
+                        employees = [shift_swap['id_employee_can'] if x==shift_swap['id_employee_ask'] else x for x in employees]
 
                         # update the new employes list in database
                         companies_collection.update({'_id': company_id, 'shifts.id': shift_swap['shift_id']},
