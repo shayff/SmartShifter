@@ -31,39 +31,39 @@ class Shifts extends Component {
 
     updateDatesAndGetShifts()
     {
-        const sunday = window.scheduler.getState().min_date;
-        const sunday_date = moment(sunday, "YYYY-MM-DD").add(0, 'days').format('YYYY-MM-DD');
-        const saturday_date = moment(sunday, "YYYY-MM-DD").add(6, 'days').format('YYYY-MM-DD');
-
+        const currMinDate = window.scheduler.getState().min_date;
+        const currMaxDate = window.scheduler.getState().max_date;
+        const minDate = moment(currMinDate, "YYYY-MM-DD").add(0, 'days').format('YYYY-MM-DD');
+        const maxDate = moment(currMaxDate, "YYYY-MM-DD").add(-1, 'days').format('YYYY-MM-DD');
+  
          const shifts ={
-             start_date: sunday_date, 
-             end_date: saturday_date
+             start_date: minDate, 
+             end_date: maxDate
          }
-
+         
          getShifts(shifts).then(shifts =>{
          if(shifts){
              let newShifts = [];
-             this.parseShifts(shifts,newShifts);
+             this.parseShifts(shifts,newShifts,minDate,maxDate);
              if(newShifts.length !== 0)
              {
                 this.setState({ weeklyShifts:newShifts},() => this.initializeTable());
              }
              else
              {
-                 alert("No Shifts To Show")
+                alert("No Shifts To Show")
              }
            }
          })
     }
 
-    parseShifts(shifts,newShifts)
+    parseShifts(shifts,newShifts,minDate,maxDate)
     {
-        let currMinDate = window.scheduler.getState().min_date;
-        let date;
-
-        for(let i=0; i<=6; i++)
+        let j = 0;
+        let date = minDate;
+  
+        while(date <= maxDate)
         {
-            date = moment(currMinDate, "YYYY-MM-DD").add(i, 'days').format('YYYY-MM-DD');
             if(shifts[date])
             {
                 for(let i=0; i<shifts[date].length; i++)
@@ -74,6 +74,8 @@ class Shifts extends Component {
                      id:(shifts[date][i])["id"]})
                 }
             }
+            j++;
+            date = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
         }
     }
 
