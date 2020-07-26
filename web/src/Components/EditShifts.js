@@ -51,39 +51,39 @@ class EditShifts extends Component {
       });
     }
 
-    onClickNextWeek(){
-      this.setState({
-         sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
-         monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
-         tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
-         wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
-         thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
-         friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
-         saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
-         previousDisabled:false
-      });
-    }
+   //  onClickNextWeek(){
+   //    this.setState({
+   //       sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
+   //       monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
+   //       tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
+   //       wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
+   //       thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
+   //       friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
+   //       saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
+   //       previousDisabled:false
+   //    });
+   //  }
 
-    onClickPreviousWeek(){
-       if(this.state.lastSunday<=moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'))
-       {
-         this.setState({
-            sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
-            monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
-            tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
-            wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
-            thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
-            friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
-            saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
-            previousDisabled:false
-         });
-       }
-      else{
-         this.setState({
-            previousDisabled:true
-         })
-      }
-    }
+   //  onClickPreviousWeek(){
+   //     if(this.state.lastSunday<=moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'))
+   //     {
+   //       this.setState({
+   //          sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
+   //          monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
+   //          tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
+   //          wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
+   //          thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
+   //          friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
+   //          saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
+   //          previousDisabled:false
+   //       });
+   //     }
+   //    else{
+   //       this.setState({
+   //          previousDisabled:true
+   //       })
+   //    }
+   //  }
     
     onSubmit (e) {
       e.preventDefault()
@@ -171,7 +171,7 @@ class EditShifts extends Component {
                          <h1 className="text-center">Edit Shifts</h1>                
                     </div>
                     <table className="table table-borderless">
-                    <thead>                          
+                    {/* <thead>                          
                             <tr>    
                             <th scope="col"><button type="button" id= "previous" className="btn btn-lg btn-primary btn-block" disabled={this.state.previousDisabled} onClick={() => this.onClickPreviousWeek()}>
                                 Previous Week
@@ -185,7 +185,7 @@ class EditShifts extends Component {
                                 Next Week
                             </button></th>                     
                             </tr>
-                        </thead>
+                        </thead> */}
                     </table>
                     <table className="table table-bordered ">
                         <thead className="thead-dark">                          
