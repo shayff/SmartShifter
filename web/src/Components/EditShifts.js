@@ -116,7 +116,7 @@ class EditShifts extends Component {
          saturday:{
             date:this.state.saturday.format('YYYY-MM-DD'),
             preference:[]
-         },
+         }
       }
       
       let preferences = document.getElementsByClassName("btn-success");
