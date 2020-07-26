@@ -75,6 +75,43 @@ export const updateProfile = user => {
         })
 }
 
+export const sendMessage = message => {
+    return axios
+        .post("/sendmessage",{
+        "to":message.toWho,
+        "title":message.title,
+        "message":message.textMessage,
+        "attached":message.attached
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Message Sent")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const getMessages= () => {
+    return axios
+        .get("/getmessage",
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            return response.data.data;
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
 export const getSettings = () => {
     return axios
     .get("http://localhost:5001/companies/profile",
@@ -136,6 +173,22 @@ export const addEmployee = user => {
         })
 }
 
+export const removeEmployee = user => {
+    return axios
+        .post("http://localhost:5001/companies/removeemployees", {
+            "employees": [user["_id"]],
+        }, 
+         { headers: {
+           Authorization: "Bearer " + localStorage.usertoken
+        }}
+        )
+        .then((response) => {
+            console.log("Removed Employee")
+             }, (error) => {
+                console.log(error)
+        })
+}
+
 export const updateEmployeeInfo = user => {
     return axios
         .post("http://localhost:5001/companies/updateemployee", {
@@ -156,22 +209,6 @@ export const updateEmployeeInfo = user => {
         )
         .then((response) => {
             console.log("Update Employee")
-             }, (error) => {
-                console.log(error)
-        })
-}
-
-export const removeEmployee = user => {
-    return axios
-        .post("http://localhost:5001/companies/removeemployees", {
-            "employees": [user["_id"]],
-        }, 
-         { headers: {
-           Authorization: "Bearer " + localStorage.usertoken
-        }}
-        )
-        .then((response) => {
-            console.log("Removed Employee")
              }, (error) => {
                 console.log(error)
         })
@@ -215,7 +252,8 @@ export const getShifts = date => {
 export const approveSwitches = data => {
     return axios
         .post("http://localhost:5002/confirmshiftswap",{
-        "swap_id":data
+        "swap_id":data.swapId,
+        "status":data.status
         },
         {
             headers: {
@@ -230,46 +268,11 @@ export const approveSwitches = data => {
         })
 }
 
-export const getSwitches = () => {
+export const getSwitches = data => {
     return axios
-        .post("http://localhost:5002/GetShiftsSwaps",
-        {
-            headers: {
-                Authorization: "Bearer " + localStorage.usertoken
-             }
-        })
-        .then(response => {
-            return response.data.data;
-        })
-        .catch(eror => {
-            console.log(eror)
-        })
-}
-
-export const sendMessage = message => {
-    return axios
-        .post("/sendmessage",{
-        "to":message.toWho,
-        "title":message.title,
-        "message":message.textMessage,
-        "attached":message.attached
+        .post("http://localhost:5002/GetShiftsSwaps",{
+            "statuses":data
         },
-        {
-            headers: {
-                Authorization: "Bearer " + localStorage.usertoken
-             }
-        })
-        .then(response => {
-            console.log("Message Sent")
-        })
-        .catch(eror => {
-            console.log(eror)
-        })
-}
-
-export const getMessages= () => {
-    return axios
-        .get("/getmessage",
         {
             headers: {
                 Authorization: "Bearer " + localStorage.usertoken
@@ -287,6 +290,26 @@ export const submitWantedShift = data => {
     return axios
         .post("http://localhost:5001/companies/PrefenceFromManager",{
             "preferences_from_manager":data
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Submitted Shifts")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const buildShifts = data => {
+    return axios
+        .post("http://localhost:5002/buildshift",{
+            "start_date": data.start_date, 
+            "end_date": data.end_date,
+            "pre_scheduled":data.preScheduled
         },
         {
             headers: {
