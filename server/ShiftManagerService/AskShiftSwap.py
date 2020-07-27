@@ -53,7 +53,6 @@ def doAskShiftSwap(userInput):
                 if data['shift_id'] == x['id']:
                     print(x)
 
-
             data.update({'date_shift':shift['date']})
             data.update({'start time':shift['start time']})
             data.update({'end time':shift['end time']})

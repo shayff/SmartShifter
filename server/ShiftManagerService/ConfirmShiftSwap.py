@@ -51,9 +51,9 @@ def doConfirmShiftSwap(userInput):
                     companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
                                                 {'$set': {'shifts_swaps.$.status': new_status}})
 
+                    return jsonify({'ok': True, 'msg': 'Update swap request successfully'}), 200
                 else:
-                    return jsonify({'ok': False, 'msg': 'there is no need for swap'}), 401
-                return jsonify({'ok': True, 'msg': 'Confirm swap request successfully'}), 200
+                    return jsonify({'ok': False, 'msg': 'there is no need for confirm'}), 401
             else:
                 return jsonify({'ok': False, 'msg': 'there is no swap with this id '}), 401
         else:
