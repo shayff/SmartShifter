@@ -28,7 +28,7 @@ def doConfirmShiftSwap(userInput):
             if shift_swap: #Exists
                 shift_swap = shift_swap['shifts_swaps'][0]
                 if (shift_swap['status'] == 'wait_for_confirm'):
-                    if(data['status'] == 'confirmed'):
+                    if(data['status'] == 'confirm'):
                         # search for the employees in the given shift
                         shifts = companies_collection.find_one({'_id': company_id, 'shifts.id': shift_swap['shift_id']},{'shifts': {'$elemMatch': {"id":shift_swap["shift_id"]} },"shifts.employees":1})
                         employees = shifts['shifts'][0]['employees']
