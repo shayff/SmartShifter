@@ -5,12 +5,12 @@ from jsonschema.exceptions import SchemaError
 canshiftswap_schema = {
     "type": "object",
     "properties": {
-        "shift_id": {
+        "swap_id": {
             "type": "integer"
         }
     },
     "required": [
-        "shift_id"
+        "swap_id"
     ],
     "additionalProperties": False
 }

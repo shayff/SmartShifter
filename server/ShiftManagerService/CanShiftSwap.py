@@ -22,16 +22,16 @@ def doCanShiftSwap(userInput):
         if 'company' in result:
             company_id = result['company']
             shift_swap = companies_collection.find_one({'_id': company_id},
-                                                {"shifts_swaps": {"$elemMatch": {"shift_id": data['shift_id']}}})
+                                                {"shifts_swaps": {"$elemMatch": {"id": data['swap_id']}}})
             status = shift_swap["shifts_swaps"][0]["status"]
-
+            shift_id = shift_swap["shifts_swaps"][0]["shift_id"]
             if status == 'wait_for_swap':
                 # update the name and id of employee can swap
-                doc = companies_collection.find_one_and_update({'_id': company_id, 'shifts_swaps.shift_id': data['shift_id']},
+                doc = companies_collection.find_one_and_update({'_id': company_id, 'shifts_swaps.shift_id': shift_id},
                                                                {'$set': {'shifts_swaps.$.id_employee_can': current_user["_id"]}})
 
                 # Update status to 'wait_for_confirm'
-                doc = companies_collection.update({'_id': company_id, 'shifts_swaps.shift_id': data['shift_id']},
+                doc = companies_collection.update({'_id': company_id, 'shifts_swaps.shift_id': shift_id},
                                             {'$set': {'shifts_swaps.$.status': 'wait_for_confirm'}})
 
                 return jsonify({'ok': True, 'msg': 'update shift swap request successfully'}), 200
