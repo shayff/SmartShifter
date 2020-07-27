@@ -36,9 +36,7 @@ class Switch extends Component {
      getSwitches(this.state.filter).then(requestSwitches =>{
            if (requestSwitches)
            {
-              this.setState({
-                switchData:requestSwitches
-              },() => console.log(this.state.switchData));
+              this.setState({switchData: requestSwitches});
 
               if (requestSwitches.length === 0)
               {
@@ -55,8 +53,8 @@ class Switch extends Component {
             status:decision
         }
         
-        console.log(managerDecision)
-        approveSwitches(managerDecision);
+        approveSwitches(managerDecision).then(res => {
+            window.location.reload()});
     }
 
     initializeTable = (data) => {
@@ -82,7 +80,7 @@ class Switch extends Component {
         if(switchData.status === 'wait_for_confirm')
         {
             return( 
-            <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDecision(switchData.shift_id,"confirm")}>
+            <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDecision(switchData.id,"confirm")}>
                                 Approve Switch
             </button>)
         }
@@ -93,7 +91,7 @@ class Switch extends Component {
         if(switchData.status === 'wait_for_confirm')
         {
             return( 
-                <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDecision(switchData.shift_id,"not_confirm")}>
+                <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDecision(switchData.id,"not_confirm")}>
                         Don't Approve Switch
                 </button>)
         }

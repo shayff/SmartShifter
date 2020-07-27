@@ -128,24 +128,24 @@ class Messages extends Component {
                         </table>
                 </div>
                 <form name="myForm7">
-                <div className="input-group mb-3">
-                <select className="custom-select" id="inputGroupSelect02" name="toWhoToSend" onChange={this.onChange}>
-                    <option value="All">All</option >
-                    {this.initializeOptions()}
-                </select>
-                <div className="input-group-append">
-                    <label className="input-group-text" htmlFor="inputGroupSelect02">Choose To Who To Send</label>
-                </div>
-                </div>
-                <div className="form-group">
-                <label htmlFor="titleComment" >Write Here The Message</label>
-                <input className="form-control" type="text" name="title" id="titleComment" placeholder="Title" onChange={this.onChange} />   
-                <label htmlFor="comment">Write Here The Message</label>
-                <textarea className="form-control" name="textMessage" rows="5" id="comment" placeholder="Message" onChange={this.onChange}></textarea>
-                </div>          
-                <button type="submit" className="btn-lg btn-primary btn-block">
-                                Send Message
-                </button>
+                    <div className="input-group mb-3">
+                    <select className="custom-select" id="inputGroupSelect02" name="toWhoToSend" onChange={this.onChange}>
+                        <option value="All">All</option >
+                        {this.initializeOptions()}
+                    </select>
+                    <div className="input-group-append">
+                        <label className="input-group-text" htmlFor="inputGroupSelect02">Choose To Who To Send</label>
+                    </div>
+                    </div>
+                    <div className="form-group">
+                    <label htmlFor="titleComment" >Write Here The Message</label>
+                    <input className="form-control" type="text" name="title" id="titleComment" placeholder="Title" onChange={this.onChange} />   
+                    <label htmlFor="comment">Write Here The Message</label>
+                    <textarea className="form-control" name="textMessage" rows="5" id="comment" placeholder="Message" onChange={this.onChange}></textarea>
+                    </div>          
+                    <button type="submit" className="btn-lg btn-primary btn-block">
+                                    Send Message
+                    </button>
                 </form>
             </div>
         )
