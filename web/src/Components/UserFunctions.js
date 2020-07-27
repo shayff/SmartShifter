@@ -252,8 +252,8 @@ export const getShifts = date => {
 export const approveSwitches = data => {
     return axios
         .post("http://localhost:5002/confirmshiftswap",{
-        "swap_id":data.swapId,
-        "status":data.status
+        "swap_id": parseInt(data.swapId),
+        "status": data.status
         },
         {
             headers: {

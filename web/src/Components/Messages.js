@@ -26,7 +26,7 @@ class Messages extends Component {
         {
          return userMessages.map((messages,index) => (
             <tr key = {index} >
-            <th scope="row"> {index}</th>
+            <th scope="row"> {index + 1}</th>
             <td>{messages["name_sender"]}</td>
             <td>{messages["title"]}</td>
             <td>{messages["message"]}</td>

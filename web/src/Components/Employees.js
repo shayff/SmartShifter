@@ -15,7 +15,7 @@ class Employees extends Component {
         {
          return employees.map((employee,index) => (
             <tr key = {index} >
-            <th scope="row"> {index}</th>
+            <th scope="row"> {index + 1}</th>
             <td>{employee["first name"]}</td>
             <td>{employee["last name"]}</td>
              {/* <td>{employee["gender"]}</td>  */}

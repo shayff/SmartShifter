@@ -6,56 +6,112 @@ class Switch extends Component {
         super()
         this.state = { 
             switchData: [],
-            filter: "All",
+            filter: ['confirmed','wait_for_swap','wait_for_confirm'],
         }
-        this.onChange = this.onChange.bind(this)
 
+        this.onChange = this.onChange.bind(this);
     }
 
-    onChange (e) {
-        this.setState({ [e.target.name]: e.target.value })
+    onChange (e) 
+    {
+        let value = [];
+        if(e.target.value==='All')
+        {
+            value.push('confirmed','wait_for_swap','wait_for_confirm')
+        }
+        else
+        {
+            value.push(e.target.value)
+        }
+        this.setState({ [e.target.name]: value },() => this.getRequestOfSwitches());
     }
 
     componentDidMount ()
     {
-       getSwitches().then(data =>{
-        console.log(data)
-           if (data)
+        this.getRequestOfSwitches();
+    }
+
+   getRequestOfSwitches()
+   {
+     getSwitches(this.state.filter).then(requestSwitches =>{
+           if (requestSwitches)
            {
-              this.setState({/**/});
-           }
-       });   
+              this.setState({
+                switchData:requestSwitches
+              },() => console.log(this.state.switchData));
+
+              if (requestSwitches.length === 0)
+              {
+               alert("No Request Switches For This Filter")
+              }
+           }       
+       });  
    }
 
-    onUApproveSwitch() {
-        approveSwitches();
+    onClickDecision(shiftId,decision) 
+    {
+        const managerDecision={
+            swapId:shiftId,
+            status:decision
+        }
+        
+        console.log(managerDecision)
+        approveSwitches(managerDecision);
     }
 
-    onDontApproveSwitch() {
-
-    }
-
-    initializeTable= (data) => {
-        if(data)
+    initializeTable = (data) => {
+        if(data.length!== 0)
         {
          return data.map((switchData,index) => (
             <tr key = {index} >
-            <th scope="row"> {index}</th>
-            <td>{data["first name"]} + {data["Last name"]}</td>
-            <td>{data["first name"]} + {data["Last name"]}</td>
-            <td>{data["first name"]} + {data["Last name"]}</td>
-            <td>
-            <button type="submit" className="btn-lg btn-primary btn-block" onClick={() => this.onUApproveSwitch()}>
-                                Approve Switch
-            </button>
-            </td>
-            <td>
-            <button type="submit" className="btn-lg btn-primary btn-block" onClick={() => this.onDontApproveSwitch()}>
-                                Don't Approve Switch
-            </button>
-            </td>
+            <th scope="row" className="text-center"> {index +1}</th>
+            <td className="text-center">{switchData.shift_details.date} {switchData.shift_details["start time"]}-{switchData.shift_details["end time"]}</td>
+            <td className="text-center">{switchData.name_employee_ask}</td>
+            {this.getWhoToGetTheShift(switchData)}
+            <td className="text-center">{switchData.status}</td>
+            <td className="text-center">{switchData.time_created}</td>
+            <td>{this.initializeTableApproveButton(switchData)}</td>
+            <td>{this.initializeTableDontApproveButtons(switchData)}</td>
             </tr>
          ));
+        }
+    }
+
+    initializeTableApproveButton(switchData)
+    {
+        if(switchData.status === 'wait_for_confirm')
+        {
+            return( 
+            <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDecision(switchData.shift_id,"confirm")}>
+                                Approve Switch
+            </button>)
+        }
+    }
+    
+    initializeTableDontApproveButtons(switchData)
+    {
+        if(switchData.status === 'wait_for_confirm')
+        {
+            return( 
+                <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDecision(switchData.shift_id,"not_confirm")}>
+                        Don't Approve Switch
+                </button>)
+        }
+    }
+
+    isWhoWantToGetTheShiftColumVisible()
+    {
+        if(this.state.filter[0] === 'wait_for_confirm' || this.state.filter[0] === 'confirmed')
+        {
+            return(<th scope="col" className="text-center">The One Who Want To Get The Shift</th>)
+        }
+    }
+
+    getWhoToGetTheShift(switchData)
+    {
+        if(this.state.filter[0] === 'wait_for_confirm' || this.state.filter[0] === 'confirmed')
+        {
+            return <td className="text-center">{switchData.name_employee_can}</td>; 
         }
     }
 
@@ -69,24 +125,27 @@ class Switch extends Component {
                     <table className="table table-bordered table-hover">
                         <thead className="thead-dark">
                             <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">The Shift</th>
-                            <th scope="col">The One Who Want To Switch The Shift</th>
-                            <th scope="col">The One Who Want To Get The Shift</th>
-                            <th scope="col"></th>
+                            <th scope="col" className="text-center">#</th>
+                            <th scope="col"className="text-center">The Shift</th>
+                            <th scope="col"className="text-center">The One Who Want To Switch The Shift</th>
+                            {this.isWhoWantToGetTheShiftColumVisible()}
+                            <th scope="col" className="text-center">Status Of The Request</th>
+                            <th scope="col" className="text-center">Time Of The Request</th>
+                            <th scope="col" className="text-center"></th>
+                            <th scope="col" className="text-center"></th>
                             </tr>
                         </thead>
                             <tbody>
-                                {this.initializeTable(/**/)}
+                                {this.initializeTable(this.state.switchData)}
                             </tbody>
                         </table>
                         <form name="myForm9">
                             <div className="input-group mb-3">
                                 <select className="custom-select" id="inputGroupSelect02" name="filter" onChange={this.onChange}>
                                     <option value="All">All</option >
-                                    <option value="Not Approved">Not Approved</option >
-                                    <option value="Approved">Approved</option >
-
+                                    <option value="wait_for_swap">Wait For Swap</option >
+                                    <option value="wait_for_confirm">Wait For Confirm</option >
+                                    <option value="confirmed">Confirmed</option >
                                 </select>
                                 <div className="input-group-append">
                                     <label className="input-group-text" htmlFor="inputGroupSelect02"> Switching Shifts Filter </label>
