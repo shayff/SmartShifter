@@ -34,7 +34,7 @@ def doGetShiftsSwaps(userInput):
                 #update the name of employees
                 doc = users_collection.find_one({'_id': swap["id_employee_ask"]},{"first name","last name"})
                 swap["name_employee_ask"] = doc["first name"] + " " + doc["last name"]
-                if "employee_can_id" in swap:
+                if "id_employee_can" in swap:
                     doc = users_collection.find_one({'_id': swap["id_employee_can"]}, {"first name", "last name"})
                     swap["name_employee_can"] = doc["first name"] + " " + doc["last name"]
 
