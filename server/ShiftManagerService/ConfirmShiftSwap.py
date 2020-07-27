@@ -4,6 +4,7 @@ from pymongo import MongoClient, ReturnDocument
 from config import MongoConfig
 from .schemas.confirmshiftswap import validate_confirmShiftSwap
 from datetime import datetime
+from server.MembersService.SendMessage import doSendMessage
 
 cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
@@ -40,16 +41,23 @@ def doConfirmShiftSwap(userInput):
                                                                                 {'$set': {'shifts.$.employees': employees}})
 
                         new_status = 'confirmed'
+                        message = {'to': [shift_swap['id_employee_can'], shift_swap['id_employee_ask']],
+                                           'title': "Swap request confirm", "message": "your swap request confirmed"}
 
                     else:
                         new_status = 'wait_for_swap'
                         doc = companies_collection.find_one_and_update(
                             {'_id': company_id, 'shifts_swaps.id': data['swap_id']},
                             {'$unset': {'shifts_swaps.$.id_employee_can': "" }}) #need to delete
+                        message = {'to': [shift_swap['id_employee_can']],
+                                           'title': "Swap request denied", "message": "denied"}
 
                     #change the status of the shiftswap
                     companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
                                                 {'$set': {'shifts_swaps.$.status': new_status}})
+
+                    #notice the employees
+                    doSendMessage(message)
 
                     return jsonify({'ok': True, 'msg': 'Update swap request successfully'}), 200
                 else:
