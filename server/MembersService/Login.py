@@ -32,11 +32,11 @@ def doLogin(userInput):
                 company_id = user['company']
                 company = companies_collection.find_one({'_id': company_id})
                 if (user['_id'] in company['managers']):
-                    user['hasCompany'] = "True"
+                    user['hasCompany'] = "true"
                 else:
-                    user['hasCompany'] = "False"
+                    user['hasCompany'] = "false"
             else:
-                user['hasCompany'] = "False"
+                user['hasCompany'] = "false"
 
             return jsonify({'ok': True, 'data': user}), 200
         else:
