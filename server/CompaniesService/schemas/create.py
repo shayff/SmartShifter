@@ -8,36 +8,10 @@ create_schema = {
         "company name": {
             "type": "string"
         },
-        "day parts":
-            {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "id": {
-                            "type": "integer"
-                        },
-                        "name": {
-                            "type": "string"
-                        },
-                        "start time": {
-                            "type": "string"
-                        },
-                        "end time": {
-                            "type": "string"
-                        }
-                    },
-                    "required": ["id", "name", "start time", "end time"]
-                }
-            },
-        "shifts":
-            {
-                "type": "array"
-            },
         "settings":
-            {
-                "type": "object"
-            }
+        {
+            "type": "object"
+        }
     },
     "required": [
         "company name"
