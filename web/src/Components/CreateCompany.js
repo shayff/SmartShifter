@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { createCompany } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class CreateCompany extends Component {
     constructor() {
@@ -110,4 +111,4 @@ class CreateCompany extends Component {
     }
 }
 
-export default CreateCompany
+export default withRouter(CreateCompany)

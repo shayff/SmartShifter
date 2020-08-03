@@ -42,22 +42,6 @@ export const createCompany = data => {
         })
 }
 
-export const hasCompany = () => {
-    return axios
-        .get("http://localhost:5001/companies/IsHasCompany",
-        {
-            headers: {
-                Authorization: "Bearer " + localStorage.usertoken
-             }
-        })
-        .then(response => {
-            return response.data.data;
-        })
-        .catch(eror => {
-            console.log(eror)
-        })
-}
-
 export const login = user => {
     return axios
         .post("/login", {
@@ -66,6 +50,7 @@ export const login = user => {
         })
         .then(response => {
             localStorage.setItem('usertoken', response.data.data.token)
+            localStorage.setItem('hasCompany', response.data.data.hasCompany)
             return response.data.data
         })
         .catch(eror => {

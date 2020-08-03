@@ -9,9 +9,6 @@ class ProtectedRoute extends React.Component {
         const isAuthenticated = localStorage.getItem('usertoken');
         const hasCompany = localStorage.getItem('hasCompany');
 
-        console.log(isAuthenticated)
-        console.log(hasCompany)
-        
         if(isAuthenticated)
         {   
             if(hasCompany === 'true')
@@ -27,12 +24,12 @@ class ProtectedRoute extends React.Component {
             }
             else
             {
-                console.log("no company")
-                return <Redirect to={{ pathname: '/createCompany' }} />
+                return <Component />
             }
         }
         else
         {
+            alert("You must log in to view the page")
             return <Redirect to={{ pathname: '/login' }} />
         }
     }

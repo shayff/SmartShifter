@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { addEmployee } from './UserFunctions'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 
 class AddEmployee extends Component {
     constructor() {
@@ -195,4 +196,4 @@ class AddEmployee extends Component {
     }
 }
 
-export default AddEmployee
+export default withRouter(AddEmployee)

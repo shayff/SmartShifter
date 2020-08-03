@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { updateSettings, getSettings } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class UpdateSettings extends Component {
     constructor() {
@@ -125,4 +126,4 @@ class UpdateSettings extends Component {
     }
 }
 
-export default UpdateSettings
+export default withRouter(UpdateSettings)

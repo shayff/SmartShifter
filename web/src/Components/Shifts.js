@@ -3,6 +3,7 @@ import { getShifts } from './UserFunctions'
 import Scheduler from './Scheduler'
 import './Scheduler.css'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 
 
 class Shifts extends Component {
@@ -109,7 +110,7 @@ class Shifts extends Component {
     }
 }
 
-export default Shifts
+export default withRouter(Shifts)
  
 
 

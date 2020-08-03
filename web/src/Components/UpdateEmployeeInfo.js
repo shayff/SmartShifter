@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { updateEmployeeInfo } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class UpdateEmployeeInfo extends Component {
     constructor() {
@@ -198,4 +199,4 @@ class UpdateEmployeeInfo extends Component {
     }
 }
 
-export default UpdateEmployeeInfo
+export default withRouter(UpdateEmployeeInfo)

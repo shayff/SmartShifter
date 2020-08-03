@@ -43,7 +43,7 @@ class Employees extends Component {
     }
 
     onUpdateInfoEmployee(path, employee) {
-        this.props.history.push(path, { detail: employee})
+         this.props.history.push(path, { detail: employee})
     }
 
     getListListOfEmployees()

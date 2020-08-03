@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getMessages,ListOfEmployees,sendMessage } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class Messages extends Component {
     constructor() {
@@ -152,4 +153,4 @@ class Messages extends Component {
     }
 }
 
-export default Messages
+export default withRouter(Messages)

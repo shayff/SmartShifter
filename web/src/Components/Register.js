@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { register } from './UserFunctions'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 
 class Register extends Component {
     constructor() {
@@ -163,4 +164,4 @@ class Register extends Component {
     }
 }
 
-export default Register
+export default withRouter(Register)

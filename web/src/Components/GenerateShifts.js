@@ -3,6 +3,7 @@ import { buildShifts, ListOfEmployees } from './UserFunctions'
 // import Scheduler from './Scheduler'
 // import './Scheduler.css'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 
 class GenerateShifts extends Component {
     constructor() {
@@ -109,7 +110,7 @@ class GenerateShifts extends Component {
     }
 }
 
-export default GenerateShifts
+export default withRouter(GenerateShifts)
 
 /* <div className="container">
 <div className="jumbotron mt-5">

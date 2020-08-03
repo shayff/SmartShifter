@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getSwitches,approveSwitches } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class SwitchShifts extends Component {
     constructor() {
@@ -156,4 +157,4 @@ class SwitchShifts extends Component {
     }
 }
 
-export default SwitchShifts
+export default withRouter(SwitchShifts)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import { submitWantedShift } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class EditShifts extends Component {
    constructor() {
@@ -284,4 +285,4 @@ class EditShifts extends Component {
     }
 }
 
-export default EditShifts
+export default withRouter(EditShifts)
