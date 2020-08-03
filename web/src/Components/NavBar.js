@@ -24,6 +24,21 @@ class Navbar extends Component {
             </ul>
         )
 
+        const createCompanyLink = (
+            <ul className="navbar-nav">
+                <li className="nav-item">
+                    <Link to="/createCompany" className="nav-link">
+                        Create Company
+                    </Link>
+                </li>
+               <li className="nav-item">
+                    <a href="/" onClick={this.logOut.bind(this)} className="nav-link">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        )
+
         const userLink = (
             <ul className="navbar-nav">
                 <li className="nav-item">
@@ -86,7 +101,7 @@ class Navbar extends Component {
                             </Link>
                         </li>
                     </ul> 
-                    {localStorage.usertoken && localStorage.hasCompany === 'true' ? userLink : loginRegLink}
+                    {localStorage.usertoken ? (localStorage.hasCompany === 'true'? userLink : createCompanyLink) : loginRegLink}
                 </div>
             </nav>
         )

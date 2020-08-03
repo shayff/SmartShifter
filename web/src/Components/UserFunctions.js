@@ -24,8 +24,9 @@ export const register = newUser => {
 export const createCompany = data => {
     return axios
         .post("http://localhost:5001/companies/create",{
-            "company name": data.company_name, 
-            "address": data.company_address
+            "company name": data.company_name,
+            "settings": data.settings,
+
         },
         {
             headers: {
@@ -35,6 +36,22 @@ export const createCompany = data => {
         .then(response => {
             localStorage.setItem('hasCompany', 'true')
             console.log("Created Company")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const hasCompany = () => {
+    return axios
+        .get("http://localhost:5001/companies/IsHasCompany",
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            return response.data.data;
         })
         .catch(eror => {
             console.log(eror)
@@ -149,11 +166,11 @@ export const getSettings = () => {
     })
 }
 
-export const updateSettings= user => {
+export const updateSettings= data => {
     return axios
         .post("http://localhost:5001/companies/update", {
-            "company name": user.company_name,
-            "settings": user.settings,
+            "company name": data.company_name,
+            "settings": data.settings,
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken

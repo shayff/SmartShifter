@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createCompany } from './UserFunctions'
 
-class Register extends Component {
+class CreateCompany extends Component {
     constructor() {
         super()
         this.state = {
@@ -44,9 +44,11 @@ class Register extends Component {
         const newCompany = 
         {
             company_name: this.state.company_name,
-            company_address: this.state.company_address,
+            settings:{
             can_employee_switch_shifts: this.state.switch_shifts,
-            shifts_required_from_emp: this.state.amout_of_shifts
+            shifts_required_from_emp: this.state.amout_of_shifts,
+            address: this.state.company_address
+            }
         }
 
         if(this.validateRegisterForm()) {
@@ -108,4 +110,4 @@ class Register extends Component {
     }
 }
 
-export default Register
+export default CreateCompany

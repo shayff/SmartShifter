@@ -30,7 +30,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/createCompany" component={CreateCompany} />
+            <ProtectedRoute exact path="/createCompany" component={CreateCompany} />
             <ProtectedRoute exact path="/profile" component={Profile} />
             <ProtectedRoute exact path="/employees" component={Employees} />
             <ProtectedRoute exact path="/shifts" component={Shifts} />
