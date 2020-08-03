@@ -19,6 +19,7 @@ class ProtectedRoute extends React.Component {
                 }
                 else
                 {
+                    alert("You created already a company")
                     return <Redirect to={{ pathname: '/' }} />
                 }
             }
