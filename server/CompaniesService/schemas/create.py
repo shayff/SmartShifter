@@ -8,15 +8,36 @@ create_schema = {
         "company name": {
             "type": "string"
         },
-        "address":{
-            "type": "string"
-        },
-        "switch_shift":{
-            "type": "boolean"
-        },
-        "amout_of_shidts": {
-            "type": "integer"
-        }
+        "day parts":
+            {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "start time": {
+                            "type": "string"
+                        },
+                        "end time": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["id", "name", "start time", "end time"]
+                }
+            },
+        "shifts":
+            {
+                "type": "array"
+            },
+        "settings":
+            {
+                "type": "object"
+            }
     },
     "required": [
         "company name"
