@@ -8,6 +8,8 @@ from config import MongoConfig
 cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
 usersCollection = db['users']
+companies_collection = db["companies"]
+
 
 def doLogin(userInput):
     data = validate_login(userInput)
@@ -24,6 +26,18 @@ def doLogin(userInput):
             refresh_token = create_refresh_token(identity=user)
             user['token'] = access_token
             user['refresh'] = refresh_token
+
+            #Check if user is manager of company
+            if('company' in user):
+                company_id = user['company']
+                company = companies_collection.find_one({'_id': company_id})
+                if (user['_id'] in company['managers']):
+                    user['hasCompany'] = "True"
+                else:
+                    user['hasCompany'] = "False"
+            else:
+                user['hasCompany'] = "False"
+
             return jsonify({'ok': True, 'data': user}), 200
         else:
             return jsonify({'ok': False, 'msg': 'invalid username or password'}), 401

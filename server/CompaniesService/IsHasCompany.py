@@ -18,7 +18,7 @@ def doIsHasCompany():
     result = users_collection.find_one({'_id': current_user['_id']})
     company_id= result['company']
 
-    company= companies_collection.find_one({'_id': company_id})
+    company = companies_collection.find_one({'_id': company_id})
     if current_user['_id'] in company['managers']:
         return jsonify({'ok': True, 'data': True}), 200
     else:
