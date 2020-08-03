@@ -42,7 +42,14 @@ class Login extends Component {
         {
         login(user).then(res => {
             if (res) {
-                this.props.history.push(`/profile`)
+                if(localStorage.getItem('hasCompany') === 'true')
+                {
+                    this.props.history.push(`/profile`)
+                }
+                else
+                {
+                    this.props.history.push(`/createCompany`)
+                }
             }
             else
             {

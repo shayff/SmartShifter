@@ -14,9 +14,30 @@ export const register = newUser => {
             "date of birth": newUser.date_of_birth
         })
         .then((response) => {
+            localStorage.setItem('hasCompany', 'false')
             console.log("Registered")
              }, (error) => {
                 console.log(error)
+        })
+}
+
+export const createCompany = data => {
+    return axios
+        .post("http://localhost:5001/companies/create",{
+            "company name": data.company_name, 
+            "address": data.company_address
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            localStorage.setItem('hasCompany', 'true')
+            console.log("Created Company")
+        })
+        .catch(eror => {
+            console.log(eror)
         })
 }
 
@@ -28,10 +49,10 @@ export const login = user => {
         })
         .then(response => {
             localStorage.setItem('usertoken', response.data.data.token)
-            return response.data.data.token
+            return response.data.data
         })
         .catch(eror => {
-            console.group("no")
+            console.group("error")
             console.log(eror)
         })
 }

@@ -42,8 +42,8 @@ class Navbar extends Component {
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/switch" className="nav-link">
-                         Swtiching Shifts
+                    <Link to="/switchShifts" className="nav-link">
+                         Switch Shifts
                     </Link>
                 </li>
                 <li className="nav-item">
@@ -86,7 +86,7 @@ class Navbar extends Component {
                             </Link>
                         </li>
                     </ul> 
-                    {localStorage.usertoken ? userLink : loginRegLink}
+                    {localStorage.usertoken && localStorage.hasCompany === 'true' ? userLink : loginRegLink}
                 </div>
             </nav>
         )

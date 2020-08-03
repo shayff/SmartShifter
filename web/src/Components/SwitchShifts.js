@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { getSwitches,approveSwitches } from './UserFunctions'
 
-class Switch extends Component {
+class SwitchShifts extends Component {
     constructor() {
         super()
         this.state = { 
@@ -40,7 +40,7 @@ class Switch extends Component {
 
               if (requestSwitches.length === 0)
               {
-               alert("No Request Switches For This Filter")
+               alert("No Requested Switches For This Filter")
               }
            }       
        });  
@@ -156,4 +156,4 @@ class Switch extends Component {
     }
 }
 
-export default Switch
+export default SwitchShifts
