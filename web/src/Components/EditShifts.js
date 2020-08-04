@@ -191,13 +191,13 @@ class EditShifts extends Component {
                     <table className="table table-bordered ">
                         <thead className="thead-dark">                          
                             <tr>    
-                            <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')} Sunday</th>
-                            <th scope="col"> {this.state.monday.format('YYYY-MM-DD')} Monday</th>
-                            <th scope="col"> {this.state.tuesday.format('YYYY-MM-DD')} Tuesday</th>
-                            <th scope="col"> {this.state.wednesday.format('YYYY-MM-DD')} Wednesday</th>
-                            <th scope="col"> {this.state.thursday.format('YYYY-MM-DD')} Thursday</th>
-                            <th scope="col"> {this.state.friday.format('YYYY-MM-DD')} Friday</th>
-                            <th scope="col"> {this.state.saturday.format('YYYY-MM-DD')} Saturday</th>                     
+                            <th scope="col" className="text-center"> {this.state.sunday.format('YYYY-MM-DD')} Sunday</th>
+                            <th scope="col" className="text-center"> {this.state.monday.format('YYYY-MM-DD')} Monday</th>
+                            <th scope="col" className="text-center"> {this.state.tuesday.format('YYYY-MM-DD')} Tuesday</th>
+                            <th scope="col" className="text-center"> {this.state.wednesday.format('YYYY-MM-DD')} Wednesday</th>
+                            <th scope="col" className="text-center"> {this.state.thursday.format('YYYY-MM-DD')} Thursday</th>
+                            <th scope="col" className="text-center"> {this.state.friday.format('YYYY-MM-DD')} Friday</th>
+                            <th scope="col" className="text-center"> {this.state.saturday.format('YYYY-MM-DD')} Saturday</th>                     
                             </tr>
                         </thead>
                         <tbody>

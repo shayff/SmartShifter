@@ -27,11 +27,11 @@ class Messages extends Component {
         {
          return userMessages.map((messages,index) => (
             <tr key = {index} >
-            <th scope="row"> {index + 1}</th>
-            <td>{messages["name_sender"]}</td>
-            <td>{messages["title"]}</td>
-            <td>{messages["message"]}</td>
-            <td>{messages["time_created"]}</td>
+            <th scope="row" className="text-center"> {index + 1}</th>
+            <td className="text-center">{messages["name_sender"]}</td>
+            <td className="text-center">{messages["title"]}</td>
+            <td className="text-center">{messages["message"]}</td>
+            <td className="text-center">{messages["time_created"]}</td>
             </tr>
          ));
         }
@@ -116,11 +116,11 @@ class Messages extends Component {
                     <table className="table table-bordered table-hover">
                         <thead className="thead-dark">
                             <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">The Sender</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">The Message</th>
-                            <th scope="col">Time Created</th>
+                            <th scope="col" className="text-center">#</th>
+                            <th scope="col" className="text-center">The Sender</th>
+                            <th scope="col" className="text-center">Title</th>
+                            <th scope="col" className="text-center">The Message</th>
+                            <th scope="col" className="text-center">Time Created</th>
                             </tr>
                         </thead>
                         <tbody>

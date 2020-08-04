@@ -180,6 +180,8 @@ class AddEmployee extends Component {
                             <div className="form-group">
                                 <label htmlFor="rank"> Rank </label>
                                 <input type="number"
+                                    min="1" 
+                                    max="5"
                                     className="form-control"
                                     name="rank"
                                     placeholder="Enter rank"

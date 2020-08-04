@@ -175,7 +175,7 @@ class UpdateEmployeeInfo extends Component {
                                 <input type="Text"
                                     className="form-control"
                                     name="job_type"
-                                    placeholder="Enter role"
+                                    placeholder="Enter Updated Job Type"
                                     value={this.state.job_type}
                                     onChange={this.onChange} />
                             </div>
@@ -183,8 +183,10 @@ class UpdateEmployeeInfo extends Component {
                                 <label htmlFor="rank"> Rank </label>
                                 <input type="number"
                                     className="form-control"
+                                    min="1" 
+                                    max="5"
                                     name="rank"
-                                    placeholder="Enter rank"
+                                    placeholder="Enter Updated Rank"
                                     value={this.state.rank}
                                     onChange={this.onChange} />
                             </div>

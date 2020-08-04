@@ -49,6 +49,7 @@ export const login = user => {
             "password": user.password
         })
         .then(response => {
+            console.log("Logged In")
             localStorage.setItem('usertoken', response.data.data.token)
             localStorage.setItem('hasCompany', response.data.data.hasCompany)
             return response.data.data

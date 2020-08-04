@@ -63,8 +63,7 @@ class Register extends Component {
         if(this.validateRegisterForm()) {
         register(newUser).then(res => {
             this.props.history.push(`/createCompany`)
-        })
-    }
+        })}
     }
 
     render () {
