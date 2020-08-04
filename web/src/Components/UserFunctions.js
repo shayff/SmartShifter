@@ -328,6 +328,69 @@ export const submitWantedShift = data => {
         })
 }
 
+export const addShifts = data => {
+    return axios
+        .post("http://localhost:5001/companies/addshift",{
+            "name": data.shift_name, 
+            "start time": data.start_time,
+            "end time":data.end_time,
+            "job type":data.job_type,
+            "difficulty":data.difficulty,
+            "date":data.date,
+            "amount":data.amount_of_employees,
+            "day part":data.day_part,
+            "employees":data.employees_for_shift,
+            "note":data.preScheduled
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Submitted Shifts")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const updateShift = data => {
+    return axios
+        .post("http://localhost:5001/companies/updateshift",{
+            /**/
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Submitted Shifts")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const RemoveShift = data => {
+    return axios
+        .post("http://localhost:5001/companies/deleteshift",{
+            "id": data.id, 
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Submitted Shifts")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
 export const buildShifts = data => {
     return axios
         .post("http://localhost:5002/buildshift",{

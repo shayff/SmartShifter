@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { ListOfEmployees } from './UserFunctions'
-import moment from 'moment'
+import { ListOfEmployees, addShifts } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
+import { Multiselect } from 'multiselect-react-dropdown';
+import moment from 'moment'
 
 class AddShifts extends Component {
     constructor() {
@@ -14,14 +15,38 @@ class AddShifts extends Component {
             job_type:'',
             difficulty:'',
             date:'',
-            amount:'',
-            day_part:[0],
+            amount_of_employees:'',
+            day_part:[],
             employees_for_shift:[],
             shift_note:''
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        this.onSelectEmployees = this.onSelectEmployees.bind(this)
+        this.onRemoveEmployees = this.onRemoveEmployees.bind(this)
+        this.onSelectDayPart = this.onSelectDayPart.bind(this)
+        this.onRemoveDayPart = this.onRemoveDayPart.bind(this)
+    }
+
+    onChange (e) {
+        this.setState({ [e.target.name]: e.target.value })
+    }
+
+    onSelectEmployees(selectedList, selectedItem) {
+        this.setState({employees_for_shift: selectedList});
+    }
+
+    onRemoveEmployees(selectedList, selectedItem) {
+        this.setState({employees_for_shift: selectedList});
+    }
+
+    onSelectDayPart(selectedList, selectedItem) {
+        this.setState({day_part: selectedList});
+    }
+
+    onRemoveDayPart(selectedList, selectedItem) {
+        this.setState({day_part: selectedList});
     }
 
     componentDidMount()
@@ -34,24 +59,55 @@ class AddShifts extends Component {
          });
     };
 
-    initializeOptions = () => { 
+
+    initializeEmployeesOptions = () => { 
         return this.state.arrEmployees.map((employee,index) => (
-        <option key={index + 1} value= {employee["_id"]} >{employee["first name"]} {employee["last name"]}</option>
+        {key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]}
         ));
   }
 
     validateRegisterForm() {
+        const shift_name = document.forms["myForm13"]["shift_name"].value;
+        const start_time = document.forms["myForm13"]["start_time"].value;
+        const end_time = document.forms["myForm13"]["end_time"].value;
+        const job_type = document.forms["myForm13"]["job_type"].value;
+        const difficulty = document.forms["myForm13"]["difficulty"].value;
+        const date = document.forms["myForm13"]["date"].value;
+        const amount_of_employees = document.forms["myForm13"]["amount_of_employees"].value;
+        const day_part = this.state.day_part.length;
+        const employees_for_shift = this.state.employees_for_shift.length;
+        let validate = true;
+        
+        if (shift_name === "" || start_time === "" || end_time === ""|| job_type === ""||
+        difficulty === ""|| date === "" ||amount_of_employees === "" || day_part === 0 || employees_for_shift === 0)
+         {
+          alert("All Fields Must Be Filled");
+          validate = false;
+        }
 
-    }
-
-    onChange (e) {
-        this.setState({ [e.target.name]: e.target.value })
+        return validate;
     }
 
     onSubmit (e) {
         e.preventDefault()
 
-     
+        const newShift = {
+            shift_name: this.state.shift_name,
+            start_time: this.state.start_time,
+            end_time: this.state.end_time,
+            job_type: this.state.job_type,
+            difficulty: this.state.difficulty,
+            date: this.state.date,
+            amount_of_employees: this.state.amount_of_employees,
+            day_part: this.state.day_part,
+            employees_for_shift: this.state.employees_for_shift,
+            shift_note: this.state.shift_note
+        }
+
+         if(this.validateRegisterForm()) {
+        addShifts(newShift).then(res => {
+            this.props.history.push(`/addShifts`)
+        })}
     }
 
     render () {
@@ -59,7 +115,7 @@ class AddShifts extends Component {
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 mt-5 mx-auto">
-                        <form name="myForm2" onSubmit={this.onSubmit}>
+                        <form name="myForm13" onSubmit={this.onSubmit}>
                         <   h1 className="h3 mb-3 font-weight-normal text-center">Add Shift</h1>
                             <div className="form-group">
                                 <label htmlFor="shift_name">Name Of The Shift</label>
@@ -67,7 +123,6 @@ class AddShifts extends Component {
                                     className="form-control"
                                     name="shift_name"
                                     placeholder="Enter The Name Of The Shift"
-                                    value={this.state.shift_name}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -75,7 +130,6 @@ class AddShifts extends Component {
                                 <input type="time"
                                     className="form-control"
                                     name="start_time"
-                                    value={this.state.start_time}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -83,7 +137,6 @@ class AddShifts extends Component {
                                 <input type="time"
                                     className="form-control"
                                     name="end_time"
-                                    value={this.state.end_time}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -92,7 +145,6 @@ class AddShifts extends Component {
                                     className="form-control"
                                     name="job_type"
                                     placeholder="Enter The Job Type For The Shift"
-                                    value={this.state.job_type}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -103,7 +155,6 @@ class AddShifts extends Component {
                                     className="form-control"
                                     name="difficulty"
                                     placeholder="Enter The Difficulty Of The Shift"
-                                    value={this.state.difficulty}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -113,40 +164,43 @@ class AddShifts extends Component {
                                     name="date"
                                     min= {moment().day(7).format('YYYY-MM-DD')}
                                     max= {moment().day(13).format('YYYY-MM-DD')}
-                                    value={this.state.date}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="day_part">Day Part </label>
-                                <select 
-                                className="custom-select form-control" 
-                                id="inputGroupSelect03" 
-                                name="day_part" 
-                                onChange={this.onChange}>
-                                <option value="Morning">Morning</option >
-                                <option value="Afternoon">Afternoon</option >
-                                <option value="Evening">Evening</option >
-                                </select>
+                                <label htmlFor="day_part">Day Part</label>
+                                <Multiselect
+                                options= {[
+                                    {key:0, value: "Morning" },
+                                    {key:1, value: "Afternoon" },
+                                    {key:2, value: "Evening"}]}
+                                displayValue="value"
+                                closeIcon="cancel"
+                                placeholder="Choose The Day Part"
+                                avoidHighlightFirstOption= {true}
+                                onSelect={this.onSelectDayPart}
+                                onRemove={this.onRemoveDayPart}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="amount_of_employees">Amount Of Employees For The Shift</label>
                                 <input type="number"
                                     min="1"
+                                    max={this.state.arrEmployees.length}
                                     className="form-control"
                                     name="amount_of_employees"
                                     placeholder="Enter The Amount Of Employees For The Shift"
-                                    value={this.state.amount_of_employees}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="employees_for_shift">Employees For The Shift</label>
-                                <select
-                                className="custom-select form-control"
-                                name="employees_for_shift" 
-                                onChange={this.onChange} >
-                                <option value="All">All</option>
-                                {this.initializeOptions()}
-                                </select>
+                                <Multiselect
+                                options= {this.initializeEmployeesOptions()}
+                                displayValue="value"
+                                closeIcon="cancel"
+                                placeholder="Choose Employees"
+                                avoidHighlightFirstOption= {true}
+                                groupBy="cat"
+                                onSelect={this.onSelectEmployees}
+                                onRemove={this.onRemoveEmployees}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="shift_note">Note For The Shift</label>
@@ -154,7 +208,6 @@ class AddShifts extends Component {
                                     className="form-control"
                                     name="shift_note"
                                     placeholder="Enter Note For The Shift (Optional)"
-                                    value={this.state.shift_note}
                                     onChange={this.onChange} />
                             </div>
                             <button type="submit" className="btn btn-lg btn-primary btn-block">
