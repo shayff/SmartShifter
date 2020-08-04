@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { getMessages,ListOfEmployees,sendMessage } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
+import { Multiselect } from 'multiselect-react-dropdown'
 
 class Messages extends Component {
     constructor() {
@@ -8,18 +9,27 @@ class Messages extends Component {
         this.state = { messages: [],
             arrEmployees:[],
             textMessage:'',
-            toWhoToSend:['All'],
+            toWhoToSend:[],
             title:[],
             attached:[]
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-
+        this.onSelectEmployees = this.onSelectEmployees.bind(this)
+        this.onRemoveEmployees = this.onRemoveEmployees.bind(this)
     }
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
+    }
+
+    onSelectEmployees(selectedList, selectedItem) {
+        this.setState({toWhoToSend: selectedList});
+    }
+
+    onRemoveEmployees(selectedList, selectedItem) {
+        this.setState({toWhoToSend: selectedList});
     }
 
     initializeTable = (userMessages) => {
@@ -36,21 +46,24 @@ class Messages extends Component {
          ));
         }
     }
-
+    
     initializeOptions = () => { 
-          return this.state.arrEmployees.map((employee,index) => (
-          <option key={index + 1} value= {employee["_id"]} >{employee["first name"]} {employee["last name"]}</option>
-          ));
+        let options = [{key:'All' ,value: 'All'}]
+        this.state.arrEmployees.map((employee,index) => (
+        options.push({key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]})
+        ));
+        return options;
     }
 
     validateMessage() {
         const title = document.forms["myForm7"]["title"].value;
         const message = document.forms["myForm7"]["textMessage"].value;
+        const toWhoToSend = this.state.toWhoToSend.length;
        // const attached = document.forms["myForm6"]["attached"].value;
         let validate = true;
 
         /*|| attached === ""*/
-        if (title === "" || message === "")
+        if (title === "" || message === "" || toWhoToSend === 0)
          {
           alert("All Fields Must Be Filled");
           validate = false;
@@ -63,7 +76,7 @@ class Messages extends Component {
         e.preventDefault()
 
         let who=[];
-        if(this.state.toWhoToSend[0] ==='All')
+        if(this.state.toWhoToSend[0].key ==='All')
         {
             for(let i=0; i<this.state.arrEmployees.length; i++)
             {
@@ -72,7 +85,10 @@ class Messages extends Component {
         }
         else
         {
-            who.push(parseInt(this.state.toWhoToSend));
+            for(let i=0; i<this.state.toWhoToSend.length; i++)
+            {
+                who.push(parseInt(this.state.toWhoToSend[i].key))
+            }
         }
 
         const meesage = {
@@ -81,8 +97,7 @@ class Messages extends Component {
             textMessage: this.state.textMessage,
             attached: this.state.attached,
         }
-
-        console.log(meesage)
+        
         if(this.validateMessage()) {
             sendMessage(meesage).then(res => {
             this.props.history.push(`/meesages`)
@@ -130,16 +145,19 @@ class Messages extends Component {
                 </div>
                 <form name="myForm7">
                     <div className="input-group mb-3">
-                    <select className="custom-select" id="inputGroupSelect02" name="toWhoToSend" onChange={this.onChange}>
-                        <option value="All">All</option >
-                        {this.initializeOptions()}
-                    </select>
-                    <div className="input-group-append">
-                        <label className="input-group-text" htmlFor="inputGroupSelect02">Choose To Who To Send</label>
-                    </div>
+                    <label htmlFor="employees_for_shift">Choose To Who To Send</label>   
+                    <Multiselect
+                    options= {this.initializeOptions()}
+                    displayValue="value"
+                    closeIcon="cancel"
+                    placeholder="Choose Employees"
+                    avoidHighlightFirstOption= {true}
+                    groupBy="cat"
+                    onSelect={this.onSelectEmployees}
+                    onRemove={this.onRemoveEmployees}/>
                     </div>
                     <div className="form-group">
-                    <label htmlFor="titleComment" >Write Here The Message</label>
+                    <label htmlFor="titleComment" >Write Here The Title</label>
                     <input className="form-control" type="text" name="title" id="titleComment" placeholder="Title" onChange={this.onChange} />   
                     <label htmlFor="comment">Write Here The Message</label>
                     <textarea className="form-control" name="textMessage" rows="5" id="comment" placeholder="Message" onChange={this.onChange}></textarea>

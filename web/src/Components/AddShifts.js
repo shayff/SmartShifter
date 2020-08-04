@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ListOfEmployees, addShifts } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
-import { Multiselect } from 'multiselect-react-dropdown';
+import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
 
 class AddShifts extends Component {
@@ -58,7 +58,6 @@ class AddShifts extends Component {
             }
          });
     };
-
 
     initializeEmployeesOptions = () => { 
         return this.state.arrEmployees.map((employee,index) => (
