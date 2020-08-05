@@ -42,13 +42,12 @@ def doGetShiftScheduled(userInput):
                         employee_full_details_array.append(employee_db)
                     shift["employees"] = employee_full_details_array
 
-                    del shift["difficulty"]
-
                     if shift['date'] in shiftScheduled:
                         shiftScheduled[shift['date']].append(shift)
                     else:
                         shiftScheduled[shift['date']] = [shift]
 
+                    print(shiftScheduled)
             return jsonify({'ok': True, 'data': shiftScheduled}), 200
         else:
             return jsonify({'ok': True, 'msg': 'User don\'t have company'}), 401
