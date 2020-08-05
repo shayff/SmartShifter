@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from config import MongoConfig
+from server.config import MongoConfig
 from flask import jsonify
 from .schemas.getshiftscheduled import validate_GetShiftScheduled
 from flask_jwt_extended import get_jwt_identity

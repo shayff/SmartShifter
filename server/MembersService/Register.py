@@ -3,7 +3,7 @@ from .schemas.register import validate_register
 from flask import jsonify
 from pymongo import ReturnDocument
 from datetime import datetime
-from config import MongoConfig
+from server.config import MongoConfig
 
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
@@ -32,7 +32,7 @@ def doRegister(data):
 
          # insert to db
          usersCollection.insert_one(data)
-         return jsonify({'ok': True, 'msg': 'user registered successfully'}), 200
+         return jsonify({'ok': True, 'msg': "user registered successfully", "id": count_id}), 200
 
    else:
       return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400

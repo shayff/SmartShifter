@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from .schemas.login import validate_login
 from flask import jsonify
 from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token
-from config import MongoConfig
+from server.config import MongoConfig
 
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])

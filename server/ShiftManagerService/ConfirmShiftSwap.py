@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from pymongo import MongoClient, ReturnDocument
-from config import MongoConfig
+from server.config import MongoConfig
 from .schemas.confirmshiftswap import validate_confirmShiftSwap
 from datetime import datetime
 from server.MembersService.SendMessage import doSendMessage

@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from config import MongoConfig
+from server.config import MongoConfig
 from pymongo import MongoClient
 from .schemas.deleteshift import validate_deleteshift
 

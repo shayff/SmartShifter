@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from config import MongoConfig
+from server.config import MongoConfig
 from .schemas.addshifts import validate_addshifts
 from pymongo import MongoClient, ReturnDocument
 
