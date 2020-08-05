@@ -25,6 +25,8 @@ def doGetShiftsSwaps(userInput):
         else:
             company_id = user["company"]
             company = companies_collection.find_one({'_id': company_id})
+
+            #filter
             shifts_swaps = company["shifts_swaps"]
             swaps_filtered = [x for x in shifts_swaps if x["status"] in statuses]
 

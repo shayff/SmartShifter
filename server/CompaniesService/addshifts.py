@@ -28,6 +28,9 @@ def doAddShifts(data):
             shift_id = doc['shifts_counter']
             data.update({'id': shift_id})
 
+            # add shift status
+            data.update({"status": "not_scheduled"})
+
             # insert to db
             companies_collection.find_one_and_update({'_id': company_id}, {'$push': {'shifts': data}})
             return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200

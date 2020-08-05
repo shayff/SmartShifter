@@ -22,7 +22,7 @@ def doSetShiftsSchedule(data):
             shifts = data['data']
             for key, value in shifts.items():
                 doc = companies_collection.update_one({'_id': company_id, 'shifts.id': int(key)},
-                                                      {'$set': {'shifts.$.employees': value}})
+                                                      {'$set': {'shifts.$.employees': value, "shifts.$.status" : "scheduled"}})
             if doc.modified_count > 0:
                 return jsonify({'ok': True, 'msg': 'Update shift successfully'}), 200
             else:
