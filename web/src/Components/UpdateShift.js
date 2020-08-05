@@ -50,9 +50,40 @@ class UpdateShift extends Component {
         this.setState({day_part: selectedList});
     }
 
+    ParseDayParts(dayParts)
+    {
+        let dayPartsString = [];
+        for(let i=0; i<dayParts.length; i++)
+        {
+            if(dayParts[i] === 0)
+            {
+                dayPartsString.push({key:0, value: "Morning"})
+            }
+            else if(dayParts[i] === 1)
+            {
+                dayPartsString.push({key:1, value: "Afternoon"})
+            }
+            else
+            {
+                dayPartsString.push({key:2, value: "Evening"})
+            }
+        }
+
+        return dayPartsString;
+    }
+
+    ParseEmployeesForShift = (arrEmployees) => { 
+        return arrEmployees.map((employee) => (
+        {key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"]}
+        ));
+    }
+
     componentDidMount()
     {
         const shift = this.props.location.state.detail;
+        const dayParts = this.ParseDayParts(shift["day part"]);
+        const employeesForShift = this.ParseEmployeesForShift(shift.employees);
+
         this.setState({
             shift_name:shift.name,
             start_time:shift["start time"],
@@ -61,11 +92,12 @@ class UpdateShift extends Component {
             difficulty:shift.difficulty,
             date:shift.date,
             amount_of_employees:shift.amount,
-            day_part:shift["day part"],
-            employees_for_shift: shift.employees,
+            day_part: dayParts,
+            employees_for_shift: employeesForShift,
             shift_note:shift.note,
             shift_id:shift.id
         });
+
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
@@ -209,6 +241,8 @@ class UpdateShift extends Component {
                                 closeIcon="cancel"
                                 placeholder="Update The Day Part"
                                 avoidHighlightFirstOption= {true}
+                                closeOnSelect={false}
+                                hidePlaceholder={true}
                                 selectedValues={this.state.day_part}
                                 onSelect={this.onSelectDayPart}
                                 onRemove={this.onRemoveDayPart}/>
@@ -232,8 +266,10 @@ class UpdateShift extends Component {
                                 closeIcon="cancel"
                                 placeholder="Update The Employees"
                                 avoidHighlightFirstOption= {true}
+                                hidePlaceholder={true}
+                                closeOnSelect={false}
                                 groupBy="cat"
-                                selectedValues={this.state.employees}
+                                selectedValues={this.state.employees_for_shift}
                                 onSelect={this.onSelectEmployees}
                                 onRemove={this.onRemoveEmployees}/>
                             </div>
@@ -242,7 +278,7 @@ class UpdateShift extends Component {
                                 <input type="text"
                                     className="form-control"
                                     name="shift_note"
-                                    value={this.state.note}
+                                    value={this.state.shift_note}
                                     placeholder="Update The Note For The Shift"
                                     onChange={this.onChange} />
                             </div>

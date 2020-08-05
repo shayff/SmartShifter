@@ -14,20 +14,20 @@ class Employees extends Component {
         if(employees)
         {
          return employees.map((employee,index) => (
-            <tr key = {index} >
-            <th scope="row" className="text-center"> {index + 1}</th>
-            <td className="text-center">{employee["first name"]}</td>
-            <td className="text-center">{employee["last name"]}</td>
-             {/* <td className="text-center">{employee["gender"]}</td>  */}
-            <td className="text-center">{employee["id number"]}</td>
-            <td className="text-center">{employee["job type"]}</td>
-            <td className="text-center">{employee["phone"]}</td>
-            <td className="text-center">{employee["email"]}</td>
-            <td className="text-center">{employee["address"]}</td>
-            <td className="text-center">{employee["date of birth"]}</td>
-            <td className="text-center">{employee["time_created"]}</td>
-            <td className="text-center">{employee["rank"]}</td>
-            <td className="text-center">
+            <tr key = {index} className="text-center">
+            <th scope="row"> {index + 1}</th>
+            <td>{employee["first name"]}</td>
+            <td>{employee["last name"]}</td>
+             {/* <td>{employee["gender"]}</td>  */}
+            <td>{employee["id number"]}</td>
+            <td>{employee["job type"]}</td>
+            <td >{employee["phone"]}</td>
+            <td>{employee["email"]}</td>
+            <td>{employee["address"]}</td>
+            <td>{employee["date of birth"]}</td>
+            <td>{employee["time_created"]}</td>
+            <td>{employee["rank"]}</td>
+            <td>
             <button type="submit" className="btn-lg btn-primary btn-block" onClick={() => this.onUpdateInfoEmployee(`/updateEmployeeInfo`,employee)}>
                                 Update Info
             </button>

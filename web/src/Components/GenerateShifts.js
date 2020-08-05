@@ -39,7 +39,7 @@ class GenerateShifts extends Component {
                 this.parseShifts(shifts,newShifts,minDate,maxDate);
                 if(newShifts.length !== 0)
                 {
-                   this.setState({ arrShiftsNotScheduled:newShifts},() => console.log(this.state.arrShiftsNotScheduled));
+                   this.setState({ arrShiftsNotScheduled:newShifts});
                 }
                 else
                 {
@@ -120,72 +120,82 @@ class GenerateShifts extends Component {
         const modalLabel = 'exampleModalLabel' + index;
  
         return(
-            <div key = {index}>
-        <button type="button" className="btn btn-primary" data-toggle="modal" data-target={modalButton}>
-        {shift.name}
-        </button>
-        <div className="modal fade" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-            <div className="modal-header text-center">
-                <h3 className="modal-title w-100" id={modalLabel}>{shift.name}</h3>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+        <div key = {index} style={{padding:'5px'}}>
+            <button type="button" className="btn btn-info btn-block" data-toggle="modal" data-target={modalButton}>
+                {shift.name}
+            </button>
+            <div className="modal fade" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div className="modal-content">
+                    <div className="modal-header text-center">
+                        <h3 className="modal-title w-100" id={modalLabel}>Details About The Shift</h3>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">            
+                    <div className="container">
+                    <table className="table table-bordered">
+                        <tbody>
+                            <tr className="text-center">
+                                <td className="table-primary">Name Of The Shift</td>
+                                <td className="table-secondary">{shift.name}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Date Of The Shift</td>
+                                <td className="table-secondary">{shift.date}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Start Time Of The Shift</td>
+                                <td className="table-secondary">{shift["start time"]}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">End Time Of The Shift</td>
+                                <td className="table-secondary">{shift["end time"]}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Job Type For The Shift</td>
+                                <td className="table-secondary">{shift["job type"]}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Difficulty Of The Shift</td>
+                                <td className="table-secondary">{shift.difficulty}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Day Part Of The Shift</td>
+                                <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Amount Of Employees</td>
+                                <td className="table-secondary">{shift.amount}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Employees For The Shift</td>
+                                <td className="table-secondary">{shift.employees.map((employee) => (
+                                    employee["first name"] + " " + employee["last name"] + ", "))}</td>
+                            </tr>
+                            <tr className="text-center">
+                                <td className="table-primary">Note For The Shift</td>
+                                <td className="table-secondary">{shift.note}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
+                            Update Shift
+                        </button>
+                        <button type="button" className="btn btn-primary"  data-dismiss="modal" onClick={() => this.onRemoveShift(shift.id)}>
+                            Remove Shift
+                        </button>
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+                </div>
             </div>
-            <div className="modal-body">            
-            <div className="jumbotron mt-5">
-            <table className="table col-md-8 mx-auto">
-                <tbody>
-                    <tr>
-                        <td>Date</td>
-                        <td>{shift.date}</td>
-                    </tr>
-                    <tr>
-                        <td>Start Time</td>
-                        <td>{shift["start time"]}</td>
-                    </tr>
-                    <tr>
-                        <td>End Time</td>
-                        <td>{shift["end time"]}</td>
-                    </tr>
-                    <tr>
-                        <td>Job Type</td>
-                        <td>{shift["job type"]}</td>
-                    </tr>
-                    <tr>
-                        <td>Difficulty</td>
-                        <td>{shift.difficulty}</td>
-                    </tr>
-                    <tr>
-                        <td>Day Part</td>
-                        <td>{this.ParseDayParts(shift["day part"])}</td>
-                    </tr>
-                    <tr>
-                        <td>Amount</td>
-                        <td>{shift.amount}</td>
-                    </tr>
-                    <tr>
-                        <td>employees</td>
-                        <td>{shift.employees.map((employee) => (
-                            employee["first name"] + " " + employee["last name"] + ",\n"))}</td>
-                    </tr>
-                    <tr>
-                        <td>Note</td>
-                        <td>{shift.note}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>Update Shift</button>
-                <button type="button" className="btn btn-primary"  data-dismiss="modal" onClick={() => this.onRemoveShift(shift.id)}>Remove Shift</button>
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-            </div>
-        </div>
-        </div>
         </div>)
     }
 
@@ -194,37 +204,37 @@ class GenerateShifts extends Component {
        return (<tr>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    this.initializeTableModal(shift,index)
+                    shift.date === this.state.sunday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    this.initializeTableModal(shift,index)
+                    shift.date === this.state.monday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    this.initializeTableModal(shift,index)
+                    shift.date === this.state.tuesday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    this.initializeTableModal(shift,index)
+                    shift.date === this.state.wednesday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    this.initializeTableModal(shift,index)
+                    shift.date === this.state.thursday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    this.initializeTableModal(shift,index)
+                    shift.date === this.state.friday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    this.initializeTableModal(shift,index)
+                    shift.date === this.state.saturday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
             </tr>
@@ -248,13 +258,14 @@ class GenerateShifts extends Component {
     render () {
         return (
             <div className="container">
+            <form name="myForm15" onSubmit={this.onSubmit}>
             <div className="jumbotron mt-5">
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Build Shifts </h1>
              </div>
-                <table className="table">
+                <table className="table table-bordered">
                     <thead className="thead-dark">                          
-                        <tr>    
+                        <tr className="text-center">    
                         <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')} Sunday</th>
                         <th scope="col"> {this.state.monday.format('YYYY-MM-DD')} Monday</th>
                         <th scope="col"> {this.state.tuesday.format('YYYY-MM-DD')} Tuesday</th>
@@ -269,12 +280,13 @@ class GenerateShifts extends Component {
                     </tbody>
                  </table>
              </div>  
-             <button type="submit" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAddShifts(`/addShifts`)}>
+             <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAddShifts(`/addShifts`)}>
                                 Add Shifts 
                 </button>   
                 <button type="submit" className="btn btn-lg btn-primary btn-block">
                     Generate Shifts
                 </button>  
+                </form>
             </div>
         )
     }

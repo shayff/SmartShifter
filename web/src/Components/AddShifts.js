@@ -60,7 +60,7 @@ class AddShifts extends Component {
     };
 
     initializeEmployeesOptions = () => { 
-        return this.state.arrEmployees.map((employee,index) => (
+        return this.state.arrEmployees.map((employee) => (
         {key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]}
         ));
   }
@@ -113,10 +113,9 @@ class AddShifts extends Component {
             shift_note: this.state.shift_note,
         }
 
-        console.log(newShift)
          if(this.validateRegisterForm()) {
             addShifts(newShift).then(res => {
-            this.props.history.push(`/addShifts`)
+            this.props.history.push(`/generateShifts`)
         })}
     }
 
@@ -187,6 +186,8 @@ class AddShifts extends Component {
                                 closeIcon="cancel"
                                 placeholder="Choose The Day Part"
                                 avoidHighlightFirstOption= {true}
+                                closeOnSelect={false}
+                                hidePlaceholder={true}
                                 onSelect={this.onSelectDayPart}
                                 onRemove={this.onRemoveDayPart}/>
                             </div>
@@ -209,6 +210,8 @@ class AddShifts extends Component {
                                 placeholder="Choose Employees"
                                 avoidHighlightFirstOption= {true}
                                 groupBy="cat"
+                                closeOnSelect={false}
+                                hidePlaceholder={true}
                                 onSelect={this.onSelectEmployees}
                                 onRemove={this.onRemoveEmployees}/>
                             </div>
