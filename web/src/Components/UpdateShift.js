@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { ListOfEmployees, addShifts } from './UserFunctions'
+import { ListOfEmployees, updateShift } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
 
-class AddShifts extends Component {
+class UpdateShift extends Component {
     constructor() {
         super()
         this.state = {
@@ -18,7 +18,8 @@ class AddShifts extends Component {
             amount_of_employees:'',
             day_part:[],
             employees_for_shift:[],
-            shift_note:''
+            shift_note:'',
+            shift_id:''
         }
 
         this.onChange = this.onChange.bind(this)
@@ -51,6 +52,20 @@ class AddShifts extends Component {
 
     componentDidMount()
     {
+        const shift = this.props.location.state.detail;
+        this.setState({
+            shift_name:shift.name,
+            start_time:shift["start time"],
+            end_time:shift["end time"],
+            job_type:shift["job type"],
+            difficulty:shift.difficulty,
+            date:shift.date,
+            amount_of_employees:shift.amount,
+            day_part:shift["day part"],
+            employees_for_shift: shift.employees,
+            shift_note:shift.note,
+            shift_id:shift.id
+        });
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
@@ -66,13 +81,13 @@ class AddShifts extends Component {
   }
 
     validateRegisterForm() {
-        const shift_name = document.forms["myForm13"]["shift_name"].value;
-        const start_time = document.forms["myForm13"]["start_time"].value;
-        const end_time = document.forms["myForm13"]["end_time"].value;
-        const job_type = document.forms["myForm13"]["job_type"].value;
-        const difficulty = document.forms["myForm13"]["difficulty"].value;
-        const date = document.forms["myForm13"]["date"].value;
-        const amount_of_employees = document.forms["myForm13"]["amount_of_employees"].value;
+        const shift_name = document.forms["myForm14"]["shift_name"].value;
+        const start_time = document.forms["myForm14"]["start_time"].value;
+        const end_time = document.forms["myForm14"]["end_time"].value;
+        const job_type = document.forms["myForm14"]["job_type"].value;
+        const difficulty = document.forms["myForm14"]["difficulty"].value;
+        const date = document.forms["myForm14"]["date"].value;
+        const amount_of_employees = document.forms["myForm14"]["amount_of_employees"].value;
         const day_part = this.state.day_part.length;
         let validate = true;
         
@@ -101,6 +116,7 @@ class AddShifts extends Component {
         }
 
         const newShift = {
+            id: this.state.shift_id,
             shift_name: this.state.shift_name,
             start_time: this.state.start_time,
             end_time: this.state.end_time,
@@ -115,8 +131,8 @@ class AddShifts extends Component {
 
         console.log(newShift)
          if(this.validateRegisterForm()) {
-            addShifts(newShift).then(res => {
-            this.props.history.push(`/addShifts`)
+            updateShift(newShift).then(res => {
+            this.props.history.push(`/generateShifts`)
         })}
     }
 
@@ -125,14 +141,15 @@ class AddShifts extends Component {
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 mt-5 mx-auto">
-                        <form name="myForm13" onSubmit={this.onSubmit}>
-                        <   h1 className="h3 mb-3 font-weight-normal text-center">Add Shift</h1>
+                        <form name="myForm14" onSubmit={this.onSubmit}>
+                        <   h1 className="h3 mb-3 font-weight-normal text-center">Update Shift</h1>
                             <div className="form-group">
                                 <label htmlFor="shift_name">Name Of The Shift</label>
                                 <input type="text"
                                     className="form-control"
                                     name="shift_name"
-                                    placeholder="Enter The Name Of The Shift"
+                                    placeholder="Update The Name Of The Shift"
+                                    value={this.state.shift_name}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -140,6 +157,7 @@ class AddShifts extends Component {
                                 <input type="date"
                                     className="form-control"
                                     name="date"
+                                    value={this.state.date}
                                     min= {moment().day(7).format('YYYY-MM-DD')}
                                     max= {moment().day(13).format('YYYY-MM-DD')}
                                     onChange={this.onChange} />
@@ -149,6 +167,7 @@ class AddShifts extends Component {
                                 <input type="time"
                                     className="form-control"
                                     name="start_time"
+                                    value={this.state.start_time}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -156,6 +175,7 @@ class AddShifts extends Component {
                                 <input type="time"
                                     className="form-control"
                                     name="end_time"
+                                    value={this.state.end_time}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -163,7 +183,8 @@ class AddShifts extends Component {
                                 <input type="text"
                                     className="form-control"
                                     name="job_type"
-                                    placeholder="Enter The Job Type For The Shift"
+                                    value={this.state.job_type}
+                                    placeholder="Update The Job Type For The Shift"
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -173,7 +194,8 @@ class AddShifts extends Component {
                                     max="5"
                                     className="form-control"
                                     name="difficulty"
-                                    placeholder="Enter The Difficulty Of The Shift"
+                                    value={this.state.difficulty}
+                                    placeholder="Update The Difficulty Of The Shift"
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -185,8 +207,9 @@ class AddShifts extends Component {
                                     {key:2, value: "Evening"}]}
                                 displayValue="value"
                                 closeIcon="cancel"
-                                placeholder="Choose The Day Part"
+                                placeholder="Update The Day Part"
                                 avoidHighlightFirstOption= {true}
+                                selectedValues={this.state.day_part}
                                 onSelect={this.onSelectDayPart}
                                 onRemove={this.onRemoveDayPart}/>
                             </div>
@@ -197,7 +220,8 @@ class AddShifts extends Component {
                                     max={this.state.arrEmployees.length}
                                     className="form-control"
                                     name="amount_of_employees"
-                                    placeholder="Enter The Amount Of Employees For The Shift"
+                                    value={this.state.amount_of_employees}
+                                    placeholder="Update The Amount Of Employees For The Shift"
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -206,9 +230,10 @@ class AddShifts extends Component {
                                 options= {this.initializeEmployeesOptions()}
                                 displayValue="value"
                                 closeIcon="cancel"
-                                placeholder="Choose Employees"
+                                placeholder="Update The Employees"
                                 avoidHighlightFirstOption= {true}
                                 groupBy="cat"
+                                selectedValues={this.state.employees}
                                 onSelect={this.onSelectEmployees}
                                 onRemove={this.onRemoveEmployees}/>
                             </div>
@@ -217,11 +242,12 @@ class AddShifts extends Component {
                                 <input type="text"
                                     className="form-control"
                                     name="shift_note"
-                                    placeholder="Enter Note For The Shift"
+                                    value={this.state.note}
+                                    placeholder="Update The Note For The Shift"
                                     onChange={this.onChange} />
                             </div>
                             <button type="submit" className="btn btn-lg btn-primary btn-block">
-                                Add Shift
+                                Update Shift
                             </button>
                         </form>
                     </div>
@@ -231,4 +257,4 @@ class AddShifts extends Component {
     }
 }
 
-export default withRouter(AddShifts)
+export default withRouter(UpdateShift)

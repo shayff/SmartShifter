@@ -347,7 +347,7 @@ export const addShifts = data => {
             "amount":data.amount_of_employees,
             "day part":data.day_part,
             "employees":data.employees_for_shift,
-            "note":data.preScheduled
+            "note":data.shift_note
         },
         {
             headers: {
@@ -365,7 +365,17 @@ export const addShifts = data => {
 export const updateShift = data => {
     return axios
         .post("http://localhost:5001/companies/updateshift",{
-            /**/
+            "id": data.id, 
+            "name": data.shift_name, 
+            "start time": data.start_time,
+            "end time":data.end_time,
+            "job type":data.job_type,
+            "difficulty":data.difficulty,
+            "date":data.date,
+            "amount":data.amount_of_employees,
+            "day part":data.day_part,
+            "employees":data.employees_for_shift,
+            "note":data.shift_note
         },
         {
             headers: {
@@ -380,10 +390,10 @@ export const updateShift = data => {
         })
 }
 
-export const RemoveShift = data => {
+export const removeShift = id => {
     return axios
         .post("http://localhost:5001/companies/deleteshift",{
-            "id": data.id, 
+            "id": id, 
         },
         {
             headers: {

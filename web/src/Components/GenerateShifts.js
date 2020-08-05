@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { buildShifts, ListOfEmployees,getShifts } from './UserFunctions'
+import { buildShifts, ListOfEmployees,getShifts,removeShift } from './UserFunctions'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 
@@ -34,20 +34,19 @@ class GenerateShifts extends Component {
          }
          
          getShifts(shifts).then(shifts =>{
-         if(shifts){
-             console.log(shifts)
-             let newShifts = [];
-             this.parseShifts(shifts,newShifts,minDate,maxDate);
-             if(newShifts.length !== 0)
-             {
-                this.setState({ arrShiftsNotScheduled:newShifts},() => console.log(this.state.arrShiftsNotScheduled));
-             }
-             else
-             {
-                alert("No Shifts To Show")
-             }
-            }
-         })
+            if(shifts){
+                let newShifts = [];
+                this.parseShifts(shifts,newShifts,minDate,maxDate);
+                if(newShifts.length !== 0)
+                {
+                   this.setState({ arrShiftsNotScheduled:newShifts},() => console.log(this.state.arrShiftsNotScheduled));
+                }
+                else
+                {
+                   alert("No Shifts To Show")
+                }
+              }
+            })
     }
 
     parseShifts(shifts,newShifts,minDate,maxDate)
@@ -61,10 +60,7 @@ class GenerateShifts extends Component {
             {
                 for(let i=0; i<shifts[date].length; i++)
                 {
-                   newShifts.push({start_date: date + " " + (shifts[date][i])["start time"], end_date: date  +" " + (shifts[date][i])["end time"],
-                    text: (shifts[date][i])["job type"] +":" +
-                      (shifts[date][i])["employees"].map((employee,index) => " " +employee["first name"] + " " + employee["last name"]),
-                     id:(shifts[date][i])["id"]})
+                   newShifts.push(shifts[date][i])
                 }
             }
             j++;
@@ -84,29 +80,155 @@ class GenerateShifts extends Component {
          });
     };
 
+    ParseDayParts(dayParts)
+    {
+        let dayPartsString = '';
+        for(let i=0; i<dayParts.length; i++)
+        {
+            if(dayParts[i] === 0)
+            {
+                dayPartsString+='Morning '
+            }
+            else if(dayParts[i] === 1)
+            {
+                dayPartsString+='Afternoon '
+            }
+            else
+            {
+                dayPartsString+='Evening '
+            }
+        }
+
+        return dayPartsString;
+    }
+
+    onRemoveShift(id)
+    {
+        removeShift(id).then(()=> {
+            this.updateDatesAndGetShifts();
+       });
+    }
+
+    onUpdateInfoShift(path, shift) {
+        this.props.history.push(path, { detail: shift})
+   }
+
+    initializeTableModal(shift,index)
+    {
+        const modalButton = '#exampleModal' + index;
+        const ModalId = "exampleModal" + index;
+        const modalLabel = 'exampleModalLabel' + index;
+ 
+        return(
+            <div key = {index}>
+        <button type="button" className="btn btn-primary" data-toggle="modal" data-target={modalButton}>
+        {shift.name}
+        </button>
+        <div className="modal fade" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div className="modal-content">
+            <div className="modal-header text-center">
+                <h3 className="modal-title w-100" id={modalLabel}>{shift.name}</h3>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div className="modal-body">            
+            <div className="jumbotron mt-5">
+            <table className="table col-md-8 mx-auto">
+                <tbody>
+                    <tr>
+                        <td>Date</td>
+                        <td>{shift.date}</td>
+                    </tr>
+                    <tr>
+                        <td>Start Time</td>
+                        <td>{shift["start time"]}</td>
+                    </tr>
+                    <tr>
+                        <td>End Time</td>
+                        <td>{shift["end time"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Job Type</td>
+                        <td>{shift["job type"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Difficulty</td>
+                        <td>{shift.difficulty}</td>
+                    </tr>
+                    <tr>
+                        <td>Day Part</td>
+                        <td>{this.ParseDayParts(shift["day part"])}</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td>{shift.amount}</td>
+                    </tr>
+                    <tr>
+                        <td>employees</td>
+                        <td>{shift.employees.map((employee) => (
+                            employee["first name"] + " " + employee["last name"] + ",\n"))}</td>
+                    </tr>
+                    <tr>
+                        <td>Note</td>
+                        <td>{shift.note}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+            </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>Update Shift</button>
+                <button type="button" className="btn btn-primary"  data-dismiss="modal" onClick={() => this.onRemoveShift(shift.id)}>Remove Shift</button>
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
+        </div>)
+    }
+
     initializeTable()
     {
-        const sunday= "table-light shifts 1";
-        const monday= "table-light shifts 2";
-        const tuesday= "table-light shifts 3";
-        const wednesday= "table-light shifts 4";
-        const thursday= "table-light shifts 5";
-        const friday= "table-light shifts 6";
-        const saturday= "table-light shifts 7";
-        const hoursColor= "table-info";
-
-       return this.state.hours.map((hours,index) => (
-            <tr key={index}>
-            <th scope="row" className={hoursColor}>{hours}</th>
-            <th scope="row" id={"sunday" + index} className={sunday}><input type="text"></input></th>
-            <th scope="row" id={"monday" + index} className={monday}><textarea></textarea></th>
-            <th scope="row" id={"tuesday" + index} className={tuesday}><select> <option value="All"></option > {this.initializeOptions()}</select></th>
-            <th scope="row" id={"wednesday" + index} className={wednesday}></th>
-            <th scope="row" id={"thursday" + index} className={thursday}></th>
-            <th scope="row" id={"friday" + index} className={friday}></th>
-            <th scope="row" id={"saturday" + index} className={saturday}></th>
+       return (<tr>
+                <td>
+                {this.state.arrShiftsNotScheduled.map((shift,index) => (
+                    this.initializeTableModal(shift,index)
+                ))}
+                </td>
+                <td>
+                {this.state.arrShiftsNotScheduled.map((shift,index) => (
+                    this.initializeTableModal(shift,index)
+                ))}
+                </td>
+                <td>
+                {this.state.arrShiftsNotScheduled.map((shift,index) => (
+                    this.initializeTableModal(shift,index)
+                ))}
+                </td>
+                <td>
+                {this.state.arrShiftsNotScheduled.map((shift,index) => (
+                    this.initializeTableModal(shift,index)
+                ))}
+                </td>
+                <td>
+                {this.state.arrShiftsNotScheduled.map((shift,index) => (
+                    this.initializeTableModal(shift,index)
+                ))}
+                </td>
+                <td>
+                {this.state.arrShiftsNotScheduled.map((shift,index) => (
+                    this.initializeTableModal(shift,index)
+                ))}
+                </td>
+                <td>
+                {this.state.arrShiftsNotScheduled.map((shift,index) => (
+                    this.initializeTableModal(shift,index)
+                ))}
+                </td>
             </tr>
-            ));
+            );
     }
 
     onAddShifts(path)
@@ -130,7 +252,7 @@ class GenerateShifts extends Component {
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Build Shifts </h1>
              </div>
-                <table className="table table-bordered ">
+                <table className="table">
                     <thead className="thead-dark">                          
                         <tr>    
                         <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')} Sunday</th>
@@ -143,11 +265,10 @@ class GenerateShifts extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                    {/* {this.initializeTable()} */}
+                    {this.initializeTable()}
                     </tbody>
                  </table>
              </div>  
-               
              <button type="submit" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAddShifts(`/addShifts`)}>
                                 Add Shifts 
                 </button>   
