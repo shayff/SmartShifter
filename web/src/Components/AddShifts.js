@@ -90,21 +90,34 @@ class AddShifts extends Component {
     onSubmit (e) {
         e.preventDefault()
 
+
+        let employees=[];
+        let dayParts=[];
+        for(let i=0; i<this.state.employees_for_shift.length; i++)
+        {
+            employees.push(this.state.employees_for_shift[i].key)
+        }
+        for(let i=0; i<this.state.day_part.length; i++)
+        {
+            dayParts.push(this.state.day_part[i].key)
+        }
+
         const newShift = {
             shift_name: this.state.shift_name,
             start_time: this.state.start_time,
             end_time: this.state.end_time,
             job_type: this.state.job_type,
-            difficulty: this.state.difficulty,
+            difficulty: parseInt(this.state.difficulty),
             date: this.state.date,
-            amount_of_employees: this.state.amount_of_employees,
-            day_part: this.state.day_part,
-            employees_for_shift: this.state.employees_for_shift,
+            amount_of_employees: parseInt(this.state.amount_of_employees),
+            day_part: dayParts,
+            employees_for_shift: employees,
             shift_note: this.state.shift_note
         }
 
+        console.log(newShift)
          if(this.validateRegisterForm()) {
-        addShifts(newShift).then(res => {
+            addShifts(newShift).then(res => {
             this.props.history.push(`/addShifts`)
         })}
     }
@@ -122,6 +135,15 @@ class AddShifts extends Component {
                                     className="form-control"
                                     name="shift_name"
                                     placeholder="Enter The Name Of The Shift"
+                                    onChange={this.onChange} />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="date">Date</label>
+                                <input type="date"
+                                    className="form-control"
+                                    name="date"
+                                    min= {moment().day(7).format('YYYY-MM-DD')}
+                                    max= {moment().day(13).format('YYYY-MM-DD')}
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
@@ -157,15 +179,6 @@ class AddShifts extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="date">Date</label>
-                                <input type="date"
-                                    className="form-control"
-                                    name="date"
-                                    min= {moment().day(7).format('YYYY-MM-DD')}
-                                    max= {moment().day(13).format('YYYY-MM-DD')}
-                                    onChange={this.onChange} />
-                            </div>
-                            <div className="form-group">
                                 <label htmlFor="day_part">Day Part</label>
                                 <Multiselect
                                 options= {[
@@ -195,7 +208,7 @@ class AddShifts extends Component {
                                 options= {this.initializeEmployeesOptions()}
                                 displayValue="value"
                                 closeIcon="cancel"
-                                placeholder="Choose Employees"
+                                placeholder="Choose Employees (Optional)"
                                 avoidHighlightFirstOption= {true}
                                 groupBy="cat"
                                 onSelect={this.onSelectEmployees}

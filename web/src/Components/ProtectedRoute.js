@@ -1,5 +1,7 @@
 import React from 'react'
 import CreateCompany from './CreateCompany'
+import Login from './Login'
+import Register from './Register'
 import { Redirect } from 'react-router-dom'
 
 class ProtectedRoute extends React.Component {
@@ -11,27 +13,42 @@ class ProtectedRoute extends React.Component {
 
         if(isAuthenticated)
         {   
-            if(hasCompany === 'true')
+            if(Component !== Login && Component !== Register)
             {
-                if(Component !== CreateCompany)
+                if(hasCompany === 'true')
                 {
-                    return <Component />
+                    if(Component !== CreateCompany)
+                    {
+                        return <Component />
+                    }
+                    else
+                    {
+                        alert("You created already a company")
+                        return <Redirect to={{ pathname: '/' }} />
+                    }
                 }
                 else
                 {
-                    alert("You created already a company")
-                    return <Redirect to={{ pathname: '/' }} />
+                    return <Component />
                 }
             }
             else
             {
-                return <Component />
+                alert("You Must Log Out To View This Page ")
+                return <Redirect to={{ pathname: '/' }} />
             }
         }
         else
-        {
-            alert("You must log in to view the page")
-            return <Redirect to={{ pathname: '/login' }} />
+        {   
+            if(Component === Login || Component === Register)
+            {
+                return <Component />
+            }
+            else
+            {
+                alert("You Must Log In To View This Page")
+                return <Redirect to={{ pathname: '/login' }} />
+            }
         }
     }
 }

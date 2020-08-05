@@ -29,8 +29,8 @@ class App extends Component {
           <div className="container">
             <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
+            <ProtectedRoute exact path="/register" component={Register} />
+            <ProtectedRoute exact path="/login" component={Login} />
             <ProtectedRoute exact path="/createCompany" component={CreateCompany} />
             <ProtectedRoute exact path="/profile" component={Profile} />
             <ProtectedRoute exact path="/employees" component={Employees} />

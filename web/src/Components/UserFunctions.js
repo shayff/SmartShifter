@@ -313,7 +313,13 @@ export const getSwitches = data => {
 export const submitWantedShift = data => {
     return axios
         .post("http://localhost:5001/companies/PrefenceFromManager",{
-            "preferences_from_manager":data
+            "sunday":data.sunday,
+            "monday":data.monday,
+            "tuesday":data.tuesday,
+            "wednesday":data.wednesday,
+            "thursday":data.thursday,
+            "friday":data.friday,
+            "saturday":data.saturday
         },
         {
             headers: {
@@ -348,7 +354,7 @@ export const addShifts = data => {
              }
         })
         .then(response => {
-            console.log("Submitted Shifts")
+            console.log("Added Shift")
         })
         .catch(eror => {
             console.log(eror)
@@ -366,7 +372,7 @@ export const updateShift = data => {
              }
         })
         .then(response => {
-            console.log("Submitted Shifts")
+            console.log("Updated Shift")
         })
         .catch(eror => {
             console.log(eror)
@@ -384,7 +390,7 @@ export const RemoveShift = data => {
              }
         })
         .then(response => {
-            console.log("Submitted Shifts")
+            console.log("Removed Shift")
         })
         .catch(eror => {
             console.log(eror)
@@ -404,7 +410,7 @@ export const buildShifts = data => {
              }
         })
         .then(response => {
-            console.log("Submitted Shifts")
+            console.log("Build Shifts")
         })
         .catch(eror => {
             console.log(eror)
