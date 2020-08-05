@@ -39,7 +39,8 @@ class Shifts extends Component {
   
          const shifts ={
              start_date: minDate, 
-             end_date: maxDate
+             end_date: maxDate,
+             statuses: ['scheduled'] 
          }
          
          getShifts(shifts).then(shifts =>{

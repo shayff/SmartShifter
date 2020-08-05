@@ -258,7 +258,8 @@ export const getShifts = date => {
     return axios
         .post("http://localhost:5002/GetShiftScheduled",{ 
                 "start_date": date.start_date, 
-                "end_date": date.end_date
+                "end_date": date.end_date,
+                "statuses": date.status
         },
         {
             headers: {
