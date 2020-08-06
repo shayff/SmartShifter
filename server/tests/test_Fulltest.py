@@ -19,11 +19,13 @@ from faker import Faker
 
 def test_Fulltest():
     #Settings
-    num_of_users = 3
-    start_date = datetime.datetime(year=2020, month=5, day=9)
+    num_of_users = 10
+    start_date = datetime.datetime(year=2020, month=8, day=9)
 
     #Prepare test
+    he_fake = Faker("he_IL")
     fake = Faker()
+
     users = []
     week = [start_date.strftime("%Y-%m-%d"),
             (start_date+datetime.timedelta(days=1)).strftime("%Y-%m-%d"),
@@ -34,7 +36,7 @@ def test_Fulltest():
             (start_date+datetime.timedelta(days=6)).strftime("%Y-%m-%d")]
 
     #1. Create users
-    create_users(fake, num_of_users, users)
+    create_users(fake,he_fake, num_of_users, users)
 
     #2. Login to users
     login_users(num_of_users, users)
@@ -59,7 +61,6 @@ def test_Fulltest():
                 '/companies/addshift',
                 headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
                 data=json.dumps({
-                    '''
                 "name": fake.color() + "shift",
                 "start time": start,
                 "end time": end,
@@ -67,7 +68,6 @@ def test_Fulltest():
                 "difficulty": random.randint(1, 5),
                 "date": week[day],
                 "amount": random.randint(1, 2),
-                '''
                 "day part": daypart,
                 "employees": [],
                 "note": ""
@@ -79,7 +79,7 @@ def test_Fulltest():
             assert data['ok']
 
 
-def create_users(fake, num_of_users, users):
+def create_users(fake,he_fake, num_of_users, users):
     for i in range(num_of_users):
         user_email = fake.email()
         response = memb_app.test_client().post(
@@ -87,7 +87,7 @@ def create_users(fake, num_of_users, users):
             data=json.dumps({"email": user_email,
                              "password": "00000",
                              "id number": "205605165",
-                             "phone": fake.phone_number(),
+                             "phone": he_fake.phone_number(),
                              "first name": fake.first_name(),
                              "last name": fake.last_name(),
                              "address": fake.address(),
@@ -123,6 +123,11 @@ def create_company(fake, users):
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
             "company name": fake.company(),
+            "settings" :
+                {"address": fake.address(),
+                 "can_employee_switch_shifts": True,
+                 "shift_required_from_emp": 5
+                }
         }),
         content_type='application/json',
     )
@@ -249,5 +254,7 @@ def rand_hours_for_shift():
         daypart.add(1)
     else:
         daypart.add(0)
-    list(daypart)
+    daypart = list(daypart)
+    start = str(start)
+    end = str(end)
     return start, end, daypart

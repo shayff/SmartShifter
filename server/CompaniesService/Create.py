@@ -50,7 +50,7 @@ def doCreate(data):
          # update user company
          users_collection.find_one_and_update({'_id': current_user['_id']}, { "$set": {'company':countId}})
 
-         #settings
+
 
          return jsonify({'ok': True, 'msg': 'company created successfully', 'data': data}), 200
    else:
