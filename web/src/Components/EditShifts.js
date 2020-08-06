@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import { submitWantedShift } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class EditShifts extends Component {
    constructor() {
@@ -51,39 +52,39 @@ class EditShifts extends Component {
       });
     }
 
-    onClickNextWeek(){
-      this.setState({
-         sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
-         monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
-         tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
-         wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
-         thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
-         friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
-         saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
-         previousDisabled:false
-      });
-    }
+   //  onClickNextWeek(){
+   //    this.setState({
+   //       sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
+   //       monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
+   //       tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
+   //       wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
+   //       thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
+   //       friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
+   //       saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
+   //       previousDisabled:false
+   //    });
+   //  }
 
-    onClickPreviousWeek(){
-       if(this.state.lastSunday<=moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'))
-       {
-         this.setState({
-            sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
-            monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
-            tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
-            wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
-            thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
-            friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
-            saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
-            previousDisabled:false
-         });
-       }
-      else{
-         this.setState({
-            previousDisabled:true
-         })
-      }
-    }
+   //  onClickPreviousWeek(){
+   //     if(this.state.lastSunday<=moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'))
+   //     {
+   //       this.setState({
+   //          sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
+   //          monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
+   //          tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
+   //          wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
+   //          thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
+   //          friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
+   //          saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
+   //          previousDisabled:false
+   //       });
+   //     }
+   //    else{
+   //       this.setState({
+   //          previousDisabled:true
+   //       })
+   //    }
+   //  }
     
     onSubmit (e) {
       e.preventDefault()
@@ -116,7 +117,7 @@ class EditShifts extends Component {
          saturday:{
             date:this.state.saturday.format('YYYY-MM-DD'),
             preference:[]
-         },
+         }
       }
       
       let preferences = document.getElementsByClassName("btn-success");
@@ -171,7 +172,7 @@ class EditShifts extends Component {
                          <h1 className="text-center">Edit Shifts</h1>                
                     </div>
                     <table className="table table-borderless">
-                    <thead>                          
+                    {/* <thead>                          
                             <tr>    
                             <th scope="col"><button type="button" id= "previous" className="btn btn-lg btn-primary btn-block" disabled={this.state.previousDisabled} onClick={() => this.onClickPreviousWeek()}>
                                 Previous Week
@@ -185,18 +186,18 @@ class EditShifts extends Component {
                                 Next Week
                             </button></th>                     
                             </tr>
-                        </thead>
+                        </thead> */}
                     </table>
                     <table className="table table-bordered ">
                         <thead className="thead-dark">                          
                             <tr>    
-                            <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')} Sunday</th>
-                            <th scope="col"> {this.state.monday.format('YYYY-MM-DD')} Monday</th>
-                            <th scope="col"> {this.state.tuesday.format('YYYY-MM-DD')} Tuesday</th>
-                            <th scope="col"> {this.state.wednesday.format('YYYY-MM-DD')} Wednesday</th>
-                            <th scope="col"> {this.state.thursday.format('YYYY-MM-DD')} Thursday</th>
-                            <th scope="col"> {this.state.friday.format('YYYY-MM-DD')} Friday</th>
-                            <th scope="col"> {this.state.saturday.format('YYYY-MM-DD')} Saturday</th>                     
+                            <th scope="col" className="text-center"> {this.state.sunday.format('YYYY-MM-DD')} Sunday</th>
+                            <th scope="col" className="text-center"> {this.state.monday.format('YYYY-MM-DD')} Monday</th>
+                            <th scope="col" className="text-center"> {this.state.tuesday.format('YYYY-MM-DD')} Tuesday</th>
+                            <th scope="col" className="text-center"> {this.state.wednesday.format('YYYY-MM-DD')} Wednesday</th>
+                            <th scope="col" className="text-center"> {this.state.thursday.format('YYYY-MM-DD')} Thursday</th>
+                            <th scope="col" className="text-center"> {this.state.friday.format('YYYY-MM-DD')} Friday</th>
+                            <th scope="col" className="text-center"> {this.state.saturday.format('YYYY-MM-DD')} Saturday</th>                     
                             </tr>
                         </thead>
                         <tbody>
@@ -284,4 +285,4 @@ class EditShifts extends Component {
     }
 }
 
-export default EditShifts
+export default withRouter(EditShifts)

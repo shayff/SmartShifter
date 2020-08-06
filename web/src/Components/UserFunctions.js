@@ -14,9 +14,31 @@ export const register = newUser => {
             "date of birth": newUser.date_of_birth
         })
         .then((response) => {
+            localStorage.setItem('hasCompany', 'false')
             console.log("Registered")
              }, (error) => {
                 console.log(error)
+        })
+}
+
+export const createCompany = data => {
+    return axios
+        .post("http://localhost:5001/companies/create",{
+            "company name": data.company_name,
+            "settings": data.settings,
+
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            localStorage.setItem('hasCompany', 'true')
+            console.log("Created Company")
+        })
+        .catch(eror => {
+            console.log(eror)
         })
 }
 
@@ -27,11 +49,13 @@ export const login = user => {
             "password": user.password
         })
         .then(response => {
+            console.log("Logged In")
             localStorage.setItem('usertoken', response.data.data.token)
-            return response.data.data.token
+            localStorage.setItem('hasCompany', response.data.data.hasCompany)
+            return response.data.data
         })
         .catch(eror => {
-            console.group("no")
+            console.group("error")
             console.log(eror)
         })
 }
@@ -75,6 +99,43 @@ export const updateProfile = user => {
         })
 }
 
+export const sendMessage = message => {
+    return axios
+        .post("/sendmessage",{
+        "to":message.toWho,
+        "title":message.title,
+        "message":message.textMessage,
+        "attached":message.attached
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Message Sent")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const getMessages= () => {
+    return axios
+        .get("/getmessage",
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            return response.data.data;
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
 export const getSettings = () => {
     return axios
     .get("http://localhost:5001/companies/profile",
@@ -91,11 +152,11 @@ export const getSettings = () => {
     })
 }
 
-export const updateSettings= user => {
+export const updateSettings= data => {
     return axios
         .post("http://localhost:5001/companies/update", {
-            "company name": user.company_name,
-            "settings": user.settings,
+            "company name": data.company_name,
+            "settings": data.settings,
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken
@@ -136,6 +197,22 @@ export const addEmployee = user => {
         })
 }
 
+export const removeEmployee = user => {
+    return axios
+        .post("http://localhost:5001/companies/removeemployees", {
+            "employees": [user["_id"]],
+        }, 
+         { headers: {
+           Authorization: "Bearer " + localStorage.usertoken
+        }}
+        )
+        .then((response) => {
+            console.log("Removed Employee")
+             }, (error) => {
+                console.log(error)
+        })
+}
+
 export const updateEmployeeInfo = user => {
     return axios
         .post("http://localhost:5001/companies/updateemployee", {
@@ -161,22 +238,6 @@ export const updateEmployeeInfo = user => {
         })
 }
 
-export const removeEmployee = user => {
-    return axios
-        .post("http://localhost:5001/companies/removeemployees", {
-            "employees": [user["_id"]],
-        }, 
-         { headers: {
-           Authorization: "Bearer " + localStorage.usertoken
-        }}
-        )
-        .then((response) => {
-            console.log("Removed Employee")
-             }, (error) => {
-                console.log(error)
-        })
-}
-
 export const ListOfEmployees = () => {
     return axios
         .get("http://localhost:5001/companies/listofemployees",
@@ -196,8 +257,9 @@ export const ListOfEmployees = () => {
 export const getShifts = date => {
     return axios
         .post("http://localhost:5002/GetShiftScheduled",{ 
-                "start_date": "2020-04-22", 
-                "end_date": "2020-04-24"
+                "start_date": date.start_date, 
+                "end_date": date.end_date,
+                "statuses": date.status
         },
         {
             headers: {
@@ -214,8 +276,9 @@ export const getShifts = date => {
 
 export const approveSwitches = data => {
     return axios
-        .post("http://localhost:5002/confirmshiftswap",{
-        "swap_id":data
+        .post("http://localhost:5002/ConfirmShiftSwap",{
+        "swap_id": data.swapId,
+        "status": data.status
         },
         {
             headers: {
@@ -230,46 +293,11 @@ export const approveSwitches = data => {
         })
 }
 
-export const getSwitches = () => {
+export const getSwitches = data => {
     return axios
-        .get("http://localhost:5002/1111111111",
-        {
-            headers: {
-                Authorization: "Bearer " + localStorage.usertoken
-             }
-        })
-        .then(response => {
-            return response.data.data;
-        })
-        .catch(eror => {
-            console.log(eror)
-        })
-}
-
-export const sendMessage = message => {
-    return axios
-        .post("/sendmessage",{
-        "to":message.toWho,
-        "title":message.title,
-        "message":message.textMessage,
-        "attached":message.attached
+        .post("http://localhost:5002/GetShiftsSwaps",{
+            "statuses":data
         },
-        {
-            headers: {
-                Authorization: "Bearer " + localStorage.usertoken
-             }
-        })
-        .then(response => {
-            console.log("Message Sent")
-        })
-        .catch(eror => {
-            console.log(eror)
-        })
-}
-
-export const getMessages= () => {
-    return axios
-        .get("/getmessage",
         {
             headers: {
                 Authorization: "Bearer " + localStorage.usertoken
@@ -286,7 +314,13 @@ export const getMessages= () => {
 export const submitWantedShift = data => {
     return axios
         .post("http://localhost:5001/companies/PrefenceFromManager",{
-            "preferences_from_manager":data
+            "sunday":data.sunday,
+            "monday":data.monday,
+            "tuesday":data.tuesday,
+            "wednesday":data.wednesday,
+            "thursday":data.thursday,
+            "friday":data.friday,
+            "saturday":data.saturday
         },
         {
             headers: {
@@ -295,6 +329,99 @@ export const submitWantedShift = data => {
         })
         .then(response => {
             console.log("Submitted Shifts")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const addShifts = data => {
+    return axios
+        .post("http://localhost:5001/companies/addshift",{
+            "name": data.shift_name, 
+            "start time": data.start_time,
+            "end time":data.end_time,
+            "job type":data.job_type,
+            "difficulty":data.difficulty,
+            "date":data.date,
+            "amount":data.amount_of_employees,
+            "day part":data.day_part,
+            "employees":data.employees_for_shift,
+            "note":data.shift_note
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Added Shift")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const updateShift = data => {
+    return axios
+        .post("http://localhost:5001/companies/updateshift",{
+            "id": data.id, 
+            "name": data.shift_name, 
+            "start time": data.start_time,
+            "end time":data.end_time,
+            "job type":data.job_type,
+            "difficulty":data.difficulty,
+            "date":data.date,
+            "amount":data.amount_of_employees,
+            "day part":data.day_part,
+            "employees":data.employees_for_shift,
+            "note":data.shift_note
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Updated Shift")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const removeShift = id => {
+    return axios
+        .post("http://localhost:5001/companies/deleteshift",{
+            "id": id, 
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Removed Shift")
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const buildShifts = data => {
+    return axios
+        .post("http://localhost:5002/buildshift",{
+            "start_date": data.start_date, 
+            "end_date": data.end_date,
+            "pre_scheduled":data.preScheduled
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Build Shifts")
         })
         .catch(eror => {
             console.log(eror)

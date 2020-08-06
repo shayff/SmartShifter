@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { updateProfile, getProfile } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class UpdateProfile extends Component {
     constructor() {
@@ -176,4 +177,4 @@ class UpdateProfile extends Component {
     }
 }
 
-export default UpdateProfile
+export default withRouter(UpdateProfile)

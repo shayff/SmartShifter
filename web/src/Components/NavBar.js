@@ -5,6 +5,7 @@ class Navbar extends Component {
     logOut (event) {
         event.preventDefault()           
         localStorage.removeItem('usertoken')
+        localStorage.removeItem('hasCompany')
         this.props.history.push(`/`) 
     }
 
@@ -20,6 +21,21 @@ class Navbar extends Component {
                     <Link to="/register" className="nav-link">
                         Register
                     </Link>
+                </li>
+            </ul>
+        )
+
+        const createCompanyLink = (
+            <ul className="navbar-nav">
+                <li className="nav-item">
+                    <Link to="/createCompany" className="nav-link">
+                        Create Company
+                    </Link>
+                </li>
+               <li className="nav-item">
+                    <a href="/" onClick={this.logOut.bind(this)} className="nav-link">
+                        Logout
+                    </a>
                 </li>
             </ul>
         )
@@ -42,8 +58,8 @@ class Navbar extends Component {
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/switch" className="nav-link">
-                         Swtiching Shifts
+                    <Link to="/switchShifts" className="nav-link">
+                         Switch Shifts
                     </Link>
                 </li>
                 <li className="nav-item">
@@ -53,7 +69,7 @@ class Navbar extends Component {
                 </li>
                 <li className="nav-item">
                     <Link to="/settings" className="nav-link">
-                        Settings
+                        Company Settings
                     </Link>
                 </li>
                 <li className="nav-item">
@@ -86,7 +102,7 @@ class Navbar extends Component {
                             </Link>
                         </li>
                     </ul> 
-                    {localStorage.usertoken ? userLink : loginRegLink}
+                    {localStorage.usertoken ? (localStorage.hasCompany === 'true'? userLink : createCompanyLink) : (localStorage.hasCompany === 'false'? createCompanyLink : loginRegLink)}
                 </div>
             </nav>
         )

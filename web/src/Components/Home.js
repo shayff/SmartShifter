@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom'
+
 import logo from '../assests/SmartShifterLogo.png';
 
 class Home extends Component {
@@ -19,5 +21,5 @@ class Home extends Component {
     }
 }
 
-export default Home
+export default withRouter(Home)
 

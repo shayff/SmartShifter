@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { addEmployee } from './UserFunctions'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 
 class AddEmployee extends Component {
     constructor() {
@@ -179,6 +180,8 @@ class AddEmployee extends Component {
                             <div className="form-group">
                                 <label htmlFor="rank"> Rank </label>
                                 <input type="number"
+                                    min="1" 
+                                    max="5"
                                     className="form-control"
                                     name="rank"
                                     placeholder="Enter rank"
@@ -195,4 +198,4 @@ class AddEmployee extends Component {
     }
 }
 
-export default AddEmployee
+export default withRouter(AddEmployee)

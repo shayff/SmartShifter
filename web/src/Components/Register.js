@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { register } from './UserFunctions'
+import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 
 class Register extends Component {
     constructor() {
@@ -60,9 +62,8 @@ class Register extends Component {
 
         if(this.validateRegisterForm()) {
         register(newUser).then(res => {
-            this.props.history.push(`/login`)
-        })
-    }
+            this.props.history.push(`/createCompany`)
+        })}
     }
 
     render () {
@@ -77,7 +78,7 @@ class Register extends Component {
                                 <input type="text"
                                     className="form-control"
                                     name="first_name"
-                                    placeholder="Enter First Name"
+                                    placeholder="Enter Your First Name"
                                     value={this.state.first_name}
                                     onChange={this.onChange} />
                             </div>
@@ -86,7 +87,7 @@ class Register extends Component {
                                 <input type="text"
                                     className="form-control"
                                     name="last_name"
-                                    placeholder="Enter Last Name"
+                                    placeholder="Enter Your Last Name"
                                     value={this.state.last_name}
                                     onChange={this.onChange} />
                             </div>
@@ -98,7 +99,7 @@ class Register extends Component {
                                     maxLength="9"
                                     className="form-control"
                                     name="id_number"
-                                    placeholder="Enter Id Number"
+                                    placeholder="Enter Your Id Number"
                                     value={this.state.id_number}
                                     onChange={this.onChange} />
                             </div>
@@ -107,7 +108,8 @@ class Register extends Component {
                                 <input type="date"
                                     className="form-control"
                                     name="date_of_birth"
-                                    placeholder="Enter Date Of Birth"
+                                    max= {moment().format('YYYY-MM-DD')}
+                                    placeholder="Enter Your Date Of Birth"
                                     value={this.state.date_of_birth}
                                     onChange={this.onChange} />
                             </div>
@@ -118,7 +120,7 @@ class Register extends Component {
                                     maxLength="10"
                                     className="form-control"
                                     name="phone"
-                                    placeholder="Enter Phone"
+                                    placeholder="Enter Your Phone"
                                     value={this.state.phone}
                                     onChange={this.onChange} />
                             </div>
@@ -127,7 +129,7 @@ class Register extends Component {
                                 <input type="text"
                                     className="form-control"
                                     name="address"
-                                    placeholder="Enter Address"
+                                    placeholder="Enter Your Address"
                                     value={this.state.address}
                                     onChange={this.onChange} />
                             </div>
@@ -136,7 +138,7 @@ class Register extends Component {
                                 <input type="email"
                                     className="form-control"
                                     name="email"
-                                    placeholder="Enter Email"
+                                    placeholder="Enter Your Email"
                                     value={this.state.email}
                                     onChange={this.onChange} />
                             </div>
@@ -161,4 +163,4 @@ class Register extends Component {
     }
 }
 
-export default Register
+export default withRouter(Register)

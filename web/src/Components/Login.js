@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { login } from './UserFunctions'
+import { withRouter } from 'react-router-dom'
 
 class Login extends Component {
     constructor() {
@@ -42,7 +43,14 @@ class Login extends Component {
         {
         login(user).then(res => {
             if (res) {
-                this.props.history.push(`/profile`)
+                if(res.hasCompany === 'true')
+                {
+                    this.props.history.push(`/profile`)
+                }
+                else
+                {
+                    this.props.history.push(`/createCompany`)
+                }
             }
             else
             {
@@ -90,4 +98,4 @@ class Login extends Component {
     }
 }
 
-export default Login
+export default withRouter(Login)
