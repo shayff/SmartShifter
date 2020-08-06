@@ -21,7 +21,7 @@ GetShiftScheduled_schema = {
     "additionalProperties": False
 }
 
-def validate_GetShiftScheduled(data):
+def validate_GetShifts(data):
     try:
         validate(data, GetShiftScheduled_schema)
     except ValidationError as e:

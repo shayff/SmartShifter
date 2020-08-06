@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from server.config import MongoConfig
 from flask import jsonify
-from .schemas.getshiftscheduled import validate_GetShiftScheduled
+from .schemas.getshifts import validate_GetShifts
 from flask_jwt_extended import get_jwt_identity
 
 
@@ -12,8 +12,8 @@ companies_collection = db['companies']
 users_collection = db['users']
 
 
-def doGetShiftScheduled(userInput):
-    data = validate_GetShiftScheduled(userInput)
+def doGetShifts(userInput):
+    data = validate_GetShifts(userInput)
     if data['ok']:
         data = data['data']
         current_user = get_jwt_identity()
