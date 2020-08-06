@@ -108,9 +108,14 @@ class Messages extends Component {
     componentDidMount ()
      {
         getMessages().then(userMessages =>{
+            console.log(userMessages)
             if (userMessages)
             {
                this.setState({messages: userMessages});
+            }
+            else
+            {
+              alert("No Messages To Show")
             }
         });  
         ListOfEmployees().then(employees =>{ 

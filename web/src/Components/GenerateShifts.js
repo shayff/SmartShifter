@@ -22,6 +22,18 @@ class GenerateShifts extends Component {
         this.onSubmit = this.onSubmit.bind(this)
     }
      
+    componentDidMount()
+    {
+        this.updateDatesAndGetShifts();
+        
+        ListOfEmployees().then(employees =>{ 
+            if (employees)
+            {
+                this.setState({arrEmployees: employees});
+            }
+         });
+    };
+
     updateDatesAndGetShifts()
     {
         const minDate = moment().day(7).format('YYYY-MM-DD');
@@ -35,11 +47,12 @@ class GenerateShifts extends Component {
          
          getShifts(shifts).then(shifts =>{
             if(shifts){
-                let newShifts = [];
-                this.parseShifts(shifts,newShifts,minDate,maxDate);
-                if(newShifts.length !== 0)
+                console.log(shifts)
+                let parserShifts = [];
+                this.parseShifts(shifts,parserShifts,minDate,maxDate);
+                if(parserShifts.length !== 0)
                 {
-                   this.setState({ arrShiftsNotScheduled:newShifts});
+                   this.setState({ arrShiftsNotScheduled:parserShifts});
                 }
                 else
                 {
@@ -49,7 +62,7 @@ class GenerateShifts extends Component {
             })
     }
 
-    parseShifts(shifts,newShifts,minDate,maxDate)
+    parseShifts(shifts,parserShifts,minDate,maxDate)
     {
         let j = 0;
         let date = minDate;
@@ -60,25 +73,13 @@ class GenerateShifts extends Component {
             {
                 for(let i=0; i<shifts[date].length; i++)
                 {
-                   newShifts.push(shifts[date][i])
+                    parserShifts.push(shifts[date][i])
                 }
             }
             j++;
             date = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
         }
     }
-
-    componentDidMount()
-    {
-        this.updateDatesAndGetShifts();
-        
-        ListOfEmployees().then(employees =>{ 
-            if (employees)
-            {
-                this.setState({arrEmployees: employees});
-            }
-         });
-    };
 
     ParseDayParts(dayParts)
     {
@@ -100,6 +101,11 @@ class GenerateShifts extends Component {
         }
 
         return dayPartsString;
+    }
+
+    onAddShifts(path)
+    {
+        this.props.history.push(path);
     }
 
     onRemoveShift(id)
@@ -201,7 +207,8 @@ class GenerateShifts extends Component {
 
     initializeTable()
     {
-       return (<tr>
+       return (
+            <tr>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
                     shift.date === this.state.sunday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
@@ -241,18 +248,21 @@ class GenerateShifts extends Component {
             );
     }
 
-    onAddShifts(path)
-    {
-        this.props.history.push(path);
-    }
-
     onSubmit (e) {
         e.preventDefault()
-    
-    
-    
-         buildShifts(/**/).then(res => {
-           this.props.history.push(`/shifts`)})
+        
+        const dates =
+        {
+            startDate: this.state.sunday.format('YYYY-MM-DD'),
+            endDate: this.state.saturday.format('YYYY-MM-DD')
+        }
+
+        buildShifts(dates).then(buildedShifts => {
+            if(buildedShifts)
+            {
+                this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts})
+            }
+        })
     }
 
     render () {
@@ -284,7 +294,7 @@ class GenerateShifts extends Component {
                                 Add Shifts 
                 </button>   
                 <button type="submit" className="btn btn-lg btn-primary btn-block">
-                    Generate Shifts
+                               Build Shifts
                 </button>  
                 </form>
             </div>
@@ -296,7 +306,6 @@ export default withRouter(GenerateShifts)
 
 
 /*
-
 import React, { Component } from 'react'
 import { buildShifts, ListOfEmployees } from './UserFunctions'
 // import Scheduler from './Scheduler'

@@ -103,7 +103,7 @@ class Employees extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                        {this.initializeTable(this.state.empArry)}
+                            {this.initializeTable(this.state.empArry)}
                         </tbody>
                         </table>
                 </div>
