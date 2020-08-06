@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from config import MongoConfig
+from server.config import MongoConfig
 from .schemas.addshifts import validate_addshifts
 from pymongo import MongoClient, ReturnDocument
 
@@ -27,6 +27,9 @@ def doAddShifts(data):
             # update id shift
             shift_id = doc['shifts_counter']
             data.update({'id': shift_id})
+
+            # add shift status
+            data.update({"status": "not_scheduled"})
 
             # insert to db
             companies_collection.find_one_and_update({'_id': company_id}, {'$push': {'shifts': data}})

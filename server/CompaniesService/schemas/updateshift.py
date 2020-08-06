@@ -9,9 +9,6 @@ updateshift_schema = {
         "id": {
             "type": "integer"
         },
-        "day": {
-             "type": "string"
-        },
         "name": {
             "type": "string"
         },
@@ -43,7 +40,7 @@ updateshift_schema = {
             "type": "string"
         }
     },
-    "required": ["id", "day", "name", "start time", "end time", "job type",	"difficulty", "date", "amount", "day part"],
+    "required": ["id", "name", "start time", "end time", "job type","difficulty", "date", "amount", "day part"],
     "additionalProperties": False
 }
 

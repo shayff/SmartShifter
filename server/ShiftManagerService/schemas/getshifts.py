@@ -2,26 +2,28 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
 
-create_schema = {
+GetShiftScheduled_schema = {
     "type": "object",
     "properties": {
-        "company name": {
+        "start_date": {
             "type": "string"
         },
-        "settings":
-        {
-            "type": "object"
+        "end_date": {
+            "type": "string"
+        },
+        "statuses": {
+            "type": "array"
         }
     },
     "required": [
-        "company name"
+        "start_date", "end_date"
     ],
     "additionalProperties": False
 }
 
-def validate_create(data):
+def validate_GetShifts(data):
     try:
-        validate(data, create_schema)
+        validate(data, GetShiftScheduled_schema)
     except ValidationError as e:
         return {'ok': False, 'msg': e}
     except SchemaError as e:

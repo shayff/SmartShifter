@@ -2,26 +2,22 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
 
-create_schema = {
+canshiftswap_schema = {
     "type": "object",
     "properties": {
-        "company name": {
-            "type": "string"
-        },
-        "settings":
-        {
-            "type": "object"
+        "swap_id": {
+            "type": "integer"
         }
     },
     "required": [
-        "company name"
+        "swap_id"
     ],
     "additionalProperties": False
 }
 
-def validate_create(data):
+def validate_CanShiftSwap(data):
     try:
-        validate(data, create_schema)
+        validate(data, canshiftswap_schema)
     except ValidationError as e:
         return {'ok': False, 'msg': e}
     except SchemaError as e:

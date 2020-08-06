@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from flask import jsonify
-from config import MongoConfig
+from server.config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
 
 #connect to database
@@ -20,4 +20,4 @@ def doGetPreferences():
         companyId = result['company']
         company = companies_collection.find_one({'_id': companyId})
         preferences = company['prefence_from_manager']
-        return preferences
+        return jsonify({'ok': True, 'msg': 'Successfully', 'data': preferences}), 200

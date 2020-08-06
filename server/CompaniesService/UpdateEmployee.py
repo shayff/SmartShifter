@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from .schemas.updateemployee import validate_updateemployee
 from flask import jsonify
-from config import MongoConfig
+from server.config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
 
 #connect to database

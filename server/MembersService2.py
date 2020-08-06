@@ -3,13 +3,13 @@ from flask import Flask, request, jsonify
 import datetime
 import json
 from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt
-from MembersService.Login import doLogin
-from MembersService.Register import doRegister
-from MembersService.SendMessage import doSendMessage
-from MembersService.GetMessage import doGetMessages
-from MembersService.Profile import doProfile
-from MembersService.UpdatMessage import doUpdateMessage
-from MembersService.UpdateProfile import doUpdateProfile
+from server.MembersService.Login import doLogin
+from server.MembersService.Register import doRegister
+from server.MembersService.SendMessage import doSendMessage
+from server.MembersService.GetMessage import doGetMessages
+from server.MembersService.Profile import doProfile
+from server.MembersService.UpdateMessage import doUpdateMessage
+from server.MembersService.UpdateProfile import doUpdateProfile
 from flask_cors import CORS
 from bson.objectid import ObjectId
 
@@ -91,8 +91,9 @@ def GetMessages():
 
 @app.route('/updatemessage',methods=['POST'])
 @jwt_required
-def UpdatMessage():
+def UpdateMessage():
     return doUpdateMessage(request.get_json())
+
 
 #for debug
 if __name__== '__main__':

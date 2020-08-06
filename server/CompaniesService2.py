@@ -4,18 +4,20 @@ import datetime
 import json
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
-from CompaniesService.Create import doCreate
-from CompaniesService.AddEmployees import doAddEmployees
-from CompaniesService.RemoveEmployees import doRemoveEmployees
-from CompaniesService.ListOfEmployees import doListOfEmployees
-from CompaniesService.Update import doUpdate
-from CompaniesService.UpdateShift import doUpdateShift
-from CompaniesService.addshifts import doAddShifts
-from CompaniesService.Profile import doProfile
-from CompaniesService.GetPreferences import doGetPreferences
-from CompaniesService.PrefenceFromManager import doPrefenceFromManager
-from CompaniesService.UpdateEmployee import doUpdateEmployee
+from server.CompaniesService.Create import doCreate
+from server.CompaniesService.AddEmployees import doAddEmployees
+from server.CompaniesService.RemoveEmployees import doRemoveEmployees
+from server.CompaniesService.ListOfEmployees import doListOfEmployees
+from server.CompaniesService.Update import doUpdate
+from server.CompaniesService.UpdateShift import doUpdateShift
+from server.CompaniesService.addshifts import doAddShifts
+from server.CompaniesService.Profile import doProfile
+from server.CompaniesService.IsHasCompany import doIsHasCompany
+from server.CompaniesService.GetPreferences import doGetPreferences
+from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
+from server.CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.DeleteShift import doDeleteShift
+from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
 from flask_cors import CORS
 
 
@@ -92,8 +94,6 @@ def Update():
 @app.route("/companies/listofemployees", methods=['GET'])
 @jwt_required
 def ListOfEmployees():
-    #print("test")
-    #return
     return doListOfEmployees()
 
 @app.route("/companies/profile", methods=['GET'])
@@ -119,6 +119,16 @@ def PrefenceFromManager():
 def GetPreferences():
     return doGetPreferences()
 
+@app.route("/companies/PrefenceFromWorker", methods=['POST'])
+@jwt_required
+def PrefenceFromWorker():
+    return doPrefenceFromWorker(request.get_json())
+
+
+@app.route("/companies/IsHasCompany", methods=['GET'])
+@jwt_required
+def IsHasCompany():
+    return doIsHasCompany()
 
 
 #for dubg

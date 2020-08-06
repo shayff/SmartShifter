@@ -3,7 +3,7 @@ from .schemas.create import validate_create
 from flask import jsonify
 from pymongo import ReturnDocument
 from datetime import datetime
-from config import MongoConfig
+from server.config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
 
 #connect to database
@@ -50,7 +50,7 @@ def doCreate(data):
          # update user company
          users_collection.find_one_and_update({'_id': current_user['_id']}, { "$set": {'company':countId}})
 
-         #settings
+
 
          return jsonify({'ok': True, 'msg': 'company created successfully', 'data': data}), 200
    else:

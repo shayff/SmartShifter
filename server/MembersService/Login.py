@@ -2,12 +2,14 @@ from pymongo import MongoClient
 from .schemas.login import validate_login
 from flask import jsonify
 from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token
-from config import MongoConfig
+from server.config import MongoConfig
 
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]
 usersCollection = db['users']
+companies_collection = db["companies"]
+
 
 def doLogin(userInput):
     data = validate_login(userInput)
@@ -24,6 +26,18 @@ def doLogin(userInput):
             refresh_token = create_refresh_token(identity=user)
             user['token'] = access_token
             user['refresh'] = refresh_token
+            print(user)
+            #Check if user is manager of company
+            if('company' in user):
+                company_id = user['company']
+                company = companies_collection.find_one({'_id': company_id})
+                if (company and user['_id'] in company['managers']):
+                    user['hasCompany'] = "true"
+                else:
+                    user['hasCompany'] = "false"
+            else:
+                user['hasCompany'] = "false"
+
             return jsonify({'ok': True, 'data': user}), 200
         else:
             return jsonify({'ok': False, 'msg': 'invalid username or password'}), 401

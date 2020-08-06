@@ -13,13 +13,22 @@ users_collection = db["users"]
 
 
 def doPrefenceFromManager(data):
+    #data = validate_PrefenceFromManager(userInput)
+
+   # if data["ok"]:
+    #    data = data["data"]
         current_user = get_jwt_identity()
         result = users_collection.find_one({'_id': current_user['_id']})
         if "company" in result:
             # update data of relevante company
             company_id = result["company"]
-            company = companies_collection.find_one_and_update({'_id': company_id},{'$set': {"prefence_from_manager" : data}})
-            return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
+            company = companies_collection.find_one_and_update({'_id': company_id},{'$set': data})
+            print(company)
+            return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200
 
         else:
             return jsonify({'ok': False, 'msg': 'User is not in company'}), 400
+   # else:
+    #    return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+
+

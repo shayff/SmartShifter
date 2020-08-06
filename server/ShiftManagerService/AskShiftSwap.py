@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from pymongo import MongoClient, ReturnDocument
-from config import MongoConfig
+from server.config import MongoConfig
 from .schemas.askshiftswap import validate_askShiftSwap
 from datetime import datetime
 
@@ -29,7 +29,7 @@ def doAskShiftSwap(userInput):
             data.update({'id': shifts_swaps_id})
 
             # update the employee ask for
-            data.update({"employee_ask": current_user['_id']})
+            data.update({"id_employee_ask": current_user['_id']})
 
             # update time created
             date = datetime.now()
@@ -44,6 +44,18 @@ def doAskShiftSwap(userInput):
         else:
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
 
+            #update shift
+            print(data['shift_id'])
+
+            company = companies_collection.find_one({'_id': company_id},{'shifts':1})
+            print(company)
+            for x in company['shifts']:
+                if data['shift_id'] == x['id']:
+                    print(x)
+
+            data.update({'date_shift':shift['date']})
+            data.update({'start time':shift['start time']})
+            data.update({'end time':shift['end time']})
 
 '''
 {

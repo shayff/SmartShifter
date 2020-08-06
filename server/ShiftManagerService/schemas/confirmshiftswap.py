@@ -7,10 +7,13 @@ confirmshiftswap_schema = {
     "properties": {
         "swap_id": {
             "type": "integer"
+        },
+        "status":{
+            "type" : "string"
         }
     },
     "required": [
-        "swap_id"
+        "swap_id","status"
     ],
     "additionalProperties": False
 }
