@@ -47,21 +47,22 @@ def doBuildShift(userInput):
 ###########################################################################################
             shift_Scheduled_to_display = dict()
             company = companies_collection.find_one({'_id': company_id})
-            for shift_id in scheduled_shifts:
-                employees_id = scheduled_shifts[shift_id]
-                shift = next(x for x in list_of_shifts if x['id'] == shift_id)
-                if shift['date'] >= data['start_date'] and shift['date'] <= data['end_date']:
-                    # For each employee id we get frmo DB the name and appened to the employees array of the shift
-                    employee_full_details_array = []
-                    for id_employee in employees_id:
-                        employee_db = users_collection.find_one({'_id': id_employee}, {'first name', 'last name'})
-                        employee_full_details_array.append(employee_db)
-                    shift['employees'] = employee_full_details_array
+            if(scheduled_shifts):
+                for shift_id in scheduled_shifts:
+                    employees_id = scheduled_shifts[shift_id]
+                    shift = next(x for x in list_of_shifts if x['id'] == shift_id)
+                    if shift['date'] >= data['start_date'] and shift['date'] <= data['end_date']:
+                        # For each employee id we get frmo DB the name and appened to the employees array of the shift
+                        employee_full_details_array = []
+                        for id_employee in employees_id:
+                            employee_db = users_collection.find_one({'_id': id_employee}, {'first name', 'last name'})
+                            employee_full_details_array.append(employee_db)
+                        shift['employees'] = employee_full_details_array
 
-                    if shift['date'] in shift_Scheduled_to_display:
-                        shift_Scheduled_to_display[shift['date']].append(shift)
-                    else:
-                        shift_Scheduled_to_display[shift['date']] = [shift]
+                        if shift['date'] in shift_Scheduled_to_display:
+                            shift_Scheduled_to_display[shift['date']].append(shift)
+                        else:
+                            shift_Scheduled_to_display[shift['date']] = [shift]
 ###########################################################################################
 
         return jsonify({'ok': True, 'msg': 'build shift', 'data': scheduled_shifts,'Full_data': shift_Scheduled_to_display}), 200
