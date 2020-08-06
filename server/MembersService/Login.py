@@ -26,12 +26,12 @@ def doLogin(userInput):
             refresh_token = create_refresh_token(identity=user)
             user['token'] = access_token
             user['refresh'] = refresh_token
-
+            print(user)
             #Check if user is manager of company
             if('company' in user):
                 company_id = user['company']
                 company = companies_collection.find_one({'_id': company_id})
-                if (user['_id'] in company['managers']):
+                if (company and user['_id'] in company['managers']):
                     user['hasCompany'] = "true"
                 else:
                     user['hasCompany'] = "false"
