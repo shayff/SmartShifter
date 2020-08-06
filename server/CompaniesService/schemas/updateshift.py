@@ -9,9 +9,6 @@ updateshift_schema = {
         "id": {
             "type": "integer"
         },
-        "day": {
-             "type": "string"
-        },
         "name": {
             "type": "string"
         },
