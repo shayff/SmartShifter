@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom'
 
 
 class Shifts extends Component {
+    _isMounted = false;
+
     constructor() {
         super();
      this.state = {
@@ -14,10 +16,17 @@ class Shifts extends Component {
         };
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount()
     {
-       window.scheduler.attachEvent("onViewChange", function (new_mode , new_date){this.updateDatesAndGetShifts()}.bind(this));
-       this.updateDatesAndGetShifts();
+        this._isMounted = true;
+
+        window.scheduler.attachEvent("onViewChange", function (new_mode , new_date){this.updateDatesAndGetShifts()}.bind(this));
+        this.updateDatesAndGetShifts();
     };
 
     onGenerateShifts(path) 
@@ -49,7 +58,10 @@ class Shifts extends Component {
              this.parseShifts(shifts,newShifts,minDate,maxDate);
              if(newShifts.length !== 0)
              {
-                this.setState({ weeklyShifts:newShifts},() => this.initializeTable());
+                if (this._isMounted)
+                {
+                    this.setState({ weeklyShifts:newShifts},() => this.initializeTable());
+                }
              }
              else
              {

@@ -4,6 +4,8 @@ import { getProfile } from './UserFunctions'
 
 
 class Profile extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -17,23 +19,34 @@ class Profile extends Component {
         }
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
+    componentDidMount(){
+        this._isMounted = true;
+
+        getProfile().then(data =>{
+        if(data){
+            if (this._isMounted)
+            {
+                this.setState({
+                first_name:data["first name"],
+                last_name: data["last name"],
+                email: data["email"],
+                id_number: data["id number"],
+                phone: data["phone"],
+                address: data["address"],
+                date_of_birth: data["date of birth"]});
+                }
+            }
+    })};
+    
     onUpdateClick(path) {
         this.props.history.push(path)
     }
 
-    componentDidMount(){
-        getProfile().then(data =>{
-        if(data){
-         this.setState({
-         first_name:data["first name"],
-         last_name: data["last name"],
-         email: data["email"],
-         id_number: data["id number"],
-         phone: data["phone"],
-         address: data["address"],
-         date_of_birth: data["date of birth"]});
-             }
-    })};
 
     render () {
         return (

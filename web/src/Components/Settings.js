@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom'
 import { getSettings } from './UserFunctions'
 
 class Settings extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -17,15 +19,25 @@ class Settings extends Component {
         this.props.history.push(path)
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount(){
+        this._isMounted = true;
+
         getSettings().then(data =>{
         if(data){
-         this.setState({
-         company_name:data["company name"],
-         company_address: data.settings["address"],
-         switch_shifts: data.settings["can_employee_switch_shifts"] === true ? "Yes" : "No" ,
-         amout_of_shifts: data.settings["shifts_required_from_emp"]});
-             }
+            if (this._isMounted)
+            {
+                this.setState({
+                company_name:data["company name"],
+                company_address: data.settings["address"],
+                switch_shifts: data.settings["can_employee_switch_shifts"] === true ? "Yes" : "No" ,
+                amout_of_shifts: data.settings["shifts_required_from_emp"]});
+                }
+            }
     })};
 
     render () {

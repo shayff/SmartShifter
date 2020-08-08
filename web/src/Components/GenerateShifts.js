@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom'
 
 
 class GenerateShifts extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -21,15 +23,25 @@ class GenerateShifts extends Component {
 
         this.onSubmit = this.onSubmit.bind(this)
     }
+
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
      
     componentDidMount()
     {
+        this._isMounted = true;
+
         this.updateDatesAndGetShifts();
         
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
-                this.setState({arrEmployees: employees});
+                if (this._isMounted)
+                {
+                    this.setState({arrEmployees: employees});
+                }
             }
          });
     };
@@ -51,7 +63,10 @@ class GenerateShifts extends Component {
                 this.parseShifts(shifts,parserShifts,minDate,maxDate);
                 if(parserShifts.length !== 0)
                 {
-                   this.setState({ arrShiftsNotScheduled:parserShifts});
+                    if (this._isMounted)
+                    {
+                        this.setState({ arrShiftsNotScheduled:parserShifts});
+                    }
                 }
                 else
                 {

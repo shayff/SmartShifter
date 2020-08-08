@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom'
 
 
 class ShowGeneratedShifts extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -21,11 +23,18 @@ class ShowGeneratedShifts extends Component {
         }
     }
      
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount()
     {
+        this._isMounted = true;
         const minDate = moment().day(7).format('YYYY-MM-DD');
         const maxDate = moment().day(13).format('YYYY-MM-DD');
         const buildedShifts = this.props.location.state.detail.Full_data;
+
 
         if(buildedShifts)
         {
@@ -33,8 +42,11 @@ class ShowGeneratedShifts extends Component {
             this.parseShifts(buildedShifts,parserShifts,minDate,maxDate);
             if(parserShifts.length !== 0)
             {
-              this.setState({ arrBuildShifts: parserShifts,
-                              dataBuildShifts: this.props.location.state.detail.data},()=> {console.log(this.state.arrBuildShifts);console.log(this.state.dataBuildShifts)});
+                if (this._isMounted)
+                {
+                    this.setState({ arrBuildShifts: parserShifts,
+                        dataBuildShifts: this.props.location.state.detail.data},()=> {console.log(this.state.arrBuildShifts);console.log(this.state.dataBuildShifts)});
+                }
             }
             else
             {
@@ -45,7 +57,10 @@ class ShowGeneratedShifts extends Component {
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
-                this.setState({arrEmployees: employees});
+                if (this._isMounted)
+                {
+                    this.setState({arrEmployees: employees});
+                }
             }
          });
     };
@@ -110,11 +125,11 @@ class ShowGeneratedShifts extends Component {
        let shiftIsOk = "btn btn-info btn-block";
        let shiftIsNotOk = "btn btn-danger btn-block";
        
-       // className = {shift.status === ok ? shiftIsOk:shiftIsNotOk}
+       
 
        return(
        <div key = {index} style={{padding:'5px'}}>
-           <button type="button" className="btn btn-info btn-block" data-toggle="modal" data-target={modalButton}>
+           <button type="button" className={shift.Is_shift_full === 'full' ? shiftIsOk:shiftIsNotOk} data-toggle="modal" data-target={modalButton}>
                 {shift.name}<br/>{shift["start time"]}-{shift["end time"]}<br/>{shift.employees.map((employee,index) => (
                                     <div key = {index}>
                                         {employee["first name"] + " " + employee["last name"]}
@@ -182,9 +197,9 @@ class ShowGeneratedShifts extends Component {
                    </div>
                </div>
                    <div className="modal-footer">
-                       <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
+                       {/* <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
                            Update Shift
-                       </button>
+                       </button> */}
                        <button type="button" className="btn btn-secondary" data-dismiss="modal">
                            Close
                        </button>

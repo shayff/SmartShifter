@@ -3,6 +3,8 @@ import { getSwitches,approveSwitches } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 
 class SwitchShifts extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = { 
@@ -27,8 +29,15 @@ class SwitchShifts extends Component {
         this.setState({ [e.target.name]: value },() => this.getRequestOfSwitches());
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount ()
     {
+        this._isMounted = true;
+
         this.getRequestOfSwitches();
     }
 
@@ -37,12 +46,17 @@ class SwitchShifts extends Component {
      getSwitches(this.state.filter).then(requestSwitches =>{
            if (requestSwitches)
            {
-              this.setState({switchData: requestSwitches});
-
-              if (requestSwitches.length === 0)
-              {
-               alert("No Requested Switches For This Filter")
-              }
+                if (requestSwitches.length !== 0)
+                {
+                    if(this._isMounted)
+                    {
+                        this.setState({switchData: requestSwitches});
+                    }
+                }
+                else
+                {
+                    alert("No Requested Switches For This Filter")
+                }
            }       
        });  
    }

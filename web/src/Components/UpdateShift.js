@@ -5,6 +5,8 @@ import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
 
 class UpdateShift extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -78,30 +80,42 @@ class UpdateShift extends Component {
         ));
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount()
     {
+        this._isMounted = true;
         const shift = this.props.location.state.detail;
         const dayParts = this.ParseDayParts(shift["day part"]);
         const employeesForShift = this.ParseEmployeesForShift(shift.employees);
-
-        this.setState({
-            shift_name:shift.name,
-            start_time:shift["start time"],
-            end_time:shift["end time"],
-            job_type:shift["job type"],
-            difficulty:shift.difficulty,
-            date:shift.date,
-            amount_of_employees:shift.amount,
-            day_part: dayParts,
-            employees_for_shift: employeesForShift,
-            shift_note:shift.note,
-            shift_id:shift.id
-        });
+        
+        if (this._isMounted)
+        {
+            this.setState({
+                shift_name:shift.name,
+                start_time:shift["start time"],
+                end_time:shift["end time"],
+                job_type:shift["job type"],
+                difficulty:shift.difficulty,
+                date:shift.date,
+                amount_of_employees:shift.amount,
+                day_part: dayParts,
+                employees_for_shift: employeesForShift,
+                shift_note:shift.note,
+                shift_id:shift.id
+            });
+        }
 
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
-                this.setState({arrEmployees: employees});
+                if (this._isMounted)
+                {
+                    this.setState({arrEmployees: employees});
+                }
             }
          });
     };
