@@ -113,9 +113,6 @@ class Shifts extends Component {
 
 export default withRouter(Shifts)
  
-
-
-
 /*
 import React, { Component } from 'react'
 import { getShifts } from './UserFunctions'

@@ -47,7 +47,6 @@ class GenerateShifts extends Component {
          
          getShifts(shifts).then(shifts =>{
             if(shifts){
-                console.log(shifts)
                 let parserShifts = [];
                 this.parseShifts(shifts,parserShifts,minDate,maxDate);
                 if(parserShifts.length !== 0)
@@ -88,19 +87,21 @@ class GenerateShifts extends Component {
         {
             if(dayParts[i] === 0)
             {
-                dayPartsString+='Morning '
+                dayPartsString+='Morning \n'
             }
             else if(dayParts[i] === 1)
             {
-                dayPartsString+='Afternoon '
+                dayPartsString+='Afternoon \n'
             }
             else
             {
-                dayPartsString+='Evening '
+                dayPartsString+='Evening \n'
             }
         }
 
-        return dayPartsString;
+        return dayPartsString = dayPartsString.split('\n').map((item, i) => {
+            return <p key={i}>{item}</p>;
+        });
     }
 
     onAddShifts(path)
@@ -177,8 +178,11 @@ class GenerateShifts extends Component {
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Employees For The Shift</td>
-                                <td className="table-secondary">{shift.employees.map((employee) => (
-                                    employee["first name"] + " " + employee["last name"] + ", "))}</td>
+                                <td className="table-secondary">{shift.employees.map((employee,index) => (
+                                    <div key = {index}>
+                                      {employee["first name"] + " " + employee["last name"]}
+                                    </div>))}
+                                </td>
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Note For The Shift</td>
@@ -276,13 +280,13 @@ class GenerateShifts extends Component {
                 <table className="table table-bordered">
                     <thead className="thead-dark">                          
                         <tr className="text-center">    
-                        <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')} Sunday</th>
-                        <th scope="col"> {this.state.monday.format('YYYY-MM-DD')} Monday</th>
-                        <th scope="col"> {this.state.tuesday.format('YYYY-MM-DD')} Tuesday</th>
-                        <th scope="col"> {this.state.wednesday.format('YYYY-MM-DD')} Wednesday</th>
-                        <th scope="col"> {this.state.thursday.format('YYYY-MM-DD')} Thursday</th>
-                        <th scope="col"> {this.state.friday.format('YYYY-MM-DD')} Friday</th>
-                        <th scope="col"> {this.state.saturday.format('YYYY-MM-DD')} Saturday</th>                     
+                        <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')}<br/> Sunday</th>
+                        <th scope="col"> {this.state.monday.format('YYYY-MM-DD')}<br/> Monday</th>
+                        <th scope="col"> {this.state.tuesday.format('YYYY-MM-DD')}<br/> Tuesday</th>
+                        <th scope="col"> {this.state.wednesday.format('YYYY-MM-DD')}<br/> Wednesday</th>
+                        <th scope="col"> {this.state.thursday.format('YYYY-MM-DD')}<br/> Thursday</th>
+                        <th scope="col"> {this.state.friday.format('YYYY-MM-DD')}<br/> Friday</th>
+                        <th scope="col"> {this.state.saturday.format('YYYY-MM-DD')}<br/> Saturday</th>                      
                         </tr>
                     </thead>
                     <tbody>

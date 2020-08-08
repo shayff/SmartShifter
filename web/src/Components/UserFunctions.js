@@ -421,7 +421,7 @@ export const buildShifts = data => {
         })
         .then(response => {
             console.log("Build Shifts")
-            return response.data.Full_data;
+            return response.data;
         })
         .catch(eror => {
             console.log(eror)
@@ -431,6 +431,7 @@ export const buildShifts = data => {
 export const acceptBuildShift = data => {
     return axios
         .post("http://localhost:5002/SetShiftsSchedule",{
+            data
         },
         {
             headers: {
