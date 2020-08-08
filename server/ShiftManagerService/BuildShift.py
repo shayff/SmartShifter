@@ -58,6 +58,13 @@ def doBuildShift(userInput):
                             employee_full_details_array.append(employee_db)
                         shift['employees'] = employee_full_details_array
 
+                        #Is_shift_full
+                        if shift['amount'] ==  len(shift['employees']):
+                            shift['Is_shift_full'] = 'full'
+                        else:
+                            shift['Is_shift_full'] = 'not_full'
+
+
                         if shift['date'] in shift_Scheduled_to_display:
                             shift_Scheduled_to_display[shift['date']].append(shift)
                         else:
