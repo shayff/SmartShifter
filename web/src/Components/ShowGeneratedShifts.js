@@ -38,7 +38,7 @@ class ShowGeneratedShifts extends Component {
             }
             else
             {
-                alert("No Shifts To Show")
+                alert("The Algorithm Could Not Build The Requested Shifts ")
             }
         }
         
@@ -98,13 +98,6 @@ class ShowGeneratedShifts extends Component {
         this.props.history.push(path);
     }
 
-//     onRemoveShift(id)
-//     {
-//         removeShift(id).then(()=> {
-//             this.updateDatesAndGetShifts();
-//        });
-//     }
-
 //     onUpdateInfoShift(path, shift) {
 //         this.props.history.push(path, { detail: shift})
 //    }
@@ -114,6 +107,10 @@ class ShowGeneratedShifts extends Component {
        const modalButton = '#exampleModal' + index;
        const ModalId = "exampleModal" + index;
        const modalLabel = 'exampleModalLabel' + index;
+       let shiftIsOk = "btn btn-info btn-block";
+       let shiftIsNotOk = "btn btn-danger btn-block";
+       
+       // className = {shift.status === ok ? shiftIsOk:shiftIsNotOk}
 
        return(
        <div key = {index} style={{padding:'5px'}}>
@@ -185,12 +182,9 @@ class ShowGeneratedShifts extends Component {
                    </div>
                </div>
                    <div className="modal-footer">
-                       {/* <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
+                       <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
                            Update Shift
                        </button>
-                       <button type="button" className="btn btn-primary"  data-dismiss="modal" onClick={() => this.onRemoveShift(shift.id)}>
-                           Remove Shift
-                       </button> */}
                        <button type="button" className="btn btn-secondary" data-dismiss="modal">
                            Close
                        </button>

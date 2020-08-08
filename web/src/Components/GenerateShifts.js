@@ -129,7 +129,7 @@ class GenerateShifts extends Component {
         return(
         <div key = {index} style={{padding:'5px'}}>
             <button type="button" className="btn btn-info btn-block" data-toggle="modal" data-target={modalButton}>
-                {shift.name}
+                    {shift.name}<br/>{shift["start time"]}-{shift["end time"]}
             </button>
             <div className="modal fade" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">

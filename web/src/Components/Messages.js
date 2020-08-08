@@ -108,7 +108,6 @@ class Messages extends Component {
     componentDidMount ()
      {
         getMessages().then(userMessages =>{
-            console.log(userMessages)
             if (userMessages)
             {
                this.setState({messages: userMessages});
@@ -118,6 +117,7 @@ class Messages extends Component {
               alert("No Messages To Show")
             }
         });  
+        
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
