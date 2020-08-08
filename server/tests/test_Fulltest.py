@@ -5,7 +5,8 @@
     #4. Add employees to company
     #5. set prefernce from manager
     #6. set prefernce from workers
-
+    #7. Create shifts
+    #8. Build shift schedule
 
 from string import Formatter
 import datetime
@@ -14,12 +15,11 @@ from flask import json
 from server.MembersService2 import app as memb_app
 from server.CompaniesService2 import app as comp_app
 import random
-
 from faker import Faker
 
 def test_Fulltest():
     #Settings
-    num_of_users = 2
+    num_of_users = 10
     start_date = datetime.datetime(year=2020, month=8, day=9)
 
     #Prepare test
