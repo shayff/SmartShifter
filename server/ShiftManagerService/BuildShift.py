@@ -33,7 +33,7 @@ def doBuildShift(userInput):
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
         else:
             company_id = result['company']
-            list_of_shifts = get_list_of_shifts(company_id)
+            list_of_shifts = get_list_of_shifts(company_id,dates)
 
             #check if there are pre_scheduled data
             if "pre_scheduled" in data:
@@ -43,8 +43,7 @@ def doBuildShift(userInput):
             shifts = buildshiftclass(list_of_shifts,list_of_employees,dates)
             scheduled_shifts = shifts.buildShift()
 
-# Full_data- Presenting the shifts to the manager
-###########################################################################################
+            #Add Full_data information about shifts and employees
             shift_Scheduled_to_display = dict()
             company = companies_collection.find_one({'_id': company_id})
             if(scheduled_shifts):
@@ -63,15 +62,16 @@ def doBuildShift(userInput):
                             shift_Scheduled_to_display[shift['date']].append(shift)
                         else:
                             shift_Scheduled_to_display[shift['date']] = [shift]
-###########################################################################################
+
 
         return jsonify({'ok': True, 'msg': 'build shift', 'data': scheduled_shifts,'Full_data': shift_Scheduled_to_display}), 200
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
 
-def get_list_of_shifts(companyId):
+def get_list_of_shifts(companyId,dates):
     company = companies_collection.find_one({'_id': companyId})
-    return company['shifts']
+    shifts = [x for x in company['shifts'] if x['date'] in dates.tolist()]
+    return shifts
 
 def get_list_of_employees(companyId):
     company = companies_collection.find_one({'_id': companyId})

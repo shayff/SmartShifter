@@ -44,6 +44,13 @@ class buildshiftclass:
                     else:
                         scheduled_shifts[shift_id] = [employee_id]
 
+                # add the other shifts (still need to emlpoyees who didn't scheduled
+
+                for shift in listOfShifts:
+                    if shift["id"] not in scheduled_shifts:
+                        scheduled_shifts[shift["id"]] = []
+
+
                 print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
                 print("-" * 60)
 
@@ -84,7 +91,6 @@ class buildshiftclass:
                 if(x['prefer'] or x['available']):
                     return True
         return False
-
 
     def build_rank_matrix(self, date,listOfShifts, listOfEmployees):
         # for each shift, add the employee that "available" or "prefer"
