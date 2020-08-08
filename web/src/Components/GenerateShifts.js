@@ -277,9 +277,13 @@ class GenerateShifts extends Component {
         }
 
         buildShifts(dates).then(buildedShifts => {
-            if(buildedShifts)
+            if(buildedShifts.data)
             {
                 this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts})
+            }
+            else
+            {
+                alert("The Algorithm Could Not Build The Requested Shifts ")
             }
         })
     }
