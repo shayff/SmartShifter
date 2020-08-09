@@ -24,7 +24,7 @@ class buildshiftclass:
             # check if there is atleast 1 employe and 1 shift
             if not listOfShifts or not listOfEmployees:
                 print("No shifts or employees")
-                return None
+                print(date)
             else:
                 # build rank matrix
                 rank_matrix = self.build_rank_matrix(date, listOfShifts, listOfEmployees)
