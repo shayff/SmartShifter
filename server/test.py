@@ -2,7 +2,12 @@ import random
 from datetime import datetime
 from datetime import timedelta
 
+def deltatime_format(myTimeDelta):
+    hours, remainder = divmod(myTimeDelta.total_seconds(), 3600)
+    minutes, seconds = divmod(remainder, 60)
 
+    # Formatted only for hours and minutes as requested
+    return '%s:%s' % (int(hours), int(minutes))
 
 
 minutes = [0, 15, 30, 45]
@@ -25,6 +30,8 @@ else:
     daypart.add(0)
 daypart = list(daypart)
 
-print(strfdelta(start))
+print(strfdelta(start, '{H}:{M}'))
 end = str(end)
 print(start)
+
+
