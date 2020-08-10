@@ -66,7 +66,7 @@ class Profile extends Component {
                                 <td>{this.state.last_name}</td>
                             </tr>
                             <tr>
-                                <td>Id Number</td>
+                                <td>ID Number</td>
                                 <td>{this.state.id_number}</td>
                             </tr>
                             <tr>
