@@ -3,6 +3,8 @@ import { updateEmployeeInfo } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 
 class UpdateEmployeeInfo extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -73,20 +75,30 @@ class UpdateEmployeeInfo extends Component {
         }
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount(){
+        this._isMounted = true;
         const employee = this.props.location.state.detail;
-        this.setState({
-            // first_name:employee["first name"],
-            // last_name: employee["last name"],
-            // id_number: employee["id number"],
-            // phone: employee["phone"],
-            // address: employee["address"],
-            // date_of_birth: employee["date of birth"],
-        //    gender:employee["gender"],
-            job_type:employee["job type"],
-            rank:employee["rank"],
-            id: employee["_id"],
-        });
+        
+        if (this._isMounted)
+        {
+            this.setState({
+                // first_name:employee["first name"],
+                // last_name: employee["last name"],
+                // id_number: employee["id number"],
+                // phone: employee["phone"],
+                // address: employee["address"],
+                // date_of_birth: employee["date of birth"],
+                //gender:employee["gender"],
+                job_type:employee["job type"],
+                rank:employee["rank"],
+                id: employee["_id"],
+            });
+        }
       }
     
     render () {

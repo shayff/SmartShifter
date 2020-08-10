@@ -5,6 +5,8 @@ import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
 
 class AddShifts extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -29,6 +31,11 @@ class AddShifts extends Component {
         this.onRemoveDayPart = this.onRemoveDayPart.bind(this)
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
@@ -51,10 +58,15 @@ class AddShifts extends Component {
 
     componentDidMount()
     {
+        this._isMounted = true;
+
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
-                this.setState({arrEmployees: employees});
+                if (this._isMounted)
+                {
+                    this.setState({arrEmployees: employees});
+                }
             }
          });
     };

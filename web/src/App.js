@@ -19,6 +19,7 @@ import GenerateShifts from './Components/GenerateShifts'
 import EditShifts from './Components/EditShifts'
 import AddShifts from './Components/AddShifts'
 import UpdateShift from './Components/UpdateShift'
+import ShowGeneratedShifts from './Components/ShowGeneratedShifts'
 import ProtectedRoute from './Components/ProtectedRoute'
 
 class App extends Component {
@@ -47,6 +48,7 @@ class App extends Component {
             <ProtectedRoute exact path="/generateShifts" component={GenerateShifts} />
             <ProtectedRoute exact path="/addShifts" component={AddShifts} />
             <ProtectedRoute exact path="/updateShift" component={UpdateShift} />
+            <ProtectedRoute exact path="/showGeneratedShifts" component={ShowGeneratedShifts} />
             </Switch>
           </div>
         </div>

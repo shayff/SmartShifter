@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 
 class Messages extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = { messages: [],
@@ -105,18 +107,36 @@ class Messages extends Component {
         }
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount ()
      {
+        this._isMounted = true;
+
         getMessages().then(userMessages =>{
             if (userMessages)
             {
-               this.setState({messages: userMessages});
+                if (this._isMounted)
+                {
+                    this.setState({messages: userMessages});
+                }
+            }
+            else
+            {
+              alert("No Messages To Show")
             }
         });  
+        
         ListOfEmployees().then(employees =>{ 
             if (employees)
             {
-                this.setState({arrEmployees: employees});
+                if (this._isMounted)
+                {
+                    this.setState({arrEmployees: employees});
+                }
             }
          });
     }

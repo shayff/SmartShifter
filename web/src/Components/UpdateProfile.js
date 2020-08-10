@@ -3,6 +3,8 @@ import { updateProfile, getProfile } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 
 class UpdateProfile extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = {
@@ -62,23 +64,33 @@ class UpdateProfile extends Component {
         if(this.validateRegisterForm()) {
         updateProfile(user).then(res => {
             this.props.history.push(`/profile`)
-        })
+        })}
     }
+
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
     }
 
     componentDidMount(){
+        this._isMounted = true;
+
         getProfile().then(data =>{
-        if(data){
-         this.setState({
-         first_name:data["first name"],
-         last_name: data["last name"],
-         email: data["email"],
-         id_number: data["id number"],
-         phone: data["phone"],
-         address: data["address"],
-         date_of_birth: data["date of birth"]});
-             }
-    })};
+            if(data){
+                if (this._isMounted)
+                {
+                    this.setState({
+                    first_name:data["first name"],
+                    last_name: data["last name"],
+                    email: data["email"],
+                    id_number: data["id number"],
+                    phone: data["phone"],
+                    address: data["address"],
+                    date_of_birth: data["date of birth"]});
+                }
+            }
+        })
+    }
     
     render () {
         return (

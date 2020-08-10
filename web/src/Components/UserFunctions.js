@@ -256,10 +256,10 @@ export const ListOfEmployees = () => {
 
 export const getShifts = date => {
     return axios
-        .post("http://localhost:5002/GetShiftScheduled",{ 
+        .post("http://localhost:5002/GetShifts",{ 
                 "start_date": date.start_date, 
                 "end_date": date.end_date,
-                "statuses": date.status
+                "statuses": date.statuses
         },
         {
             headers: {
@@ -375,7 +375,7 @@ export const updateShift = data => {
             "amount":data.amount_of_employees,
             "day part":data.day_part,
             "employees":data.employees_for_shift,
-            "note":data.shift_note
+            "note":data.shift_note,
         },
         {
             headers: {
@@ -411,9 +411,8 @@ export const removeShift = id => {
 export const buildShifts = data => {
     return axios
         .post("http://localhost:5002/buildshift",{
-            "start_date": data.start_date, 
-            "end_date": data.end_date,
-            "pre_scheduled":data.preScheduled
+            "start_date": data.startDate, 
+            "end_date": data.endDate
         },
         {
             headers: {
@@ -422,6 +421,26 @@ export const buildShifts = data => {
         })
         .then(response => {
             console.log("Build Shifts")
+            return response.data;
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const acceptBuildShift = data => {
+    return axios
+        .post("http://localhost:5002/SetShiftsSchedule",{
+            data
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            console.log("Accepted Build Shifts")
+            return response.data.data;
         })
         .catch(eror => {
             console.log(eror)

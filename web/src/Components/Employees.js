@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom'
 import { getSettings ,ListOfEmployees, removeEmployee } from './UserFunctions'
 
 class Employees extends Component {
+    _isMounted = false;
+
     constructor() {
         super()
         this.state = { empArry: [],
@@ -51,7 +53,10 @@ class Employees extends Component {
         ListOfEmployees().then(data =>{
             if (data)
             {
-                this.setState({empArry:data});
+                if(this._isMounted)
+                {
+                    this.setState({empArry:data});
+                }
             }
         });   
     }
@@ -66,14 +71,25 @@ class Employees extends Component {
         this.props.history.push(path);
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
     componentDidMount () {
-    this.getListListOfEmployees(); 
-    getSettings().then(data => {
-        if(data)
-        {
-            this.setState({company_name: data["company name"]});
-        }
-    });
+        this._isMounted = true;
+        
+        this.getListListOfEmployees();
+        
+        getSettings().then(data => {
+            if(data)
+            {   
+                if (this._isMounted)
+                {
+                    this.setState({company_name: data["company name"]});
+                }
+            }
+        });
     }
 
     render () {
@@ -90,7 +106,7 @@ class Employees extends Component {
                             <th scope="col" className="text-center">First Name</th>
                             <th scope="col" className="text-center">Last Name</th>
                             {/* <th scope="col" className="text-center">Gender</th> */}
-                            <th scope="col" className="text-center">Id</th>
+                            <th scope="col" className="text-center">ID</th>
                             <th scope="col" className="text-center">Job Type</th>
                             <th scope="col" className="text-center">Phone</th>
                             <th scope="col" className="text-center">Email</th>
@@ -103,7 +119,7 @@ class Employees extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                        {this.initializeTable(this.state.empArry)}
+                            {this.initializeTable(this.state.empArry)}
                         </tbody>
                         </table>
                 </div>
