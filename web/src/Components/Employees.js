@@ -94,12 +94,12 @@ class Employees extends Component {
 
     render () {
         return (
-            <div className="container">
-                <div className="jumbotron mt-5">
+            <div className="container" style={{marginBottom: '30px'}}>
+                <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
                     <div className="col-sm-8 mx-auto">
-                         <h1 className="text-center">  {this.state.company_name} Employees</h1>
+                         <h1 className="text-center"> {this.state.company_name} Employees</h1>
                     </div>
-                    <table className="table table-bordered table-hover">
+                    <table className="table table-bordered table-hover" >
                         <thead className="thead-dark">
                             <tr>
                             <th scope="col" className="text-center">#</th>
@@ -122,7 +122,7 @@ class Employees extends Component {
                             {this.initializeTable(this.state.empArry)}
                         </tbody>
                         </table>
-                </div>
+                </div >
                       <button type="submit" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAddEmployee(`/addEmployee`)}>
                                 Add Employee
                     </button>                

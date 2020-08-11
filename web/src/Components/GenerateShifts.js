@@ -290,7 +290,7 @@ class GenerateShifts extends Component {
 
     render () {
         return (
-            <div className="container">
+            <div className="container" style={{marginBottom: '30px'}}>
             <form name="myForm15" onSubmit={this.onSubmit}>
             <div className="jumbotron mt-5">
              <div className="col-sm-8 mx-auto">

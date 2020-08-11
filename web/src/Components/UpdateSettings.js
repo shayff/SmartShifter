@@ -88,7 +88,7 @@ class UpdateSettings extends Component {
     
     render () {
         return (
-            <div className="container">
+            <div className="container" style={{marginBottom: '30px'}}>
                 <div className="row">
                     <div className="col-md-6 mt-5 mx-auto">
                         <form name="MyForm5" onSubmit={this.onSubmit}>

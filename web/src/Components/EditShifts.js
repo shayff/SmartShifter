@@ -165,9 +165,9 @@ class EditShifts extends Component {
         let btn_class = "btn btn-lg btn-success btn-block btn2";
         
         return (
-            <div className="container">
+            <div className="container" style={{marginBottom: '30px'}}>
                 <form name="myForm8" onSubmit={this.onSubmit}>
-                <div className="jumbotron mt-5">
+                <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
                     <div className="col-sm-8 mx-auto">
                          <h1 className="text-center">Edit Shifts</h1>                
                     </div>
