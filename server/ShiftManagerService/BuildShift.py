@@ -36,7 +36,6 @@ def doBuildShift(userInput):
         else:
             company_id = result['company']
             list_of_shifts = get_list_of_shifts(company_id,dates)
-            print(list_of_shifts)
             total = get_Total_Employees_Count_Needed(list_of_shifts, dates)
 
             #check if there are pre_scheduled data
@@ -56,10 +55,9 @@ def doBuildShift(userInput):
 
             #Add Full_data information about shifts and employees
             shift_Scheduled_to_display = dict()
-
+            print(scheduled_shifts)
             company = companies_collection.find_one({'_id': company_id})
             if(scheduled_shifts):
-
                 for shift_id in scheduled_shifts:
                     employees_id = scheduled_shifts[shift_id]
 
@@ -83,16 +81,17 @@ def doBuildShift(userInput):
                         else:
                             shift['Is_shift_full'] = 'not_full'
 
-                        '''
+
                         #add the empty shifts
                         if shift['date'] in shift_Scheduled_to_display:
                             shift_Scheduled_to_display[shift['date']].append(shift)
                         else:
                             shift_Scheduled_to_display[shift['date']] = [shift]
-                        '''
+
                     else:
                         print("check if need to delete that if")
         #sort the shifts
+        print(shift_Scheduled_to_display)
         sort_shifts_by_start_time(shift_Scheduled_to_display)
 
         print(count)
