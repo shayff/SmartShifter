@@ -82,6 +82,9 @@ def doBuildShift(userInput):
                         else:
                             shift_Scheduled_to_display[shift['date']] = [shift]
 
+        #order the shifts
+        sort_shifts_by_start_time(shift_Scheduled_to_display)
+
         #compute the success rate
         success_rate = int(count/total  * 100)
         return jsonify({'ok': True, 'msg': 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'Full_data': shift_Scheduled_to_display}), 200
@@ -109,3 +112,9 @@ def get_Total_Employees_Count_Needed(list_of_shifts):
     for shift in list_of_shifts:
         total += shift["amount"]
     return total
+
+
+def sort_shifts_by_start_time(shifts):
+    for shifts_by_day in shifts:
+        shifts[shifts_by_day].sort(key=lambda x: x["start time"], reverse=False)
+    return
