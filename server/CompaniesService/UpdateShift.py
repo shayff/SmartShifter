@@ -34,7 +34,7 @@ def doUpdateShift(data):
 
             #update in database
             doc = companies_collection.update_one({'_id': company_id, 'shifts.id': shift_id}, {'$set':
-                                                                                                   {'shifts.$': data}})
+                                                                                                   {'shifts.$': shift}})
             if doc.modified_count > 0:
                 return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200
             else:
