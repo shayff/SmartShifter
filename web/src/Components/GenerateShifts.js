@@ -277,7 +277,7 @@ class GenerateShifts extends Component {
         }
 
         buildShifts(dates).then(buildedShifts => {
-            if(buildedShifts.data)
+            if(buildedShifts.success_rate !== 0)
             {
                 this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts})
             }

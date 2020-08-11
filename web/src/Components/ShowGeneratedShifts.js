@@ -19,7 +19,8 @@ class ShowGeneratedShifts extends Component {
             wednesday:moment().day(10),
             thursday:moment().day(11),
             friday:moment().day(12),
-            saturday:moment().day(13)
+            saturday:moment().day(13),
+            success_percentage:0
         }
     }
      
@@ -34,8 +35,7 @@ class ShowGeneratedShifts extends Component {
         const minDate = moment().day(7).format('YYYY-MM-DD');
         const maxDate = moment().day(13).format('YYYY-MM-DD');
         const buildedShifts = this.props.location.state.detail.Full_data;
-
-
+        
         if(buildedShifts)
         {
             let parserShifts = [];
@@ -45,7 +45,8 @@ class ShowGeneratedShifts extends Component {
                 if (this._isMounted)
                 {
                     this.setState({ arrBuildShifts: parserShifts,
-                        dataBuildShifts: this.props.location.state.detail.data},()=> {console.log(this.state.arrBuildShifts);console.log(this.state.dataBuildShifts)});
+                                    dataBuildShifts: this.props.location.state.detail.data,
+                                    success_percentage: this.props.location.state.detail.success_rate});
                 }
             }
             else
@@ -264,7 +265,7 @@ class ShowGeneratedShifts extends Component {
     render () {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
-            <div className="jumbotron mt-5">
+            <div className="jumbotron mt-5" style={{display: 'inline-block' , marginLeft: '-10%'}}>
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Generated Shifts </h1>
              </div>
@@ -288,7 +289,9 @@ class ShowGeneratedShifts extends Component {
              <div style={{paddingBottom:'8px'}}>
                 <label htmlFor="success_percentage">Success Percentage Of The Algorithm</label>
                 <div className="progress">
-                    <div className="progress-bar" role="progressbar" style={{width: '25%'}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                    <div className="progress-bar" role="progressbar" style={{width: this.state.success_percentage + "%"}} aria-valuenow={this.state.success_percentage + ""} aria-valuemin="0" aria-valuemax="100">
+                        {this.state.success_percentage}%
+                    </div>
                 </div>  
              </div>
              <div></div>

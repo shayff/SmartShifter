@@ -131,7 +131,7 @@ class SwitchShifts extends Component {
     render () {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
-                <div className="jumbotron mt-5">
+                <div className="jumbotron mt-5" style={{display: 'inline-block' , marginLeft: '-10%'}}>
                     <div className="col-sm-8 mx-auto">
                         <h1 className="text-center"> Switching Shifts </h1>
                     </div>
