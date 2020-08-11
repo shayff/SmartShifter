@@ -50,7 +50,7 @@ def doBuildShift(userInput):
             #Add the employees that already work to the data
             for shift in list_of_shifts:
                 if shift["id"] in scheduled_shifts:
-                    scheduled_shifts[shift["id"]].append(shift["employees"])
+                    scheduled_shifts[shift["id"]] += (shift["employees"])
                 else:
                     scheduled_shifts[shift["id"]] = shift["employees"]
 
@@ -83,13 +83,13 @@ def doBuildShift(userInput):
                         else:
                             shift['Is_shift_full'] = 'not_full'
 
+                        '''
                         #add the empty shifts
-                        print(shift)
                         if shift['date'] in shift_Scheduled_to_display:
                             shift_Scheduled_to_display[shift['date']].append(shift)
                         else:
                             shift_Scheduled_to_display[shift['date']] = [shift]
-
+                        '''
                     else:
                         print("check if need to delete that if")
         #sort the shifts
