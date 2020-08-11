@@ -18,41 +18,45 @@ class buildshiftclass:
         for date in self.dates:
             # get the employess and shift that relevant for current date
             # Possible to improve by get the list all shift once and filter it each time
-            listOfShifts = self.get_list_of_shifts(date)
-            listOfEmployees = self.get_list_of_employees(date)
+            listOfShiftsByDate = self.get_list_of_shifts(date)
+            listOfEmployeesByDate = self.get_list_of_employees(date)
+
 
             # check if there is atleast 1 employe and 1 shift
-            if not listOfShifts or not listOfEmployees:
-                print("No shifts or employees")
-                print(date)
-            else:
-                # build rank matrix
-                rank_matrix = self.build_rank_matrix(date, listOfShifts, listOfEmployees)
+            if listOfShiftsByDate and listOfEmployeesByDate:
 
-                # Run the hungarian algorithm
-                hungarian = Hungarian(rank_matrix, is_profit_matrix=True)
-                hungarian.calculate()
+                # run for each job
+                jobslist = self.getListOfJobs(listOfShiftsByDate)
+                for job in jobslist:
+                    listOfShifts = self.filterShiftsByJob(listOfShiftsByDate, job)
+                    listOfEmployees = self.filterEmployeesByJob(listOfEmployeesByDate, job)
+                    if listOfShifts and listOfEmployees:
+                        # build rank matrix
+                        rank_matrix = self.build_rank_matrix(date, listOfShifts, listOfEmployees)
 
-                for employee, shift in hungarian.get_results():
-                    shift_id = listOfShifts[shift]['id']
-                    employee_id = listOfEmployees[employee]['id']
-                    print("worker:", employee_id, "scheduled for shift: ", shift_id)
+                        # Run the hungarian algorithm
+                        hungarian = Hungarian(rank_matrix, is_profit_matrix=True)
+                        hungarian.calculate()
 
-                    # add the employe shifted to the scheduled_shifts dict
-                    if shift_id in scheduled_shifts:
-                        scheduled_shifts[shift_id].append(employee_id)
-                    else:
-                        scheduled_shifts[shift_id] = [employee_id]
+                        for employee, shift in hungarian.get_results():
+                            shift_id = listOfShifts[shift]['id']
+                            employee_id = listOfEmployees[employee]['id']
+                            print("worker:", employee_id, "scheduled for shift: ", shift_id)
 
-                # add the other shifts (still need to emlpoyees who didn't scheduled
+                            # add the employe shifted to the scheduled_shifts dict
+                            if shift_id in scheduled_shifts:
+                                scheduled_shifts[shift_id].append(employee_id)
+                            else:
+                                scheduled_shifts[shift_id] = [employee_id]
 
-                for shift in listOfShifts:
+                    # add the other shifts (still need to emlpoyees who didn't scheduled
+
+                for shift in listOfShiftsByDate:
                     if shift["id"] not in scheduled_shifts:
                         scheduled_shifts[shift["id"]] = []
 
-
-                print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
-                print("-" * 60)
+                        print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
+                        print("-" * 60)
 
         return scheduled_shifts
 
@@ -149,6 +153,14 @@ class buildshiftclass:
                 rank_matrix[y, x] += rank_to_add
         return rank_matrix
 
+    def getListOfJobs(self, listOfShifts):
+        jobs = set()
+        for shift in listOfShifts:
+            jobs.add(shift["job type"])
+        return list(jobs)
 
+    def filterShiftsByJob(self, listOfShifts, job):
+        return [x for x in listOfShifts if x["job type"] == job]
 
-
+    def filterEmployeesByJob(self, listOfEmployees, job):
+        return [x for x in listOfEmployees if job in x["job type"]]
