@@ -23,6 +23,16 @@ def doUpdateShift(data):
             #update data of relevant company
             company_id = result["company"]
             shift_id = data['id']
+            shift = companies_collection.find_one({'_id': company_id},
+                                                {"shifts": {"$elemMatch": {"id": shift_id}}})
+            shift = shift["shifts"][0]
+
+            #Update only the field that we need
+            for key, value in shift.items():
+                if key in data:
+                    shift[key] = data[key]
+
+            #update in database
             doc = companies_collection.update_one({'_id': company_id, 'shifts.id': shift_id}, {'$set':
                                                                                                    {'shifts.$': data}})
             if doc.modified_count > 0:
