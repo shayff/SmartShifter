@@ -144,6 +144,12 @@ class UpdateShift extends Component {
           validate = false;
         }
 
+        if(amount_of_employees<this.state.employees_for_shift.length)
+        {
+            alert("Amount Of Employees Must Be Equal Or Bigger Than The Amount Of Requested Employees");
+            validate = false;
+        }
+
         return validate;
     }
 

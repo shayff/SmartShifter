@@ -440,7 +440,7 @@ export const acceptBuildShift = data => {
         })
         .then(response => {
             console.log("Accepted Build Shifts")
-            return response.data.data;
+            return response.data;
         })
         .catch(eror => {
             console.log(eror)

@@ -125,11 +125,9 @@ class ShowGeneratedShifts extends Component {
        let shiftIsOk = "btn btn-info btn-block";
        let shiftIsNotOk = "btn btn-danger btn-block";
        
-       
-
        return(
        <div key = {index} style={{padding:'5px'}}>
-           <button type="button" className={shift.Is_shift_full === 'full' ? shiftIsOk:shiftIsNotOk} data-toggle="modal" data-target={modalButton}>
+           <button type="button" className={shift.Is_shift_full === 'full' ? shiftIsOk : shiftIsNotOk} data-toggle="modal" data-target={modalButton}>
                 {shift.name}<br/>{shift["start time"]}-{shift["end time"]}<br/>{shift.employees.map((employee,index) => (
                                     <div key = {index}>
                                         {employee["first name"] + " " + employee["last name"]}
@@ -177,12 +175,12 @@ class ShowGeneratedShifts extends Component {
                                <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
                            </tr>
                            <tr className="text-center">
-                               <td className="table-primary">Amount Of Employees</td>
-                               <td className="table-secondary">{shift.amount}</td>
+                               <td className={shift.Is_shift_full === 'full' ? "table-primary" : "table-danger"}>Amount Of Employees</td>
+                               <td className={shift.Is_shift_full === 'full' ? "table-secondary" : "table-danger"}>{shift.amount}</td>
                            </tr>
                            <tr className="text-center">
-                               <td className="table-primary">Employees For The Shift</td>
-                               <td className="table-secondary">{shift.employees.map((employee,index) => (
+                               <td className={shift.Is_shift_full === 'full' ? "table-primary" : "table-danger"}>Employees For The Shift</td>
+                               <td className={shift.Is_shift_full === 'full' ? "table-secondary" : "table-danger"}>{shift.employees.map((employee,index) => (
                                     <div key = {index}>
                                       {employee["first name"] + " " + employee["last name"]}
                                     </div>))}
@@ -256,8 +254,7 @@ class ShowGeneratedShifts extends Component {
     onAcceptBuild (path) 
     {
         acceptBuildShift(this.state.dataBuildShifts).then(res => {
-            console.log(res)
-            if(res)
+            if(res.ok)
             {
                 this.props.history.push(path)
             }
@@ -287,7 +284,14 @@ class ShowGeneratedShifts extends Component {
                     {this.initializeTable()}
                     </tbody>
                  </table>
-             </div>  
+             </div>
+             <div style={{paddingBottom:'8px'}}>
+                <label htmlFor="success_percentage">Success Percentage Of The Algorithm</label>
+                <div className="progress">
+                    <div className="progress-bar" role="progressbar" style={{width: '25%'}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                </div>  
+             </div>
+             <div></div>
              <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAcceptBuild(`/shifts`)}>
                         Accept Build
                 </button>   
