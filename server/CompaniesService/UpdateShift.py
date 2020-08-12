@@ -23,6 +23,7 @@ def doUpdateShift(data):
             #update data of relevant company
             company_id = result["company"]
             shift_id = data['id']
+
             doc = companies_collection.update_one({'_id': company_id, 'shifts.id': shift_id}, {'$set':
                                                                                                    {'shifts.$': data}})
             if doc.modified_count > 0:

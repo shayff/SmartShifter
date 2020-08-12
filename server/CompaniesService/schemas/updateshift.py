@@ -7,7 +7,7 @@ updateshift_schema = {
     "type": "object",
     "properties": {
         "id": {
-            "type": "integer
+            "type": "integer"
         },
         "name": {
             "type": "string"

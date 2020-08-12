@@ -31,6 +31,9 @@ register_schema = {
         },
         "date of birth": {
             "type": "string"
+        },
+        "gender":{
+            "type":"string"
         }
     },
     "required": [
@@ -39,7 +42,7 @@ register_schema = {
         "id number",
         "phone",
         "first name",
-        "last name"
+        "last name",
     ],
     "additionalProperties": False
 }
