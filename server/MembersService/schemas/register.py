@@ -31,6 +31,9 @@ register_schema = {
         },
         "date of birth": {
             "type": "string"
+        },
+        "gender":{
+            "type": "steing"
         }
     },
     "required": [
