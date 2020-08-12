@@ -269,6 +269,14 @@ class ShowGeneratedShifts extends Component {
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Generated Shifts </h1>
              </div>
+             <div style={{paddingBottom:'8px'}}>
+                <label htmlFor="success_percentage">Success Percentage Of The Algorithm</label>
+                <div className="progress">
+                    <div className="progress-bar" role="progressbar" style={{width: this.state.success_percentage + "%"}} aria-valuenow={this.state.success_percentage + ""} aria-valuemin="0" aria-valuemax="100">
+                        {this.state.success_percentage}%
+                    </div>
+                </div>  
+             </div>
                 <table className="table table-bordered">
                     <thead className="thead-dark">                          
                         <tr className="text-center">    
@@ -286,15 +294,6 @@ class ShowGeneratedShifts extends Component {
                     </tbody>
                  </table>
              </div>
-             <div style={{paddingBottom:'8px'}}>
-                <label htmlFor="success_percentage">Success Percentage Of The Algorithm</label>
-                <div className="progress">
-                    <div className="progress-bar" role="progressbar" style={{width: this.state.success_percentage + "%"}} aria-valuenow={this.state.success_percentage + ""} aria-valuemin="0" aria-valuemax="100">
-                        {this.state.success_percentage}%
-                    </div>
-                </div>  
-             </div>
-             <div></div>
              <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAcceptBuild(`/shifts`)}>
                         Accept Build
                 </button>   

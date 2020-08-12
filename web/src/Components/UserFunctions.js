@@ -11,7 +11,8 @@ export const register = newUser => {
             "id number": newUser.id_number,
             "phone": newUser.phone,
             "address": newUser.address,
-            "date of birth": newUser.date_of_birth
+            "date of birth": newUser.date_of_birth,
+            "gender": newUser.gender
         })
         .then((response) => {
             localStorage.setItem('hasCompany', 'false')
@@ -86,7 +87,8 @@ export const updateProfile = user => {
             "id number": user.id_number,
             "phone": user.phone,
             "address": user.address,
-            "date of birth": user.date_of_birth
+            "date of birth": user.date_of_birth,
+            "gender": user.gender
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken
@@ -174,7 +176,6 @@ export const addEmployee = user => {
         .post("http://localhost:5001/companies/addemployees", {
         //     "first name": user.first_name,
         //     "last name": user.last_name,
-        //     "gender": user.last_name,
             // "password": user.password,
             // "id number": user.id_number,
             // "phone": user.phone,
@@ -218,7 +219,6 @@ export const updateEmployeeInfo = user => {
         .post("http://localhost:5001/companies/updateemployee", {
           //  "first name": user.first_name,
         //    "last name": user.last_name,
-        //    "gender": user.last_name,
             "id": parseInt(user.id),
        //     "phone": user.phone,
       //      "address": user.address,

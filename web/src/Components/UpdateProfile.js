@@ -15,7 +15,8 @@ class UpdateProfile extends Component {
             id_number: '',
             phone: '',
             address: '',
-            date_of_birth: ''
+            date_of_birth: '',
+            gender: ''
         }
 
         this.onChange = this.onChange.bind(this)
@@ -29,18 +30,42 @@ class UpdateProfile extends Component {
         const passwrod = document.forms["myForm4"]["password"].value;
         const id_number = document.forms["myForm4"]["id_number"].value;
         const phone = document.forms["myForm4"]["phone"].value;
-        const address = document.forms["myForm4"]["address"].value;
+        // const address = document.forms["myForm4"]["address"].value;
+        //const gedner = document.forms["myForm4"]["gender"].value;
         const date_of_birth = document.forms["myForm4"]["date_of_birth"].value;
         let validate = true;
 
+        //address === "" || gedner === ""
         if (email === "" || passwrod === "" || first_name === ""|| id_number === ""||
-             last_name === ""|| phone === "" ||address === "" || date_of_birth === "")
+             last_name === ""|| phone === "" || date_of_birth === "")
          {
           alert("All Fields Must Be Filled");
           validate = false;
         }
 
         return validate;
+      }
+
+      initializeGenderOption()
+      {
+          if(this.state.gender==="Male")
+          {
+              return(
+                    <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
+                    <option value="" selected disabled hidden>Choose Your Gender</option >
+                    <option value="Male" selected>Male</option >
+                    <option value="Female">Female</option >
+                    </select>)
+          }
+          else
+          {
+              return(
+                    <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
+                    <option value="" selected disabled hidden>Choose Your Gender</option >
+                    <option value="Male">Male</option >
+                    <option value="Female" selected>Female</option >
+                    </select>)
+          }
       }
 
     onChange (e) {
@@ -58,7 +83,8 @@ class UpdateProfile extends Component {
             id_number: this.state.id_number,
             phone: this.state.phone,
             address: this.state.address,
-            date_of_birth: this.state.date_of_birth
+            date_of_birth: this.state.date_of_birth,
+            gender: this.state.gender
         }
 
         if(this.validateRegisterForm()) {
@@ -86,7 +112,8 @@ class UpdateProfile extends Component {
                     id_number: data["id number"],
                     phone: data["phone"],
                     address: data["address"],
-                    date_of_birth: data["date of birth"]});
+                    date_of_birth: data["date of birth"],
+                    gender: data["gender"]});
                 }
             }
         })
@@ -116,6 +143,10 @@ class UpdateProfile extends Component {
                                     placeholder="Enter Last Name"
                                     value={this.state.last_name}
                                     onChange={this.onChange} />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="gender">Gender (Option)</label>
+                                {this.initializeGenderOption()}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="id_number">Id Number</label>
@@ -152,7 +183,7 @@ class UpdateProfile extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="address">Address</label>
+                                <label htmlFor="address">Address (Option)</label>
                                 <input type="text"
                                     className="form-control"
                                     name="address"

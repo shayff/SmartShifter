@@ -15,7 +15,8 @@ class Profile extends Component {
             id_number: '',
             phone: '',
             address: '',
-            date_of_birth: ''
+            date_of_birth: '',
+            gender:''
         }
     }
 
@@ -38,7 +39,8 @@ class Profile extends Component {
                 id_number: data["id number"],
                 phone: data["phone"],
                 address: data["address"],
-                date_of_birth: data["date of birth"]});
+                date_of_birth: data["date of birth"],
+                gender:data["gender"]});
                 }
             }
     })};
@@ -66,6 +68,10 @@ class Profile extends Component {
                                 <td>{this.state.last_name}</td>
                             </tr>
                             <tr>
+                                <td>Gender</td>
+                                <td>{this.state.gender}</td>
+                            </tr>
+                            <tr>
                                 <td>ID Number</td>
                                 <td>{this.state.id_number}</td>
                             </tr>
@@ -74,7 +80,7 @@ class Profile extends Component {
                                 <td>{this.state.phone}</td>
                             </tr>
                             <tr>
-                                <td>address</td>
+                                <td>Address</td>
                                 <td>{this.state.address}</td>
                             </tr>
                             <tr>
