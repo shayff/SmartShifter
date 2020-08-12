@@ -36,6 +36,10 @@ def doBuildShift(userInput):
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
         else:
             company_id = result['company']
+            #get full data of all employees
+            employees_full_data = get_all_employees(company_id)
+
+
             list_of_shifts = get_list_of_shifts(company_id,dates)
             total = get_Total_Employees_Count_Needed(list_of_shifts, dates)
 
@@ -70,8 +74,7 @@ def doBuildShift(userInput):
                     # For each employee id we get from DB the name and appened to the employees array of the shift
                     employee_full_details_array = []
                     for id_employee in employees_id:
-                        employee_db = users_collection.find_one({'_id': id_employee}, {'first name', 'last name'})
-                        employee_full_details_array.append(employee_db)
+                        employee_full_details_array.append(employees_full_data[id_employee])
                     shift['employees'] = employee_full_details_array
 
                     #Is_shift_full
@@ -85,7 +88,6 @@ def doBuildShift(userInput):
                         shift_Scheduled_to_display[shift['date']].append(shift)
                     else:
                         shift_Scheduled_to_display[shift['date']] = [shift]
-
 
         #sort the shifts
         sort_shifts_by_start_time(shift_Scheduled_to_display)
@@ -117,3 +119,16 @@ def get_Total_Employees_Count_Needed(list_of_shifts, dates):
     for shift in list_of_shifts:
         total += shift["amount"]
     return total
+
+
+def get_all_employees(company_id):
+    '''
+    To save server request we bring data of all employees
+    '''
+    employees_full_data = {}
+    company = companies_collection.find_one({'_id': company_id})
+    employees = company['employees']
+    for employee in employees:
+        employeeFromDb = users_collection.find_one({'_id': employee['id']}, {'first name', 'last name'})
+        employees_full_data[employee['id']] = employeeFromDb
+    return employees_full_data
