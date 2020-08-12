@@ -33,7 +33,7 @@ register_schema = {
             "type": "string"
         },
         "gender":{
-            "type": "steing"
+            "type": "string"
         }
     },
     "required": [
