@@ -31,6 +31,9 @@ updateProfile_schema = {
         },
         "date of birth": {
             "type": "string"
+        },
+        "gender": {
+            "type": "string"
         }
 
     },
