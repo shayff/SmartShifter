@@ -19,16 +19,11 @@ def doSetShiftsSchedule(data):
             #update data of relevant company
             company_id = result["company"]
             shifts = data['data']
-            for key, value in shifts.items():
-                doc = companies_collection.update_one({'_id': company_id, 'shifts.id': int(key)},
-                                                      {'$set': {'shifts.$.employees': value, "shifts.$.status" : "scheduled"}})
-                employees.update(value)
+            doc = set_employees_to_shifts(company_id, employees, shifts)
 
             #send message to employees
             if doc.modified_count > 0:
-                message = {'to': [list(employees)],
-                               'title': "You just scheduled to new shifts", "message": "Take a look at the shift page, you got new shifts"}
-                doSendMessage(message)
+                send_message_to_employees(employees)
 
                 return jsonify({'ok': True, 'msg': 'Update shift successfully'}), 200
             else:
@@ -36,6 +31,20 @@ def doSetShiftsSchedule(data):
 
         else:
             return jsonify({'ok': False, 'msg': 'User has no company'}), 401
+
+
+def set_employees_to_shifts(company_id, employees, shifts):
+    for key, value in shifts.items():
+        doc = companies_collection.update_one({'_id': company_id, 'shifts.id': int(key)},
+                                              {'$set': {'shifts.$.employees': value, "shifts.$.status": "scheduled"}})
+        employees.update(value)
+    return doc
+
+def send_message_to_employees(employees):
+    message = {'to': [list(employees)],
+               'title': "You just scheduled to new shifts",
+               "message": "Take a look at the shift page, you got new shifts"}
+    doSendMessage(message)
 
 
 
