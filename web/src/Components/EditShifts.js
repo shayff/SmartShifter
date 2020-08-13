@@ -273,10 +273,10 @@ class EditShifts extends Component {
                         </tbody>
                         </table>
                 </div>
-                      <button type="button" className="btn btn-lg btn-primary btn-block"  onClick={() => this.onClickMarkAllButton("btn2")}>
+                      <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '1.5%'}} onClick={() => this.onClickMarkAllButton("btn2")}>
                                 Mark All
                       </button>  
-                      <button type="submit" className="btn btn-lg btn-primary btn-block">
+                      <button type="submit" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '1.5%'}}>
                                 Sumbit Changes
                       </button>  
                       </form>

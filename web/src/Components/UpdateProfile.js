@@ -52,19 +52,26 @@ class UpdateProfile extends Component {
           {
               return(
                     <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
-                    <option value="" selected disabled hidden>Choose Your Gender</option >
-                    <option value="Male" selected>Male</option >
+                    <option value="Male" defaultValue>Male</option >
                     <option value="Female">Female</option >
+                    </select>)
+          }
+          else if (this.state.gender==="Female")
+          {
+              return(
+                    <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
+                    <option value="Male">Male</option >
+                    <option value="Female" defaultValue>Female</option >
                     </select>)
           }
           else
           {
-              return(
-                    <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
-                    <option value="" selected disabled hidden>Choose Your Gender</option >
-                    <option value="Male">Male</option >
-                    <option value="Female" selected>Female</option >
-                    </select>)
+            return(
+                <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
+                <option value="" defaultValue hidden>Choose Your Gender</option >
+                <option value="Male">Male</option >
+                <option value="Female" >Female</option >
+                </select>)
           }
       }
 
