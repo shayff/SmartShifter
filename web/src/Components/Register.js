@@ -66,7 +66,7 @@ class Register extends Component {
 
         if(this.validateRegisterForm()) {
         register(newUser).then(res => {
-            this.props.history.push(`/createCompany`)
+            this.props.history.push(`/login`)
         })}
     }
 
@@ -98,7 +98,7 @@ class Register extends Component {
                             <div className="form-group">
                                 <label htmlFor="gender">Gender (Option)</label>
                                 <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
-                                    <option value="" selected disabled hidden>Choose Your Gender</option >
+                                    <option value="" defaultValue hidden>Choose Your Gender</option >
                                     <option value="Male">Male</option >
                                     <option value="Female">Female</option >
                                 </select>

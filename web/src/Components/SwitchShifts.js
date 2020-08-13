@@ -133,7 +133,12 @@ class SwitchShifts extends Component {
             <div className="container" style={{marginBottom: '30px'}}>
                 <div className="jumbotron mt-5" style={{display: 'inline-block' , marginLeft: '-10%'}}>
                     <div className="col-sm-8 mx-auto">
-                        <h1 className="text-center"> Switching Shifts </h1>
+                        <h1 className="text-center">
+                            {<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-arrows-angle-contract" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M9.5 2.036a.5.5 0 0 1 .5.5v3.5h3.5a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5z"/>
+                    <path fillRule="evenodd" d="M14.354 1.646a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 1 1-.708-.708l4.5-4.5a.5.5 0 0 1 .708 0zm-7.5 7.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708l4.5-4.5a.5.5 0 0 1 .708 0z"/>
+                    <path fillRule="evenodd" d="M2.036 9.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V10h-3.5a.5.5 0 0 1-.5-.5z"/>
+                </svg>} Switching Shifts </h1>
                     </div>
                     <table className="table table-bordered table-hover">
                         <thead className="thead-dark">
