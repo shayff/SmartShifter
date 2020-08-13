@@ -6,6 +6,7 @@ from .schemas.buildshift import validate_buildShift
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from .BL.ShiftsLogic import sort_shifts_by_start_time
 
 MongoConfig ={
     "ConnectionString": "mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority",
@@ -23,6 +24,8 @@ def doBuildShift(userInput):
     if data['ok']:
         data = data['data']
 
+        count = 0
+
         #create list of dates we want to work with
         dates = pd.date_range(start=data['start_date'], end=data['end_date'])
         dates = pd.Series(dates.format())
@@ -33,7 +36,12 @@ def doBuildShift(userInput):
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
         else:
             company_id = result['company']
+            #get full data of all employees
+            employees_full_data = get_all_employees(company_id)
+
+
             list_of_shifts = get_list_of_shifts(company_id,dates)
+            total = get_Total_Employees_Count_Needed(list_of_shifts, dates)
 
             #check if there are pre_scheduled data
             if "pre_scheduled" in data:
@@ -43,35 +51,50 @@ def doBuildShift(userInput):
             shifts = buildshiftclass(list_of_shifts,list_of_employees,dates)
             scheduled_shifts = shifts.buildShift()
 
+            #Add the employees that already work to the data
+            for shift in list_of_shifts:
+                if shift["id"] in scheduled_shifts:
+                    scheduled_shifts[shift["id"]] += (shift["employees"])
+                else:
+                    scheduled_shifts[shift["id"]] = shift["employees"]
+
             #Add Full_data information about shifts and employees
             shift_Scheduled_to_display = dict()
+            print(scheduled_shifts)
             company = companies_collection.find_one({'_id': company_id})
             if(scheduled_shifts):
                 for shift_id in scheduled_shifts:
                     employees_id = scheduled_shifts[shift_id]
+
+                    #count how many employees scheduled
+                    count += len(employees_id)
+
                     shift = next(x for x in list_of_shifts if x['id'] == shift_id)
-                    if shift['date'] >= data['start_date'] and shift['date'] <= data['end_date']:
-                        # For each employee id we get frmo DB the name and appened to the employees array of the shift
-                        employee_full_details_array = []
-                        for id_employee in employees_id:
-                            employee_db = users_collection.find_one({'_id': id_employee}, {'first name', 'last name'})
-                            employee_full_details_array.append(employee_db)
-                        shift['employees'] = employee_full_details_array
 
-                        #Is_shift_full
-                        if shift['amount'] ==  len(shift['employees']):
-                            shift['Is_shift_full'] = 'full'
-                        else:
-                            shift['Is_shift_full'] = 'not_full'
+                    # For each employee id we get from DB the name and appened to the employees array of the shift
+                    employee_full_details_array = []
+                    for id_employee in employees_id:
+                        employee_full_details_array.append(employees_full_data[id_employee])
+                    shift['employees'] = employee_full_details_array
 
+                    #Is_shift_full
+                    if shift['amount'] ==  len(shift['employees']):
+                        shift['Is_shift_full'] = 'full'
+                    else:
+                        shift['Is_shift_full'] = 'not_full'
 
-                        if shift['date'] in shift_Scheduled_to_display:
-                            shift_Scheduled_to_display[shift['date']].append(shift)
-                        else:
-                            shift_Scheduled_to_display[shift['date']] = [shift]
+                    #add the empty shifts
+                    if shift['date'] in shift_Scheduled_to_display:
+                        shift_Scheduled_to_display[shift['date']].append(shift)
+                    else:
+                        shift_Scheduled_to_display[shift['date']] = [shift]
 
+        #sort the shifts
+        sort_shifts_by_start_time(shift_Scheduled_to_display)
 
-        return jsonify({'ok': True, 'msg': 'build shift', 'data': scheduled_shifts,'Full_data': shift_Scheduled_to_display}), 200
+        #compute the success rate
+        success_rate = int(count/total  * 100)
+        return jsonify({'ok': True, 'msg': 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'Full_data': shift_Scheduled_to_display}), 200
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
 
@@ -90,3 +113,22 @@ def update_pre_scheduled(list_of_shifts, data):
             if shift["id"] == ps["shift_id"]:
                 list_of_shifts[index]["employees"].append(ps["employee_id"])
     return
+
+def get_Total_Employees_Count_Needed(list_of_shifts, dates):
+    total = 0
+    for shift in list_of_shifts:
+        total += shift["amount"]
+    return total
+
+
+def get_all_employees(company_id):
+    '''
+    To save server request we bring data of all employees
+    '''
+    employees_full_data = {}
+    company = companies_collection.find_one({'_id': company_id})
+    employees = company['employees']
+    for employee in employees:
+        employeeFromDb = users_collection.find_one({'_id': employee['id']}, {'first name', 'last name'})
+        employees_full_data[employee['id']] = employeeFromDb
+    return employees_full_data

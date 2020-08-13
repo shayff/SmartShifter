@@ -33,7 +33,7 @@ register_schema = {
             "type": "string"
         },
         "gender":{
-            "type":"string"
+            "type": "string"
         }
     },
     "required": [

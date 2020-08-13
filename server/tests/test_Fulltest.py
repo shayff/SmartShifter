@@ -20,7 +20,7 @@ from faker import Faker
 def test_Fulltest():
     #Settings
     num_of_users = 10
-    start_date = datetime.datetime(year=2020, month=8, day=9)
+    start_date = datetime.datetime(year=2020, month=8, day=16)
 
     #Prepare test
     he_fake = Faker("he_IL")
@@ -255,8 +255,8 @@ def rand_hours_for_shift():
     else:
         daypart.add(0)
     daypart = list(daypart)
-    start = strfdelta(start, '{H}:{M}')
-    end = strfdelta(end, '{H}:{M}')
+    start = strfdelta(start, '{H:02}:{M:02}')
+    end = strfdelta(end, '{H:02}:{M:02}')
     return start, end, daypart
 
 def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelta'):

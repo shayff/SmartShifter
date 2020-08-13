@@ -3,7 +3,7 @@ from server.config import MongoConfig
 from flask import jsonify
 from .schemas.getshifts import validate_GetShifts
 from flask_jwt_extended import get_jwt_identity
-
+from .BL.ShiftsLogic import sort_shifts_by_start_time
 
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
@@ -47,7 +47,9 @@ def doGetShifts(userInput):
                     else:
                         shiftScheduled[shift['date']] = [shift]
 
-                    print(shiftScheduled)
+                    #sort the shifts by start date
+                    sort_shifts_by_start_time(shiftScheduled)
+
             return jsonify({'ok': True, 'data': shiftScheduled}), 200
         else:
             return jsonify({'ok': True, 'msg': 'User don\'t have company'}), 401
