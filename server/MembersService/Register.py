@@ -16,9 +16,10 @@ def doRegister(data):
    if data["ok"]:
       data = data["data"]
       data['email'] = data['email'].lower()
-      result = usersCollection.find_one({'email': data['email']})
-      if result:
-         return jsonify({'ok': False, 'msg': 'User with email address already exists'}), 401
+      result_email = usersCollection.find_one({'email': data['email']})
+      result_id_number = usersCollection.find_one({'id number': data['id number']})
+      if result_email or result_id_number:
+         return jsonify({'ok': False, 'msg': 'User with email address or id number already exists'}), 401
       else:
          # update counter Users
          doc = counters_collection.find_one_and_update({'_id': 'userid'}, {'$inc': {'value': 1}}, return_document=ReturnDocument.AFTER)

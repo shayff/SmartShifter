@@ -42,7 +42,7 @@ register_schema = {
         "id number",
         "phone",
         "first name",
-        "last name"
+        "last name",
     ],
     "additionalProperties": False
 }
