@@ -3,7 +3,8 @@ from server.config import MongoConfig
 from flask import jsonify
 from .schemas.getshifts import validate_GetShifts
 from flask_jwt_extended import get_jwt_identity
-from .BL.ShiftsLogic import sort_shifts_by_start_time
+from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
+from .BL.ShiftData import ShiftData
 
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])
@@ -19,12 +20,14 @@ def doGetShifts(userInput):
         current_user = get_jwt_identity()
         user = users_collection.find_one({'_id': current_user['_id']})
         shiftScheduled = dict()
-
+    
         # check if user has company
         if 'company' in user:
             company_id = user['company']
             company = companies_collection.find_one({'_id': company_id})
             list_of_shifts = company['shifts']
+            shift_data = ShiftData(company_id)
+
 
             # filter shifts by status
             if("statuses" in data):
@@ -36,11 +39,7 @@ def doGetShifts(userInput):
                 if shift['date']>=data['start_date'] and shift['date']<=data['end_date']:
 
                     #For each employee id we get frmo DB the name and appened to the employees array of the shift
-                    employee_full_details_array = []
-                    for id_employee in shift["employees"]:
-                        employee_db = users_collection.find_one({'_id': id_employee},{"first name","last name"})
-                        employee_full_details_array.append(employee_db)
-                    shift["employees"] = employee_full_details_array
+                    add_full_data_of_employees_to_shifts(shift["employees"], shift, shift_data)
 
                     if shift['date'] in shiftScheduled:
                         shiftScheduled[shift['date']].append(shift)

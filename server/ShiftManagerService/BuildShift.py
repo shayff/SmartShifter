@@ -6,7 +6,8 @@ from .schemas.buildshift import validate_buildShift
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from .BL.ShiftsLogic import sort_shifts_by_start_time
+from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
+from .BL.ShiftData import ShiftData
 
 MongoConfig ={
     "ConnectionString": "mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority",
@@ -40,7 +41,7 @@ def doBuildShift(userInput):
             #init data
             shift_data = ShiftData(company_id)
             list_of_shifts = get_list_of_shifts(company_id,dates)
-            total = get_Total_Employees_Count_Needed(list_of_shifts, dates)
+            total = get_total_employees_count_needed(list_of_shifts, dates)
 
             #check if there are pre_scheduled data
             if "pre_scheduled" in data:
@@ -96,7 +97,6 @@ def add_employee_that_already_work(list_of_shifts, scheduled_shifts):
         else:
             scheduled_shifts[shift["id"]] = shift["employees"]
 
-
 def add_is_shift_full_field(shift):
     '''
     This method add check if shift is full and add this field
@@ -107,14 +107,7 @@ def add_is_shift_full_field(shift):
         shift['Is_shift_full'] = 'not_full'
 
 
-def add_full_data_of_employees_to_shifts(employees_id, shift, shift_data):
-    '''
-    For each employee id we get from DB the name and appened to the employees array of the shift
-    '''
-    employee_full_details_array = []
-    for id_employee in employees_id:
-        employee_full_details_array.append(shift_data.getEmployee(id_employee))
-    shift['employees'] = employee_full_details_array
+
 
 
 def get_list_of_shifts(companyId,dates):
@@ -133,30 +126,9 @@ def update_pre_scheduled(list_of_shifts, data):
                 list_of_shifts[index]["employees"].append(ps["employee_id"])
     return
 
-def get_Total_Employees_Count_Needed(list_of_shifts, dates):
+def get_total_employees_count_needed(list_of_shifts, dates):
     total = 0
     for shift in list_of_shifts:
         total += shift["amount"]
     return total
 
-class ShiftData:
-    def __init__(self, company_id):
-        '''
-        To save server request we bring data of all employees
-        '''
-        self.employees_full_data = {}
-        company = companies_collection.find_one({'_id': company_id})
-        employees = company['employees']
-        for employee in employees:
-            employeeFromDb = users_collection.find_one({'_id': employee['id']}, {'first name', 'last name'})
-            self.employees_full_data[employee['id']] = employeeFromDb
-
-    def getEmployee(self,id):
-        '''
-        This method return the full name of the employees
-        '''
-        if id in self.employees_full_data:
-            return self.employees_full_data[id]
-        else:
-            #if in some case the employee needed not in the employee fulldata
-            return users_collection.find_one({'_id': id}, {'first name', 'last name'})
