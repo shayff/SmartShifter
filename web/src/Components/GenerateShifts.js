@@ -313,7 +313,7 @@ class GenerateShifts extends Component {
                     </tbody>
                  </table>
              </div>  
-             <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '7%'}} onClick={() => this.onAddShifts(`/addShifts`)}>
+             <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '5%'}} onClick={() => this.onAddShifts(`/addShifts`)}>
                     {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-calendar2-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M8 8a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8z"/>
                         <path fillRule="evenodd" d="M7.5 10.5A.5.5 0 0 1 8 10h2a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0v-2z"/>
@@ -322,7 +322,7 @@ class GenerateShifts extends Component {
                         <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
                     </svg>}<br/> Add Shifts 
                 </button>   
-                <button type="submit" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '7%'}}>
+                <button type="submit" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '5%'}}>
                                Build Shifts
                 </button>  
                 </form>

@@ -48,31 +48,12 @@ class UpdateProfile extends Component {
 
       initializeGenderOption()
       {
-          if(this.state.gender==="Male")
-          {
-              return(
-                    <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
-                    <option value="Male" defaultValue>Male</option >
-                    <option value="Female">Female</option >
-                    </select>)
-          }
-          else if (this.state.gender==="Female")
-          {
-              return(
-                    <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
-                    <option value="Male">Male</option >
-                    <option value="Female" defaultValue>Female</option >
-                    </select>)
-          }
-          else
-          {
-            return(
-                <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
-                <option value="" defaultValue hidden>Choose Your Gender</option >
-                <option value="Male">Male</option >
-                <option value="Female" >Female</option >
-                </select>)
-          }
+        return(
+            <select className="custom-select" id="inputGroupSelect02" name="gender" value={this.state.gender} onChange={this.onChange}>
+            <option value='' hidden>Choose Your Gender</option >
+            <option value="Male">Male</option >
+            <option value="Female">Female</option >
+            </select>)
       }
 
     onChange (e) {
@@ -120,7 +101,7 @@ class UpdateProfile extends Component {
                     phone: data["phone"],
                     address: data["address"],
                     date_of_birth: data["date of birth"],
-                    gender: data["gender"]});
+                    gender: data["gender"]},()=>console.log(this.state.gender));
                 }
             }
         })

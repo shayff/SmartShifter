@@ -98,7 +98,7 @@ class Register extends Component {
                             <div className="form-group">
                                 <label htmlFor="gender">Gender (Option)</label>
                                 <select className="custom-select" id="inputGroupSelect02" name="gender" onChange={this.onChange}>
-                                    <option value="" defaultValue hidden>Choose Your Gender</option >
+                                    <option value="" hidden>Choose Your Gender</option >
                                     <option value="Male">Male</option >
                                     <option value="Female">Female</option >
                                 </select>
@@ -161,6 +161,7 @@ class Register extends Component {
                                     className="form-control"
                                     name="password"
                                     placeholder="Enter Password"
+                                    autoComplete="new-password"
                                     value={this.state.password}
                                     onChange={this.onChange} />
                             </div>
