@@ -74,22 +74,39 @@ class Shifts extends Component {
     parseShifts(shifts,newShifts,minDate,maxDate)
     {
         let j = 0;
-        let date = minDate;
-  
-        while(date <= maxDate)
+        let startDate = minDate;
+        let endDate;
+
+        while(startDate <= maxDate)
         {
-            if(shifts[date])
+            if(shifts[startDate])
             {
-                for(let i=0; i<shifts[date].length; i++)
+                for(let i=0; i<shifts[startDate].length; i++)
                 {
-                   newShifts.push({start_date: date + " " + (shifts[date][i])["start time"], end_date: date  +" " + (shifts[date][i])["end time"],
-                    text: (shifts[date][i])["job type"] +":" +
-                      (shifts[date][i])["employees"].map((employee,index) => " " +employee["first name"] + " " + employee["last name"]),
-                     id:(shifts[date][i])["id"]})
+                     if((shifts[startDate][i])["start time"]>=(shifts[startDate][i])["end time"])
+                    {
+                        endDate= moment(startDate, "YYYY-MM-DD").add(1, 'days').format('YYYY-MM-DD')
+                        newShifts.push({start_date: startDate + " " + (shifts[startDate][i])["start time"], end_date: startDate  + " 24:00",
+                        text: (shifts[startDate][i])["job type"] +":" +
+                        (shifts[startDate][i])["employees"].map((employee) => " " + employee["first name"] + " " + employee["last name"]),
+                        id:(shifts[startDate][i])["id"]})
+                        newShifts.push({start_date: endDate + " 00:00", end_date: endDate  + " " + (shifts[startDate][i])["end time"],
+                        text: (shifts[startDate][i])["job type"] +":" +
+                        (shifts[startDate][i])["employees"].map((employee) => " " +employee["first name"] + " " + employee["last name"]),
+                        id:(shifts[startDate][i])["id"] + " extended shift"})
+                    }
+                    else
+                    {
+                        endDate = startDate;
+                        newShifts.push({start_date: startDate + " " + (shifts[startDate][i])["start time"], end_date: endDate  + " " + (shifts[startDate][i])["end time"],
+                        text: (shifts[startDate][i])["job type"] +":" +
+                          (shifts[startDate][i])["employees"].map((employee) => " " +employee["first name"] + " " + employee["last name"]),
+                         id:(shifts[startDate][i])["id"]})
+                    }
                 }
             }
             j++;
-            date = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
+            startDate = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
         }
     }
 

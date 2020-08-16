@@ -17,7 +17,7 @@ class Home extends Component {
                 </div>
                 <div className="row" style={{ content: "",clear: 'both',display: 'table'}}>
                     <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
-                        <video autoPlay loop muted height style={{width:'100%'}}>
+                        <video autoPlay loop muted style={{width:'100%'}}>
                             <source src={conferenceVideo} type="video/mp4"/>
                         </video>     
                     </div>
