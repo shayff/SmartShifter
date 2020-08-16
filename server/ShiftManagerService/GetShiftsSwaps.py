@@ -26,11 +26,18 @@ def doGetShiftsSwaps(userInput):
             company_id = user["company"]
             company = companies_collection.find_one({'_id': company_id})
 
+            #find job
+            employees = company['employees']
+            obj_emp = next((x for x in company['employees'] if x['id'] == current_user['_id']), None)
+            print(obj_emp)
+            job_type = obj_emp['job type']
+            print(job_type)
             #filter
             shifts_swaps = company["shifts_swaps"]
             swaps_filtered = [x for x in shifts_swaps if x["status"] in statuses]
 
             #updates the names and the shift detailes for each swap
+            arr_to_del = []
             for swap in swaps_filtered:
 
                 #update the name of employees
@@ -43,7 +50,19 @@ def doGetShiftsSwaps(userInput):
                 #update the shift details
                 doc = companies_collection.find_one({'_id': company_id},{"shifts": { "$elemMatch" : {"id":swap["shift_id"]}}} )
                 doc = doc["shifts"][0]
-                swap.update({"shift_details":doc})
+                print(doc)
+
+                #filter by job, create arr to remove
+                if  doc['job type'] in job_type:
+                    swap.update({"shift_details": doc})
+                else:
+                    arr_to_del.append(swap)
+
+            for swap in arr_to_del:
+                to_del =next((x for x in swaps_filtered if x == swap), None)
+                print(to_del)
+                swaps_filtered.remove(to_del)
+
             return jsonify({"ok": True, "data": swaps_filtered}), 200
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400

@@ -17,6 +17,7 @@ def doAskShiftSwap(userInput):
         data = data['data']
         current_user = get_jwt_identity()
         result = users_collection.find_one({'_id': current_user['_id']})
+        print(data)
 
         #check if user has company
         if 'company' in result:
@@ -25,6 +26,14 @@ def doAskShiftSwap(userInput):
             # update shifts_swaps id
             doc = companies_collection.find_one_and_update({'_id': company_id}, {'$inc': {'shifts_swaps_counter': 1}},
                                                            return_document=ReturnDocument.AFTER)
+            #Check if the user is assigned to this shift
+
+            shifts=doc['shifts']
+            shift = [x for x in shifts if x["id"]==data['shift_id']]
+            if current_user['_id'] not in shift[0]['employees']:
+                return jsonify({'ok': False, 'msg': "wrong shift id, You're not in this shift"}), 401
+
+            #update counter shifts swaps id
             shifts_swaps_id = doc['shifts_swaps_counter']
             data.update({'id': shifts_swaps_id})
 

@@ -29,6 +29,11 @@ def doRemoveEmployees(data):
          employees_not_updated = [x for x in employees if x not in employees_id_list]
          employees = [x for x in employees if x not in employees_not_updated]
 
+         #Check if the employee has future shifts
+
+
+
+
          #iterate for each epmloye, remove his company id
          print(employees)
          for employe in employees:
