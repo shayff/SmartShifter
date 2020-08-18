@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {AppRegistry, SectionList ,StyleSheet, Text, View,TextInput, TouchableOpacity,KeyboardAvoidingView,Keyboard, Alert,ScrollView } from 'react-native';
+import {StyleSheet, Text, View,TextInput, TouchableOpacity, Alert,ScrollView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 //import serverApi from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/Server'
 //import DatePicker from 'react-native-datepicker';
-import member_server from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/member_server';
+import member_server from '../../networking/member_server';
 
 export default class Regform extends Component {
 

@@ -1,12 +1,9 @@
 import React, {useState, Component} from 'react';
-import { AsyncStorage,StyleSheet, Text, View, Image, Keyboard, TouchableOpacity,Alert,FlatList,TouchableWithoutFeedback,ScrollView } from 'react-native';
+import { AsyncStorage,StyleSheet, Text, View, TouchableOpacity,Alert,FlatList} from 'react-native';
 import SingleMessage from '../component/messages/SingleMessage'
-import { updateLocale } from 'moment';
-import member_server from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/member_server';
-
+import member_server from '../networking/member_server';
 
 export default class Messages extends Component {
-
 
     constructor(inside){
         super(inside);

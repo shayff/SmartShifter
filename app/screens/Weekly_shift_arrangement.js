@@ -1,6 +1,6 @@
 import React, {useState, Component} from 'react';
 import { FlatList,ActivityIndicator,StyleSheet, Text, View, Image, Keyboard, TouchableOpacity, Button,ScrollView, Alert } from 'react-native';
-import {Get_arrangement_shifts} from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/company_server';
+import {Get_arrangement_shifts} from '../networking/company_server';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Calendar} from 'react-native-calendars';
 import Moment from 'moment';

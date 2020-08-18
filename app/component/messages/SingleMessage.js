@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { StyleSheet, Text, View, TextInput, Button, CheckBox, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 
 export default function SingleMessage(promp) {

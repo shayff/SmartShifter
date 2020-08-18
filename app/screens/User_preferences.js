@@ -4,7 +4,7 @@
 import React, {useState, Component} from 'react';
 import { ActivityIndicator ,AsyncStorage,StyleSheet, Text, View, Image, Keyboard, TouchableOpacity, Alert,Button,FlatList, ScrollView } from 'react-native';
 import DaySquare from '../component/userPreferences/daySquare';
-import company_server from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/company_server';
+import company_server from '../networking/company_server';
 
 export default class User_preferences extends Component {
 

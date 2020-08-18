@@ -1,6 +1,6 @@
 import React, {useState, Component} from 'react';
 import { ActivityIndicator,AsyncStorage ,StyleSheet, Alert, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native';
-import member_server from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/member_server';
+import member_server from '../../networking/member_server';
 
 
 export default class LoginForm extends Component {

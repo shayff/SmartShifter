@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { StyleSheet, Text, View, Image, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Image} from 'react-native';
 import LoginForm from '../component/login/loginForm';
 
 

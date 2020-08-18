@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AppRegistry, SectionList ,StyleSheet, Text,Button, View,TextInput, TouchableOpacity,KeyboardAvoidingView,Keyboard, Alert } from 'react-native';
+import {StyleSheet, Text,Button, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 

@@ -1,6 +1,6 @@
 import React, {useState, Component} from 'react';
 import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, Keyboard, TouchableOpacity,ScrollView, Alert } from 'react-native';
-import member_server from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/member_server';
+import member_server from '../networking/member_server';
 
 export default class Private_profile extends Component {
 
