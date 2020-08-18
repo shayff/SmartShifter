@@ -50,7 +50,7 @@ get_from_server = async (data_send) =>
 {
   try{
     const response = await member_server.post('/login',data_send);
-    let keys = [['token', response.data.data.token],['name', response.data.data["first name"]],['id',response.data.data["id number"]],['password',this.state.password.toString()]];
+    let keys = [['token', response.data.data.token],['name', response.data.data["first name"]],['_id',response.data.data["_id"].toString()],['password',this.state.password.toString()]];
     await AsyncStorage.multiSet(keys, () => {
 
     });

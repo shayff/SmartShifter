@@ -5,7 +5,7 @@ import shiftManager_server from '../networking/shiftManager_server';
 
 export default class Switching_shifts extends Component {
 
-
+//new
     constructor(inside){
         super(inside);
         this.state = {
