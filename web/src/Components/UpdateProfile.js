@@ -11,7 +11,9 @@ class UpdateProfile extends Component {
             first_name: '',
             last_name: '',
             email: '',
-            password: '',
+            currPassword: '',
+            newPassword: '',
+            newPasswordTypedAgain: '',
             id_number: '',
             phone: '',
             address: '',
@@ -27,7 +29,7 @@ class UpdateProfile extends Component {
         const first_name = document.forms["myForm4"]["first_name"].value;
         const last_name = document.forms["myForm4"]["last_name"].value;
         const email = document.forms["myForm4"]["email"].value;
-        const passwrod = document.forms["myForm4"]["password"].value;
+        //const currPassword = document.forms["myForm4"]["currPassword"].value;
         const id_number = document.forms["myForm4"]["id_number"].value;
         const phone = document.forms["myForm4"]["phone"].value;
         // const address = document.forms["myForm4"]["address"].value;
@@ -35,10 +37,9 @@ class UpdateProfile extends Component {
         const date_of_birth = document.forms["myForm4"]["date_of_birth"].value;
         let validate = true;
 
-        //address === "" || gedner === ""
-        if (email === "" || passwrod === "" || first_name === ""|| id_number === ""||
-             last_name === ""|| phone === "" || date_of_birth === "")
-         {
+        //address === "" || gedner === "" || currPassword === "" 
+        if (email === "" || first_name === ""|| id_number === ""|| last_name === ""|| phone === "" || date_of_birth === "")
+        {
           alert("All Fields Must Be Filled");
           validate = false;
         }
@@ -60,6 +61,25 @@ class UpdateProfile extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
+    onUpdatePassword()
+    {
+        // if(/* this.state.currPassword === הסיסמא הישנה שלו*/)
+        // {
+        //     if(this.state.newPasswordTypedAgain === this.state.newPassword)
+        //     {
+        //              function(newpassword)
+        //     }
+        //     else
+        //     {
+        //         alert("The New Password That You Entered Is Not Equal To The New Password That Was Typed Again");
+        //     }
+        // }
+        // else
+        // {
+        //     alert("The Current Password That You Entered Is Wrong");
+        // }
+    }
+
     onSubmit (e) {
         e.preventDefault()
 
@@ -67,7 +87,7 @@ class UpdateProfile extends Component {
             first_name: this.state.first_name,
             last_name: this.state.last_name,
             email: this.state.email,
-            password: this.state.password,
+            //currPassword: this.state.currPassword,
             id_number: this.state.id_number,
             phone: this.state.phone,
             address: this.state.address,
@@ -101,7 +121,7 @@ class UpdateProfile extends Component {
                     phone: data["phone"],
                     address: data["address"],
                     date_of_birth: data["date of birth"],
-                    gender: data["gender"]},()=>console.log(this.state.gender));
+                    gender: data["gender"]});
                 }
             }
         })
@@ -189,13 +209,53 @@ class UpdateProfile extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="password">Password </label>
-                                <input type="password"
-                                    minLength="5"
-                                    className="form-control"
-                                    name="password"
-                                    placeholder="Enter Password"
-                                    onChange={this.onChange} />
+                                <label htmlFor="currPassword">Password</label><br/>
+                                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                    Update Password
+                                </button>
+                                <div className="modal fade" id="exampleModalCenter" data-backdrop="false" tabIndex="-1"  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                        <div className="modal-content">
+                                        <div className="modal-header text-center">
+                                            <h3 className="modal-title w-100" id="exampleModalLongTitle">Update Password</h3>
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                            <div className="modal-body">
+                                            <label htmlFor="currPassword">Type Your Current Password</label>
+                                            <input type="password"
+                                            minLength="5"
+                                            className="form-control"
+                                            name="currPassword"
+                                            placeholder="Enter Password"
+                                            onChange={this.onChange} /><br/>
+                                            <label htmlFor="newPassword">Type Your New Password</label>
+                                            <input type="password"
+                                            minLength="5"
+                                            className="form-control"
+                                            name="newPassword"
+                                            placeholder="Enter Password"
+                                            onChange={this.onChange} /><br/>
+                                            <label htmlFor="newPassword">Type Your New Password Again</label>
+                                            <input type="password"
+                                            minLength="5"
+                                            className="form-control"
+                                            name="newPasswordTypedAgain"
+                                            placeholder="Enter Password"
+                                            onChange={this.onChange} />
+                                            </div> 
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdatePassword()}>
+                                                Update Password
+                                            </button>
+                                            <button type="button" className="btn btn-secondary" data-dismiss="modal">
+                                                Close
+                                            </button>   
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <button type="submit" className="btn btn-lg btn-primary btn-block">
                                 Update
@@ -209,3 +269,13 @@ class UpdateProfile extends Component {
 }
 
 export default withRouter(UpdateProfile)
+
+/* <div className="form-group">
+<label htmlFor="password">Password </label>
+<input type="password"
+    minLength="5"
+    className="form-control"
+    name="password"
+    placeholder="Enter Password"
+    onChange={this.onChange} />
+</div> */

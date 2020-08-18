@@ -261,6 +261,7 @@ class UpdateShift extends Component {
                                 closeIcon="cancel"
                                 placeholder="Update The Day Part"
                                 avoidHighlightFirstOption= {true}
+                                style={{searchBox: {background: 'white'}}}
                                 closeOnSelect={false}
                                 hidePlaceholder={true}
                                 selectedValues={this.state.day_part}
@@ -286,6 +287,7 @@ class UpdateShift extends Component {
                                 closeIcon="cancel"
                                 placeholder="Update The Employees"
                                 avoidHighlightFirstOption= {true}
+                                style={{searchBox: {background: 'white'}}}
                                 hidePlaceholder={true}
                                 closeOnSelect={false}
                                 groupBy="cat"

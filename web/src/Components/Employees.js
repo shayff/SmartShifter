@@ -55,13 +55,14 @@ class Employees extends Component {
 
     getListListOfEmployees()
     {
-        ListOfEmployees().then(data =>{
-            if (data)
+        ListOfEmployees().then(data => {
+            if (data.length === 0)
             {
-                if(this._isMounted)
-                {
-                    this.setState({empArry:data});
-                }
+                alert("No Employees To Show")
+            }
+            if(this._isMounted)
+            {
+                this.setState({empArry:data});
             }
         });   
     }

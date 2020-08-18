@@ -142,7 +142,7 @@ class ShowGeneratedShifts extends Component {
                                                     {employee["first name"] + " " + employee["last name"]}
                                                 </div>))}
            </button>
-           <div className="modal fade" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
+           <div className="modal fade" data-backdrop="false" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
                <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                    <div className="modal-content">
                    <div className="modal-header text-center">

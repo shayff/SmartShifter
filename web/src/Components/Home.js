@@ -30,41 +30,10 @@ class Home extends Component {
                         </video>        
                     </div>
                 </div>
-                <p className="text-center" style={{marginTop:'100px'}}> Copyright © SmartShifter {new Date().getFullYear()}. </p>
+                <p className="text-center" style={{marginTop:'100px',fontSize:'17px'}}> Copyright © SmartShifter {new Date().getFullYear()}. </p>
             </div>
         )
     }
 }
 
 export default withRouter(Home)
-
-// class Home extends Component {
-//     render () {
-//         return (
-//             <div className="container">
-//                 <div className="jumbotron mt-5">
-//                     <div className="col-sm-8 mx-auto">
-//                         <h1 className="text-center" style={{color:'#03A9F4'}}> Welcome </h1>
-//                         <img src={logo} alt="Logo" height={600} width={700}/>
-//                     </div>
-//                 </div>
-//                 <div className="row" style={{ content: "",clear: 'both',display: 'table'}}>
-//                     <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
-//                         <video autoPlay loop muted height style={{width:'100%'}}>
-//                             <source src={conferenceVideo} type="video/mp4"/>
-//                         </video>     
-//                     </div>
-//                     <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
-//                         <img src={schedule} alt="schedule"style={{width:'100%'}}/>
-//                     </div>
-//                     <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
-//                         <video autoPlay loop muted style={{width:'100%'}}>
-//                             <source src={happyPeople} type="video/mp4"/>
-//                         </video>        
-//                     </div>
-//                 </div>
-//                 <p className="text-center" style={{marginTop:'50px'}}> Copyright © SmartShifter {new Date().getFullYear()}. </p>
-//             </div>
-//         )
-//     }
-// }

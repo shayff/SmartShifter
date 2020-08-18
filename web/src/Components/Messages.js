@@ -163,7 +163,7 @@ class Messages extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                        {this.initializeTable(this.state.messages)}  
+                            {this.initializeTable(this.state.messages)}  
                         </tbody>
                         </table>
                 </div>
@@ -172,6 +172,7 @@ class Messages extends Component {
                     <label htmlFor="employees_for_shift">Choose To Who To Send</label>   
                     <Multiselect
                     options= {this.initializeOptions()}
+                    style={{searchBox: {background: 'white'}}}
                     displayValue="value"
                     closeIcon="cancel"
                     placeholder="Choose Employees"

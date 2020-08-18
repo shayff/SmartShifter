@@ -203,6 +203,7 @@ class AddShifts extends Component {
                                     {key:2, value: "Evening"}]}
                                 displayValue="value"
                                 closeIcon="cancel"
+                                style={{searchBox: {background: 'white'}}}
                                 placeholder="Choose The Day Part"
                                 avoidHighlightFirstOption= {true}
                                 closeOnSelect={false}
@@ -228,6 +229,7 @@ class AddShifts extends Component {
                                 closeIcon="cancel"
                                 placeholder="Choose Employees"
                                 avoidHighlightFirstOption= {true}
+                                style={{searchBox: {background: 'white'}}}
                                 groupBy="cat"
                                 closeOnSelect={false}
                                 hidePlaceholder={true}

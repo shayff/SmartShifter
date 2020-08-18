@@ -61,16 +61,13 @@ class GenerateShifts extends Component {
             if(shifts){
                 let parserShifts = [];
                 this.parseShifts(shifts,parserShifts,minDate,maxDate);
-                if(parserShifts.length !== 0)
+                if(parserShifts.length === 0)
                 {
-                    if (this._isMounted)
-                    {
-                        this.setState({ arrShiftsNotScheduled:parserShifts});
-                    }
+                    alert("No Shifts To Show")
                 }
-                else
+                if (this._isMounted)
                 {
-                   alert("No Shifts To Show")
+                    this.setState({ arrShiftsNotScheduled:parserShifts});
                 }
               }
             })
@@ -146,7 +143,7 @@ class GenerateShifts extends Component {
             <button type="button" className="btn btn-info btn-block" data-toggle="modal" data-target={modalButton}>
                     {shift.name}<br/>{shift["start time"]}-{shift["end time"]}
             </button>
-            <div className="modal fade" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
+            <div className="modal fade" data-backdrop="false" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content">
                     <div className="modal-header text-center">

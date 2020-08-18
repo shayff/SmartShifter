@@ -83,7 +83,7 @@ export const updateProfile = user => {
             "first name": user.first_name,
             "last name": user.last_name,
             "email": user.email, 
-            "password": user.password,
+            // "password": user.password,
             "id number": user.id_number,
             "phone": user.phone,
             "address": user.address,
