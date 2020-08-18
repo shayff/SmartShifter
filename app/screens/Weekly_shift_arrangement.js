@@ -4,8 +4,9 @@ import {AsyncStorage,FlatList,ActivityIndicator,StyleSheet, Text, View, Image, K
 import Accordion from 'react-native-collapsible/Accordion';
 import {Calendar} from 'react-native-calendars';
 import Moment from 'moment';
-import SingleShift from '../component/shift_arrangement/singleShift';
-import meneger_server from '../networking/shiftManager_server';
+import meneger_server from '.././networking/shiftManager_server';
+import SingleShift from '.././component/shift_arrangement/singleShift';
+
 
 //import RNSchedule from 'rnschedule';
 
