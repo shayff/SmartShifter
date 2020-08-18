@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, CheckBox, FlatList, TouchableOpacity } from 'react-native';
 
 
 export default function SingleShift(promp) {
@@ -11,7 +11,7 @@ return (
 
     <View style={Styles.itemSet}>
         <View style={Styles.titleLine}>
-            <Text style={Styles.title}>Title: </Text>
+            <Text style={Styles.title}>Type of job: </Text>
             <Text style={Styles.secendTitle}>{promp.item.title}</Text>
         </View>
 
@@ -30,7 +30,7 @@ return (
                 <View>
                     { employees.map( item => (
                         <View key = {item._id}>
-                            <Text style={Styles.secendTitle}>{item["first name"]}-{item["last name"]}</Text>
+                            <Text style={Styles.nameEMP}>{item["first name"]} {item["last name"]}</Text>
                         </View>
 
                     ))}
@@ -57,6 +57,13 @@ const Styles = StyleSheet.create({
         textDecorationLine: 'underline',
         paddingBottom: 16,
 
+    },
+    nameEMP:
+    {
+        color:'#ffff',
+        opacity:0.7,
+        fontSize: 14,
+        paddingLeft:10
     },
     secendTitle:
     {
