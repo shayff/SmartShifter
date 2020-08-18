@@ -28,7 +28,6 @@ def doGetShifts(userInput):
             list_of_shifts = company['shifts']
             shift_data = ShiftData(company_id)
 
-
             # filter shifts by status
             if("statuses" in data):
                 statuses = data["statuses"]

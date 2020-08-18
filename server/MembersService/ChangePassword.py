@@ -1,0 +1,26 @@
+from pymongo import MongoClient
+from flask import jsonify
+from flask_jwt_extended import get_jwt_identity
+from server.config import MongoConfig
+from .schemas.ChangePassword import validate_changePassword
+
+
+#connect to database
+cluster = MongoClient(MongoConfig['ConnectionString'])
+db = cluster[MongoConfig['ClusterName']]
+usersCollection = db['users']
+
+def doChangePassword(user_input):
+    data = validate_changePassword(user_input)
+    if data['ok']:
+        data = data['data']
+
+        logged_in_user = get_jwt_identity()
+        #Search for user password in database
+
+        data_from_db = usersCollection.find_one({'_id': logged_in_user['_id']},{"password":1})
+        if data["current_password"] == data_from_db["password"]:
+            usersCollection.find_one_and_update({'_id': logged_in_user['_id']}, {"$set" : {'password': data["new_password"]}})
+            return jsonify({'ok': True, 'msg': "The password changed successfully"}), 200
+        else:
+            return jsonify({'ok': False, 'msg': "The password entered is wrong"}), 202

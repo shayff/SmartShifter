@@ -1,5 +1,5 @@
 from flask import json
-from server.MembersService2 import app
+from server.Members_Service import app
 from faker import Faker
 
 def test_do_register():
