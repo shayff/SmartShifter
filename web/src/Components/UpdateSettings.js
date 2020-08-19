@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { updateSettings, getSettings } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
+import { Multiselect } from 'multiselect-react-dropdown'
 
 class UpdateSettings extends Component {
     _isMounted = false;
@@ -12,12 +13,18 @@ class UpdateSettings extends Component {
             company_address: '',
             switch_shifts: '',
             amout_of_shifts: '',
+            companyJobTypes: [],
+            jobType:''
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
+        this.onRemoveJobType = this.onRemoveJobType.bind(this)
     }
 
+    onRemoveJobType(selectedList, selectedItem) {
+        this.setState({companyJobTypes: selectedList});
+    }
 
     validateRegisterForm() 
     {
@@ -35,6 +42,12 @@ class UpdateSettings extends Component {
         return validate;
     }
 
+    onAddJobType()
+    {
+        let newcompanyJobTypes = this.state.companyJobTypes;
+        newcompanyJobTypes.push(this.state.jobType)
+        this.setState({ companyJobTypes: newcompanyJobTypes },() => document.getElementById('jobTypeInput').value = '');
+    }
 
     onChange(e)
     {
@@ -50,6 +63,7 @@ class UpdateSettings extends Component {
 
         const newSettings = {
             company_name: this.state.company_name,
+            companyJobTypes: this.state.companyJobTypes,
             settings:{
             can_employee_switch_shifts: this.state.switch_shifts,
             shifts_required_from_emp: this.state.amout_of_shifts,
@@ -62,6 +76,13 @@ class UpdateSettings extends Component {
             this.props.history.push(`/settings`)
           })
         }
+    }
+
+    initializeOptions = () => { 
+        let options = [];
+        this.state.companyJobTypes.map((jobType,index) => (
+        options.push({key:index ,value: jobType})));
+        return options;
     }
 
     componentWillUnmount() 
@@ -80,7 +101,8 @@ class UpdateSettings extends Component {
                     company_name:data["company name"],
                     company_address: data.settings["address"],
                     switch_shifts: data.settings["can_employee_switch_shifts"],
-                    amout_of_shifts: data.settings["shifts_required_from_emp"]});
+                    amout_of_shifts: data.settings["shifts_required_from_emp"],
+                    companyJobTypes: data["roles"]});
                 }
             }
         })
@@ -111,7 +133,7 @@ class UpdateSettings extends Component {
                                     value={this.state.company_address}
                                     onChange={this.onChange} />
                             </div>
-                            <div className="form-group">
+                            <div className="form-group" style={{marginLeft:"25px"}}>
                                  <input type="checkbox"
                                     className="form-check-input"
                                     name="switch_shifts"
@@ -127,7 +149,28 @@ class UpdateSettings extends Component {
                                     placeholder="Enter Amount"
                                     value={this.state.amout_of_shifts}
                                     onChange={this.onChange} />
-                            </div>                       
+                            </div>
+                            <div className="form-group">
+                            <label htmlFor="amout_of_shifts">Company Job Types</label>
+                            <Multiselect
+                                style={{searchBox: {background: 'white'}}}
+                                selectedValues={this.initializeOptions()}
+                                displayValue="value"
+                                closeIcon="cancel"
+                                placeholder="Update Job Types"
+                                avoidHighlightFirstOption= {true}
+                                onRemove={this.onRemoveJobType}/><br/>
+                                <input type="text"
+                                    id="jobTypeInput"
+                                    className="form-control"
+                                    name="jobType"
+                                    style={{marginBottom:"10px"}}
+                                    placeholder="Enter job Type"
+                                    onChange={this.onChange} />
+                                <button type="button" className="btn btn-lg btn-primary" onClick={() => this.onAddJobType()}>
+                                    Add Job Type
+                                </button>
+                                </div>                            
                             <button type="submit" className="btn btn-lg btn-primary btn-block">
                                 Update
                             </button>

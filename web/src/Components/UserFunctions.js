@@ -175,6 +175,7 @@ export const updateSettings= data => {
     return axios
         .post("http://localhost:5001/companies/update", {
             "company name": data.company_name,
+            "roles": data.companyJobTypes,
             "settings": data.settings,
         }, 
          { headers: {

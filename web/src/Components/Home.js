@@ -16,15 +16,15 @@ class Home extends Component {
                     </div>
                 </div>
                 <div className="row" style={{ content: "",clear: 'both',display: 'table'}}>
-                    <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
+                    <div className="column" style={{float: 'left',width: '50%',padding: '5px'}}>
                         <video autoPlay loop muted style={{width:'100%'}}>
                             <source src={conferenceVideo} type="video/mp4"/>
                         </video>     
                     </div>
-                    <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
+                    {/* <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
                         <img src={schedule} alt="schedule"style={{width:'100%'}}/>
-                    </div>
-                    <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
+                    </div> */}
+                    <div className="column" style={{float: 'left',width: '50%',padding: '5px'}}>
                         <video autoPlay loop muted style={{width:'100%'}}>
                             <source src={happyPeople} type="video/mp4"/>
                         </video>        

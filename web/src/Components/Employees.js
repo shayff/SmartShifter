@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { getSettings ,ListOfEmployees, removeEmployee } from './UserFunctions'
+import { Multiselect } from 'multiselect-react-dropdown'
 
 class Employees extends Component {
     _isMounted = false;
@@ -8,14 +9,39 @@ class Employees extends Component {
     constructor() {
         super()
         this.state = { empArry: [],
-            company_name:''
+            company_name:'',
+            filter: [],
+            companyJobTypes:[]
         }
+
+        this.onSelectOrRemoveJobTypes = this.onSelectOrRemoveJobTypes.bind(this)
     }
 
-    initializeTable= (employees) => {
+    filterEmployees(employees,optionsFilter)
+    {
+        let employeesFilterd = [];
+        employeesFilterd = employees.filter((employee) => { 
+            for(let i=0 ; i<optionsFilter.length; i++)
+            {
+                if(employee["job type"].indexOf(optionsFilter[i])>-1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        return employeesFilterd;
+    }
+
+    initializeTable = (employees,optionsFilter) => 
+    {
         if(employees)
         {
-         return employees.map((employee,index) => (
+            let employeesFilterd = this.filterEmployees(employees,optionsFilter);
+
+         return employeesFilterd.map((employee,index) => (
             <tr key = {index} className="text-center">
             <th scope="row"> {index + 1}</th>
             <td>{employee["first name"]}</td>
@@ -49,7 +75,8 @@ class Employees extends Component {
         }
     }
 
-    onUpdateInfoEmployee(path, employee) {
+    onUpdateInfoEmployee(path, employee)
+    {
          this.props.history.push(path, { detail: employee})
     }
 
@@ -65,6 +92,23 @@ class Employees extends Component {
                 this.setState({empArry:data});
             }
         });   
+    }
+
+    initializeOptions = () => { 
+        let options = [];
+        this.state.companyJobTypes.map((jobType,index) => (
+        options.push({key:index ,value: jobType})));
+        return options;
+    }
+
+    onSelectOrRemoveJobTypes(selectedList) 
+    {
+        let newFilter=[];
+        for(let i=0; i<selectedList.length; i++)
+        {
+            newFilter.push(selectedList[i].value)
+        }
+        this.setState({filter: newFilter},() => this.initializeTable(this.state.empArry,this.state.filter));
     }
 
     onRemoveEmployee(employee) {     
@@ -92,7 +136,9 @@ class Employees extends Component {
             {   
                 if (this._isMounted)
                 {
-                    this.setState({company_name: data["company name"]});
+                    this.setState({company_name: data["company name"],
+                                   companyJobTypes: data["roles"],
+                                   filter: data["roles"]});
                 }
             }
         });
@@ -128,9 +174,23 @@ class Employees extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.initializeTable(this.state.empArry)}
+                            {this.initializeTable(this.state.empArry,this.state.filter)}
                         </tbody>
                         </table>
+                        <div>
+                            <label htmlFor="employees_for_shift">Filter By Job Type</label>   
+                            <Multiselect
+                            options= {this.initializeOptions()}
+                            style={{searchBox: {background: 'white'}}}
+                            selectedValues={this.initializeOptions()}
+                            displayValue="value"
+                            closeIcon="cancel"
+                            placeholder="Choose Job Type"
+                            avoidHighlightFirstOption= {true}
+                            hidePlaceholder={true}
+                            onSelect={this.onSelectOrRemoveJobTypes}
+                            onRemove={this.onSelectOrRemoveJobTypes}/>
+                        </div>
                 </div >
                       <button type="submit" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '5%'}} onClick={() => this.onAddEmployee(`/addEmployee`)}>
                         {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-person-plus-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

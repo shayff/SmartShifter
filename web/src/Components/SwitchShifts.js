@@ -26,7 +26,11 @@ class SwitchShifts extends Component {
         {
             value.push(e.target.value)
         }
-        this.setState({ [e.target.name]: value },() => this.getRequestOfSwitches());
+
+        if(this._isMounted)
+        {
+            this.setState({ [e.target.name]: value },() => this.getRequestOfSwitches());
+        }
     }
 
     componentWillUnmount() 

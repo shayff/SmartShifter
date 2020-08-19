@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListOfEmployees, updateShift } from './UserFunctions'
+import { ListOfEmployees, updateShift,getSettings } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
@@ -10,45 +10,42 @@ class UpdateShift extends Component {
     constructor() {
         super()
         this.state = {
-            arrEmployees:[],
+            arrEmployees: [],
             shift_name:'',
             start_time:'',
             end_time:'',
-            job_type:'',
+            job_type: [],
+            currJobType: [],
             difficulty:'',
             date:'',
             amount_of_employees:'',
             day_part:[],
-            employees_for_shift:[],
+            employees_for_shift: [],
             shift_note:'',
-            shift_id:''
+            shift_id:'',
+            companyJobTypes: []
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-        this.onSelectEmployees = this.onSelectEmployees.bind(this)
-        this.onRemoveEmployees = this.onRemoveEmployees.bind(this)
-        this.onSelectDayPart = this.onSelectDayPart.bind(this)
-        this.onRemoveDayPart = this.onRemoveDayPart.bind(this)
+        this.onSelectOrRemoveEmployees = this.onSelectOrRemoveEmployees.bind(this)
+        this.onSelectOrRemoveDayPart = this.onSelectOrRemoveDayPart.bind(this)
+        this.onSelectOrRemoveJobType = this.onSelectOrRemoveJobType.bind(this)
     }
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    onSelectEmployees(selectedList, selectedItem) {
+    onSelectOrRemoveJobType(selectedList) {
+        this.setState({job_type: selectedList});
+    }
+
+    onSelectOrRemoveEmployees(selectedList) {
         this.setState({employees_for_shift: selectedList});
     }
 
-    onRemoveEmployees(selectedList, selectedItem) {
-        this.setState({employees_for_shift: selectedList});
-    }
-
-    onSelectDayPart(selectedList, selectedItem) {
-        this.setState({day_part: selectedList});
-    }
-
-    onRemoveDayPart(selectedList, selectedItem) {
+    onSelectOrRemoveDayPart(selectedList) {
         this.setState({day_part: selectedList});
     }
 
@@ -105,9 +102,20 @@ class UpdateShift extends Component {
                 day_part: dayParts,
                 employees_for_shift: employeesForShift,
                 shift_note:shift.note,
-                shift_id:shift.id
+                shift_id:shift.id,
+                currJobType:shift["job type"]
             });
         }
+
+        getSettings().then(data => {
+            if(data)
+            {   
+                if (this._isMounted)
+                {
+                    this.setState({companyJobTypes: data["roles"]});
+                }
+            }
+        });
 
         ListOfEmployees().then(employees =>{ 
             if (employees)
@@ -130,14 +138,14 @@ class UpdateShift extends Component {
         const shift_name = document.forms["myForm14"]["shift_name"].value;
         const start_time = document.forms["myForm14"]["start_time"].value;
         const end_time = document.forms["myForm14"]["end_time"].value;
-        const job_type = document.forms["myForm14"]["job_type"].value;
+        const job_type = this.state.job_type.length;
         const difficulty = document.forms["myForm14"]["difficulty"].value;
         const date = document.forms["myForm14"]["date"].value;
         const amount_of_employees = document.forms["myForm14"]["amount_of_employees"].value;
         const day_part = this.state.day_part.length;
         let validate = true;
         
-        if (shift_name === "" || start_time === "" || end_time === ""|| job_type === ""||
+        if (shift_name === "" || start_time === "" || end_time === ""|| job_type === 0||
         difficulty === ""|| date === "" ||amount_of_employees === "" || day_part === 0)
          {
           alert("All Fields Must Be Filled");
@@ -151,6 +159,13 @@ class UpdateShift extends Component {
         }
 
         return validate;
+    }
+
+    initializeOptions = () => { 
+        let options = [];
+        this.state.companyJobTypes.map((jobType,index) => (
+        options.push({key:index ,value: jobType})));
+        return options;
     }
 
     onSubmit (e) {
@@ -172,7 +187,7 @@ class UpdateShift extends Component {
             shift_name: this.state.shift_name,
             start_time: this.state.start_time,
             end_time: this.state.end_time,
-            job_type: this.state.job_type,
+            job_type: this.state.job_type[0].value,
             difficulty: parseInt(this.state.difficulty),
             date: this.state.date,
             amount_of_employees: parseInt(this.state.amount_of_employees),
@@ -232,12 +247,18 @@ class UpdateShift extends Component {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="job_type">Job Type For The Shift</label>
-                                <input type="text"
-                                    className="form-control"
-                                    name="job_type"
-                                    value={this.state.job_type}
-                                    placeholder="Update The Job Type For The Shift"
-                                    onChange={this.onChange} />
+                                <Multiselect
+                                options={this.initializeOptions()}
+                                style={{searchBox: {background: 'white'}}}
+                                selectedValues={[{key: this.state.currJobType ,value: this.state.currJobType }]}
+                                displayValue="value"
+                                closeIcon="cancel"
+                                placeholder="Update Job Types"
+                                avoidHighlightFirstOption= {true}
+                                hidePlaceholder={true}
+                                selectionLimit="1"
+                                onSelect={this.onSelectOrRemoveJobType}
+                                onRemove={this.onSelectOrRemoveJobType}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="difficulty">Difficulty Of The Shift</label>
@@ -265,8 +286,8 @@ class UpdateShift extends Component {
                                 closeOnSelect={false}
                                 hidePlaceholder={true}
                                 selectedValues={this.state.day_part}
-                                onSelect={this.onSelectDayPart}
-                                onRemove={this.onRemoveDayPart}/>
+                                onSelect={this.onSelectOrRemoveDayPart}
+                                onRemove={this.onSelectOrRemoveDayPart}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="amount_of_employees">Amount Of Employees For The Shift</label>
@@ -292,8 +313,8 @@ class UpdateShift extends Component {
                                 closeOnSelect={false}
                                 groupBy="cat"
                                 selectedValues={this.state.employees_for_shift}
-                                onSelect={this.onSelectEmployees}
-                                onRemove={this.onRemoveEmployees}/>
+                                onSelect={this.onSelectOrRemoveEmployees}
+                                onRemove={this.onSelectOrRemoveEmployees}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="shift_note">Note For The Shift (Optional)</label>

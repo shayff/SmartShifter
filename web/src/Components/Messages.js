@@ -18,19 +18,14 @@ class Messages extends Component {
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-        this.onSelectEmployees = this.onSelectEmployees.bind(this)
-        this.onRemoveEmployees = this.onRemoveEmployees.bind(this)
+        this.onSelectOrRemoveEmployees = this.onSelectOrRemoveEmployees.bind(this)
     }
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    onSelectEmployees(selectedList, selectedItem) {
-        this.setState({toWhoToSend: selectedList});
-    }
-
-    onRemoveEmployees(selectedList, selectedItem) {
+    onSelectOrRemoveEmployees(selectedList) {
         this.setState({toWhoToSend: selectedList});
     }
 
@@ -51,7 +46,7 @@ class Messages extends Component {
     
     initializeOptions = () => { 
         let options = [{key:'All' ,value: 'All'}]
-        this.state.arrEmployees.map((employee,index) => (
+        this.state.arrEmployees.map((employee) => (
         options.push({key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]})
         ));
         return options;
@@ -73,39 +68,6 @@ class Messages extends Component {
 
         return validate;
       }
-
-      onSubmit (e) {
-        e.preventDefault()
-
-        let who=[];
-        if(this.state.toWhoToSend[0].key ==='All')
-        {
-            for(let i=0; i<this.state.arrEmployees.length; i++)
-            {
-                who.push(parseInt(this.state.arrEmployees[i]["_id"]))
-            }
-        }
-        else
-        {
-            for(let i=0; i<this.state.toWhoToSend.length; i++)
-            {
-                who.push(parseInt(this.state.toWhoToSend[i].key))
-            }
-        }
-
-        const meesage = {
-            toWho: who,
-            title: this.state.title,
-            textMessage: this.state.textMessage,
-            attached: this.state.attached,
-        }
-        
-        if(this.validateMessage()) {
-            sendMessage(meesage).then(res => {
-            this.props.history.push(`/meesages`)
-           })
-        }
-    }
 
     componentWillUnmount() 
     {
@@ -140,6 +102,40 @@ class Messages extends Component {
             }
          });
     }
+    
+      onSubmit (e) {
+        e.preventDefault()
+
+        let who=[];
+        if(this.state.toWhoToSend[0].key === 'All')
+        {
+            for(let i=0; i<this.state.arrEmployees.length; i++)
+            {
+                who.push(parseInt(this.state.arrEmployees[i]["_id"]))
+            }
+        }
+        else
+        {
+            for(let i=0; i<this.state.toWhoToSend.length; i++)
+            {
+                who.push(parseInt(this.state.toWhoToSend[i].key))
+            }
+        }
+
+        const meesage = {
+            toWho: who,
+            title: this.state.title,
+            textMessage: this.state.textMessage,
+            attached: this.state.attached,
+        }
+        
+        if(this.validateMessage()) {
+            sendMessage(meesage).then(res => {
+            this.props.history.push(`/meesages`)
+           })
+        }
+    }
+
 
     render () {
         return (
@@ -178,8 +174,9 @@ class Messages extends Component {
                     placeholder="Choose Employees"
                     avoidHighlightFirstOption= {true}
                     groupBy="cat"
-                    onSelect={this.onSelectEmployees}
-                    onRemove={this.onRemoveEmployees}/>
+                    hidePlaceholder={true}
+                    onSelect={this.onSelectOrRemoveEmployees}
+                    onRemove={this.onSelectOrRemoveEmployees}/>
                     </div>
                     <div className="form-group">
                     <label htmlFor="titleComment" >Write Here The Title</label>
