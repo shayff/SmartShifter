@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AppRegistry, SectionList ,StyleSheet, Text, View,TextInput, TouchableOpacity,KeyboardAvoidingView,Keyboard, Alert } from 'react-native';
+import {StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
 

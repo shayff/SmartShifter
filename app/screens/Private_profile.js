@@ -12,8 +12,8 @@ export default class Private_profile extends Component {
             "first name": "loding...",
             "last name": "loding...",
             "date of birth": "loding...",
-            "address": "loding",// להוסיף
-            "company": 0,
+            "address": "loding...",// להוסיף
+            "company": 'loding...',
             "email": "loding...",
             "password": "",
             "password to confirm":"*****"},
@@ -38,7 +38,6 @@ export default class Private_profile extends Component {
               Authorization: "Bearer " + token
           }
       }).then(response => {
-        console.log("GOOD " + response.data.data);
         return  response.data;
       }).catch(err => {
         console.log("EROR "+err.response.data);
@@ -55,8 +54,9 @@ export default class Private_profile extends Component {
         "last name": resData["last name"],
         "date of birth": resData["date of birth"],
         "address": resData["address"],
-        "company": resData["company"],
+        "company": resData["company name"],
         "email": resData["email"],
+        "password": "",
         "password to confirm": "*****"};
 
         this.setState({profileDataUser:details});
@@ -100,17 +100,38 @@ export default class Private_profile extends Component {
       
       save_user_change = async () =>
       {
-        let newDataToSend = {
-            "email":this.state.profileDataUser["email"],
-            "password":this.state.profileDataUser["password"],
-            "id number":this.state.profileDataUser["id number"],
-            "phone":this.state.profileDataUser["phone"],
-            "first name":this.state.profileDataUser["first name"],
-            "last name":this.state.profileDataUser["last name"],
-            "address":this.state.profileDataUser["address"],
-            "date of birth":this.state.profileDataUser["date of birth"]
+        let ps="null";
+        console.log(this.state.profileDataUser["password"]);
+        if(this.state.profileDataUser["password"] != "") // so he is update password
+        {
+            ps = this.state.profileDataUser["password"];
+            await AsyncStorage.setItem("password",this.state.profileDataUser["password"]);
+        console.log("lo");
+
         }
-        await AsyncStorage.setItem("password",this.state.profileDataUser["password"]);
+        else
+        {
+
+            ps = await AsyncStorage.getItem('password');
+
+        }
+
+        await AsyncStorage.setItem("name",this.state.profileDataUser["first name"]);
+
+
+          let newDataToSend = {
+              "email":this.state.profileDataUser["email"],
+              "password":ps,
+              "id number":this.state.profileDataUser["id number"],
+              "phone":this.state.profileDataUser["phone"],
+              "first name":this.state.profileDataUser["first name"],
+              "last name":this.state.profileDataUser["last name"],
+              "address":this.state.profileDataUser["address"],
+              "date of birth":this.state.profileDataUser["date of birth"]
+            }
+
+            
+
 
         let token = await AsyncStorage.getItem('token');
         const response = await member_server.post('/updateprofile',
@@ -120,14 +141,14 @@ export default class Private_profile extends Component {
                 Authorization: "Bearer " + token 
             }
       }).then(response => {
-        console.log("GOOD " + response.data.data);
+        console.log("update " + response.data.data);
         return  response.data;
       }).catch(err => {
         console.log("EROR "+err.response.data);
 
       });
+      this.props.navigation.goBack(null);
 
-        this.props.navigation.goBack(null);
 
       }
 

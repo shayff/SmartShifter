@@ -35,7 +35,8 @@ export default class Switching_shifts extends Component {
 
       this.setState({massegesData:response});
 
-
+      console.log(this.state.massegesData);
+      
         if(this.state.massegesData.ok != true)
         {
             Alert.alert("There was a problem receiving the messages, please try again");
