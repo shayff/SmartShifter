@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text,Button, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-
 
 
 export default class daySquare extends Component {
@@ -46,31 +44,30 @@ export default class daySquare extends Component {
     render() {  
 return (
     <View>
-        <View style={Styles.AreaZone}>
+  
             <Text style={Styles.Text}>{this.state.DayName}: {this.props.dateName}</Text>
+            <View style={Styles.line}>
+                <View style={ this.state.colorPrefer[0] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[0] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
+                    {this.props.whichShiftToShowe[0] ? (
+                        <Button title= "morning" onPress={() => this.updateSelected({typeOfShift: 0})} />
+                    ): <Button title= "" onPress={() => this.updateSelected({typeOfShift: 0})} />}
+                    
+                </View>
+            
+                <View style={ this.state.colorPrefer[1] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[1] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
+                    {this.props.whichShiftToShowe[1] ? (
+                        <Button title= "noon" onPress={() => this.updateSelected({typeOfShift: 1})} />
+                    ):  <Button title= "" onPress={() => this.updateSelected({typeOfShift: 1})} />}
+                    
+                </View>
 
-            <View style={ this.state.colorPrefer[0] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[0] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
-                {this.props.whichShiftToShowe[0] ? (
-                    <Button title= "morning" onPress={() => this.updateSelected({typeOfShift: 0})} />
-                   ): <Button title= "" onPress={() => this.updateSelected({typeOfShift: 0})} />}
-                
+                <View style={ this.state.colorPrefer[2] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[2] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
+                    {this.props.whichShiftToShowe[2] ? (
+                        <Button title= "evening" onPress={() => this.updateSelected({typeOfShift: 2})} />
+                    ):  <Button title= "" onPress={() => this.updateSelected({typeOfShift: 2})} />}
+                    
+                </View>
             </View>
-
-            <View style={ this.state.colorPrefer[1] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[1] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
-                {this.props.whichShiftToShowe[1] ? (
-                    <Button title= "noon" onPress={() => this.updateSelected({typeOfShift: 1})} />
-                   ):  <Button title= "" onPress={() => this.updateSelected({typeOfShift: 1})} />}
-                
-            </View>
-
-            <View style={ this.state.colorPrefer[2] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[2] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
-                {this.props.whichShiftToShowe[2] ? (
-                    <Button title= "evening" onPress={() => this.updateSelected({typeOfShift: 2})} />
-                   ):  <Button title= "" onPress={() => this.updateSelected({typeOfShift: 2})} />}
-                
-            </View>
-
-        </View>
     </View>
 );
 
@@ -78,34 +75,44 @@ return (
 }
 
 const Styles = StyleSheet.create({
-
+line:
+{
+    justifyContent: 'center',
+    padding:2,
+    flexDirection : 'row',
+    alignItems: 'stretch',
+    
+},
 Text: {
     alignSelf:'center',
     color: '#ffff'
 },
 NotAvailableButton : {
     borderColor: '#9c2921',
-    borderWidth: 4,
+    borderWidth: 3,
     borderRadius: 10,
+    //padding:1,
+    width:120,
+    backgroundColor: '#9c2921',
+
+    
 
 },
 AvailableButton : {
     borderColor: '#45adba',
-    borderWidth: 4,
+    borderWidth: 3,
     borderRadius: 10,
-
+  //  padding:1,
+    width:120,
 },
 PreferButton : {
     borderColor: '#522b8a',
-    borderWidth: 4,
+    borderWidth: 3,
     borderRadius: 10,
+     //padding:1,
+    width:120,
 
 },
-AreaZone: {
-    width: 160,
-    height: 170,
-    backgroundColor: '#638cb0',
-    borderRadius: 10,
-}
+
 
 })

@@ -217,16 +217,25 @@ export default class User_preferences extends Component {
                 <ScrollView>
                     <View style={Styles.line}>
                         <DaySquare dayName={ 'Sunday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.sunday.date} whichShiftToShowe = {this.state.whichShiftToShowe[0]} clickSelectPreferce = {this.update_select_prefers} />
+                    </View>   
+
+                    <View style={Styles.line}>
                         <DaySquare dayName={ 'monday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.monday.date} whichShiftToShowe = {this.state.whichShiftToShowe[1]} clickSelectPreferce = {this.update_select_prefers} />
                     </View>
 
                     <View style={Styles.line}>
                         <DaySquare dayName={ 'Tuesday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.tuesday.date} whichShiftToShowe = {this.state.whichShiftToShowe[2]} clickSelectPreferce = {this.update_select_prefers} />
+                    </View>
+
+                    <View style={Styles.line}>  
                         <DaySquare dayName={ 'Wednesday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.wednesday.date} whichShiftToShowe = {this.state.whichShiftToShowe[3]} clickSelectPreferce = {this.update_select_prefers} />
                     </View>
 
                     <View style={Styles.line}>
                         <DaySquare dayName={ 'Thursday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.thursday.date} whichShiftToShowe = {this.state.whichShiftToShowe[4]} clickSelectPreferce = {this.update_select_prefers} />
+                    </View>
+
+                    <View style={Styles.line}>
                         <DaySquare dayName={ 'Friday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.friday.date} whichShiftToShowe = {this.state.whichShiftToShowe[5]} clickSelectPreferce = {this.update_select_prefers} />
                     </View>
 
@@ -248,21 +257,17 @@ export default class User_preferences extends Component {
     const Styles = StyleSheet.create({
         titleNameDate : {
             alignSelf:'center',
-
-
         },
         center: {
 
             justifyContent: 'center',
             alignItems: 'stretch',
-
-
         },
         UnselectButton : {
             borderColor: '#f5f5f5',
-            borderWidth: 4,
-            borderRadius: 10,
-
+            borderWidth: 1,
+            borderRadius: 2,
+            
         },
         container:
         {
@@ -271,51 +276,36 @@ export default class User_preferences extends Component {
         },
         selectButton : {
             borderColor: '#5fe39d',
-            borderWidth: 4,
-            borderRadius: 10,
+            borderWidth: 1,
+            borderRadius: 2,
 
         },
         MorningTouchArea : {
             paddingRight: 40,
-
-
         },
         LunchTouchArea : {
             paddingRight: 40,
-        },
-        buttonTouchArea: {
-            borderColor: '#9f9dd1',
-            borderWidth: 6,
-            borderRadius: 10,
-            justifyContent: 'center',
-            width: 100,
-            height: 50,
-            backgroundColor: '#3638bf',
         },
         sendText: {
             alignSelf:'center',
             color: '#ffff',
             fontWeight: 'bold',
-
-
         },
         sendArea:
         {
             backgroundColor: '#1d9aad',
             paddingVertical: 10,
+            borderRadius:5,
         },
         line:
         {
             justifyContent: 'center',
             padding:4,
-
             flexDirection : 'row',
             alignItems: 'stretch',
-            
         },
         notAvailable:
         {
-
             textAlign: 'center',
             color: '#ff0d41',
             fontWeight:'700',
