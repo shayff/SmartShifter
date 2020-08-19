@@ -38,6 +38,10 @@ update_schema = {
         "settings":
             {
                 "type": "object"
+            },
+        "roles":
+            {
+                "type": "array"
             }
     },
     "required": [],

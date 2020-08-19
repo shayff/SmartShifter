@@ -11,7 +11,11 @@ create_schema = {
         "settings":
         {
             "type": "object"
-        }
+        },
+        "roles":
+            {
+                "type": "array"
+            }
     },
     "required": [
         "company name"

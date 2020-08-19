@@ -86,7 +86,7 @@ def create_users(fake,he_fake, num_of_users, users):
             '/register',
             data=json.dumps({"email": user_email,
                              "password": "00000",
-                             "id number": "205605165",
+                             "id number": str(random.randint(100000000, 999999999)),
                              "phone": he_fake.phone_number(),
                              "first name": fake.first_name(),
                              "last name": fake.last_name(),
@@ -127,7 +127,8 @@ def create_company(fake, users):
                 {"address": fake.address(),
                  "can_employee_switch_shifts": True,
                  "shifts_required_from_emp": 5
-                }
+                },
+            "roles" : ["waiter"]
         }),
         content_type='application/json',
     )
