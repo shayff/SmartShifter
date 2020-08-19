@@ -74,7 +74,7 @@ export default class Private_profile extends Component {
             this.setState({isWriteToConfirmPassword:false});
             this.refs.oldPassword.focus();
         }
-        else // he press to chake password
+        else // he press to check password
         {
             let hisPassword = await AsyncStorage.getItem('password');
 
