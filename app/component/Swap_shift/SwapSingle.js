@@ -6,7 +6,12 @@ import { MaterialIcons } from '../../node_modules/@expo/vector-icons';
 export default function SwapSingle(promp) {
 
     const [isRead, SetIsRead] = useState(false);
-    const ifWaitToSwap = () => promp.item.status !== 'wait_for_swap';
+    
+    const ifWaitToSwap = () =>
+    {
+        promp.item.status !== 'wait_for_swap';
+    } 
+        
  
 
 
@@ -40,7 +45,7 @@ return (
         </View>
 
         <View style={Styles.buttonStyle}>
-            <TouchableOpacity  style={Styles.line} disabled={ifWaitToSwap()} >
+            <TouchableOpacity  style={Styles.line} onPress={ifWaitToSwap} >
         
                 <MaterialIcons name="autorenew" size={30} color="black" />
                 <Text style={Styles.textStyle}>
