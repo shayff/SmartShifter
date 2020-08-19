@@ -101,6 +101,23 @@ export const updateProfile = user => {
         })
 }
 
+export const updatePassword = user => {
+    return axios
+        .post("/changepassword", {
+            "current_password": user.currPassword,
+             "new_password": user.newPassword
+        }, 
+         { headers: {
+           Authorization: "Bearer " + localStorage.usertoken
+        }}
+        )
+        .then((response) => {
+            return response.data.ok;
+             }, (error) => {
+                console.log(error)
+        })
+}
+
 export const sendMessage = message => {
     return axios
         .post("/sendmessage",{
