@@ -22,7 +22,7 @@ class UpdateSettings extends Component {
         this.onRemoveJobType = this.onRemoveJobType.bind(this)
     }
 
-    onRemoveJobType(selectedList, selectedItem) {
+    onRemoveJobType(selectedList) {
         this.setState({companyJobTypes: selectedList});
     }
 
@@ -31,9 +31,10 @@ class UpdateSettings extends Component {
         const company_name = document.forms["MyForm5"]["company_name"].value;
         const company_address = document.forms["MyForm5"]["company_address"].value;
         const amout_of_shifts = document.forms["MyForm5"]["amout_of_shifts"].value;
+        const companyJobTypes = this.state.companyJobTypes.length;
         let validate = true;
 
-        if (company_name === "" || company_address === "" || amout_of_shifts === "")
+        if (company_name === "" || company_address === "" || amout_of_shifts === "" || companyJobTypes === 0)
         {
           alert("All Fields Must Be Filled");
           validate = false;
@@ -44,9 +45,17 @@ class UpdateSettings extends Component {
 
     onAddJobType()
     {
-        let newcompanyJobTypes = this.state.companyJobTypes;
-        newcompanyJobTypes.push(this.state.jobType)
-        this.setState({ companyJobTypes: newcompanyJobTypes },() => document.getElementById('jobTypeInput').value = '');
+        if(this.state.jobType !== '')
+        {
+            let newcompanyJobTypes = this.state.companyJobTypes;
+            newcompanyJobTypes.push(this.state.jobType)
+            this.setState({ companyJobTypes: newcompanyJobTypes,
+                            jobType:'' },() => document.getElementById('jobTypeInput').value = '');
+        }
+        else
+        {
+            alert("Job Type Must Be Filled To Add It");
+        }
     }
 
     onChange(e)
@@ -159,6 +168,7 @@ class UpdateSettings extends Component {
                                 closeIcon="cancel"
                                 placeholder="Update Job Types"
                                 avoidHighlightFirstOption= {true}
+                                hidePlaceholder={true}
                                 onRemove={this.onRemoveJobType}/><br/>
                                 <input type="text"
                                     id="jobTypeInput"

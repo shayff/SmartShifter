@@ -6,7 +6,7 @@ class Navbar extends Component {
     logOut (event) {
         event.preventDefault()           
         localStorage.removeItem('usertoken')
-        localStorage.removeItem('hasCompany')
+        localStorage.removeItem('isManagerOfCompany')
         this.props.history.push(`/`) 
     }
 
@@ -145,7 +145,7 @@ class Navbar extends Component {
                             </Link>
                         </li>
                     </ul> 
-                    {localStorage.usertoken ? (localStorage.hasCompany === 'true'? userLink : createCompanyLink) : loginRegLink}
+                    {localStorage.usertoken ? (localStorage.isManagerOfCompany === 'true'? userLink : createCompanyLink) : loginRegLink}
                 </div>
             </nav>
         )

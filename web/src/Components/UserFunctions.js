@@ -14,11 +14,12 @@ export const register = newUser => {
             "date of birth": newUser.date_of_birth,
             "gender": newUser.gender
         })
-        .then((response) => {
-            localStorage.setItem('hasCompany', 'false')
-            console.log("Registered")
-             }, (error) => {
+        .then(response => {
+            localStorage.setItem('isManagerOfCompany', 'false')
+             })
+        .catch(error => {
                 console.log(error)
+                return error.response.data
         })
 }
 
@@ -26,8 +27,8 @@ export const createCompany = data => {
     return axios
         .post("http://localhost:5001/companies/create",{
             "company name": data.company_name,
+            "roles": data.companyJobTypes,
             "settings": data.settings,
-
         },
         {
             headers: {
@@ -35,11 +36,12 @@ export const createCompany = data => {
              }
         })
         .then(response => {
-            localStorage.setItem('hasCompany', 'true')
-            console.log("Created Company")
+            localStorage.setItem('isManagerOfCompany', 'true')
         })
-        .catch(eror => {
-            console.log(eror)
+        .catch(error => {
+            console.log(error)
+            return error.response.data
+
         })
 }
 
@@ -52,7 +54,7 @@ export const login = user => {
         .then(response => {
             console.log("Logged In")
             localStorage.setItem('usertoken', response.data.data.token)
-            localStorage.setItem('hasCompany', response.data.data.hasCompany)
+            localStorage.setItem('isManagerOfCompany', response.data.data.isManagerOfCompany)
             return response.data.data
         })
         .catch(eror => {

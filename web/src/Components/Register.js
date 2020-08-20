@@ -66,7 +66,15 @@ class Register extends Component {
 
         if(this.validateRegisterForm()) {
         register(newUser).then(res => {
-            this.props.history.push(`/login`)
+            if(res.ok)
+            {
+                console.log("Registered")
+                this.props.history.push(`/login`)
+            }
+            else
+            {
+                alert(res.msg)
+            }
         })}
     }
 
