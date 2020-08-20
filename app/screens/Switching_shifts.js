@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { AsyncStorage,SafeAreaView, View, FlatList, StyleSheet, Text,ScrollView } from 'react-native';
+import { ActivityIndicator,AsyncStorage,SafeAreaView, View, FlatList, StyleSheet, Text,ScrollView } from 'react-native';
 import SwapSingle from '../component/Swap_shift/SwapSingle';
 import shiftManager_server from '../networking/shiftManager_server';
 
@@ -14,11 +14,14 @@ export default class Switching_shifts extends Component {
                 "ok":true
             },
             listMasseges : [], 
+            thereIsDataFromServer : false,
             // frontText: "loding..." 
+
         }                              
     }
 
     componentDidMount = async () => {
+        this.setState({thereIsDataFromServer:false});
         let toSend = {"statuses" : ["confirmed","wait_for_swap","wait_for_confirm"]}
 
         let token = await AsyncStorage.getItem('token');
@@ -35,7 +38,6 @@ export default class Switching_shifts extends Component {
 
       this.setState({massegesData:response});
 
-      console.log(this.state.massegesData);
       
         if(this.state.massegesData.ok != true)
         {
@@ -44,22 +46,40 @@ export default class Switching_shifts extends Component {
         }
         
         let updatList=[];
-
+        let statusFormat="";
         let numberOfMasseges = this.state.massegesData.data.length;
         
         for (let i =0; i<numberOfMasseges; i++)
-        {
+        {   
+            if(this.state.massegesData.data[i].status=='wait_for_swap')
+            {
+                statusFormat = 'wait for swap';
+            }
+            else if (this.state.massegesData.data[i].status=='wait_for_confirm')
+            {
+                statusFormat = 'wait for confrim';
+            }
+            else if(this.state.massegesData.data[i].status=='confirmed')
+            {
+                statusFormat= 'confirmed'
+            }
+            console.log(statusFormat);
+           
+
             let temp = {date: this.state.massegesData.data[i].shift_details.date,
                         start_time:this.state.massegesData.data[i].shift_details['start time'],
                         end_time:this.state.massegesData.data[i].shift_details['end time'],
                         Who_asks:this.state.massegesData.data[i].name_employee_ask,
-                        status:this.state.massegesData.data[i].status,
+                        status:statusFormat,
                         id:this.state.massegesData.data[i].id
                         };
             updatList.push(temp);
         }
 
         this.setState({listMasseges:updatList});
+
+        this.setState({thereIsDataFromServer:true});
+
     }
 
 
@@ -70,6 +90,10 @@ export default class Switching_shifts extends Component {
 
 
         render() {  
+            if(this.state.thereIsDataFromServer == false)
+            {
+                return (<View style={Styles.center}><ActivityIndicator  size="large" color="#0000ff" /></View>);
+            }
             return(
                     <SafeAreaView style={Styles.container} >
                             <FlatList
@@ -89,6 +113,11 @@ const Styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#36485f",
         alignItems: 'center'
+    },
+    center: {
+
+        justifyContent: 'center',
+        alignItems: 'stretch',
     },
     text: {
         fontSize: 40,
