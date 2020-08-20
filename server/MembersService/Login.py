@@ -27,16 +27,17 @@ def doLogin(userInput):
             user['token'] = access_token
             user['refresh'] = refresh_token
             print(user)
+
             #Check if user is manager of company
             if('company' in user):
                 company_id = user['company']
                 company = companies_collection.find_one({'_id': company_id})
                 if (company and user['_id'] in company['managers']):
-                    user['hasCompany'] = "true"
+                    user['isManagerOfCompany'] = "true"
                 else:
-                    user['hasCompany'] = "false"
+                    user['isManagerOfCompany'] = "false"
             else:
-                user['hasCompany'] = "false"
+                user['isManagerOfCompany'] = "false"
 
             return jsonify({'ok': True, 'data': user}), 200
         else:
