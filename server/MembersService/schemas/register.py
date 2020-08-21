@@ -15,7 +15,7 @@ register_schema = {
         },
         "id number": {
             "type": "string",
-            "minLength": 8
+            "minLength": 9
         },
         "phone": {
             "type": "string"

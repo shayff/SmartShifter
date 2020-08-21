@@ -1,8 +1,8 @@
 import datetime
 from datetime import timedelta
 from flask import json
-from server.MembersService2 import app as memb_app
-from server.CompaniesService2 import app as comp_app
+from server.Members_Service import app as memb_app
+from server.Companies_Service import app as comp_app
 import random
 
 

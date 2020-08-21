@@ -5,36 +5,26 @@ from jsonschema.exceptions import SchemaError
 addemployees_schema = {
     "type": "object",
     "properties": {
-        "employees": {
-            "type": "array",
-            "items":{
-                "type" : "object",
-                "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "rank": {
-                    "type": "integer"
-                },
-                "job type": {
-                    "type": "array"
-                },
-                "time of joining": {
-                    "type": "string"
-                },
-                "preference" : {
-                    "type": "array"
-                }
+            "email": {
+                "type": "string"
             },
-                "required": ["email"],
-                "additionalProperties": False
+            "rank": {
+                "type": "integer"
+            },
+            "job type": {
+                "type": "array"
+            },
+            "time of joining": {
+                "type": "string"
+            },
+            "preference" : {
+                "type": "array"
             }
-
-        }
-    },
-    "required": ["employees"],
-    "additionalProperties": False
+                },
+            "required": ["email"],
+            "additionalProperties": True
 }
+
 
 def validate_addemployees(data):
     try:

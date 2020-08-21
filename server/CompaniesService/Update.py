@@ -9,8 +9,8 @@ db = cluster[MongoConfig['ClusterName']]
 companies_collection = db["companies"]
 users_collection = db["users"]
 
-def doUpdate(data):
-    data = validate_update(data)
+def doUpdate(user_input):
+    data = validate_update(user_input)
     if data["ok"]:
         data = data["data"]
 

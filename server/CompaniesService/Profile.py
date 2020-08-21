@@ -10,8 +10,8 @@ companies_collection = db["companies"]
 users_collection = db["users"]
 
 def doProfile():
-    loggedinUser = get_jwt_identity()
-    result = users_collection.find_one({'_id': loggedinUser['_id']})
+    logged_in_user = get_jwt_identity()
+    result = users_collection.find_one({'_id': logged_in_user['_id']})
     if "company" in result:
 
         #get data of relevante company

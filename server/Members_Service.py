@@ -10,6 +10,7 @@ from server.MembersService.GetMessage import doGetMessages
 from server.MembersService.Profile import doProfile
 from server.MembersService.UpdateMessage import doUpdateMessage
 from server.MembersService.UpdateProfile import doUpdateProfile
+from server.MembersService.ChangePassword import doChangePassword
 from flask_cors import CORS
 from bson.objectid import ObjectId
 
@@ -52,7 +53,7 @@ def check_if_token_in_blacklist(decrypted_token):
 
 @app.route("/")
 def main():
-    return 'hello eliran'
+    return "Looking for something?"
 
 @app.route("/login", methods=['POST'])
 def Login():
@@ -73,6 +74,12 @@ def profile():
 @app.route('/register', methods=['POST'])
 def Register():
     return doRegister(request.get_json())
+
+@app.route('/changepassword', methods=['POST'])
+@jwt_required
+def ChangePassword():
+    return doChangePassword(request.get_json())
+
 
 @app.route('/updateprofile', methods=['POST'])
 @jwt_required

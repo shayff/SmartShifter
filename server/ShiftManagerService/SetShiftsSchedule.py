@@ -22,12 +22,12 @@ def doSetShiftsSchedule(data):
             doc = set_employees_to_shifts(company_id, employees, shifts)
 
             #send message to employees
-            if doc.modified_count > 0:
-                send_message_to_employees(employees)
+          #  if doc.modified_count > 0:
+            send_message_to_employees(employees)
 
-                return jsonify({'ok': True, 'msg': 'Update shift successfully'}), 200
-            else:
-                return jsonify({'ok': False, 'msg': 'shift not exist'}), 400
+            return jsonify({'ok': True, 'msg': 'Update shift successfully'}), 200
+            #else:
+             #   return jsonify({'ok': False, 'msg': 'shift not exist'}), 400
 
         else:
             return jsonify({'ok': False, 'msg': 'User has no company'}), 401

@@ -2,30 +2,25 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
 
-create_schema = {
+change_password_schema = {
     "type": "object",
     "properties": {
-        "company name": {
-            "type": "string"
+        "current_password": {
+            "type": "string",
+            "minLength": 5
         },
-        "settings":
-        {
-            "type": "object"
+        "new_password": {
+            "type": "string",
+            "minLength": 5
         },
-        "roles":
-            {
-                "type": "array"
-            }
     },
-    "required": [
-        "company name"
-    ],
+    "required": ["current_password", "new_password"],
     "additionalProperties": False
 }
 
-def validate_create(data):
+def validate_changePassword(data):
     try:
-        validate(data, create_schema)
+        validate(data, change_password_schema)
     except ValidationError as e:
         return {'ok': False, 'msg': e}
     except SchemaError as e:

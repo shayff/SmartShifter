@@ -12,15 +12,15 @@ from string import Formatter
 import datetime
 from datetime import timedelta
 from flask import json
-from server.MembersService2 import app as memb_app
-from server.CompaniesService2 import app as comp_app
+from server.Members_Service import app as memb_app
+from server.Companies_Service import app as comp_app
 import random
 from faker import Faker
 
 def test_Fulltest():
     #Settings
-    num_of_users = 10
-    start_date = datetime.datetime(year=2020, month=8, day=16)
+    num_of_users = 2
+    start_date = datetime.datetime(year=2020, month=8, day=30)
 
     #Prepare test
     he_fake = Faker("he_IL")
@@ -36,12 +36,14 @@ def test_Fulltest():
             (start_date+datetime.timedelta(days=6)).strftime("%Y-%m-%d")]
 
     #1. Create users
+    print("========= Create Usesrs =========")
     create_users(fake,he_fake, num_of_users, users)
 
     #2. Login to users
     login_users(num_of_users, users)
 
     #3. Create company
+    print("========= Create Company =========")
     create_company(fake, users)
 
     #4. Add employees to company
@@ -50,10 +52,13 @@ def test_Fulltest():
     #5. Set prefernce from manager
     set_prefence_from_manager(users, week)
 
+
+
     #6. Set prefernce from workers
     set_prefernce_from_workers(num_of_users, users, week)
 
     #7. Create shifts
+    print("========= Create Shifts =========")
     for day in range(7):
         for shift in range(random.randint(2, 4)):
             start,end, daypart = rand_hours_for_shift()
@@ -86,7 +91,7 @@ def create_users(fake,he_fake, num_of_users, users):
             '/register',
             data=json.dumps({"email": user_email,
                              "password": "00000",
-                             "id number": "205605165",
+                             "id number": str(random.randint(100000000, 999999999)),
                              "phone": he_fake.phone_number(),
                              "first name": fake.first_name(),
                              "last name": fake.last_name(),
@@ -127,7 +132,8 @@ def create_company(fake, users):
                 {"address": fake.address(),
                  "can_employee_switch_shifts": True,
                  "shifts_required_from_emp": 5
-                }
+                },
+            "roles" : ["waiter"]
         }),
         content_type='application/json',
     )
@@ -142,19 +148,34 @@ def add_employees_to_company(num_of_users, users):
             '/companies/addemployees',
             headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
             data=json.dumps({
-                "employees": [
-                    {
                         "email": users[i]["email"],
                         "rank": random.randint(1, 5),
                         "job type": ["waiter"]
-                    }
-                ]
-            }),
+                                }),
             content_type='application/json',
         )
         data = json.loads(response.get_data(as_text=True))
         assert response.status_code == 200
         assert data['ok']
+
+
+
+def send_messages_to_employee(users):
+    users_id = [user["id"] for user in users if user["id"] != 0]
+    respone = memb_app.test_client().post(
+        '/sendmessage',
+        headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
+        data=json.dumps({
+            "to" : users_id,
+            "title" : "wellcome to shifter",
+            "message" : "Hope you will have fun from this test!"
+        }),
+
+        content_type='application/json',
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data['ok']
 
 
 def set_prefence_from_manager(users, week):

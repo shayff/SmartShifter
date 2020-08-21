@@ -1,5 +1,5 @@
 from flask import json
-from server.MembersService2 import app
+from server.Members_Service import app
 from faker import Faker
 
 def test_do_register():
@@ -8,7 +8,7 @@ def test_do_register():
         '/register',
         data=json.dumps({"email":fake.email(),
 	"password":"00000",
-	"id number":"205605165",
+	"id number":'123456789',
 	"phone":fake.phone_number(),
 	"first name": fake.first_name(),
 	"last name":fake.last_name(),

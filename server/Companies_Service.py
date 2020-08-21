@@ -12,7 +12,6 @@ from server.CompaniesService.Update import doUpdate
 from server.CompaniesService.UpdateShift import doUpdateShift
 from server.CompaniesService.addshifts import doAddShifts
 from server.CompaniesService.Profile import doProfile
-from server.CompaniesService.IsHasCompany import doIsHasCompany
 from server.CompaniesService.GetPreferences import doGetPreferences
 from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
 from server.CompaniesService.UpdateEmployee import doUpdateEmployee
@@ -123,12 +122,6 @@ def GetPreferences():
 @jwt_required
 def PrefenceFromWorker():
     return doPrefenceFromWorker(request.get_json())
-
-
-@app.route("/companies/IsHasCompany", methods=['GET'])
-@jwt_required
-def IsHasCompany():
-    return doIsHasCompany()
 
 
 #for dubg
