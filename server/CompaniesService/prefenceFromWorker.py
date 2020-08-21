@@ -19,9 +19,10 @@ def doPrefenceFromWorker(data):
         current_user = get_jwt_identity()
         print(current_user)
         result = users_collection.find_one({'_id': current_user['_id']})
-        print(companies_collection.find_one({'_id': result['company'], 'employees.id':current_user['_id']}))
+        print(result)
 
         if 'company' not in result:
+            print("shAY")
             return jsonify({'ok': False, 'msg': 'User has no company'}), 401
         else:
             doc = companies_collection.find_one_and_update({'_id': result['company'], 'employees.id':current_user['_id']},
