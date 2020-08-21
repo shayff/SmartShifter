@@ -30,8 +30,7 @@ def doGetMessages():
     print(list_messages)
     #check if List is empty
     if not list_messages:
-        print({'ok': True, 'msg': 'list of messages:', 'data': list_messages})
-        return jsonify({'ok': True, 'msg': 'The messages list is empty'}), 200
+        return jsonify({'ok': True, 'msg': 'The messages list is empty','data': list_messages}), 200
     else:
         return jsonify({'ok': True, 'msg': 'list of messages:', 'data': list_messages}), 200
 

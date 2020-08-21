@@ -14,6 +14,7 @@ def doGetPreferences():
     current_user = get_jwt_identity()
     print(current_user)
     result = users_collection.find_one({'_id': current_user['_id']})
+    print(result)
     if 'company' not in result:
         return jsonify({'ok': False, 'msg': 'User has no company'}), 401
     else:
