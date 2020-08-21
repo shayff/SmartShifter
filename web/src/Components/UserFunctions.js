@@ -16,6 +16,7 @@ export const register = newUser => {
         })
         .then(response => {
             localStorage.setItem('isManagerOfCompany', 'false')
+            return response.data
              })
         .catch(error => {
                 console.log(error)
@@ -37,11 +38,11 @@ export const createCompany = data => {
         })
         .then(response => {
             localStorage.setItem('isManagerOfCompany', 'true')
+            return response.data
         })
         .catch(error => {
             console.log(error)
             return error.response.data
-
         })
 }
 
@@ -85,7 +86,6 @@ export const updateProfile = user => {
             "first name": user.first_name,
             "last name": user.last_name,
             "email": user.email, 
-            // "password": user.password,
             "id number": user.id_number,
             "phone": user.phone,
             "address": user.address,
@@ -194,17 +194,10 @@ export const updateSettings= data => {
 export const addEmployee = user => {
     return axios
         .post("http://localhost:5001/companies/addemployees", {
-        //     "first name": user.first_name,
-        //     "last name": user.last_name,
-            // "password": user.password,
-            // "id number": user.id_number,
-            // "phone": user.phone,
-            // "address": user.address,
-            // "date of birth": user.date_of_birth,
             "employees": [{
             "email": user.email, 
             "time of joining": moment().format(),
-            "job type": [user.job_type],
+            "job type": user.job_type,
             "rank": parseInt(user.rank)}]
         }, 
          { headers: {
@@ -237,15 +230,9 @@ export const removeEmployee = user => {
 export const updateEmployeeInfo = user => {
     return axios
         .post("http://localhost:5001/companies/updateemployee", {
-          //  "first name": user.first_name,
-        //    "last name": user.last_name,
             "id": parseInt(user.id),
-       //     "phone": user.phone,
-      //      "address": user.address,
-      //      "date of birth": user.date_of_birth,
-            "job type": [user.job_type],
+            "job type": user.job_type,
             "rank": parseInt(user.rank),
-        //    "time of joining": moment().format(),
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken

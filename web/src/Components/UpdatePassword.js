@@ -53,7 +53,7 @@ class UpdatePassword extends Component {
                 if(res)
                 {
                     console.log("Updated Password");
-                    this.props.history.push(`/employees`);
+                    this.props.history.push(`/profile`);
                 }   
                 else
                 {
@@ -94,7 +94,7 @@ class UpdatePassword extends Component {
                                     onChange={this.onChange} />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="newPassword">Type Your New Password Again</label>
+                                    <label htmlFor="newPassword">Confrim New Password</label>
                                     <input type="password"
                                     minLength="5"
                                     className="form-control"

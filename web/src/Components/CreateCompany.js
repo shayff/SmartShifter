@@ -90,7 +90,7 @@ class CreateCompany extends Component {
                 {
                     console.log("Created Company")
                     this.props.history.push(`/profile`)
-        }
+                }
                 else
                 {
                     alert(res.msg)

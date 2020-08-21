@@ -40,15 +40,14 @@ class Employees extends Component {
         if(employees)
         {
             let employeesFilterd = this.filterEmployees(employees,optionsFilter);
-
+            
          return employeesFilterd.map((employee,index) => (
             <tr key = {index} className="text-center">
             <th scope="row"> {index + 1}</th>
             <td>{employee["first name"]}</td>
             <td>{employee["last name"]}</td>
-             {/* <td>{employee["gender"]}</td>  */}
             <td>{employee["id number"]}</td>
-            <td>{employee["job type"]}</td>
+            <td>{employee["job type"].map((jobType,index) => <li key = {index}> {jobType} </li>)} </td>
             <td >{employee["phone"]}</td>
             <td>{employee["email"]}</td>
             <td>{employee["address"]}</td>
@@ -160,7 +159,6 @@ class Employees extends Component {
                             <th scope="col" className="text-center">#</th>
                             <th scope="col" className="text-center">First Name</th>
                             <th scope="col" className="text-center">Last Name</th>
-                            {/* <th scope="col" className="text-center">Gender</th> */}
                             <th scope="col" className="text-center">ID</th>
                             <th scope="col" className="text-center">Job Type</th>
                             <th scope="col" className="text-center">Phone</th>

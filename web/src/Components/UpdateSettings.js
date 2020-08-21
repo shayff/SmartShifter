@@ -23,7 +23,23 @@ class UpdateSettings extends Component {
     }
 
     onRemoveJobType(selectedList) {
-        this.setState({companyJobTypes: selectedList});
+        if (this._isMounted)
+        {
+            let jobTypes=[];
+            for(let i=0; i<selectedList.length; i++)
+            {
+                jobTypes.push(selectedList[i].value)
+            }
+
+            this.setState({companyJobTypes: jobTypes},()=>console.log(this.state.companyJobTypes));
+        }
+    }
+
+    initializeOptions = () => { 
+        let options = [];
+        this.state.companyJobTypes.map((jobType,index) => (
+        options.push({key:index ,value: jobType})));
+        return options;
     }
 
     validateRegisterForm() 
@@ -47,10 +63,13 @@ class UpdateSettings extends Component {
     {
         if(this.state.jobType !== '')
         {
-            let newcompanyJobTypes = this.state.companyJobTypes;
-            newcompanyJobTypes.push(this.state.jobType)
-            this.setState({ companyJobTypes: newcompanyJobTypes,
-                            jobType:'' },() => document.getElementById('jobTypeInput').value = '');
+            let newJobTypes = this.state.companyJobTypes;
+            newJobTypes.push(this.state.jobType)
+            if (this._isMounted)
+            {
+                this.setState({ companyJobTypes: newJobTypes,
+                                jobType:'' },() => document.getElementById('jobTypeInput').value = '');
+            }
         }
         else
         {
@@ -60,11 +79,17 @@ class UpdateSettings extends Component {
 
     onChange(e)
     {
-        this.setState({ [e.target.name]: e.target.value })
+        if (this._isMounted)
+        {
+            this.setState({ [e.target.name]: e.target.value })
+        }
     }
 
     handleChange = () => {
-        this.setState({ switch_shifts: !this.state.switch_shifts });
+        if (this._isMounted)
+        {
+            this.setState({ switch_shifts: !this.state.switch_shifts });
+        }
     }
 
     onSubmit (e) {
@@ -85,13 +110,6 @@ class UpdateSettings extends Component {
             this.props.history.push(`/settings`)
           })
         }
-    }
-
-    initializeOptions = () => { 
-        let options = [];
-        this.state.companyJobTypes.map((jobType,index) => (
-        options.push({key:index ,value: jobType})));
-        return options;
     }
 
     componentWillUnmount() 
@@ -160,7 +178,7 @@ class UpdateSettings extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                            <label htmlFor="amout_of_shifts">Company Job Types</label>
+                            <label htmlFor="Job Types">Company Job Types</label>
                             <Multiselect
                                 style={{searchBox: {background: 'white'}}}
                                 selectedValues={this.initializeOptions()}

@@ -44,12 +44,30 @@ class AddShifts extends Component {
         this.setState({job_type: selectedList.value});
     }
 
-    onSelectOrRemoveEmployees(selectedList, selectedItem) {
-        this.setState({employees_for_shift: selectedList});
+    onSelectOrRemoveEmployees(selectedList) {
+        if(this._isMounted)
+        {
+            let employees=[];
+            for(let i=0; i<selectedList.length; i++)
+            {
+                employees.push(selectedList[i].key)
+            }
+        
+            this.setState({employees_for_shift: employees});
+        }
     }
 
-    onSelectOrRemoveDayPart(selectedList, selectedItem) {
-        this.setState({day_part: selectedList});
+    onSelectOrRemoveDayPart(selectedList) {
+        if(this._isMounted)
+        {
+            let dayParts=[];
+            for(let i=0; i<selectedList.length; i++)
+            {
+                dayParts.push(selectedList.key)
+            }
+
+            this.setState({day_part: dayParts});
+        }
     }
 
     initializeOptions = () => { 
@@ -121,17 +139,6 @@ class AddShifts extends Component {
     onSubmit (e) {
         e.preventDefault()
 
-        let employees=[];
-        let dayParts=[];
-        for(let i=0; i<this.state.employees_for_shift.length; i++)
-        {
-            employees.push(this.state.employees_for_shift[i].key)
-        }
-        for(let i=0; i<this.state.day_part.length; i++)
-        {
-            dayParts.push(this.state.day_part[i].key)
-        }
-
         const newShift = {
             shift_name: this.state.shift_name,
             start_time: this.state.start_time,
@@ -140,8 +147,8 @@ class AddShifts extends Component {
             difficulty: parseInt(this.state.difficulty),
             date: this.state.date,
             amount_of_employees: parseInt(this.state.amount_of_employees),
-            day_part: dayParts,
-            employees_for_shift: employees,
+            day_part: this.state.day_part,
+            employees_for_shift: this.state.employees_for_shift,
             shift_note: this.state.shift_note,
         }
 

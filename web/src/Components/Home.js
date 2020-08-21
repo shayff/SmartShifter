@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom'
 import logo from '../assests/SmartShifterLogo.png';
 import conferenceVideo from '../assests/conferenceVideo.mp4';
 import happyPeople from '../assests/happyPeople.mp4';
-import schedule from '../assests/pexels-bich-tran-760710.jpg';
 
 class Home extends Component {
     render () {
@@ -21,16 +20,13 @@ class Home extends Component {
                             <source src={conferenceVideo} type="video/mp4"/>
                         </video>     
                     </div>
-                    {/* <div className="column" style={{float: 'left',width: '33.33%',padding: '5px'}}>
-                        <img src={schedule} alt="schedule"style={{width:'100%'}}/>
-                    </div> */}
                     <div className="column" style={{float: 'left',width: '50%',padding: '5px'}}>
                         <video autoPlay loop muted style={{width:'100%'}}>
                             <source src={happyPeople} type="video/mp4"/>
                         </video>        
                     </div>
                 </div>
-                <p className="text-center" style={{marginTop:'100px',fontSize:'17px'}}> Copyright © SmartShifter {new Date().getFullYear()}. </p>
+                <p className="text-center" style={{marginTop:'50px',fontSize:'17px'}}> Copyright © SmartShifter {new Date().getFullYear()}. </p>
             </div>
         )
     }
