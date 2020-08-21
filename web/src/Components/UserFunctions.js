@@ -194,11 +194,10 @@ export const updateSettings= data => {
 export const addEmployee = user => {
     return axios
         .post("http://localhost:5001/companies/addemployees", {
-            "employees": [{
             "email": user.email, 
             "time of joining": moment().format(),
             "job type": user.job_type,
-            "rank": parseInt(user.rank)}]
+            "rank": parseInt(user.rank)
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken

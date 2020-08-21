@@ -41,7 +41,7 @@ class AddShifts extends Component {
     }
 
     onSelectOrRemoveJobType(selectedList) {
-        this.setState({job_type: selectedList.value});
+        this.setState({job_type: selectedList[0].value});
     }
 
     onSelectOrRemoveEmployees(selectedList) {
@@ -118,9 +118,9 @@ class AddShifts extends Component {
         const amount_of_employees = document.forms["myForm13"]["amount_of_employees"].value;
         const day_part = this.state.day_part.length;
         let validate = true;
-        
+
         if (shift_name === "" || start_time === "" || end_time === ""|| job_type === 0||
-        difficulty === ""|| date === "" ||amount_of_employees === "" || day_part === 0)
+        difficulty === ""|| date === "" || amount_of_employees === "" || day_part === 0)
          {
           alert("All Fields Must Be Filled");
           validate = false;
@@ -207,7 +207,8 @@ class AddShifts extends Component {
                                 avoidHighlightFirstOption= {true}
                                 selectionLimit="1"
                                 hidePlaceholder={true}
-                                onRemove={this.onRemoveJobType}/>
+                                onSelect={this.onSelectOrRemoveJobType}
+                                onRemove={this.onSelectOrRemoveJobType}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="difficulty">Difficulty Of The Shift</label>

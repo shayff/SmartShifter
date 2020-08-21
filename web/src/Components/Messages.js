@@ -129,6 +129,7 @@ class Messages extends Component {
             attached: this.state.attached,
         }
         
+        console.log(meesage)
         if(this.validateMessage()) {
             sendMessage(meesage).then(res => {
             this.props.history.push(`/meesages`)
