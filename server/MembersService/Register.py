@@ -33,6 +33,6 @@ def doRegister(user_input):
          usersCollection.insert_one(new_user)
          return jsonify({'ok': True, 'msg': "user registered successfully", "id": count_id}), 200
       else:
-         return jsonify({'ok': False, 'msg': 'User with email address or id number already exists'}), 401
+         return jsonify({'ok': False, 'msg': 'User with email address or id number already exists'}), 409
    else:
       return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(new_user['msg'])}), 400

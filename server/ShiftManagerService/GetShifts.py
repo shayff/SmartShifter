@@ -33,9 +33,10 @@ def doGetShifts(userInput):
                 statuses = data["statuses"]
                 list_of_shifts = [x for x in list_of_shifts if x["status"] in statuses]
 
+
             for shift in list_of_shifts:
                 dic_employees = {}
-                if shift['date']>=data['start_date'] and shift['date']<=data['end_date']:
+                if shift and shift['date']>=data['start_date'] and shift['date']<=data['end_date']:
 
                     #For each employee id we get frmo DB the name and appened to the employees array of the shift
                     add_full_data_of_employees_to_shifts(shift["employees"], shift, shift_data)

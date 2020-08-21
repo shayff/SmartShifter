@@ -19,8 +19,8 @@ from faker import Faker
 
 def test_Fulltest():
     #Settings
-    num_of_users = 10
-    start_date = datetime.datetime(year=2020, month=8, day=16)
+    num_of_users = 2
+    start_date = datetime.datetime(year=2020, month=8, day=30)
 
     #Prepare test
     he_fake = Faker("he_IL")
@@ -36,12 +36,15 @@ def test_Fulltest():
             (start_date+datetime.timedelta(days=6)).strftime("%Y-%m-%d")]
 
     #1. Create users
+    print("========= Create Usesrs =========")
     create_users(fake,he_fake, num_of_users, users)
 
     #2. Login to users
+    print("========= Create Users =========")
     login_users(num_of_users, users)
 
     #3. Create company
+    print("========= Create Company =========")
     create_company(fake, users)
 
     #4. Add employees to company
@@ -54,6 +57,7 @@ def test_Fulltest():
     set_prefernce_from_workers(num_of_users, users, week)
 
     #7. Create shifts
+    print("========= Create Shifts =========")
     for day in range(7):
         for shift in range(random.randint(2, 4)):
             start,end, daypart = rand_hours_for_shift()

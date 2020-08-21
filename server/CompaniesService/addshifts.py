@@ -33,6 +33,8 @@ def doAddShifts(data):
 
             # insert to db
             companies_collection.find_one_and_update({'_id': company_id}, {'$push': {'shifts': data}})
+
+            print(data)
             return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200
 
         else:

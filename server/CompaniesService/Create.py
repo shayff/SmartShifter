@@ -44,6 +44,9 @@ def doCreate(data):
          # add an array of shift swaps
          data.update({'shifts_swaps':[]})
 
+         # add
+         data.update({"shifts": []})
+
          # add roles array
          if "roles" not in data:
             data.update({"roles": []})
