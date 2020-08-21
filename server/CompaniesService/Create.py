@@ -47,6 +47,9 @@ def doCreate(data):
          # add
          data.update({"shifts": []})
 
+         # add empty prefence_from_manager
+         data.update({"prefence_from_manager": {}})
+
          # add roles array
          if "roles" not in data:
             data.update({"roles": []})
