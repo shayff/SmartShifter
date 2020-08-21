@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
-
 import logo from '../assests/SmartShifterLogo.png';
+import conferenceVideo from '../assests/conferenceVideo.mp4';
+import happyPeople from '../assests/happyPeople.mp4';
 
 class Home extends Component {
     render () {
         return (
             <div className="container">
-                <div className="jumbotron mt-5">
+                <div style={{marginTop:'50px',marginBottom:'50px'}}>
                     <div className="col-sm-8 mx-auto">
-                        <h1 className="text-center" style={{color:'#03A9F4'}}> Welcome </h1>
+                        <h1 className="text-center"> Welcome </h1><br/> 
                         <img src={logo} alt="Logo" height={600} width={700}/>
                     </div>
                 </div>
-                     <p className="text-center"> Copyright © SmartShifter {new Date().getFullYear()}. </p>
-                <div>
+                <div className="row" style={{ content: "",clear: 'both',display: 'table'}}>
+                    <div className="column" style={{float: 'left',width: '50%',padding: '5px'}}>
+                        <video autoPlay loop muted style={{width:'100%'}}>
+                            <source src={conferenceVideo} type="video/mp4"/>
+                        </video>     
+                    </div>
+                    <div className="column" style={{float: 'left',width: '50%',padding: '5px'}}>
+                        <video autoPlay loop muted style={{width:'100%'}}>
+                            <source src={happyPeople} type="video/mp4"/>
+                        </video>        
+                    </div>
                 </div>
+                <p className="text-center" style={{marginTop:'50px',fontSize:'17px'}}> Copyright © SmartShifter {new Date().getFullYear()}. </p>
             </div>
         )
     }
 }
 
 export default withRouter(Home)
-

@@ -18,19 +18,14 @@ class Messages extends Component {
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-        this.onSelectEmployees = this.onSelectEmployees.bind(this)
-        this.onRemoveEmployees = this.onRemoveEmployees.bind(this)
+        this.onSelectOrRemoveEmployees = this.onSelectOrRemoveEmployees.bind(this)
     }
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    onSelectEmployees(selectedList, selectedItem) {
-        this.setState({toWhoToSend: selectedList});
-    }
-
-    onRemoveEmployees(selectedList, selectedItem) {
+    onSelectOrRemoveEmployees(selectedList) {
         this.setState({toWhoToSend: selectedList});
     }
 
@@ -51,7 +46,7 @@ class Messages extends Component {
     
     initializeOptions = () => { 
         let options = [{key:'All' ,value: 'All'}]
-        this.state.arrEmployees.map((employee,index) => (
+        this.state.arrEmployees.map((employee) => (
         options.push({key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]})
         ));
         return options;
@@ -73,39 +68,6 @@ class Messages extends Component {
 
         return validate;
       }
-
-      onSubmit (e) {
-        e.preventDefault()
-
-        let who=[];
-        if(this.state.toWhoToSend[0].key ==='All')
-        {
-            for(let i=0; i<this.state.arrEmployees.length; i++)
-            {
-                who.push(parseInt(this.state.arrEmployees[i]["_id"]))
-            }
-        }
-        else
-        {
-            for(let i=0; i<this.state.toWhoToSend.length; i++)
-            {
-                who.push(parseInt(this.state.toWhoToSend[i].key))
-            }
-        }
-
-        const meesage = {
-            toWho: who,
-            title: this.state.title,
-            textMessage: this.state.textMessage,
-            attached: this.state.attached,
-        }
-        
-        if(this.validateMessage()) {
-            sendMessage(meesage).then(res => {
-            this.props.history.push(`/meesages`)
-           })
-        }
-    }
 
     componentWillUnmount() 
     {
@@ -140,13 +102,52 @@ class Messages extends Component {
             }
          });
     }
+    
+      onSubmit (e) {
+        e.preventDefault()
+
+        let who=[];
+        if(this.state.toWhoToSend[0].key === 'All')
+        {
+            for(let i=0; i<this.state.arrEmployees.length; i++)
+            {
+                who.push(parseInt(this.state.arrEmployees[i]["_id"]))
+            }
+        }
+        else
+        {
+            for(let i=0; i<this.state.toWhoToSend.length; i++)
+            {
+                who.push(parseInt(this.state.toWhoToSend[i].key))
+            }
+        }
+
+        const meesage = {
+            toWho: who,
+            title: this.state.title,
+            textMessage: this.state.textMessage,
+            attached: this.state.attached,
+        }
+        
+        console.log(meesage)
+        if(this.validateMessage()) {
+            sendMessage(meesage).then(res => {
+            this.props.history.push(`/meesages`)
+           })
+        }
+    }
+
 
     render () {
         return (
-            <div className="container">
+            <div className="container" style={{marginBottom: '30px'}}>
                 <div className="jumbotron mt-5">
                     <div className="col-sm-8 mx-auto">
-                        <h1 className="text-center">Messages</h1>
+                        <h1 className="text-center">
+                            {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-chat-text-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fillRule="evenodd" d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.5 5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                            </svg>} Messages
+                    </h1>
                     </div>
                     <table className="table table-bordered table-hover">
                         <thead className="thead-dark">
@@ -159,7 +160,7 @@ class Messages extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                        {this.initializeTable(this.state.messages)}  
+                            {this.initializeTable(this.state.messages)}  
                         </tbody>
                         </table>
                 </div>
@@ -168,13 +169,15 @@ class Messages extends Component {
                     <label htmlFor="employees_for_shift">Choose To Who To Send</label>   
                     <Multiselect
                     options= {this.initializeOptions()}
+                    style={{searchBox: {background: 'white'}}}
                     displayValue="value"
                     closeIcon="cancel"
                     placeholder="Choose Employees"
                     avoidHighlightFirstOption= {true}
                     groupBy="cat"
-                    onSelect={this.onSelectEmployees}
-                    onRemove={this.onRemoveEmployees}/>
+                    hidePlaceholder={true}
+                    onSelect={this.onSelectOrRemoveEmployees}
+                    onRemove={this.onSelectOrRemoveEmployees}/>
                     </div>
                     <div className="form-group">
                     <label htmlFor="titleComment" >Write Here The Title</label>

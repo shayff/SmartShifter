@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './app.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import NavBar from './Components/NavBar'
 import Home from './Components/Home'
@@ -20,6 +21,7 @@ import EditShifts from './Components/EditShifts'
 import AddShifts from './Components/AddShifts'
 import UpdateShift from './Components/UpdateShift'
 import ShowGeneratedShifts from './Components/ShowGeneratedShifts'
+import UpdatePassword from './Components/UpdatePassword'
 import ProtectedRoute from './Components/ProtectedRoute'
 
 class App extends Component {
@@ -49,6 +51,7 @@ class App extends Component {
             <ProtectedRoute exact path="/addShifts" component={AddShifts} />
             <ProtectedRoute exact path="/updateShift" component={UpdateShift} />
             <ProtectedRoute exact path="/showGeneratedShifts" component={ShowGeneratedShifts} />
+            <ProtectedRoute exact path="/updatePassword" component={UpdatePassword} />
             </Switch>
           </div>
         </div>

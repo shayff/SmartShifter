@@ -1,5 +1,15 @@
 .App {
-    text-align: center;
+    /* text-align: center; */
+    background-image: url("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+    top: 0;
+    bottom:0;
+    position:fixed;
+    overflow-y:auto;
+    overflow-x:hidden;
+    min-width: 100%;
+    min-height: 100%;
+    background-size: cover;
+    background-position: center;
   }
   
   .App-logo {

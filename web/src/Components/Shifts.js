@@ -74,22 +74,39 @@ class Shifts extends Component {
     parseShifts(shifts,newShifts,minDate,maxDate)
     {
         let j = 0;
-        let date = minDate;
-  
-        while(date <= maxDate)
+        let startDate = minDate;
+        let endDate;
+
+        while(startDate <= maxDate)
         {
-            if(shifts[date])
+            if(shifts[startDate])
             {
-                for(let i=0; i<shifts[date].length; i++)
+                for(let i=0; i<shifts[startDate].length; i++)
                 {
-                   newShifts.push({start_date: date + " " + (shifts[date][i])["start time"], end_date: date  +" " + (shifts[date][i])["end time"],
-                    text: (shifts[date][i])["job type"] +":" +
-                      (shifts[date][i])["employees"].map((employee,index) => " " +employee["first name"] + " " + employee["last name"]),
-                     id:(shifts[date][i])["id"]})
+                     if((shifts[startDate][i])["start time"]>=(shifts[startDate][i])["end time"])
+                    {
+                        endDate= moment(startDate, "YYYY-MM-DD").add(1, 'days').format('YYYY-MM-DD')
+                        newShifts.push({start_date: startDate + " " + (shifts[startDate][i])["start time"], end_date: startDate  + " 24:00",
+                        text: (shifts[startDate][i])["job type"] +":" +
+                        (shifts[startDate][i])["employees"].map((employee) => " " + employee["first name"] + " " + employee["last name"]),
+                        id:(shifts[startDate][i])["id"]})
+                        newShifts.push({start_date: endDate + " 00:00", end_date: endDate  + " " + (shifts[startDate][i])["end time"],
+                        text: (shifts[startDate][i])["job type"] +":" +
+                        (shifts[startDate][i])["employees"].map((employee) => " " +employee["first name"] + " " + employee["last name"]),
+                        id:(shifts[startDate][i])["id"] + " extended shift"})
+                    }
+                    else
+                    {
+                        endDate = startDate;
+                        newShifts.push({start_date: startDate + " " + (shifts[startDate][i])["start time"], end_date: endDate  + " " + (shifts[startDate][i])["end time"],
+                        text: (shifts[startDate][i])["job type"] +":" +
+                          (shifts[startDate][i])["employees"].map((employee) => " " +employee["first name"] + " " + employee["last name"]),
+                         id:(shifts[startDate][i])["id"]})
+                    }
                 }
             }
             j++;
-            date = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
+            startDate = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
         }
     }
 
@@ -103,10 +120,15 @@ class Shifts extends Component {
 
     render () {
         return (
-            <div className="container">
-                <div className="jumbotron mt-5">
+            <div className="container" style={{marginBottom: '30px'}}>
+                <div className="jumbotron mt-5" style={{display: 'inline-block',marginLeft: '-65%'}}>
                  <div className="col-sm-8 mx-auto">
-                    <h1 className="text-center"> Shifts </h1>
+                    <h1 className="text-center">
+                        {<svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-calendar-week" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" d="M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1zm1-3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z"/>
+                            <path fillRule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                        </svg>} Shifts</h1>
                  </div>
                  <div className='scheduler-container'>
                     <Scheduler/>
@@ -115,7 +137,7 @@ class Shifts extends Component {
                 <button type="submit" className="btn btn-lg btn-primary btn-block" onClick={() => this.onEditShifts(`/editShifts`)}>
                                 Edit Submission Of Shifts
                 </button>   
-                <button type="submit" className="btn btn-lg btn-primary btn-block" onClick={() => this.onGenerateShifts(`/generateShifts`)}>
+                <button type="submit" className="btn btn-lg btn-primary btn-block"  onClick={() => this.onGenerateShifts(`/generateShifts`)}>
                                 Generate Shifts
                 </button> 
             </div>

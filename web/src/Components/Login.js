@@ -43,7 +43,7 @@ class Login extends Component {
         {
         login(user).then(res => {
             if (res) {
-                if(res.hasCompany === 'true')
+                if(res.isManagerOfCompany === 'true')
                 {
                     this.props.history.push(`/profile`)
                 }

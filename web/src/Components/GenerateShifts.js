@@ -61,16 +61,13 @@ class GenerateShifts extends Component {
             if(shifts){
                 let parserShifts = [];
                 this.parseShifts(shifts,parserShifts,minDate,maxDate);
-                if(parserShifts.length !== 0)
+                if(parserShifts.length === 0)
                 {
-                    if (this._isMounted)
-                    {
-                        this.setState({ arrShiftsNotScheduled:parserShifts});
-                    }
+                    alert("No Shifts To Show")
                 }
-                else
+                if (this._isMounted)
                 {
-                   alert("No Shifts To Show")
+                    this.setState({ arrShiftsNotScheduled:parserShifts});
                 }
               }
             })
@@ -146,7 +143,7 @@ class GenerateShifts extends Component {
             <button type="button" className="btn btn-info btn-block" data-toggle="modal" data-target={modalButton}>
                     {shift.name}<br/>{shift["start time"]}-{shift["end time"]}
             </button>
-            <div className="modal fade" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
+            <div className="modal fade" data-backdrop="false" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content">
                     <div className="modal-header text-center">
@@ -277,7 +274,7 @@ class GenerateShifts extends Component {
         }
 
         buildShifts(dates).then(buildedShifts => {
-            if(buildedShifts.data)
+            if(buildedShifts.success_rate !== 0)
             {
                 this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts})
             }
@@ -290,9 +287,9 @@ class GenerateShifts extends Component {
 
     render () {
         return (
-            <div className="container">
+            <div className="container" style={{marginBottom: '30px'}}>
             <form name="myForm15" onSubmit={this.onSubmit}>
-            <div className="jumbotron mt-5">
+            <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Build Shifts </h1>
              </div>
@@ -313,10 +310,16 @@ class GenerateShifts extends Component {
                     </tbody>
                  </table>
              </div>  
-             <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAddShifts(`/addShifts`)}>
-                                Add Shifts 
+             <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '5%'}} onClick={() => this.onAddShifts(`/addShifts`)}>
+                    {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-calendar2-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" d="M8 8a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8z"/>
+                        <path fillRule="evenodd" d="M7.5 10.5A.5.5 0 0 1 8 10h2a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0v-2z"/>
+                        <path fillRule="evenodd" d="M14 2H2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM2 1a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z"/>
+                        <path fillRule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+                    </svg>}<br/> Add Shifts 
                 </button>   
-                <button type="submit" className="btn btn-lg btn-primary btn-block">
+                <button type="submit" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '5%'}}>
                                Build Shifts
                 </button>  
                 </form>
