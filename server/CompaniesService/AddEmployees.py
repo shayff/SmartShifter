@@ -11,39 +11,30 @@ companies_collection = db["companies"]
 users_collection = db["users"]
 counters_collection = db["counters"]
 
+def doAddEmployees(user_input):
+    data = validate_addemployees(user_input)
+    if data['ok']:
+        employee_to_add = data['data']
+        current_user = get_jwt_identity()
+        result = users_collection.find_one({'_id': current_user['_id']})
+        if 'company' in result:
+            company_id = result['company']
 
-#Only a company manager can
-def doAddEmployees(data):
-   data = validate_addemployees(data)
-   if data['ok']:
-      data = data['data']
-      current_user = get_jwt_identity()
-      result = users_collection.find_one({'_id': current_user['_id']})
-      if 'company' in result:
-         company_id = result['company']
-         employees = data['employees']
-         employees_not_updated = []
-
-         #iterate for each epmloye, check if he has company and add if not
-         for employe in employees:
-            user_result = users_collection.find_one({'email': employe['email']})
-            #Adding the id of the company
+            #look for the employee
+            user_result = users_collection.find_one({'email': employee_to_add['email']})
             if user_result and 'company' not in user_result:
-               users_collection.find_one_and_update({'email': employe['email']}, {'$set': {'company': company_id}})
-               # switch the email given from the user to the id
-               employe["id"] = user_result["_id"]
-               del employe["email"]
+                # switch the email given from the user to the id
+                employee_to_add["id"] = user_result["_id"]
+                del employee_to_add["email"]
+
+                # update employees in the company
+                doc = companies_collection.find_one_and_update({'_id': company_id},
+                                                               {'$addToSet': {"employees": employee_to_add["id"]}})
+                if doc:
+                    return jsonify({'ok': True, 'msg': 'Employee has been added'}), 200
             else:
-               employees_not_updated.append(employe)
-
-         #remove employees that already have company
-         employees = [x for x in employees if x not in employees_not_updated]
-
-         # update employees in the company
-         doc = companies_collection.find_one_and_update({'_id': company_id}, {'$addToSet': {'employees': {'$each': employees}}})
-         if doc != None:
-             return jsonify({'ok': True, 'msg': 'Added employees', 'added': employees, 'not added': employees_not_updated}), 200
-         else:
-             return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401
-   else:
-      return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+                return jsonify({'ok': False, 'msg': 'User already have company'}), 409
+        else:
+            return jsonify({'ok': False, 'msg': 'Manager has no company'}), 401
+    else:
+        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400

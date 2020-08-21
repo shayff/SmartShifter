@@ -11,8 +11,8 @@ usersCollection = db['users']
 companies_collection = db["companies"]
 
 
-def doLogin(userInput):
-    data = validate_login(userInput)
+def doLogin(user_input):
+    data = validate_login(user_input)
     if data['ok']:
         data = data['data']
 
