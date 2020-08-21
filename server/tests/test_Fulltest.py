@@ -40,7 +40,6 @@ def test_Fulltest():
     create_users(fake,he_fake, num_of_users, users)
 
     #2. Login to users
-    print("========= Create Users =========")
     login_users(num_of_users, users)
 
     #3. Create company
@@ -52,6 +51,8 @@ def test_Fulltest():
 
     #5. Set prefernce from manager
     set_prefence_from_manager(users, week)
+
+
 
     #6. Set prefernce from workers
     set_prefernce_from_workers(num_of_users, users, week)
@@ -147,19 +148,34 @@ def add_employees_to_company(num_of_users, users):
             '/companies/addemployees',
             headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
             data=json.dumps({
-                "employees": [
-                    {
                         "email": users[i]["email"],
                         "rank": random.randint(1, 5),
                         "job type": ["waiter"]
-                    }
-                ]
-            }),
+                                }),
             content_type='application/json',
         )
         data = json.loads(response.get_data(as_text=True))
         assert response.status_code == 200
         assert data['ok']
+
+
+
+def send_messages_to_employee(users):
+    users_id = [user["id"] for user in users if user["id"] != 0]
+    respone = memb_app.test_client().post(
+        '/sendmessage',
+        headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
+        data=json.dumps({
+            "to" : users_id,
+            "title" : "wellcome to shifter",
+            "message" : "Hope you will have fun from this test!"
+        }),
+
+        content_type='application/json',
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data['ok']
 
 
 def set_prefence_from_manager(users, week):

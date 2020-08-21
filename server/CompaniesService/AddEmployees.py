@@ -24,12 +24,14 @@ def doAddEmployees(user_input):
             user_result = users_collection.find_one({'email': employee_to_add['email']})
             if user_result and 'company' not in user_result:
                 # switch the email given from the user to the id
-                employee_to_add["id"] = user_result["_id"]
+                employee_to_add["_id"] = user_result["_id"]
                 del employee_to_add["email"]
 
                 # update employees in the company
+                users_collection.find_one_and_update({'_id': employee_to_add["_id"]}, {'$set': {'company': company_id}})
+
                 doc = companies_collection.find_one_and_update({'_id': company_id},
-                                                               {'$addToSet': {"employees": employee_to_add["id"]}})
+                                                               {'$addToSet': {"employees": employee_to_add["_id"]}})
                 if doc:
                     return jsonify({'ok': True, 'msg': 'Employee has been added'}), 200
             else:

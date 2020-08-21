@@ -16,17 +16,17 @@ def doPrefenceFromWorker(data):
     data = validate_prefenceFromWorker(data)
     if data["ok"]:
         data = data["data"]
-        current_user = get_jwt_identity()
-        print(current_user)
-        result = users_collection.find_one({'_id': current_user['_id']})
-        print(result)
+        logged_in_user = get_jwt_identity()
+        result = users_collection.find_one({'_id': logged_in_user['_id']})
 
-        if 'company' not in result:
-            print("shAY")
-            return jsonify({'ok': False, 'msg': 'User has no company'}), 401
+        if result:
+            if 'company' not in result:
+                return jsonify({'ok': False, 'msg': 'User has no company'}), 401
+            else:
+                doc = companies_collection.find_one_and_update({'_id': result['company'], 'employees.id':logged_in_user['_id']},
+                                            {'$set': {'employees.$.preference': data["preference"]}})
+                return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
         else:
-            doc = companies_collection.find_one_and_update({'_id': result['company'], 'employees.id':current_user['_id']},
-                                        {'$set': {'employees.$.preference': data["preference"]}})
-            return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
+            return jsonify({'ok': False, 'msg': 'User not exist'}), 401
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
