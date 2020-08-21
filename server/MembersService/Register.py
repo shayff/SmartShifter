@@ -12,9 +12,9 @@ usersCollection = db["users"]
 counters_collection = db["counters"]
 
 def doRegister(user_input):
-   data2 = validate_register(user_input)
-   if data2["ok"]:
-      new_user = data2["data"]
+   data = validate_register(user_input)
+   if data["ok"]:
+      new_user = data["data"]
       new_user['email'] = new_user['email'].lower()
       result_email = usersCollection.find_one({'email': new_user['email']})
       result_id_number = usersCollection.find_one({'id number': new_user['id number']})

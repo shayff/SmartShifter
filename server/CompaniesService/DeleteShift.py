@@ -9,8 +9,8 @@ db = cluster[MongoConfig['ClusterName']]
 companies_collection = db["companies"]
 users_collection = db["users"]
 
-def doDeleteShift(data):
-    data = validate_deleteshift(data)
+def doDeleteShift(user_input):
+    data = validate_deleteshift(user_input)
     if data["ok"]:
         data = data["data"]
 

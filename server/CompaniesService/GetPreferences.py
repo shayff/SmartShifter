@@ -12,13 +12,13 @@ users_collection = db['users']
 
 def doGetPreferences():
     current_user = get_jwt_identity()
-    print(current_user)
+
     result = users_collection.find_one({'_id': current_user['_id']})
-    print(result)
+
     if 'company' not in result:
         return jsonify({'ok': False, 'msg': 'User has no company'}), 401
     else:
-        companyId = result['company']
-        company = companies_collection.find_one({'_id': companyId})
+        company_id = result['company']
+        company = companies_collection.find_one({'_id': company_id})
         preferences = company['prefence_from_manager']
         return jsonify({'ok': True, 'msg': 'Successfully', 'data': preferences}), 200
