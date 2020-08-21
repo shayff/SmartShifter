@@ -1,6 +1,7 @@
 import React, {useState, Component} from 'react';
 import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, Keyboard, TouchableOpacity,ScrollView, Alert } from 'react-native';
 import member_server from '../networking/member_server';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Private_profile extends Component {
 
@@ -12,8 +13,8 @@ export default class Private_profile extends Component {
             "first name": "loding...",
             "last name": "loding...",
             "date of birth": "loding...",
-            "address": "loding",// להוסיף
-            "company": 0,
+            "address": "loding...",// להוסיף
+            "company": 'loding...',
             "email": "loding...",
             "password": "",
             "password to confirm":"*****"},
@@ -38,7 +39,6 @@ export default class Private_profile extends Component {
               Authorization: "Bearer " + token
           }
       }).then(response => {
-        console.log("GOOD " + response.data.data);
         return  response.data;
       }).catch(err => {
         console.log("EROR "+err.response.data);
@@ -55,8 +55,9 @@ export default class Private_profile extends Component {
         "last name": resData["last name"],
         "date of birth": resData["date of birth"],
         "address": resData["address"],
-        "company": resData["company"],
+        "company": resData["company name"],
         "email": resData["email"],
+        "password": "",
         "password to confirm": "*****"};
 
         this.setState({profileDataUser:details});
@@ -74,7 +75,7 @@ export default class Private_profile extends Component {
             this.setState({isWriteToConfirmPassword:false});
             this.refs.oldPassword.focus();
         }
-        else // he press to chake password
+        else // he press to check password
         {
             let hisPassword = await AsyncStorage.getItem('password');
 
@@ -100,17 +101,38 @@ export default class Private_profile extends Component {
       
       save_user_change = async () =>
       {
-        let newDataToSend = {
-            "email":this.state.profileDataUser["email"],
-            "password":this.state.profileDataUser["password"],
-            "id number":this.state.profileDataUser["id number"],
-            "phone":this.state.profileDataUser["phone"],
-            "first name":this.state.profileDataUser["first name"],
-            "last name":this.state.profileDataUser["last name"],
-            "address":this.state.profileDataUser["address"],
-            "date of birth":this.state.profileDataUser["date of birth"]
+        let ps="null";
+        console.log(this.state.profileDataUser["password"]);
+        if(this.state.profileDataUser["password"] != "") // so he is update password
+        {
+            ps = this.state.profileDataUser["password"];
+            await AsyncStorage.setItem("password",this.state.profileDataUser["password"]);
+        console.log("lo");
+
         }
-        await AsyncStorage.setItem("password",this.state.profileDataUser["password"]);
+        else
+        {
+
+            ps = await AsyncStorage.getItem('password');
+
+        }
+
+        await AsyncStorage.setItem("name",this.state.profileDataUser["first name"]);
+
+
+          let newDataToSend = {
+              "email":this.state.profileDataUser["email"],
+              "password":ps,
+              "id number":this.state.profileDataUser["id number"],
+              "phone":this.state.profileDataUser["phone"],
+              "first name":this.state.profileDataUser["first name"],
+              "last name":this.state.profileDataUser["last name"],
+              "address":this.state.profileDataUser["address"],
+              "date of birth":this.state.profileDataUser["date of birth"]
+            }
+
+            
+
 
         let token = await AsyncStorage.getItem('token');
         const response = await member_server.post('/updateprofile',
@@ -120,67 +142,101 @@ export default class Private_profile extends Component {
                 Authorization: "Bearer " + token 
             }
       }).then(response => {
-        console.log("GOOD " + response.data.data);
+        console.log("update " + response.data.data);
         return  response.data;
       }).catch(err => {
         console.log("EROR "+err.response.data);
 
       });
+      this.props.navigation.goBack(null);
 
-        this.props.navigation.goBack(null);
 
       }
 
     render() {  
         return(
             
+            <View style={Styles.all}>
             <ScrollView style={Styles.container}>
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>ID: </Text>
                         <TextInput style={Styles.TextInput} ref='idNumber' onChangeText={(data) => {this.state.profileDataUser["id number"]=data}}  editable =  {false}>{this.state.profileDataUser["id number"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.idNumber.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.idNumber.focus();}}></Button>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.idNumber.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.idNumber.focus();}}>  
+                        </Icon.Button>    
                 </View>
 
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>First Name: </Text>
                         <TextInput style={Styles.TextInput} ref='firstName' onChangeText={(data) => {this.state.profileDataUser["first name"]=data}} editable =  {false}>{this.state.profileDataUser["first name"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.firstName.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.firstName.focus();}}></Button>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.firstName.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.firstName.focus();}}>  
+                        </Icon.Button>  
                 </View>
 
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>Lest Name: </Text>
                         <TextInput style={Styles.TextInput} ref='lestName' onChangeText={(data) => {this.state.profileDataUser["last name"]=data}} editable =  {false}>{this.state.profileDataUser["last name"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.lestName.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.lestName.focus();}}></Button>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.lestName.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.lestName.focus();}}>  
+                        </Icon.Button> 
                 </View>
 
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>Date of birth: </Text>
                         <TextInput style={Styles.TextInput} ref='dateOfBirth' onChangeText={(data) => {this.state.profileDataUser["date of birth"]=data}} editable =  {false}>{this.state.profileDataUser["date of birth"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.dateOfBirth.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.dateOfBirth.focus();}}></Button>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.dateOfBirth.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.dateOfBirth.focus();}}>  
+                        </Icon.Button> 
                 </View>
 
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>address: </Text>
                         <TextInput style={Styles.TextInput} ref='address' onChangeText={(data) => {this.state.profileDataUser["address"]=data}} editable =  {false}>{this.state.profileDataUser["address"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.address.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.address.focus();}}></Button>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.address.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.address.focus();}}>  
+                        </Icon.Button> 
                 </View>
 
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>Phone: </Text>
                         <TextInput style={Styles.TextInput} ref='phone' onChangeText={(data) => {this.state.profileDataUser["phone"]=data}} editable =  {false}>{this.state.profileDataUser["phone"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.phone.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.phone.focus();}}></Button>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.phone.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.phone.focus();}}>  
+                        </Icon.Button> 
                 </View>
 
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>Email: </Text>
                         <TextInput style={Styles.TextInput} ref='email' onChangeText={(data) => {this.state.profileDataUser["email"]=data}} editable =  {false}>{this.state.profileDataUser["email"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.email.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.email.focus();}}></Button>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.email.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.email.focus();}}>  
+                        </Icon.Button>                      
                 </View>
 
                 <View style={Styles.line}>
                         <Text style={Styles.titel}>Company: </Text>
                         <TextInput style={Styles.TextInput} ref='company' onChangeText={(data) => {this.state.profileDataUser["company"]=data}} editable =  {false}>{this.state.profileDataUser["company"]}</TextInput>
-                        <Button title="Edit" onPress={(data)=>{this.refs.company.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.company.focus();}}></Button>
+                        <Icon.Button
+                            //     name="edit"
+                                backgroundColor="#36485f"
+                                disabled
+                                onPress={(data)=>{this.refs.company.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.company.focus();}}>  
+                        </Icon.Button> 
                 </View>
 
                 <View style={Styles.passwordLine}>
@@ -199,7 +255,7 @@ export default class Private_profile extends Component {
                         <Text ref='saveText' style={Styles.sendText}>{this.state.saveText}</Text>
                     </TouchableOpacity>
             </ScrollView>
-        
+            </View>
         );
     }
 }
@@ -209,9 +265,12 @@ export default class Private_profile extends Component {
 const Styles = StyleSheet.create({
     sendArea:
     {
-        backgroundColor: '#1d9aad',
-        paddingVertical: 10,
-        alignItems: 'center',
+        backgroundColor: '#2980b9',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginVertical: 1,
+        padding: 6, 
+        height:45
     },
     TextInput:
     {
@@ -219,36 +278,40 @@ const Styles = StyleSheet.create({
         fontSize: 16,
         opacity:0.7,
 
-
     },
     container:
     {
         flex:1,
-        backgroundColor:'#36485f',
+        backgroundColor:'#36485f', 
+        borderWidth: 3,
+        borderRadius: 10,
+        marginVertical: 10,
+        padding: 4, 
+
     },
     line:
     {
-        paddingBottom: 20,
+        paddingBottom: 5,
         flexDirection : 'row',
-        alignItems: 'stretch',
-        paddingLeft: 10,
+        alignItems: 'center',
+        paddingLeft: 20,
         justifyContent:"space-between",
-        borderBottomColor: '#f2f2f2',
-        borderBottomWidth: 1,
+     
     },
     passwordLine:
     {
         paddingBottom: 20,
         flexDirection : 'row',
         alignItems: 'stretch',
-        paddingLeft: 10,
+        paddingLeft: 20,
         justifyContent:"space-between",
         borderBottomWidth: 1,
+        borderBottomColor: '#36485f',
+        paddingTop:7,
     },
     secendSubject: {
         paddingLeft:30,
-        backgroundColor: '#ffff'
-    
+        backgroundColor: '#ffff',    
       },
       titel: {
         fontWeight: 'bold',
@@ -257,9 +320,17 @@ const Styles = StyleSheet.create({
       },
       sendText: {
           fontWeight: 'bold',
-          color: '#ffff',
-      }
-
+          color: '#ffff',    
+          paddingLeft:120,
+          fontSize:20,
+         
+      },
+      all:{
+      backgroundColor: '#2980b9',
+       width:410,
+       height:600,
+       
+      },
 });
 
 

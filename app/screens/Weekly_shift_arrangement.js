@@ -1,10 +1,12 @@
 import React, {useState, Component} from 'react';
-import { FlatList,ActivityIndicator,StyleSheet, Text, View, Image, Keyboard, TouchableOpacity, Button,ScrollView, Alert } from 'react-native';
-import {Get_arrangement_shifts} from '../networking/company_server';
+import {AsyncStorage,FlatList,ActivityIndicator,StyleSheet, Text, View, Image, Keyboard, TouchableOpacity, Button,ScrollView, Alert } from 'react-native';
+//import {Get_arrangement_shifts} from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/company_server';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Calendar} from 'react-native-calendars';
 import Moment from 'moment';
-import SingleShift from '../component/shift_arrangement/singleShift';
+import meneger_server from '.././networking/shiftManager_server';
+import SingleShift from '.././component/shift_arrangement/singleShift';
+
 
 //import RNSchedule from 'rnschedule';
 
@@ -31,12 +33,7 @@ export default class Weekly_shift_arrangement extends Component {
                   },
                 ],
             activeSections:[],
-            markedDates: {
-              '2020-08-15': {selected: true, marked: true, dotColor: 'red'},
-              '2020-08-17': {marked: true},
-              '2020-08-16': {selected: true,marked: true, dotColor: 'red', activeOpacity: 0},
-              '2020-08-18': {disabled: true, disableTouchEvent: true}
-            },
+            markedDates: {},
             rangeToSelect: ['','select day',''], // [minDat,currentDay,maxDay] to choose on the borde,
             isLodingDataMonth: true,
       }
@@ -48,6 +45,7 @@ export default class Weekly_shift_arrangement extends Component {
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
 
+      
       //Alert.alert(date + '-' + month + '-' + year);
       // You can turn it in to your desired format
       let res = {
@@ -68,7 +66,7 @@ export default class Weekly_shift_arrangement extends Component {
   _renderHeader = section => {
     return (
       <View>
-        <Text>{section.title}</Text>
+        <Text style={Styles.AccordionHeader}>{section.title}</Text>
       </View>
     );
   };
@@ -97,11 +95,53 @@ export default class Weekly_shift_arrangement extends Component {
     );
   };
 
-  updateShiftInBorde = (dateSelect)=>
+  formatDay = (date) =>
   {
-    let minDateShift = dateSelect.year+'-'+(dateSelect.month)+'-01';
+    let newMonth=0;
+    let newDay=0;
+
+    if (date.month<10)
+    {
+      newMonth= '0'+date.month;
+    }
+    else
+    {
+      newMonth = date.month;
+    }
+
+    if(date.day < 10)
+    {
+      newDay = '0'+newDay.day;
+    }
+    else
+    {
+      newDay = date.day;
+    }
+
+    let res = {
+      'year': date.year,
+      'month': newMonth,
+      'day': newDay,
+      'dateString':date.year+"-"+newMonth+"-"+newDay
+    }
+
+    return res;
+    
+  }
+
+  updateShiftInBorde = async (dateSelect) =>
+  {
+    this.setState({isLodingDataMonth:true});
+
+    let formatCurrentDay = this.formatDay(this.getCurrentDate());
+    console.log(formatCurrentDay);
+    
+    let formatDateSelect = this.formatDay(dateSelect);
+
+
+    let minDateShift = formatDateSelect.year+'-'+(formatDateSelect.month)+'-01';
     // get the lest day in this month
-    var lestDay = new Date(dateSelect.year, dateSelect.month, 0);
+    var lestDay = new Date(formatDateSelect.year, formatDateSelect.month, 0);
     let maxDateShift = Moment(lestDay).format('YYYY-MM-DD');
 
     // talk to the server
@@ -110,7 +150,24 @@ export default class Weekly_shift_arrangement extends Component {
       "end_date": maxDateShift,
       "statuses": ["scheduled"]
     }
-    let ShiftMonth = Get_arrangement_shifts(toSent);
+
+    console.log(toSent);
+
+    let token = await AsyncStorage.getItem('token');
+    let _id = await AsyncStorage.getItem('_id');
+    
+    let ShiftMonth = await meneger_server.post('/GetShifts',
+    toSent,
+     {
+          headers: {
+              Authorization: "Bearer " + token
+          }
+      }).then(response => {
+        return  response.data;
+      }).catch(err => {
+        Alert.alert("something get wrong, please try again");
+      });
+    //let ShiftMonth = get_shift_from_server(toSent);
 
     this.setState({dataArrangement:ShiftMonth});
 
@@ -121,7 +178,7 @@ export default class Weekly_shift_arrangement extends Component {
 
      Object.keys(ShiftMonth.data).forEach(function (item) {
 
-      tempMarksDays[item]= {marked: true};
+      tempMarksDays[item]= {startingDay: true,textColor:'black', color: '#50cebb', endingDay: true};
       let date = ShiftMonth.data[item];
 
       for(let i=0; i<date.length; i++) // passing all the shift in this day
@@ -129,16 +186,31 @@ export default class Weekly_shift_arrangement extends Component {
         let EmployeesArray = date[i]["employees"];
           for(let i=0; i<EmployeesArray.length;i++)
           {
-            if(EmployeesArray[i]["_id"] == "51") // need to put her ID
+            if(EmployeesArray[i]["_id"] == _id) // need to put her ID
             {
-              tempMarksDays[date[i]["date"]] = {selected: true, marked: true, dotColor: 'red'};
+              tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black', color: '#50cebb',dotColor: '#ffff', endingDay: true};
             }
           }
       }
 
       });
 
+      let currentDay = tempMarksDays[formatCurrentDay.dateString];
+
+      if(currentDay == null) // if there are no mark object in this day
+      {
+        currentDay= {textColor:'#7d2934'}; //mast not white
+      }
+      else
+      {
+        currentDay["textColor"]= '#7d2934';//mast not white
+      }
+      tempMarksDays[formatCurrentDay.dateString] = currentDay;
+
       this.setState({markedDates:tempMarksDays});
+
+      this.setState({isLodingDataMonth:false});
+
   }
 
   update_shift_for_this_day = (day) =>
@@ -238,17 +310,24 @@ export default class Weekly_shift_arrangement extends Component {
 
   }
 
+  get_shift_from_server = (data) =>
+  {
+
+  }
+
   
 
     render() {  
         return(
             
-            <ScrollView>
+            <ScrollView style={Styles.content}>
 
               <View>
               <Calendar
                         // Collection of dates that have to be marked. Default = {}
                         markedDates={this.state.markedDates}
+                         // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+                        markingType={'period'}
                         // Initially visible month. Default = Date()
                         current={this.state.rangeToSelect}
                         // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
@@ -294,9 +373,12 @@ export default class Weekly_shift_arrangement extends Component {
 
               </View>
 
-            <Text>{this.state.rangeToSelect[1]}</Text>
+            <Text style={Styles.dateShow}>{this.state.rangeToSelect[1]}</Text>
             <View>
-                {this.state.rangeToSelect[1] == 'select day' ? (null):(this.state.isLodingDataMonth ?(
+                {this.state.rangeToSelect[1] == 'select day' ? ((this.state.isLodingDataMonth ?(
+                                    <View>
+                                      <ActivityIndicator  size="large" color="#0000ff" />
+                                    </View>):(null))):(this.state.isLodingDataMonth ?(
                                     <View>
                                       <ActivityIndicator  size="large" color="#0000ff" />
                                     </View>):(
@@ -324,6 +406,28 @@ const Styles = StyleSheet.create({
         borderColor: '#f5f5f5',
         borderWidth: 4,
         borderRadius: 10,
+    },
+    content:
+    {
+      backgroundColor:'#36485f',
+
+    },
+    dateShow:
+    {
+      textAlign: 'center',
+      backgroundColor:'#1ac4b0',
+      fontSize:18,
+      fontWeight: 'bold',
+      color:'#ffff',
+
+    },
+    AccordionHeader:
+    {
+      textAlign: 'center',
+      color:'#ffff',
+      borderWidth: 1,
+      borderRadius: 10,
+      backgroundColor:'#2980b9',
     },
     container:
     {
