@@ -47,8 +47,8 @@ class Employees extends Component {
             <td>{employee["first name"]}</td>
             <td>{employee["last name"]}</td>
             <td>{employee["id number"]}</td>
-            <td>{employee["job type"].map((jobType,index) => <li key = {index}> {jobType} </li>)} </td>
-            <td >{employee["phone"]}</td>
+            <td>{employee["job type"].map((jobType,index) => <li key = {index}>{jobType}</li>)} </td>
+            <td>{employee["phone"]}</td>
             <td>{employee["email"]}</td>
             <td>{employee["address"]}</td>
             <td>{employee["date of birth"]}</td>
