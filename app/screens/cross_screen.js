@@ -8,6 +8,7 @@ export default class Cross_screen extends Component {
       super(inside);
       this.state = {
           Name:'',
+          isHaveCompany: false,
 
       }
     }
@@ -20,8 +21,17 @@ export default class Cross_screen extends Component {
   {
     let firstName = await AsyncStorage.getItem('name');
     let name = "welcome "+ firstName;
+    let company = await AsyncStorage.getItem('company');
+    
+    if(company != "null")
+      {
+        this.setState({isHaveCompany:true});
+      }
+    
     this.setState({Name:name});
+
   }
+
 
   render() {  
         return(
@@ -38,28 +48,39 @@ export default class Cross_screen extends Component {
           </View>
 
                 <View  style={Styles.line}>
+                  {this.state.isHaveCompany ?(
+                            <View>
+                            <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'}  nevTo = {'Weekly_shift_arrangement'}/>
+                          </View>
+                  ):(null)}
+
+                </View>
+          
+                <View  style={Styles.line}>
+                {this.state.isHaveCompany ?(
                   <View>
-                    <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'}  nevTo = {'Weekly_shift_arrangement'}/>
+                  <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  nevTo = {'Switching_shifts'}/>
                   </View>
-                </View>
-          
-                <View  style={Styles.line}>
-                  <View>
-                    <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  nevTo = {'Switching_shifts'}/>
-                    </View>
+                  ):(null)}
+
                 </View>
 
                 <View  style={Styles.line}>
+                {this.state.isHaveCompany ?(
                   <View>
-                   <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'}  nevTo = {'Messages'}/>
-                   </View>
+                  <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'}  nevTo = {'Messages'}/>
+                  </View>
+                  ):(null)}
+
                 </View>
           
 
                 <View  style={Styles.line}>
+                {this.state.isHaveCompany ?(
                   <View>
-                <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  nevTo = {'User_preferences'} />
-                </View>
+                  <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  nevTo = {'User_preferences'} />
+                  </View>
+                  ):(null)}
                </View>
 
         </View>
