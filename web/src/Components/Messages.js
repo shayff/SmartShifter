@@ -157,7 +157,6 @@ class Messages extends Component {
             attached: this.state.attached,
         }
         
-        console.log(meesage)
         if(this.validateMessage()) {
             sendMessage(meesage).then(res => {
                 window.location.reload(false);

@@ -88,7 +88,7 @@ class UpdateShift extends Component {
         const shift = this.props.location.state.detail;
         const dayParts = this.ParseDayParts(shift["day part"]);
         const employeesForShift = this.ParseEmployeesForShift(shift.employees);
-        console.log(shift)
+        
         if (this._isMounted)
         {
             this.setState({
@@ -196,7 +196,6 @@ class UpdateShift extends Component {
             shift_note: this.state.shift_note,
         }
 
-        console.log(newShift)
          if(this.validateRegisterForm()) {
             updateShift(newShift).then(res => {
             this.props.history.push(`/generateShifts`)

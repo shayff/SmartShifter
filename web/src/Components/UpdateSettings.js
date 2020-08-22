@@ -31,7 +31,7 @@ class UpdateSettings extends Component {
                 jobTypes.push(selectedList[i].value)
             }
 
-            this.setState({companyJobTypes: jobTypes},()=>console.log(this.state.companyJobTypes));
+            this.setState({companyJobTypes: jobTypes});
         }
     }
 
