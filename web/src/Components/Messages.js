@@ -122,8 +122,9 @@ class Messages extends Component {
         this._isMounted = true;
 
         getMessages().then(userMessages =>{
-            if (userMessages)
+            if (userMessages && userMessages.length !== 0)
             {
+                console.log("yes")
                 if (this._isMounted)
                 {
                     this.setState({messages: userMessages});
@@ -159,7 +160,7 @@ class Messages extends Component {
         console.log(meesage)
         if(this.validateMessage()) {
             sendMessage(meesage).then(res => {
-            this.props.history.push(`/meesages`)
+                window.location.reload(false);
            })
         }
     }
@@ -191,7 +192,7 @@ class Messages extends Component {
                         </tbody>
                         </table>
                 </div>
-                <form name="myForm7">
+                <form name="myForm7" onSubmit={this.onSubmit}>
                     <div className="input-group mb-3">
                     <label htmlFor="employees_for_shift">Choose To Who To Send</label>   
                     <Multiselect
