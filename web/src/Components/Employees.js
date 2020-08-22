@@ -82,7 +82,7 @@ class Employees extends Component {
     getListListOfEmployees()
     {
         ListOfEmployees().then(data => {
-            if (data.length === 0)
+            if (data && data.length === 0)
             {
                 alert("No Employees To Show")
             }

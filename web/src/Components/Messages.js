@@ -8,12 +8,15 @@ class Messages extends Component {
 
     constructor() {
         super()
-        this.state = { messages: [],
+        this.state = { 
+            messages: [],
             arrEmployees:[],
+            view: [],
             textMessage:'',
             toWhoToSend:[],
-            title:[],
-            attached:[]
+            title:'',
+            attached:[],
+            isOptionAll: false
         }
 
         this.onChange = this.onChange.bind(this)
@@ -26,7 +29,40 @@ class Messages extends Component {
     }
 
     onSelectOrRemoveEmployees(selectedList) {
-        this.setState({toWhoToSend: selectedList});
+        // let who=[];
+        // let isAll;
+        // let showView;
+
+        // console.log(selectedList)
+        // console.log(selectedList.indexOf(object => object.value === 'All'))
+        console.log(selectedList.indexOf(object => (object.value === 'All') > -1))
+
+        // if(selectedList.indexOf(object => (object.key === 'All') > -1))
+        // {
+        //     for(let i=0; i<this.state.arrEmployees.length; i++)
+        //     {
+        //         who.push(parseInt(this.state.arrEmployees[i]["_id"]))
+        //     }
+
+        //     console.log("yes")
+        //     isAll = true;
+        //     showView = [{key:'All' ,value: 'All'}];
+        // }
+        // else
+        // {
+        //     for(let i=0; i<selectedList.length; i++)
+        //     {
+        //         who.push(parseInt(selectedList[i].key))
+        //     }
+
+        //     console.log("no")
+        //     isAll = false;
+        //     showView = selectedList;
+        // }
+        
+        // this.setState({toWhoToSend: who,
+        //                isOptionAll: isAll,
+        //                view: showView});
     }
 
     initializeTable = (userMessages) => {
@@ -92,7 +128,7 @@ class Messages extends Component {
             }
         });  
         
-        ListOfEmployees().then(employees =>{ 
+        ListOfEmployees().then(employees =>{
             if (employees)
             {
                 if (this._isMounted)
@@ -106,24 +142,8 @@ class Messages extends Component {
       onSubmit (e) {
         e.preventDefault()
 
-        let who=[];
-        if(this.state.toWhoToSend[0].key === 'All')
-        {
-            for(let i=0; i<this.state.arrEmployees.length; i++)
-            {
-                who.push(parseInt(this.state.arrEmployees[i]["_id"]))
-            }
-        }
-        else
-        {
-            for(let i=0; i<this.state.toWhoToSend.length; i++)
-            {
-                who.push(parseInt(this.state.toWhoToSend[i].key))
-            }
-        }
-
         const meesage = {
-            toWho: who,
+            toWho: this.state.toWhoToSend,
             title: this.state.title,
             textMessage: this.state.textMessage,
             attached: this.state.attached,
@@ -169,6 +189,8 @@ class Messages extends Component {
                     <label htmlFor="employees_for_shift">Choose To Who To Send</label>   
                     <Multiselect
                     options= {this.initializeOptions()}
+                    selectedValues={this.state.view}
+                    selectionLimit={this.state.isOptionAll === true ? '1' : null}
                     style={{searchBox: {background: 'white'}}}
                     displayValue="value"
                     closeIcon="cancel"
