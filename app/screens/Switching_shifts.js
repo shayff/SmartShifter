@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { ActivityIndicator,AsyncStorage,SafeAreaView, View, FlatList, StyleSheet, Text,ScrollView } from 'react-native';
+import { ActivityIndicator,AsyncStorage,SafeAreaView, View, FlatList, StyleSheet, Text,TouchableOpacity } from 'react-native';
 import SwapSingle from '../component/Swap_shift/SwapSingle';
 import shiftManager_server from '../networking/shiftManager_server';
 
@@ -15,7 +15,7 @@ export default class Switching_shifts extends Component {
             },
             listMasseges : [], 
             thereIsDataFromServer : false,
-            // frontText: "loding..." 
+            frontText: "loding..." 
 
         }                              
     }
@@ -79,6 +79,7 @@ export default class Switching_shifts extends Component {
         this.setState({listMasseges:updatList});
 
         this.setState({thereIsDataFromServer:true});
+        this.setState({frontText:"Exit"});
 
     }
 
@@ -89,23 +90,39 @@ export default class Switching_shifts extends Component {
         }
 
 
-        render() {  
+        render() { 
+            
             if(this.state.thereIsDataFromServer == false)
             {
                 return (<View style={Styles.center}><ActivityIndicator  size="large" color="#0000ff" /></View>);
             }
             return(
-                    <SafeAreaView style={Styles.container} >
+            <View  style={Styles.content}>
+                    <View  style={Styles.saveElement}>
+                        <TouchableOpacity style={Styles.touchArea2} onPress={this.save_and_exit} >
+                            <Text style={Styles.Text2}>{this.state.frontText}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={Styles.container} >
                             <FlatList
                                 data={this.state.listMasseges}
                                 keyExtractor={(item, index) => {return item.id.toString();}}
                                 renderItem={({item})=>(<SwapSingle item={item}/>)}
                             />
-                    </SafeAreaView>
+                    </View>
+            </View>
             );
         }
+        
 }
-    
+{/* <SafeAreaView style={Styles.container} >
+<FlatList
+    data={this.state.listMasseges}
+    keyExtractor={(item, index) => {return item.id.toString();}}
+    renderItem={({item})=>(<SwapSingle item={item}/>)}
+/>
+</SafeAreaView>
+     */}
 const Styles = StyleSheet.create({
 
     container: {
@@ -125,6 +142,11 @@ const Styles = StyleSheet.create({
         paddingBottom:30,
         color:"#638cb0",
     },
+    Text2: {
+        alignSelf:'center',
+        color: '#ffff',
+        fontWeight: 'bold',
+    },
     content: {
         padding:16,
         backgroundColor:'#36485f',
@@ -136,6 +158,17 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#1d9aad',
+    },
+    touchArea2: {
+        width: 200,
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#1d9aad',
+    },
+    saveElement: {
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })
 

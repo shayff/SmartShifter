@@ -46,7 +46,7 @@ export default class SwapSingle extends Component {
       });
 
       this.setState({color:'#f08080'});
-      this.props.item.status=status_new;
+     // this.props.item.status=status_new;
 
     } 
 
