@@ -36,10 +36,7 @@ def doAddShifts(user_input):
 
             print(data)
             return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200
-
         else:
             return jsonify({'ok': False, 'msg': 'User has no company'}), 401
-
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
-
