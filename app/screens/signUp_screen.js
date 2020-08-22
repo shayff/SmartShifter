@@ -12,7 +12,7 @@ export default class SignUp extends Component {
             <ScrollView style={Styles.container}>
 
                 <View style={global_styles.logo_container}>
-                <Image style={global_styles.image} source={require('../component/login/images/pngguru.com.png')}/>
+                <Image style={global_styles.image} source={require('../component/login/images/logo.png')}/>
                 <Text style={global_styles.smallTitle, Styles.smallTitle}>Happy to see you joining</Text>
                 </View>
 

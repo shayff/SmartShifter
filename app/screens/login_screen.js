@@ -13,7 +13,7 @@ export default class Login extends Component {
                 <Text style={Styles.bigTitle}>SmartShifter</Text>
                 </View>
                 <View style={Styles.logo_container}>
-                <Image style={Styles.image} source={require('../component/login/images/pngguru.com.png')}/>
+                <Image style={Styles.image} source={require('../component/login/images/logo.png')}/>
                 <Text style={Styles.smallTitle}>Make It Simple</Text>
                 </View>
                 <View>
