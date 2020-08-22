@@ -15,8 +15,8 @@ def doAddShifts(user_input):
         data = data["data"]
 
         #check if user has company
-        current_user = get_jwt_identity()
-        result = users_collection.find_one({'_id': current_user['_id']})
+        logged_in_user = get_jwt_identity()
+        result = users_collection.find_one({'_id': logged_in_user['_id']})
         if "company" in result:
             #update data of relevant company
             company_id = result["company"]

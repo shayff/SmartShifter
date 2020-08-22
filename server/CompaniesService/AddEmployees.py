@@ -15,8 +15,8 @@ def doAddEmployees(user_input):
     data = validate_addemployees(user_input)
     if data['ok']:
         employee_to_add = data['data']
-        current_user = get_jwt_identity()
-        result = users_collection.find_one({'_id': current_user['_id']})
+        logged_in_user = get_jwt_identity()
+        result = users_collection.find_one({'_id': logged_in_user['_id']})
         if 'company' in result:
             company_id = result['company']
 
@@ -28,7 +28,7 @@ def doAddEmployees(user_input):
                 del employee_to_add["email"]
 
                 # update employees in the company
-                users_collection.find_one_and_update({'_id': employee_to_add["_id"]}, {'$set': {'company': company_id}})
+                users_collection.find_one_and_update({'_id': employee_to_add["id"]}, {'$set': {'company': company_id}})
 
                 doc = companies_collection.find_one_and_update({'_id': company_id},
                                                                {'$addToSet': {"employees": employee_to_add}})

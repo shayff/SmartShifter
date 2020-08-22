@@ -22,9 +22,12 @@ def doUpdateShift(data):
         if "company" in result:
             #update data of relevant company
             company_id = result["company"]
+            print(company_id)
             shift_id = data['id']
+            print(shift_id)
             shift = companies_collection.find_one({'_id': company_id},
                                                 {"shifts": {"$elemMatch": {"id": shift_id}}})
+            print(shift)
             shift = shift["shifts"][0]
 
             #Update only the field that we need
@@ -35,13 +38,10 @@ def doUpdateShift(data):
             #update in database
             doc = companies_collection.update_one({'_id': company_id, 'shifts.id': shift_id}, {'$set':
                                                                                                    {'shifts.$': shift}})
-            if doc.modified_count > 0:
-                return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200
-            else:
-                return jsonify({'ok': False, 'msg': 'shift not exist'}), 400
+
+            return jsonify({'ok': True, 'msg': 'Update Shift successfully'}), 200
         else:
             return jsonify({'ok': False, 'msg': 'User has no company'}), 401
-
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
 

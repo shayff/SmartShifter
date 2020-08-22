@@ -4,9 +4,10 @@
     #3. Create Company
     #4. Add employees to company
     #5. set prefernce from manager
-    #6. set prefernce from workers
-    #7. Create shifts
-    #8. Build shift schedule
+    #6. Send messages
+    #7. set prefernce from workers
+    #8. Create shifts
+    #9. Build shift schedule
 
 from string import Formatter
 import datetime
@@ -19,8 +20,8 @@ from faker import Faker
 
 def test_Fulltest():
     #Settings
-    num_of_users = 2
-    start_date = datetime.datetime(year=2020, month=8, day=30)
+    num_of_users = 10
+    start_date = datetime.datetime(year=2020, month=8, day=23)
 
     #Prepare test
     he_fake = Faker("he_IL")
@@ -52,31 +53,35 @@ def test_Fulltest():
     #5. Set prefernce from manager
     set_prefence_from_manager(users, week)
 
-    #6 Send message
+    #6 Send messages
     send_messages_to_employee(users)
 
-    #6. Set prefernce from workers
+    #7. Set prefernce from workers
     set_prefernce_from_workers(num_of_users, users, week)
 
-    #7. Create shifts
+    #8. Create shifts
     print("========= Create Shifts =========")
+    create_shifts(fake, users, week)
+
+
+def create_shifts(fake, users, week):
     for day in range(7):
         for shift in range(random.randint(2, 4)):
-            start,end, daypart = rand_hours_for_shift()
+            start, end, daypart = rand_hours_for_shift()
             response = comp_app.test_client().post(
                 '/companies/addshift',
                 headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
                 data=json.dumps({
-                "name": fake.color() + "shift",
-                "start time": start,
-                "end time": end,
-                "job type": "waiter",
-                "difficulty": random.randint(1, 5),
-                "date": week[day],
-                "amount": random.randint(1, 2),
-                "day part": daypart,
-                "employees": [],
-                "note": ""
+                    "name": fake.color() + "shift",
+                    "start time": start,
+                    "end time": end,
+                    "job type": "waiter",
+                    "difficulty": random.randint(1, 5),
+                    "date": week[day],
+                    "amount": random.randint(1, 2),
+                    "day part": daypart,
+                    "employees": [],
+                    "note": ""
                 }),
                 content_type='application/json',
             )
@@ -162,9 +167,10 @@ def add_employees_to_company(num_of_users, users):
 
 
 def send_messages_to_employee(users):
-    users_id = [user["id"] for user in users if user["id"] != 0]
+    users_id = [user["id"] for user in users]
+    users_id.pop(0)
 
-    respone = memb_app.test_client().post(
+    response = memb_app.test_client().post(
         '/sendmessage',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
@@ -172,7 +178,6 @@ def send_messages_to_employee(users):
             "title" : "wellcome to shifter",
             "message" : "Hope you will have fun from this test!"
         }),
-
         content_type='application/json',
     )
     data = json.loads(response.get_data(as_text=True))
@@ -261,7 +266,7 @@ def get_rand_prefers():
 def rand_hours_for_shift():
     minutes = [0, 15, 30, 45]
     time_of_shift = random.randint(5, 6)
-    hour = random.randint(7, 18)
+    hour = random.randint(6, 17)
     start = timedelta(hours=hour, minutes=minutes[random.randint(0, 3)])
     end = start + timedelta(hours=time_of_shift)
     daypart = set()
