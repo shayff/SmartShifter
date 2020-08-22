@@ -21,11 +21,12 @@ def doLogin(user_input):
         if user and user['password'] == data['password']:
             del user['password']
             # create jwt token
-            token = {'_id': user['_id'], 'email': user['email']}
+            token = {"_id": user['_id'], 'email': user['email']}
             access_token = create_access_token(identity=user)
             refresh_token = create_refresh_token(identity=user)
-            user['token'] = access_token
-            user['refresh'] = refresh_token
+            user["token"] = access_token
+            user["refresh"] = refresh_token
+            user["is_has_company"] = "company" in user
             print(user)
 
             #Check if user is manager of company

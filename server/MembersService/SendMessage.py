@@ -21,7 +21,6 @@ def doSendMessage(data):
     array_to_send = []
     not_exist = False
     if data["ok"]:
-
         # Check if all users exist
         data = data['data']
         for user_id in data['to']:
@@ -58,8 +57,6 @@ def doSendMessage(data):
                 users_collection.update({'_id': user_id}, {'$push': {'messages': {'$each': [{'id': data['_id'],
                                                                                              'status': 'unread'}],
                                                                                   '$position': 0}}})
-            print("message created")
             return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
-
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
