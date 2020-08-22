@@ -27,6 +27,10 @@ export default class Cross_screen extends Component {
       {
         this.setState({isHaveCompany:true});
       }
+      else
+      {
+        this.setState({isHaveCompany:false});
+      }
     
     this.setState({Name:name});
 

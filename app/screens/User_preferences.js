@@ -20,6 +20,7 @@ export default class User_preferences extends Component {
             whichTypePrefer: [false,false,false],
             availability: -1,
             thereIsDataFromServer: false,
+            menegerSendShift : false,
         }
         
     }
@@ -28,15 +29,23 @@ export default class User_preferences extends Component {
          componentDidMount = async () => {
     
             let token = await AsyncStorage.getItem('token');
-            console.log("GOODB ");
 
             const response = await company_server.get('/companies/GetPreferences', {
                 headers: {
                     Authorization: "Bearer " + token
                 }
             }).then(response => {
-                console.log("GOOD " + response.data.data);
-                this.setState({ShiftsFromManager:response.data.data}, () => this.daysShift());
+                console.log("look= " + response.data);
+                if(response.data.data == null)
+                {
+                    this.setState({menegerSendShift:false});
+                }
+                else
+                {
+                    this.setState({ShiftsFromManager:response.data.data}, () => this.daysShift());
+                    this.setState({menegerSendShift:true});
+                }
+                 this.setState({thereIsDataFromServer:true});
 
 
                 return  response.data;
@@ -51,7 +60,6 @@ export default class User_preferences extends Component {
         daysShift = () =>
         {
             let update = this.getShiftByDay();
-            this.setState({thereIsDataFromServer:true});
             this.setState({whichShiftToShowe:update});
             //this.state.whichShiftToShowe = update;
             //this.state.whichShiftToShowe = true;
@@ -197,56 +205,63 @@ export default class User_preferences extends Component {
             return (<View style={Styles.center}><ActivityIndicator  size="large" color="#0000ff" /></View>);
         }
         return(
-            
+
             <ScrollView style={Styles.container}>
+                {this.state.menegerSendShift ? (
+                    <View>
+                    <View style={Styles.line}>
+                        <View style={this.state.whichTypePrefer[0] ? Styles.selectButton : Styles.UnselectButton}>
+                            <Button title="not Available" color="#cf2740" onPress = {()=> this.updateColors({typeOfButton: 0}) }/>
+                        </View>
 
-                <View style={Styles.line}>
-                    <View style={this.state.whichTypePrefer[0] ? Styles.selectButton : Styles.UnselectButton}>
-                        <Button title="not Available" color="#cf2740" onPress = {()=> this.updateColors({typeOfButton: 0}) }/>
+                        <View style={this.state.whichTypePrefer[1] ? Styles.selectButton : Styles.UnselectButton}>
+                            <Button title="Available" color = "#45adba" onPress = {()=> this.updateColors({typeOfButton: 1}) }/>
+                        </View>
+
+                        <View style={this.state.whichTypePrefer[2] ? Styles.selectButton : Styles.UnselectButton}>
+                            <Button title="Prefer" color = "#522b8a" onPress = {()=> this.updateColors({typeOfButton: 2}) }/>
+                        </View>
                     </View>
 
-                    <View style={this.state.whichTypePrefer[1] ? Styles.selectButton : Styles.UnselectButton}>
-                        <Button title="Available" color = "#45adba" onPress = {()=> this.updateColors({typeOfButton: 1}) }/>
-                    </View>
+                    <ScrollView>
+                        <View style={Styles.line}>
+                            <DaySquare dayName={ 'Sunday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.sunday.date} whichShiftToShowe = {this.state.whichShiftToShowe[0]} clickSelectPreferce = {this.update_select_prefers} />
+                        </View>   
 
-                    <View style={this.state.whichTypePrefer[2] ? Styles.selectButton : Styles.UnselectButton}>
-                        <Button title="Prefer" color = "#522b8a" onPress = {()=> this.updateColors({typeOfButton: 2}) }/>
-                    </View>
+                        <View style={Styles.line}>
+                            <DaySquare dayName={ 'monday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.monday.date} whichShiftToShowe = {this.state.whichShiftToShowe[1]} clickSelectPreferce = {this.update_select_prefers} />
+                        </View>
+
+                        <View style={Styles.line}>
+                            <DaySquare dayName={ 'Tuesday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.tuesday.date} whichShiftToShowe = {this.state.whichShiftToShowe[2]} clickSelectPreferce = {this.update_select_prefers} />
+                        </View>
+
+                        <View style={Styles.line}>  
+                            <DaySquare dayName={ 'Wednesday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.wednesday.date} whichShiftToShowe = {this.state.whichShiftToShowe[3]} clickSelectPreferce = {this.update_select_prefers} />
+                        </View>
+
+                        <View style={Styles.line}>
+                            <DaySquare dayName={ 'Thursday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.thursday.date} whichShiftToShowe = {this.state.whichShiftToShowe[4]} clickSelectPreferce = {this.update_select_prefers} />
+                        </View>
+
+                        <View style={Styles.line}>
+                            <DaySquare dayName={ 'Friday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.friday.date} whichShiftToShowe = {this.state.whichShiftToShowe[5]} clickSelectPreferce = {this.update_select_prefers} />
+                        </View>
+
+                        <View style={Styles.line}>
+                            <DaySquare dayName={ 'Saturday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.saturday.date} whichShiftToShowe = {this.state.whichShiftToShowe[6]} clickSelectPreferce = {this.update_select_prefers} />
+                        </View>
+
+                        <TouchableOpacity style={Styles.sendArea} onPress = {() => this.send_shift_weekly_data()}>
+                            <Text style={Styles.sendText}>Send and Exit</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
                 </View>
 
-                <ScrollView>
-                    <View style={Styles.line}>
-                        <DaySquare dayName={ 'Sunday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.sunday.date} whichShiftToShowe = {this.state.whichShiftToShowe[0]} clickSelectPreferce = {this.update_select_prefers} />
-                    </View>   
-
-                    <View style={Styles.line}>
-                        <DaySquare dayName={ 'monday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.monday.date} whichShiftToShowe = {this.state.whichShiftToShowe[1]} clickSelectPreferce = {this.update_select_prefers} />
-                    </View>
-
-                    <View style={Styles.line}>
-                        <DaySquare dayName={ 'Tuesday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.tuesday.date} whichShiftToShowe = {this.state.whichShiftToShowe[2]} clickSelectPreferce = {this.update_select_prefers} />
-                    </View>
-
-                    <View style={Styles.line}>  
-                        <DaySquare dayName={ 'Wednesday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.wednesday.date} whichShiftToShowe = {this.state.whichShiftToShowe[3]} clickSelectPreferce = {this.update_select_prefers} />
-                    </View>
-
-                    <View style={Styles.line}>
-                        <DaySquare dayName={ 'Thursday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.thursday.date} whichShiftToShowe = {this.state.whichShiftToShowe[4]} clickSelectPreferce = {this.update_select_prefers} />
-                    </View>
-
-                    <View style={Styles.line}>
-                        <DaySquare dayName={ 'Friday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.friday.date} whichShiftToShowe = {this.state.whichShiftToShowe[5]} clickSelectPreferce = {this.update_select_prefers} />
-                    </View>
-
-                    <View style={Styles.line}>
-                        <DaySquare dayName={ 'Saturday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.saturday.date} whichShiftToShowe = {this.state.whichShiftToShowe[6]} clickSelectPreferce = {this.update_select_prefers} />
-                    </View>
-
-                    <TouchableOpacity style={Styles.sendArea} onPress = {() => this.send_shift_weekly_data()}>
-                        <Text style={Styles.sendText}>Send and Exit</Text>
-                    </TouchableOpacity>
-                </ScrollView>
+                ):(
+                    <View><Text>There is no shifts to select</Text></View>
+                )}
+                
             </ScrollView>
         
         );
