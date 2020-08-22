@@ -16,7 +16,7 @@ class Messages extends Component {
             toWhoToSend:[],
             title:'',
             attached:[],
-            isOptionAll: false
+            isOptionAllChosen: false
         }
 
         this.onChange = this.onChange.bind(this)
@@ -28,41 +28,48 @@ class Messages extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
+    isAllOptionInArray(array)
+    {
+        for(let i = 0; i<array.length; i++)
+        {
+            if(array[i].key === 'All')
+            {
+                return true;
+            }
+        }
+
+        return false
+    }
+
     onSelectOrRemoveEmployees(selectedList) {
-        // let who=[];
-        // let isAll;
-        // let showView;
+        let who=[];
+        let isAllChosen;
+        let showView;
 
-        // console.log(selectedList)
-        // console.log(selectedList.indexOf(object => object.value === 'All'))
-        console.log(selectedList.indexOf(object => (object.value === 'All') > -1))
+        if(this.isAllOptionInArray(selectedList))
+        {
+            for(let i=0; i<this.state.arrEmployees.length; i++)
+            {
+                who.push(parseInt(this.state.arrEmployees[i]["_id"]))
+            }
 
-        // if(selectedList.indexOf(object => (object.key === 'All') > -1))
-        // {
-        //     for(let i=0; i<this.state.arrEmployees.length; i++)
-        //     {
-        //         who.push(parseInt(this.state.arrEmployees[i]["_id"]))
-        //     }
+            isAllChosen = true;
+            showView = [{key:'All' ,value: 'All'}];
+        }
+        else
+        {
+            for(let i=0; i<selectedList.length; i++)
+            {
+                who.push(parseInt(selectedList[i].key))
+            }
 
-        //     console.log("yes")
-        //     isAll = true;
-        //     showView = [{key:'All' ,value: 'All'}];
-        // }
-        // else
-        // {
-        //     for(let i=0; i<selectedList.length; i++)
-        //     {
-        //         who.push(parseInt(selectedList[i].key))
-        //     }
-
-        //     console.log("no")
-        //     isAll = false;
-        //     showView = selectedList;
-        // }
+            isAllChosen = false;
+            showView = selectedList;
+        }
         
-        // this.setState({toWhoToSend: who,
-        //                isOptionAll: isAll,
-        //                view: showView});
+        this.setState({toWhoToSend: who,
+                       isOptionAllChosen: isAllChosen,
+                       view: showView});
     }
 
     initializeTable = (userMessages) => {
@@ -190,7 +197,7 @@ class Messages extends Component {
                     <Multiselect
                     options= {this.initializeOptions()}
                     selectedValues={this.state.view}
-                    selectionLimit={this.state.isOptionAll === true ? '1' : null}
+                    selectionLimit={this.state.isOptionAllChosen === true ? '1' : null}
                     style={{searchBox: {background: 'white'}}}
                     displayValue="value"
                     closeIcon="cancel"
