@@ -37,6 +37,7 @@ export default class Messages extends Component {
         console.log("EROR "+err.response.data);
 
       });
+      console.log(response);
 
       this.setState({massegesData:response});
       
@@ -47,9 +48,9 @@ export default class Messages extends Component {
         }
         
         let updatList=[];
-
+        console.log(this.state.massegesData.data.length);
         let numberOfMasseges = this.state.massegesData.data.length;
-       
+        
         for (let i =0; i<numberOfMasseges; i++)
         {
             let temp = {name_sender: this.state.massegesData.data[i].name_sender,

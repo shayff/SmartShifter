@@ -163,7 +163,7 @@ export default class User_preferences extends Component {
         let token = await AsyncStorage.getItem('token');
 
         const response = await company_server.post('/companies/PrefenceFromWorker',
-        
+        toSend,
          {
               headers: {
                   Authorization: "Bearer " + token

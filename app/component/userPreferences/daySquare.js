@@ -88,30 +88,24 @@ Text: {
     color: '#ffff'
 },
 NotAvailableButton : {
-    borderColor: '#9c2921',
-    borderWidth: 3,
+    borderColor: '#cf2740',
+    borderWidth: 4,
     borderRadius: 10,
-    //padding:1,
+
     width:120,
-    backgroundColor: '#9c2921',
-
-    
-
+   // backgroundColor: '#9c2921',
 },
 AvailableButton : {
     borderColor: '#45adba',
-    borderWidth: 3,
+    borderWidth: 4,
     borderRadius: 10,
-  //  padding:1,
     width:120,
 },
 PreferButton : {
     borderColor: '#522b8a',
-    borderWidth: 3,
+    borderWidth: 4,
     borderRadius: 10,
-     //padding:1,
     width:120,
-
 },
 
 
