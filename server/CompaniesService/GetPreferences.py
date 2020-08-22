@@ -11,9 +11,9 @@ users_collection = db['users']
 
 
 def doGetPreferences():
-    current_user = get_jwt_identity()
+    logged_in_user = get_jwt_identity()
 
-    result = users_collection.find_one({'_id': current_user['_id']})
+    result = users_collection.find_one({'_id': logged_in_user['_id']})
 
     if 'company' not in result:
         return jsonify({'ok': False, 'msg': 'User has no company'}), 401

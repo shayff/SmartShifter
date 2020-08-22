@@ -21,7 +21,9 @@ def doListOfEmployees():
         companyId = result['company']
         company = companies_collection.find_one({'_id': companyId})
         employees = company['employees']
+        print(employees)
         for employee in employees:
+            print(employee)
             employeeFromDb = users_collection.find_one({'_id': employee['id']})
             employeeFromDb['job type'] = employee['job type']
             employeeFromDb['rank'] = employee['rank']

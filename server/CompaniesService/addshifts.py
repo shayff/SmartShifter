@@ -9,8 +9,8 @@ db = cluster[MongoConfig['ClusterName']]
 companies_collection = db["companies"]
 users_collection = db["users"]
 
-def doAddShifts(data):
-    data = validate_addshifts(data)
+def doAddShifts(user_input):
+    data = validate_addshifts(user_input)
     if data["ok"]:
         data = data["data"]
 

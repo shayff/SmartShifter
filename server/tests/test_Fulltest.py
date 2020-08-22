@@ -52,7 +52,8 @@ def test_Fulltest():
     #5. Set prefernce from manager
     set_prefence_from_manager(users, week)
 
-
+    #6 Send message
+    send_messages_to_employee(users)
 
     #6. Set prefernce from workers
     set_prefernce_from_workers(num_of_users, users, week)
@@ -162,6 +163,7 @@ def add_employees_to_company(num_of_users, users):
 
 def send_messages_to_employee(users):
     users_id = [user["id"] for user in users if user["id"] != 0]
+
     respone = memb_app.test_client().post(
         '/sendmessage',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
