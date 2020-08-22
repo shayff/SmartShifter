@@ -45,7 +45,7 @@ def doGetShiftsSwaps(userInput):
                 doc = companies_collection.find_one({'_id': company_id},{"shifts": { "$elemMatch" : {"id":swap["shift_id"]}}} )
                 doc = doc["shifts"][0]
                 print(doc)
-
+                print(swaps_filtered )
                 #if its emplotee or manager
                 if (current_user["_id"] not in company['managers']):
                     # find job
@@ -64,6 +64,10 @@ def doGetShiftsSwaps(userInput):
                         print(to_del)
                         swaps_filtered.remove(to_del)
 
+                else:
+                    swap.update({"shift_details": doc})
+
+                print(swaps_filtered)
             return jsonify({"ok": True, "data": swaps_filtered}), 200
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
