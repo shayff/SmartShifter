@@ -26,8 +26,6 @@ def doDeleteShift(user_input):
             result = companies_collection.update_one({'_id': company_id}, {'$pull': {'shifts': {'id': data['id']}}})
 
             if result.modified_count > 0:
-                # update counter shifts in company
-                companies_collection.find_one_and_update({'_id': company_id}, {'$inc': {'shifts_counter': -1}})
                 return jsonify({'ok': True, 'msg': 'delete shift successfully'}), 200
             else:
                 return jsonify({'ok': True, 'msg': 'Shift is not exist'}), 200
