@@ -176,7 +176,7 @@ class Employees extends Component {
                         </tbody>
                         </table>
                         <div>
-                            <label htmlFor="employees_for_shift">Filter By Job Type</label>   
+                            <label htmlFor="job_type_filter">Filter By Job Type</label>   
                             <Multiselect
                             options= {this.initializeOptions()}
                             style={{searchBox: {background: 'white'}}}

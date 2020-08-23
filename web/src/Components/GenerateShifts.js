@@ -12,13 +12,13 @@ class GenerateShifts extends Component {
         this.state = {
             arrShiftsNotScheduled :[],
             arrEmployees:[],
-            sunday:moment().day(7),
-            monday:moment().day(8),
-            tuesday:moment().day(9),
-            wednesday:moment().day(10),
-            thursday:moment().day(11),
-            friday:moment().day(12),
-            saturday:moment().day(13)
+            sunday:moment().day(7).format('YYYY-MM-DD') ,
+            monday:moment().day(8).format('YYYY-MM-DD') ,
+            tuesday:moment().day(9).format('YYYY-MM-DD') ,
+            wednesday:moment().day(10).format('YYYY-MM-DD') ,
+            thursday:moment().day(11).format('YYYY-MM-DD') ,
+            friday:moment().day(12).format('YYYY-MM-DD') ,
+            saturday:moment().day(13).format('YYYY-MM-DD') 
         }
 
         this.onSubmit = this.onSubmit.bind(this)
@@ -48,13 +48,13 @@ class GenerateShifts extends Component {
 
     updateDatesAndGetShifts()
     {
-        const minDate = moment().day(7).format('YYYY-MM-DD');
-        const maxDate = moment().day(13).format('YYYY-MM-DD');
+        const minDate = this.state.sunday;
+        const maxDate = this.state.saturday;
   
          const shifts ={
              start_date: minDate, 
              end_date: maxDate,
-             statuses: ['not_scheduled'] 
+             statuses: ['not_scheduled', 'scheduled'] 
          }
          
          getShifts(shifts).then(shifts =>{
@@ -87,6 +87,7 @@ class GenerateShifts extends Component {
                     parserShifts.push(shifts[date][i])
                 }
             }
+
             j++;
             date = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
         }
@@ -137,10 +138,13 @@ class GenerateShifts extends Component {
         const modalButton = '#exampleModal' + index;
         const ModalId = "exampleModal" + index;
         const modalLabel = 'exampleModalLabel' + index;
- 
+        const shiftIsScheduled= "btn btn-success btn-block";
+        const shiftIsNotScheduled= "btn btn-info btn-block";
+        const shiftIsScheduledButNotOk= "btn btn-warning btn-block";
+
         return(
         <div key = {index} style={{padding:'5px'}}>
-            <button type="button" className="btn btn-info btn-block" data-toggle="modal" data-target={modalButton}>
+            <button type="button" className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? shiftIsScheduled : shiftIsScheduledButNotOk) : shiftIsNotScheduled} data-toggle="modal" data-target={modalButton}>
                     {shift.name}<br/>{shift["start time"]}-{shift["end time"]}
             </button>
             <div className="modal fade" data-backdrop="false" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
@@ -227,37 +231,37 @@ class GenerateShifts extends Component {
             <tr>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    shift.date === this.state.sunday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
+                    shift.date === this.state.sunday ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    shift.date === this.state.monday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
+                    shift.date === this.state.monday ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    shift.date === this.state.tuesday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
+                    shift.date === this.state.tuesday ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    shift.date === this.state.wednesday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
+                    shift.date === this.state.wednesday ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    shift.date === this.state.thursday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
+                    shift.date === this.state.thursday ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    shift.date === this.state.friday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
+                    shift.date === this.state.friday ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
                 <td>
                 {this.state.arrShiftsNotScheduled.map((shift,index) => (
-                    shift.date === this.state.saturday.format('YYYY-MM-DD') ? this.initializeTableModal(shift,index):null
+                    shift.date === this.state.saturday ? this.initializeTableModal(shift,index):null
                 ))}
                 </td>
             </tr>
@@ -269,12 +273,12 @@ class GenerateShifts extends Component {
         
         const dates =
         {
-            startDate: this.state.sunday.format('YYYY-MM-DD'),
-            endDate: this.state.saturday.format('YYYY-MM-DD')
+            startDate: this.state.sunday,
+            endDate: this.state.saturday
         }
 
         buildShifts(dates).then(buildedShifts => {
-            if(buildedShifts.success_rate !== 0)
+            if(buildedShifts.data)
             {
                 this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts})
             }
@@ -293,16 +297,16 @@ class GenerateShifts extends Component {
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Build Shifts </h1>
              </div>
-                <table className="table table-bordered">
+                <table className="table table-bordered" style={{marginBottom: '30px'}}>
                     <thead className="thead-dark">                          
                         <tr className="text-center">    
-                        <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')}<br/> Sunday</th>
-                        <th scope="col"> {this.state.monday.format('YYYY-MM-DD')}<br/> Monday</th>
-                        <th scope="col"> {this.state.tuesday.format('YYYY-MM-DD')}<br/> Tuesday</th>
-                        <th scope="col"> {this.state.wednesday.format('YYYY-MM-DD')}<br/> Wednesday</th>
-                        <th scope="col"> {this.state.thursday.format('YYYY-MM-DD')}<br/> Thursday</th>
-                        <th scope="col"> {this.state.friday.format('YYYY-MM-DD')}<br/> Friday</th>
-                        <th scope="col"> {this.state.saturday.format('YYYY-MM-DD')}<br/> Saturday</th>                      
+                        <th scope="col"> {this.state.sunday}<br/> Sunday</th>
+                        <th scope="col"> {this.state.monday}<br/> Monday</th>
+                        <th scope="col"> {this.state.tuesday}<br/> Tuesday</th>
+                        <th scope="col"> {this.state.wednesday}<br/> Wednesday</th>
+                        <th scope="col"> {this.state.thursday}<br/> Thursday</th>
+                        <th scope="col"> {this.state.friday}<br/> Friday</th>
+                        <th scope="col"> {this.state.saturday}<br/> Saturday</th>                      
                         </tr>
                     </thead>
                     <tbody>

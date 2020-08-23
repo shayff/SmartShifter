@@ -128,7 +128,7 @@ class EditShifts extends Component {
       }
 
          submitWantedShift(shifts).then(res => {
-            this.props.history.push(`/shifts`)
+            this.props.history.push(`/generateShifts`)
       });
   }
 

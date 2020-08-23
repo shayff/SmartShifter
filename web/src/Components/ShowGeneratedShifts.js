@@ -114,17 +114,17 @@ class ShowGeneratedShifts extends Component {
         this.props.history.push(path);
     }
 
-//     onUpdateInfoShift(path, shift) {
-//         this.props.history.push(path, { detail: shift})
-//    }
+    onUpdateInfoShift(path, shift) {
+        this.props.history.push(path, { detail: shift})
+   }
 
    initializeTableModal(shift,index)
    {
        const modalButton = '#exampleModal' + index;
        const ModalId = "exampleModal" + index;
        const modalLabel = 'exampleModalLabel' + index;
-       let shiftIsOk = "btn btn-info btn-block";
-       let shiftIsNotOk = "btn btn-danger btn-block";
+       const shiftIsOk = "btn btn-success btn-block";
+       const shiftIsNotOk = "btn btn-danger btn-block";
        
        return(
        <div key = {index} style={{padding:'5px'}}>
@@ -204,9 +204,9 @@ class ShowGeneratedShifts extends Component {
                    </div>
                </div>
                    <div className="modal-footer">
-                       {/* <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
+                       <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
                            Update Shift
-                       </button> */}
+                       </button>
                        <button type="button" className="btn btn-secondary" data-dismiss="modal">
                            Close
                        </button>
@@ -285,7 +285,7 @@ class ShowGeneratedShifts extends Component {
                     </div>
                 </div>  
              </div>
-                <table className="table table-bordered" style={{marginBottom: '50px'}}>
+                <table className="table table-bordered" style={{marginBottom: '30px'}}>
                     <thead className="thead-dark">                          
                         <tr className="text-center">    
                         <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')}<br/> Sunday</th>
