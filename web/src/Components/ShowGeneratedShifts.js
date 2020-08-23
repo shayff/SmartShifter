@@ -285,7 +285,7 @@ class ShowGeneratedShifts extends Component {
                     </div>
                 </div>  
              </div>
-                <table className="table table-bordered">
+                <table className="table table-bordered" style={{marginBottom: '50px'}}>
                     <thead className="thead-dark">                          
                         <tr className="text-center">    
                         <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')}<br/> Sunday</th>
@@ -301,92 +301,16 @@ class ShowGeneratedShifts extends Component {
                     {this.initializeTable()}
                     </tbody>
                  </table>
-             </div>
-             <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '11%'}} onClick={() => this.onAcceptBuild(`/shifts`)}>
+                 <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAcceptBuild(`/shifts`)}>
                         Accept Build
                 </button>   
-                <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '11%'}} onClick={() => this.onDeclineBuild(`/generateShifts`)}>
-                      Decline Build
+                <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onDeclineBuild(`/generateShifts`)}>
+                        Decline Build
                 </button>  
+             </div>
             </div>
         )
     }
 }
 
 export default withRouter(ShowGeneratedShifts)
-
-
- // initializeTableModal(shift,index)
-    // {
-    //     const collapseCard = '#collapseOne' + index;
-    //     const collapseId = "collapseOne" + index;
-    //     const collapseLabel = 'headingOne' + index;
-    //     const collapseAccordion = 'accordion' + index;
-    //     const collapseAccordionCard = '#accordion' + index;
-
- 
-    //     return(
-    //     <div key = {index} style={{padding:'5px'}}>
-    //             <div id={collapseAccordion}>
-    //                 <div className="card">
-    //                     <div className="card-header" id={collapseLabel}>
-    //                     <h5 className="mb-0">
-    //                         <button className="btn btn-link" data-toggle="collapse" data-target={collapseCard} aria-expanded="true" aria-controls={collapseId}>
-    //                         {shift.name}<br/>{shift["start time"]}-{shift["end time"]}<br/>{shift.employees.map((employee) => (
-    //                                     employee["first name"] + " " + employee["last name"] + ", "))}
-    //                         </button>
-    //                     </h5>
-    //                     </div>
-    //                     <div id={collapseId} className="collapse" aria-labelledby={collapseLabel} data-parent={collapseAccordionCard}>
-    //                     <div className="card-body">
-    //                         <table className="table table-bordered">
-    //                         <tbody>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Name Of The Shift</td>
-    //                                 <td className="table-secondary">{shift.name}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Date Of The Shift</td>
-    //                                 <td className="table-secondary">{shift.date}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Start Time Of The Shift</td>
-    //                                 <td className="table-secondary">{shift["start time"]}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">End Time Of The Shift</td>
-    //                                 <td className="table-secondary">{shift["end time"]}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Job Type For The Shift</td>
-    //                                 <td className="table-secondary">{shift["job type"]}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Difficulty Of The Shift</td>
-    //                                 <td className="table-secondary">{shift.difficulty}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Day Part Of The Shift</td>
-    //                                 <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Amount Of Employees</td>
-    //                                 <td className="table-secondary">{shift.amount}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Employees For The Shift</td>
-    //                                 <td className="table-secondary">{shift.employees.map((employee) => (
-    //                                     employee["first name"] + " " + employee["last name"] + ", "))}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Note For The Shift</td>
-    //                                 <td className="table-secondary">{shift.note}</td>
-    //                             </tr>
-    //                         </tbody>
-    //                         </table>
-    //                     </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //     </div>)
-    // }

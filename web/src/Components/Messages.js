@@ -124,7 +124,6 @@ class Messages extends Component {
         getMessages().then(userMessages =>{
             if (userMessages && userMessages.length !== 0)
             {
-                console.log("yes")
                 if (this._isMounted)
                 {
                     this.setState({messages: userMessages});
