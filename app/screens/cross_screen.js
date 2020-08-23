@@ -20,7 +20,7 @@ export default class Cross_screen extends Component {
   get = async (data_send) =>
   {
     let firstName = await AsyncStorage.getItem('name');
-    let name = "welcome "+ firstName;
+    let name = "Welcome "+ firstName;
     let company = await AsyncStorage.getItem('company');
     
     if(company != "null")
@@ -97,7 +97,7 @@ export default class Cross_screen extends Component {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#36485f",// צבע רקע של כל האפליקציה
+    backgroundColor: "#36485f",
     alignItems: 'center'
   },
   line:
@@ -105,19 +105,21 @@ const Styles = StyleSheet.create({
     flexDirection : 'row',
     alignItems: 'stretch',
     paddingTop: 5,
-    backgroundColor:'#36485f',// צבע רגע של השורה
+    backgroundColor:'#36485f',
   },
   firstLine:{
     
     flexDirection : 'row',
     alignItems: 'stretch',
-    paddingTop: 50,
-    backgroundColor:'#36485f',// צבע רגע של השורה
+    paddingTop: 40,
+    backgroundColor:'#36485f',
   },
   text: {
+    color: "#f5fffa",
     fontSize: 40,
+    fontWeight: "bold",
     paddingTop: 30,
-    color:"#638cb0",
+
   }
 
 });

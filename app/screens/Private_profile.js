@@ -13,11 +13,12 @@ export default class Private_profile extends Component {
             "first name": "loding...",
             "last name": "loding...",
             "date of birth": "loding...",
-            "address": "loding...",// להוסיף
+            "address": "loding...",
+            "gender": "loding...",
             "company": 'loding...',
             "email": "loding...",
             "password": "",
-            "password to confirm":"*****"},
+            "password to confirm":"******"},
 
             titleBTpasseord : "Confirm first",
             isWriteToConfirmPassword : true,
@@ -54,6 +55,7 @@ export default class Private_profile extends Component {
         "first name": resData["first name"],
         "last name": resData["last name"],
         "date of birth": resData["date of birth"],
+        "gender": resData['gender'],
         "address": resData["address"],
         "company": resData["company name"],
         "email": resData["email"],
@@ -128,6 +130,7 @@ export default class Private_profile extends Component {
               "first name":this.state.profileDataUser["first name"],
               "last name":this.state.profileDataUser["last name"],
               "address":this.state.profileDataUser["address"],
+              "gender":this.state.profileDataUser["gender"],
               "date of birth":this.state.profileDataUser["date of birth"]
             }
 
@@ -205,6 +208,16 @@ export default class Private_profile extends Component {
                                 name="edit"
                                 backgroundColor="#a9a9a9"
                                 onPress={(data)=>{this.refs.address.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.address.focus();}}>  
+                        </Icon.Button> 
+                </View>
+
+                <View style={Styles.line}>
+                        <Text style={Styles.titel}>gender: </Text>
+                        <TextInput style={Styles.TextInput} ref='gender' onChangeText={(data) => {this.state.profileDataUser["gender"]=data}} editable =  {false}>{this.state.profileDataUser["gender"]}</TextInput>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.gender.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.gender.focus();}}>  
                         </Icon.Button> 
                 </View>
 

@@ -36,7 +36,8 @@ export default class User_preferences extends Component {
                 }
             }).then(response => {
                 console.log("look= " + response.data);
-                if(response.data.data == null)
+                let myData = {};
+                if(response.data.data == myData)
                 {
                     this.setState({menegerSendShift:false});
                 }
