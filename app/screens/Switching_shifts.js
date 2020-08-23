@@ -48,7 +48,7 @@ export default class Switching_shifts extends Component {
         let updatList=[];
         let statusFormat="";
         let numberOfMasseges = this.state.massegesData.data.length;
-        
+
         for (let i =0; i<numberOfMasseges; i++)
         {   
             if(this.state.massegesData.data[i].status=='wait_for_swap')
@@ -57,7 +57,7 @@ export default class Switching_shifts extends Component {
             }
             else if (this.state.massegesData.data[i].status=='wait_for_confirm')
             {
-                statusFormat = 'wait for confrim';
+                statusFormat = 'wait for confirm';
             }
             else if(this.state.massegesData.data[i].status=='confirmed')
             {
