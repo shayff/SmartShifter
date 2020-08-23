@@ -74,10 +74,17 @@ def doBuildShift(userInput):
         sort_shifts_by_start_time(shift_Scheduled_to_display)
 
         #compute the success rate
-        success_rate = int(count/total  * 100)
+        success_rate = get_success_rate(count, total)
         return jsonify({'ok': True, 'msg': 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'Full_data': shift_Scheduled_to_display}), 200
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+
+
+def get_success_rate(count, total):
+    if(total == 0):
+        return 0
+    else:
+        return int(count / total * 100)
 
 
 def add_empty_shifts_by_date(shift, shift_Scheduled_to_display):
