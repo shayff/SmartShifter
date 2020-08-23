@@ -46,6 +46,9 @@ def doGetShifts(userInput):
                     else:
                         shiftScheduled[shift['date']] = [shift]
 
+                    if shift["status"] == "scheduled":
+                        add_is_shift_full_field(shift) #duplicate with build shift
+
                     #sort the shifts by start date
                     sort_shifts_by_start_time(shiftScheduled)
 
@@ -57,3 +60,11 @@ def doGetShifts(userInput):
 
 
 
+def add_is_shift_full_field(shift):
+    '''
+    This method add check if shift is full and add this field
+    '''
+    if shift['amount'] == len(shift['employees']):
+        shift['Is_shift_full'] = 'full'
+    else:
+        shift['Is_shift_full'] = 'not_full'

@@ -65,7 +65,9 @@ def doBuildShift(userInput):
                     #count how many employees scheduled
                     count += len(employees_id)
 
+                    #find the shift details in the list_of_shifts
                     shift = next(x for x in list_of_shifts if x['id'] == shift_id)
+
                     add_full_data_of_employees_to_shifts(employees_id, shift, shift_data)
                     add_is_shift_full_field(shift)
                     add_empty_shifts_by_date(shift, shift_Scheduled_to_display)
@@ -112,9 +114,6 @@ def add_is_shift_full_field(shift):
         shift['Is_shift_full'] = 'full'
     else:
         shift['Is_shift_full'] = 'not_full'
-
-
-
 
 
 def get_list_of_shifts(companyId,dates):
