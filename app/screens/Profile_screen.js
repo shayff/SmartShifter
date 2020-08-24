@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, Keyboard, TouchableOpacity,ScrollView, Alert } from 'react-native';
+import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, ActivityIndicator, TouchableOpacity,ScrollView, Alert } from 'react-native';
 import member_server from '../networking/member_server';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -25,7 +25,8 @@ export default class Private_profile extends Component {
             titleOldPassword : "Enter password",
             saveText:'not been a change',
             currectAnswer: true,
-            
+            thereIsDataFromServer : false,
+
 
       }
     }
@@ -63,6 +64,7 @@ export default class Private_profile extends Component {
         "password to confirm": "*****"};
 
         this.setState({profileDataUser:details});
+        this.setState({thereIsDataFromServer:true});
 
       }
     
@@ -151,12 +153,17 @@ export default class Private_profile extends Component {
         console.log("EROR "+err.response.data);
 
       });
+
       this.props.navigation.goBack(null);
 
 
       }
 
     render() {  
+        if(this.state.thereIsDataFromServer == false)
+        {
+            return (<View style={Styles.center}><ActivityIndicator  size="large" color="#0000ff" /></View>);
+        }
         return(
             
             <View style={Styles.all}>
@@ -340,8 +347,8 @@ const Styles = StyleSheet.create({
       },
       all:{
       backgroundColor: '#2980b9',
-       width:410,
-       height:600,
+       width:412,
+       height:610,
        
       },
 });

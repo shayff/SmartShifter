@@ -2,7 +2,7 @@
 // לעצב הכל
 
 import React, {useState, Component} from 'react';
-import { ActivityIndicator ,AsyncStorage,StyleSheet, Text, View, Image, Keyboard, TouchableOpacity, Alert,Button,FlatList, ScrollView } from 'react-native';
+import { ActivityIndicator ,AsyncStorage,StyleSheet, Text, View,TouchableOpacity, Alert,Button, ScrollView } from 'react-native';
 import DaySquare from '../component/userPreferences/daySquare';
 import company_server from '../networking/company_server';
 
@@ -99,7 +99,7 @@ export default class User_preferences extends Component {
     {
         if(this.state.availability == -1)
         {
-            Alert.alert("you need to select prefernce first");
+            Alert.alert("choose priority first");
         }
         else
         {
@@ -212,15 +212,15 @@ export default class User_preferences extends Component {
                     <View>
                     <View style={Styles.line}>
                         <View style={this.state.whichTypePrefer[0] ? Styles.selectButton : Styles.UnselectButton}>
-                            <Button title="not Available" color="#cf2740" onPress = {()=> this.updateColors({typeOfButton: 0}) }/>
+                            <Button title="not Available" color="#b22222" onPress = {()=> this.updateColors({typeOfButton: 0}) }/>
                         </View>
 
                         <View style={this.state.whichTypePrefer[1] ? Styles.selectButton : Styles.UnselectButton}>
-                            <Button title="Available" color = "#45adba" onPress = {()=> this.updateColors({typeOfButton: 1}) }/>
+                            <Button title="Available" color = "#3cb371" onPress = {()=> this.updateColors({typeOfButton: 1}) }/>
                         </View>
 
                         <View style={this.state.whichTypePrefer[2] ? Styles.selectButton : Styles.UnselectButton}>
-                            <Button title="Prefer" color = "#522b8a" onPress = {()=> this.updateColors({typeOfButton: 2}) }/>
+                            <Button title="Prefer" color = "#9370db" onPress = {()=> this.updateColors({typeOfButton: 2}) }/>
                         </View>
                     </View>
 
@@ -273,6 +273,7 @@ export default class User_preferences extends Component {
     const Styles = StyleSheet.create({
         titleNameDate : {
             alignSelf:'center',
+            fontSize:20,
         },
         center: {
 
@@ -292,8 +293,6 @@ export default class User_preferences extends Component {
         },
         selectButton : {
             borderColor: '#5fe39d',
-            borderWidth: 1,
-            borderRadius: 2,
 
         },
         MorningTouchArea : {
@@ -311,7 +310,7 @@ export default class User_preferences extends Component {
         {
             backgroundColor: '#1d9aad',
             paddingVertical: 10,
-            borderRadius:5,
+            borderRadius: 2,
         },
         line:
         {
@@ -320,24 +319,24 @@ export default class User_preferences extends Component {
             flexDirection : 'row',
             alignItems: 'stretch',
         },
-        notAvailable:
-        {
-            textAlign: 'center',
-            color: '#ff0d41',
-            fontWeight:'700',
-        },
-        Available:
-        {
-            textAlign: 'center',
-            color: '#1ff2f2',
-            fontWeight:'700', 
-        },
-        Prefer:
-        {
-            textAlign: 'center',
-            color: '#000cb8',
-            fontWeight:'700',
-        },
+        // notAvailable:
+        // {
+        //     textAlign: 'center',
+        //     color: '#ff0d41',
+        //     fontWeight:'700',
+        // },
+        // Available:
+        // {
+        //     textAlign: 'center',
+        //     color: '#1ff2f2',
+        //     fontWeight:'700', 
+        // },
+        // Prefer:
+        // {
+        //     // textAlign: 'center',
+        //     // color: '#db7093',
+        //     // fontWeight:'700',
+        // },
 
     });
 

@@ -87,6 +87,7 @@ export default class Cross_screen extends Component {
                   ):(null)}
                </View>
 
+
         </View>
       );
   }
@@ -111,7 +112,7 @@ const Styles = StyleSheet.create({
     
     flexDirection : 'row',
     alignItems: 'stretch',
-    paddingTop: 40,
+    paddingTop: 20,
     backgroundColor:'#36485f',
   },
   text: {

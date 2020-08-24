@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { AsyncStorage,StyleSheet, Text, View, TouchableOpacity,Alert,FlatList} from 'react-native';
+import { AsyncStorage,StyleSheet, Text, View, ActivityIndicator,Alert,FlatList} from 'react-native';
 import SingleMessage from '../component/messages/SingleMessage'
 import member_server from '../networking/member_server';
 
@@ -8,13 +8,13 @@ export default class Messages extends Component {
     constructor(inside){
         super(inside);
         this.state = {
+            thereIsDataFromServer : false,
             massegesData : {
                 "data":[],
                 "msg":'',
                 "ok":false
             },
-            listMasseges : [], // why i need mast her- {} ?
-            frontText: "loding..." 
+            listMasseges : [], 
 
         }
                                     
@@ -22,8 +22,7 @@ export default class Messages extends Component {
 
       // function that call after the constractor 
       componentDidMount = async () => {
-        //let data = this.Get_masseges_server_data();
-        //this.setState({massegesData:data});
+   
 
         let token = await AsyncStorage.getItem('token');
         const response = await member_server.get('/getmessage', {
@@ -45,7 +44,7 @@ export default class Messages extends Component {
       {
           Alert.alert("There was a problem receiving the messages, please try again");
           this.props.navigation.goBack(null);
-        }
+      }
         
         let updatList=[];
         console.log(this.state.massegesData.data.length);
@@ -59,35 +58,23 @@ export default class Messages extends Component {
                         time_created: this.state.massegesData.data[i].time_created,
                         id: this.state.massegesData.data[i]._id};
             updatList.push(temp);
-            //this.state.listMasseges.push(temp);
         }
 
         this.setState({listMasseges:updatList});
-
-        this.setState({frontText:"Exit"})
-
-      }
-
-
-
-      
-      save_and_exit = () =>
-      {
-        
-        this.props.navigation.goBack(null);
+        this.setState({thereIsDataFromServer:true});
+ 
 
       }
 
 
     render() {  
+        if(this.state.thereIsDataFromServer == false)
+        {
+            return (<View style={Styles.center}><ActivityIndicator  size="large" color="#0000ff" /></View>);
+        }
         return(
             
             <View style={Styles.content}>
-                <View  style={Styles.saveElement}>
-                        <TouchableOpacity style={Styles.touchArea} onPress={this.save_and_exit} >
-                            <Text style={Styles.Text}>{this.state.frontText}</Text>
-                        </TouchableOpacity>
-                </View>
                 <View>
                     <FlatList
                         data={this.state.listMasseges}

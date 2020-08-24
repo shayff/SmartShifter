@@ -88,24 +88,22 @@ Text: {
     color: '#ffff'
 },
 NotAvailableButton : {
-    borderColor: '#cf2740',
-    borderWidth: 4,
-    borderRadius: 10,
-
-    width:120,
-   // backgroundColor: '#9c2921',
+    borderColor: '#b22222',
+    borderWidth: 3,
+    borderRadius: 2,
+    width:110,
 },
 AvailableButton : {
-    borderColor: '#45adba',
-    borderWidth: 4,
-    borderRadius: 10,
-    width:120,
+    borderColor: '#3cb371',
+    borderWidth: 3,
+    borderRadius: 2,
+    width:115,
 },
 PreferButton : {
-    borderColor: '#522b8a',
-    borderWidth: 4,
-    borderRadius: 10,
-    width:120,
+    borderColor: '#9370db',
+    borderWidth: 3,
+    borderRadius: 2,
+    width:115,
 },
 
 

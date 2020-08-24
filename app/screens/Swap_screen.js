@@ -79,7 +79,7 @@ export default class Switching_shifts extends Component {
         this.setState({listMasseges:updatList});
 
         this.setState({thereIsDataFromServer:true});
-        this.setState({frontText:"Exit"});
+       
 
     }
 
@@ -98,11 +98,7 @@ export default class Switching_shifts extends Component {
             }
             return(
             <View  style={Styles.content}>
-                    <View  style={Styles.saveElement}>
-                        <TouchableOpacity style={Styles.touchArea2} onPress={this.save_and_exit} >
-                            <Text style={Styles.Text2}>{this.state.frontText}</Text>
-                        </TouchableOpacity>
-                    </View>
+               
                     <View style={Styles.container} >
                             <FlatList
                                 data={this.state.listMasseges}

@@ -3,14 +3,14 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Cross_screen from '../screens/cross_screen';
-import Login from '../screens/login_screen';
-import SignUp from '../screens/signUp_screen';
-import User_preferences from '../screens/User_preferences';
-import Messages from '../screens/Messages';
-import Switching_shifts from '../screens/Switching_shifts';
-import Weekly_shift_arrangement from '../screens/Weekly_shift_arrangement';
-import Private_profile from '../screens/Private_profile';
+import Cross_screen from '../screens/Cross_screen';
+import Login from '../screens/Login_screen';
+import SignUp from '../screens/SignUp_screen';
+import User_preferences from '../screens/UserPreferences_screen';
+import Messages from '../screens/Messages_screen';
+import Switching_shifts from '../screens/Swap_screen';
+import Weekly_shift_arrangement from '../screens/ShiftArrangement_screen';
+import Private_profile from '../screens/Profile_screen';
 
 const Stack = createStackNavigator()
 
@@ -26,7 +26,7 @@ export default function Navigator_stack() {
         <Stack.Screen name='User_preferences' component={User_preferences} options={{ title: 'User Preferences'}}/>
         <Stack.Screen name='Messages' component={Messages} options={{ title: 'Messages'}}/>
         <Stack.Screen name='Switching_shifts' component={Switching_shifts} options={{ title: 'Switching Shifts'}}/>
-        <Stack.Screen name='Private_profile' component={Private_profile} options={{ title: 'Private Profile'}}/>
+        <Stack.Screen name='Private_profile' component={Private_profile} options={{ title: 'Private Profile'}}/>        
 
       </Stack.Navigator>
     </NavigationContainer>
