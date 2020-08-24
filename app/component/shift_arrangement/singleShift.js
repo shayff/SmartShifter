@@ -1,11 +1,16 @@
 import React, {useState, Component} from 'react';
-import { StyleSheet, Text, View, TextInput, Button, CheckBox, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View,  TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 export default function SingleShift(promp) {
 
+    
     const [employees, SetEmployees] = useState(promp.item.employees);
 
+    let myId=12;
+    let ButtonStateHolder=true;
+      
 
 return (
 
@@ -29,11 +34,17 @@ return (
              <Text style={Styles.title}>Employees:</Text>
                 <View>
                     { employees.map( item => (
-                        <View key = {item._id}>
+                        <View key = {item._id} style={Styles.line}>
                             <Text style={Styles.nameEMP}>{item["first name"]} {item["last name"]}</Text>
+                            <View style={Styles.screenContainer} >
+                                
+                                <TouchableOpacity style={Styles.appButtonContainer} disabled = {false}  >
+                                    <MaterialIcons name="swap-horiz" size={30} color="black" />
+                                    <Text style={Styles.appButtonText}>{'swap'}</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-
-                    ))}
+                        ))}
 
                 </View>
         </View>
@@ -88,6 +99,23 @@ const Styles = StyleSheet.create({
         padding: 16,
         borderWidth: 2,
         borderRadius: 10,
-    }
+    },
+    appButtonContainer: {
+        elevation: 3,
+        backgroundColor: "#009688",
+        borderRadius: 10,
+        width:85,
+        position: 'relative', justifyContent: 'center', alignItems: 'center',
+        top: 0, left: 170, right: 10,       
+        flexDirection : 'row',
+
+      },
+      appButtonText: {
+        fontSize: 15,
+        color: "#fff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase"
+      }
 
 })
