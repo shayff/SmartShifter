@@ -23,10 +23,13 @@ def doConfirmShiftSwap(userInput):
             company_id = result['company']
             user_id = result['_id']
             shift_swap = companies_collection.find_one({'_id': company_id , 'shifts_swaps.id': data['swap_id']},{'shifts_swaps.$': data['swap_id']})
+            print("shift_swap: ")
             print(shift_swap)
 
             if shift_swap: #Exists
                 shift_swap = shift_swap['shifts_swaps'][0]
+                print("shift_swap['shifts_swaps'][0]:")
+                print(shift_swap)
                 if (shift_swap['status'] == 'wait_for_confirm'):
                     if(data['status'] == 'confirm'):
                         # search for the employees in the given shift
@@ -53,6 +56,7 @@ def doConfirmShiftSwap(userInput):
                                            'title': "Swap request denied", "message": "denied"}
 
                     #change the status of the shiftswap
+                    print(new_status)
                     companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
                                                 {'$set': {'shifts_swaps.$.status': new_status}})
 

@@ -43,6 +43,8 @@ def doGetShiftsSwaps(userInput):
 
                 #update the shift details
                 doc = companies_collection.find_one({'_id': company_id},{"shifts": { "$elemMatch" : {"id":swap["shift_id"]}}} )
+                print("doc:")
+                print(doc)
                 doc = doc["shifts"][0]
                 print(doc)
                 print(swaps_filtered )

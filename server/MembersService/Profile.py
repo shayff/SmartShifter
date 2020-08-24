@@ -14,7 +14,7 @@ def doProfile():
     #Search for user in database
     user = usersCollection.find_one({'_id': logged_in_user['_id']})
     user["is_has_company"] = "company" in user
-    if(user['company']):
+    if user['company']:
         company_id = user['company']
         company = companies_collection.find_one({'_id': company_id})
         user["company name"] = company["company name"]

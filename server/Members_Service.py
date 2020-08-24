@@ -7,6 +7,7 @@ from server.MembersService.Login import doLogin
 from server.MembersService.Register import doRegister
 from server.MembersService.SendMessage import doSendMessage
 from server.MembersService.GetMessage import doGetMessages
+from server.MembersService.HistoryMessages import doHistoryMessages
 from server.MembersService.Profile import doProfile
 from server.MembersService.UpdateMessage import doUpdateMessage
 from server.MembersService.UpdateProfile import doUpdateProfile
@@ -101,6 +102,10 @@ def GetMessages():
 def UpdateMessage():
     return doUpdateMessage(request.get_json())
 
+@app.route('/gethistorymessages',methods=['GET'])
+@jwt_required
+def HistoryMessages():
+    return doHistoryMessages()
 
 #for debug
 if __name__== '__main__':

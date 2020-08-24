@@ -21,4 +21,5 @@ def doGetPreferences():
         company_id = result['company']
         company = companies_collection.find_one({'_id': company_id})
         preferences = company['prefence_from_manager']
+        print(preferences)
         return jsonify({'ok': True, 'msg': 'Successfully', 'data': preferences}), 200
