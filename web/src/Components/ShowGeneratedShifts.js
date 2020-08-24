@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListOfEmployees,acceptBuildShift } from './UserFunctions'
+import { acceptBuildShift } from './UserFunctions'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 
@@ -12,7 +12,6 @@ class ShowGeneratedShifts extends Component {
         this.state = {
             dataBuildShifts:{},
             arrBuildShifts:[],
-            arrEmployees:[],
             sunday:moment().day(7),
             monday:moment().day(8),
             tuesday:moment().day(9),
@@ -54,16 +53,6 @@ class ShowGeneratedShifts extends Component {
                 alert("The Algorithm Could Not Build The Requested Shifts ")
             }
         }
-        
-        ListOfEmployees().then(employees =>{ 
-            if (employees)
-            {
-                if (this._isMounted)
-                {
-                    this.setState({arrEmployees: employees});
-                }
-            }
-         });
     };
 
     parseShifts(shifts,parserShifts,minDate,maxDate)
@@ -301,6 +290,10 @@ class ShowGeneratedShifts extends Component {
                     {this.initializeTable()}
                     </tbody>
                  </table>
+                 <div style={{backgroundColor:'#28a745',height:"30px",width:"40px",float:'left'}}></div>
+                 <label style={{marginLeft:"10px"}}>A Shift That Has Been Set And Is Good </label><br/>
+                 <div style={{backgroundColor:'#dc3545',height:"30px",width:"40px",float:'left'}}></div>
+                 <label style={{marginLeft:"10px", marginBottom: '30px'}}>A Shift That Has Been Set And Is Not Good</label><br/>
                  <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAcceptBuild(`/shifts`)}>
                         Accept Build
                 </button>   

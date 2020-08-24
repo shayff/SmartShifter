@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { buildShifts, ListOfEmployees,getShifts,removeShift } from './UserFunctions'
+import { buildShifts,getShifts,removeShift } from './UserFunctions'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 
@@ -11,7 +11,6 @@ class GenerateShifts extends Component {
         super()
         this.state = {
             arrShiftsNotScheduled :[],
-            arrEmployees:[],
             sunday:moment().day(7).format('YYYY-MM-DD') ,
             monday:moment().day(8).format('YYYY-MM-DD') ,
             tuesday:moment().day(9).format('YYYY-MM-DD') ,
@@ -34,16 +33,6 @@ class GenerateShifts extends Component {
         this._isMounted = true;
 
         this.updateDatesAndGetShifts();
-        
-        ListOfEmployees().then(employees =>{ 
-            if (employees)
-            {
-                if (this._isMounted)
-                {
-                    this.setState({arrEmployees: employees});
-                }
-            }
-         });
     };
 
     updateDatesAndGetShifts()
@@ -189,12 +178,12 @@ class GenerateShifts extends Component {
                                 <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
                             </tr>
                             <tr className="text-center">
-                                <td className="table-primary">Amount Of Employees</td>
-                                <td className="table-secondary">{shift.amount}</td>
+                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-primary" : "table-danger") : "table-primary"}>Amount Of Employees</td>
+                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-secondary" : "table-danger") : "table-secondary"}>{shift.amount}</td>
                             </tr>
                             <tr className="text-center">
-                                <td className="table-primary">Employees For The Shift</td>
-                                <td className="table-secondary">{shift.employees.map((employee,index) => (
+                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-primary" : "table-danger") : "table-primary"}>Employees For The Shift</td>
+                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-secondary" : "table-danger") : "table-secondary"}>{shift.employees.map((employee,index) => (
                                     <div key = {index}>
                                       {employee["first name"] + " " + employee["last name"]}
                                     </div>))}
@@ -297,7 +286,7 @@ class GenerateShifts extends Component {
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Build Shifts </h1>
              </div>
-                <table className="table table-bordered" style={{marginBottom: '30px'}}>
+                <table className="table table-bordered" >
                     <thead className="thead-dark">                          
                         <tr className="text-center">    
                         <th scope="col"> {this.state.sunday}<br/> Sunday</th>
@@ -313,6 +302,12 @@ class GenerateShifts extends Component {
                     {this.initializeTable()}
                     </tbody>
                  </table>
+                 <div style={{backgroundColor:'#28a745',height:"30px",width:"40px",float:'left'}}></div>
+                 <label style={{marginLeft:"10px"}}>A Shift That Has Been Set And Is Good </label><br/>
+                 <div style={{backgroundColor:'#FFC107',height:"30px",width:"40px",float:'left'}}></div>
+                 <label style={{marginLeft:"10px"}}>A Shift That Has Been Set And Is Not Good</label><br/>
+                 <div style={{backgroundColor:'#17A2B8',height:"30px",width:"40px",float:'left'}}></div>
+                 <label style={{marginLeft:"10px", marginBottom: '30px'}}>A Shift That Has Not Yet Been Set</label>
                  <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAddShifts(`/addShifts`)}>
                     {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-calendar2-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M8 8a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V8.5A.5.5 0 0 1 8 8z"/>
