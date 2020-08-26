@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
 from ..config import MongoConfig
-from server.MembersService.SendMessage import doSendMessage
+from server.MembersService.send_message import doSendMessage
 
 #connect to database
 cluster = MongoClient(MongoConfig['ConnectionString'])

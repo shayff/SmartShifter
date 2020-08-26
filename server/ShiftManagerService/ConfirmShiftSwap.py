@@ -4,7 +4,7 @@ from pymongo import MongoClient, ReturnDocument
 from server.config import MongoConfig
 from .schemas.confirmshiftswap import validate_confirmShiftSwap
 from datetime import datetime
-from server.MembersService.SendMessage import doSendMessage
+from server.MembersService.send_message import doSendMessage
 
 cluster = MongoClient(MongoConfig['ConnectionString'])
 db = cluster[MongoConfig['ClusterName']]

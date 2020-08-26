@@ -5,7 +5,7 @@ import json
 from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt
 from server.MembersService.Login import doLogin
 from server.MembersService.Register import doRegister
-from server.MembersService.SendMessage import doSendMessage
+from server.MembersService.send_message import doSendMessage
 from server.MembersService.GetMessage import doGetMessages
 from server.MembersService.HistoryMessages import doHistoryMessages
 from server.MembersService.Profile import doProfile
@@ -67,6 +67,7 @@ def Logout():
     blacklist.add(jti)
     return jsonify({"msg": "Successfully logged out"}), 200
 
+@app.route("/api/v1/user/profile", methods=['GET'])
 @app.route("/profile", methods=['GET'])
 @jwt_required
 def profile():
