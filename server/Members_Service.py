@@ -7,7 +7,7 @@ from server.MembersService.Login import doLogin
 from server.MembersService.Register import doRegister
 from server.MembersService.send_message import doSendMessage
 from server.MembersService.GetMessage import doGetMessages
-from server.MembersService.HistoryMessages import doHistoryMessages
+from server.MembersService.get_sent_messages import doGetSentMessages
 from server.MembersService.Profile import doProfile
 from server.MembersService.UpdateMessage import doUpdateMessage
 from server.MembersService.UpdateProfile import doUpdateProfile
@@ -103,10 +103,10 @@ def GetMessages():
 def UpdateMessage():
     return doUpdateMessage(request.get_json())
 
-@app.route('/gethistorymessages',methods=['GET'])
+@app.route('/api/v1/messages/sent',methods=['GET'])
 @jwt_required
-def HistoryMessages():
-    return doHistoryMessages()
+def get_sent_message():
+    return doGetSentMessages()
 
 #for debug
 if __name__== '__main__':
