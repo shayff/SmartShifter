@@ -22,7 +22,7 @@ def doGetSentMessages():
 
     print(list_messages)
     #check if List is empty
-    if not list_messages:
-        return jsonify({'ok': True, 'msg': 'The messages list is empty','data': list_messages}), 204
-    else:
+    if list_messages:
         return jsonify({'ok': True, 'msg': 'list of messages:', 'data': list_messages}), 200
+    else:
+        return jsonify({'ok': True, 'msg': 'The messages list is empty', 'data': list_messages}), 204

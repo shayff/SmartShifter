@@ -2,16 +2,8 @@ from datetime import datetime
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from pymongo import collection, MongoClient, ReturnDocument
-from server.config import MongoConfig
 from .schemas.sendMessage import validate_sendMessage
-
-# connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-users_collection = db['users']
-messages_collection = db['messages']
-counter = db['counters']
-companies_collection = db["companies"]
+from .. import db
 
 def doSendMessage(user_input):
     '''
@@ -31,11 +23,11 @@ def doSendMessage(user_input):
             message = prepare_message(set_ids,current_user["_id"],data["title"],data["message"])
 
             # insert message to message collection
-            messages_collection.insert_one(message)
+            db.messages_collection.insert_one(message)
 
             # insert the message to each employee
             for user_id in set_ids:
-                users_collection.update({'_id': user_id}, {'$push':
+                db.users_collection.update({'_id': user_id}, {'$push':
                                                                {'messages':
                                                                     {'$each': [
                                                                         {'id': message['_id'], 'status': 'unread'}],'$position': 0}}})
@@ -56,7 +48,7 @@ def get_employees_id_to_send(company_id, send_to_data):
 
     if "employees" in send_to_data:
         set_ids.update(send_to_data["employees"])
-    shifts = companies_collection.find_one({'_id': company_id},
+    shifts = db.companies_collection.find_one({'_id': company_id},
                                            {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})["shifts"]
     if "shifts" in send_to_data:
         send_shifts = send_to_data["shifts"]
@@ -71,7 +63,7 @@ def get_employees_id_to_send(company_id, send_to_data):
 def prepare_message(send_to,send_from, title, message):
 
     # update counter message id
-    doc = counter.find_one_and_update({'_id': 'messageid'}, {'$inc': {'value': 1}},
+    doc = db.counters_collection.find_one_and_update({'_id': 'messageid'}, {'$inc': {'value': 1}},
                                       return_document=ReturnDocument.AFTER)
     count_id = doc['value']
 
