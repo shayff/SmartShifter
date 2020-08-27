@@ -73,11 +73,13 @@ def AddEmployees():
 def RemoveEmployees():
     return doRemoveEmployees(request.get_json())
 
+@app.route("/api/v1/shift/<shift_id>", methods=['PUT'])
 @app.route("/companies/updateshift", methods=['POST'])
 @jwt_required
 def UpdateShift():
     return doUpdateShift(request.get_json())
 
+@app.route("/api/v1/shift", methods=['POST'])
 @app.route("/companies/addshift", methods=['POST'])
 @jwt_required
 def AddShifts():
@@ -107,19 +109,13 @@ def ListOfEmployees():
 def profile():
     return doProfile()
 
+@app.route("/api/v1/company/employee", methods=['PUT'])
 @app.route("/companies/updateemployee", methods=['POST'])
 @jwt_required
 def updateemployee():
     return doUpdateEmployee(request.get_json())
 
-
-
-@app.route("/companies/PrefenceFromManager", methods=['POST'])
-@jwt_required
-def PrefenceFromManager():
-    return doPrefenceFromManager(request.get_json())
-
-
+@app.route("/api/v1/company/preferences", methods=['GET'])
 @app.route("/companies/GetPreferences", methods=['GET'])
 @jwt_required
 def GetPreferences():
@@ -130,6 +126,10 @@ def GetPreferences():
 def PrefenceFromWorker():
     return doPrefenceFromWorker(request.get_json())
 
+@app.route("/companies/PrefenceFromManager", methods=['POST'])
+@jwt_required
+def PrefenceFromManager():
+    return doPrefenceFromManager(request.get_json())
 
 #for dubg
 if __name__== '__main__':

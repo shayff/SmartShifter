@@ -59,6 +59,8 @@ def buildShift():
 def SetShiftsSchedule():
     return doSetShiftsSchedule(request.get_json())
 
+
+@app.route('/api/v1/shift_swap', methods=['POST'])
 @app.route('/AskShiftSwap', methods=['POST'])
 @jwt_required
 def AskShiftSwap():
@@ -82,7 +84,7 @@ def GetShifts():
 def ConfirmShiftSwap():
     return doConfirmShiftSwap(request.get_json())
 
-@app.route('/api/v1/shifts/swaps', methods= ['GET'])
+@app.route('/api/v1/shift_swap', methods= ['GET'])
 @app.route('/GetShiftsSwaps', methods=['POST'])
 @jwt_required
 def GetShiftsSwaps():
