@@ -69,7 +69,8 @@ def AskShiftSwap():
 def CanShiftSwap():
     return doCanShiftSwap(request.get_json())
 
-
+#we need here parameters
+@app.route('/api/v1/shifts', methods= ['GET'])
 @app.route('/GetShifts', methods= ['POST'])
 @jwt_required
 def GetShifts():
@@ -81,11 +82,11 @@ def GetShifts():
 def ConfirmShiftSwap():
     return doConfirmShiftSwap(request.get_json())
 
+@app.route('/api/v1/shifts/swaps', methods= ['GET'])
 @app.route('/GetShiftsSwaps', methods=['POST'])
 @jwt_required
 def GetShiftsSwaps():
     return doGetShiftsSwaps(request.get_json())
-
 
 #for dubg
 if __name__== '__main__':

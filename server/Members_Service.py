@@ -73,6 +73,7 @@ def Logout():
 def profile():
     return doProfile()
 
+@app.route('/api/v1/user', methods=['POST'])
 @app.route('/register', methods=['POST'])
 def Register():
     return doRegister(request.get_json())

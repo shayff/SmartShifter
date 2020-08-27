@@ -55,16 +55,19 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
+@app.route("/api/v1/company", methods=['POST'])
 @app.route("/companies/create", methods=['POST'])
 @jwt_required
 def Create():
     return doCreate(request.get_json())
 
+@app.route("/api/v1/company/employee", methods=['POST'])
 @app.route("/companies/addemployees", methods=['POST'])
 @jwt_required
 def AddEmployees():
     return doAddEmployees(request.get_json())
 
+@app.route("/api/v1/company/employee/<employee_id>", methods=['DELETE'])
 @app.route("/companies/removeemployees", methods=['POST'])
 @jwt_required
 def RemoveEmployees():
@@ -80,21 +83,25 @@ def UpdateShift():
 def AddShifts():
     return doAddShifts(request.get_json())
 
+@app.route("/api/v1/company/shift/<shift_id>", methods=['DELETE'])
 @app.route("/companies/deleteshift", methods=['POST'])
 @jwt_required
 def DeleteShift():
     return doDeleteShift(request.get_json())
 
+@app.route("/api/v1/company", methods=['PUT'])
 @app.route("/companies/update", methods=['POST'])
 @jwt_required
 def Update():
     return doUpdate(request.get_json())
 
+@app.route("/api/v1/company/employees", methods=['GET'])
 @app.route("/companies/listofemployees", methods=['GET'])
 @jwt_required
 def ListOfEmployees():
     return doListOfEmployees()
 
+@app.route("/api/v1/company", methods=['GET'])
 @app.route("/companies/profile", methods=['GET'])
 @jwt_required
 def profile():
