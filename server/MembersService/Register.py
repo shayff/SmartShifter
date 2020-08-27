@@ -15,10 +15,11 @@ def doRegister(user_input):
       # [check] look like id not really work
       result_id_number = db.users_collection.find_one({'id number': new_user['id number']})
       if not result_email:
-         prepare_new_user(new_user)
+         count_id = prepare_new_user(new_user)
 
          # insert user to db
          db.users_collection.insert_one(new_user)
+         print(new_user)
          return jsonify({'ok': True, 'msg': "user registered successfully", "id": count_id}), 200
       else:
          return jsonify({'ok': False, 'msg': 'User with email address or id number already exists'}), 409
