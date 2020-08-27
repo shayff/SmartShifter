@@ -64,7 +64,6 @@ def prepare_message(send_to,send_from, title, message):
                                       return_document=ReturnDocument.AFTER)
     count_id = doc['value']
 
-
     message = {
         "_id": count_id,
         "to": list(send_to),
