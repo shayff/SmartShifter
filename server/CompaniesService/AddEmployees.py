@@ -1,36 +1,28 @@
-from pymongo import MongoClient
-from .schemas.addemployees import validate_addemployees
+from . import db
 from flask import jsonify
-from server.config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
-
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db["companies"]
-users_collection = db["users"]
-counters_collection = db["counters"]
+from .schemas.addemployees import validate_addemployees
 
 def doAddEmployees(user_input):
     data = validate_addemployees(user_input)
     if data['ok']:
         employee_to_add = data['data']
         logged_in_user = get_jwt_identity()
-        result = users_collection.find_one({'_id': logged_in_user['_id']})
-        if 'company' in result:
-            company_id = result['company']
+        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+        if 'company' in user_from_db:
+            company_id = user_from_db['company']
 
             #look for the employee
-            user_result = users_collection.find_one({'email': employee_to_add['email']})
-            if user_result and 'company' not in user_result:
+            employee_to_add = db.users_collection.find_one({'email': employee_to_add['email']})
+            if employee_to_add and 'company' not in employee_to_add:
                 # switch the email given from the user to the id
-                employee_to_add["id"] = user_result["_id"]
+                employee_to_add["id"] = employee_to_add["_id"]
                 del employee_to_add["email"]
 
                 # update employees in the company
-                users_collection.find_one_and_update({'_id': employee_to_add["id"]}, {'$set': {'company': company_id}})
+                db.users_collection.find_one_and_update({'_id': employee_to_add["id"]}, {'$set': {'company': company_id}})
 
-                doc = companies_collection.find_one_and_update({'_id': company_id},
+                doc = db.companies_collection.find_one_and_update({'_id': company_id},
                                                                {'$addToSet': {"employees": employee_to_add}})
                 if doc:
                     return jsonify({'ok': True, 'msg': 'Employee has been added'}), 200

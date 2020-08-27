@@ -1,7 +1,7 @@
-from .schemas.login import validate_login
+from . import db
 from flask import jsonify
 from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token
-from .. import db
+from .schemas.login import validate_login
 
 def doLogin(user_input):
     data = validate_login(user_input)
@@ -9,31 +9,40 @@ def doLogin(user_input):
         data = data['data']
 
         #Search for user in database
-        user = db.users_collection.find_one({'email': data['email']})
-        if user and user['password'] == data['password']:
-            del user['password']
+        user_from_db = db.users_collection.find_one({'email': data['email']})
+
+        if user_from_db and user_from_db['password'] == data['password']:
+            del user_from_db['password']
+
             # create jwt token
-            token = {"_id": user['_id'], 'email': user['email']}
-            access_token = create_access_token(identity=user)
-            refresh_token = create_refresh_token(identity=user)
-            user["token"] = access_token
-            user["refresh"] = refresh_token
-            user["is_has_company"] = "company" in user
-            print(user)
+            create_and_add_token(user_from_db)
+
+            user_from_db["is_has_company"] = "company" in user_from_db
+            print(user_from_db)
 
             #Check if user is manager of company
-            if('company' in user):
-                company_id = user['company']
+            if('company' in user_from_db):
+                company_id = user_from_db['company']
                 company = db.companies_collection.find_one({'_id': company_id})
-                if (company and user['_id'] in company['managers']):
-                    user['isManagerOfCompany'] = "true"
+                if (company and user_from_db['_id'] in company['managers']):
+                    user_from_db['isManagerOfCompany'] = "true"
                 else:
-                    user['isManagerOfCompany'] = "false"
+                    user_from_db['isManagerOfCompany'] = "false"
             else:
-                user['isManagerOfCompany'] = "false"
+                user_from_db['isManagerOfCompany'] = "false"
 
-            return jsonify({'ok': True, 'data': user}), 200
+            return jsonify({'ok': True, 'data': user_from_db}), 200
         else:
             return jsonify({'ok': False, 'msg': 'invalid username or password'}), 401
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+
+
+
+
+def create_and_add_token(user_from_db):
+    token = {"_id": user_from_db['_id'], 'email': user_from_db['email']}
+    access_token = create_access_token(identity=user_from_db)
+    refresh_token = create_refresh_token(identity=user_from_db)
+    user_from_db["token"] = access_token
+    user_from_db["refresh"] = refresh_token

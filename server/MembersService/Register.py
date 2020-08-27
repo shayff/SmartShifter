@@ -1,8 +1,9 @@
+from . import db
 from .schemas.register import validate_register
 from flask import jsonify
 from pymongo import ReturnDocument #check if needed?
 from datetime import datetime
-from .. import db
+
 
 def doRegister(user_input):
    data = validate_register(user_input)
@@ -11,12 +12,12 @@ def doRegister(user_input):
       new_user['email'] = new_user['email'].lower()
 
       result_email = db.users_collection.find_one({'email': new_user['email']})
-      #look like id not really work
+      # [check] look like id not really work
       result_id_number = db.users_collection.find_one({'id number': new_user['id number']})
       if not result_email:
          prepare_new_user(new_user)
 
-         # insert to db
+         # insert user to db
          db.users_collection.insert_one(new_user)
          return jsonify({'ok': True, 'msg': "user registered successfully", "id": count_id}), 200
       else:
@@ -25,10 +26,12 @@ def doRegister(user_input):
       return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(new_user['msg'])}), 400
 
 
-
 def prepare_new_user(new_user):
+   '''
+   Add relevant fields for new user
+   '''
    # update counter Users
-   new_user_id = inc_and_get_counter
+   new_user_id = inc_and_get_counter()
    new_user.update({'_id': new_user_id})
 
    # update time created and messages
@@ -40,5 +43,5 @@ def prepare_new_user(new_user):
 
 def inc_and_get_counter():
    doc = db.counters_collection.find_one_and_update({'_id': 'userid'}, {'$inc': {'value': 1}},
-                                                    return_document=ReturnDocument.AFTER)
+                                                     return_document=ReturnDocument.AFTER)
    return doc['value']

@@ -1,4 +1,4 @@
-from server import db
+from . import db
 from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
 from .BL.BuildShiftLogic import buildshiftclass

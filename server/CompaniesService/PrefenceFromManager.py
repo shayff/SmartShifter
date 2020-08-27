@@ -1,24 +1,16 @@
-from pymongo import MongoClient
+from . import db
 from flask import jsonify
+from flask_jwt_extended import get_jwt_identity
 from pymongo import ReturnDocument
 from datetime import datetime
-from server.config import MongoConfig
-from flask_jwt_extended import get_jwt_identity
-
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db["companies"]
-users_collection = db["users"]
-
 
 def doPrefenceFromManager(data):
-        current_user = get_jwt_identity()
-        result = users_collection.find_one({'_id': current_user['_id']})
-        if "company" in result:
+        logged_in_user = get_jwt_identity()
+        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+        if "company" in user_from_db:
             # update data of relevante company
-            company_id = result["company"]
-            company = companies_collection.find_one_and_update({'_id': company_id},{'$set': {"prefence_from_manager" : data}})
+            company_id = user_from_db["company"]
+            company = db.companies_collection.find_one_and_update({'_id': company_id},{'$set': {"prefence_from_manager" : data}})
             return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
 
         else:

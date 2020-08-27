@@ -1,21 +1,21 @@
-from server import db
+from . import db
 from flask import jsonify
-from .schemas.getshifts import validate_GetShifts
 from flask_jwt_extended import get_jwt_identity
 from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
 from .BL.ShiftData import ShiftData
+from .schemas.getshifts import validate_GetShifts
 
 def doGetShifts(user_input):
     data = validate_GetShifts(user_input)
     if data['ok']:
         data = data['data']
-        current_user = get_jwt_identity()
-        logged_in_user = db.users_collection.find_one({'_id': current_user['_id']})
+        logged_in_user = get_jwt_identity()
+        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
         shiftScheduled = dict()
     
         # check if user has company
-        if 'company' in logged_in_user:
-            company_id = logged_in_user['company']
+        if 'company' in user_from_db:
+            company_id = user_from_db['company']
             company = companies_collection.find_one({'_id': company_id})
             list_of_shifts = company['shifts']
 

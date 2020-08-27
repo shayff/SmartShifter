@@ -1,5 +1,4 @@
-class testi:
-    def __init__(self):
-        self.a = 0
+from . import database
+from .database import Mongo_db
 
-testa = testi()
+db = Mongo_db()

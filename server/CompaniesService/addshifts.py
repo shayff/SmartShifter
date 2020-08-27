@@ -1,13 +1,9 @@
+from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from server.config import MongoConfig
 from .schemas.addshifts import validate_addshifts
 from pymongo import MongoClient, ReturnDocument
 
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db["companies"]
-users_collection = db["users"]
 
 def doAddShifts(user_input):
     data = validate_addshifts(user_input)
@@ -16,13 +12,13 @@ def doAddShifts(user_input):
 
         #check if user has company
         logged_in_user = get_jwt_identity()
-        result = users_collection.find_one({'_id': logged_in_user['_id']})
-        if "company" in result:
+        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+        if "company" in user_from_db:
             #update data of relevant company
-            company_id = result["company"]
+            company_id = user_from_db["company"]
 
             # update counter shifts in company
-            doc = companies_collection.find_one_and_update({'_id': company_id}, {'$inc': {'shifts_counter': 1}},
+            doc = db.companies_collection.find_one_and_update({'_id': company_id}, {'$inc': {'shifts_counter': 1}},
                                                            return_document=ReturnDocument.AFTER)
             # update id shift
             shift_id = doc['shifts_counter']
@@ -32,7 +28,7 @@ def doAddShifts(user_input):
             data.update({"status": "not_scheduled"})
 
             # insert to db
-            companies_collection.find_one_and_update({'_id': company_id}, {'$push': {'shifts': data}})
+            db.companies_collection.find_one_and_update({'_id': company_id}, {'$push': {'shifts': data}})
 
             print(data)
             return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200

@@ -1,41 +1,31 @@
-from pymongo import MongoClient
+from . import db
 from flask import jsonify
-from server.config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
 
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db['companies']
-users_collection = db['users']
-counters_collection = db['counters']
-
 def doListOfEmployees():
-    current_user = get_jwt_identity()
-    print(current_user)
-    result = users_collection.find_one({'_id': current_user['_id']})
-    if 'company' in result:
+    logged_in_user = get_jwt_identity()
+    user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+    if 'company' in user_from_db:
         employeesResult = []
-        companyId = result['company']
-        company = companies_collection.find_one({'_id': companyId})
+        company_id = user_from_db['company']
+        company_from_db = db.companies_collection.find_one({'_id': company_id})
 
         #Get all the employees from the company
-        employees = company['employees']
+        employees = company_from_db['employees']
 
         #iterate through each employee and get his full details
         for employee in employees:
-            print(employee)
-            employeeFromDb = users_collection.find_one({'_id': employee['id']})
-            employeeFromDb['job type'] = employee['job type']
-            employeeFromDb['rank'] = employee['rank']
+            employee_from_db = db.users_collection.find_one({'_id': employee['id']})
+            employee_from_db['job type'] = employee['job type']
+            employee_from_db['rank'] = employee['rank']
 
             #remove unnesery data
-            del employeeFromDb['password']
-            if 'company' in employeeFromDb:
-                del employeeFromDb['company']
+            del employee_from_db['password']
+            if 'company' in employee_from_db:
+                del employee_from_db['company']
 
             #add to list of all employees
-            employeesResult.append(employeeFromDb)
+            employeesResult.append(employee_from_db)
 
         return jsonify({'ok': True, 'msg': 'Successfully', 'data': employeesResult}), 200
     else:

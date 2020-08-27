@@ -1,34 +1,32 @@
-from server import db
+from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from .schemas.canshiftswap import validate_CanShiftSwap
 from datetime import datetime
 
-
-
 def doCanShiftSwap(userInput):
     data = validate_CanShiftSwap(userInput)
     if data['ok']:
         data = data['data']
-        current_user = get_jwt_identity()
-        result = db.users_collection.find_one({'_id': current_user['_id']})
+        logged_in_user = get_jwt_identity()
+        result = db.users_collection.find_one({'_id': logged_in_user['_id']})
 
         #check if user has company
         if 'company' in result:
             company_id = result['company']
             shift_swap = db.companies_collection.find_one({'_id': company_id},
-                                                {"shifts_swaps": {"$elemMatch": {"id": data['swap_id']}}})
+                                                           {"shifts_swaps": {"$elemMatch": {"id": data['swap_id']}}})
             status = shift_swap["shifts_swaps"][0]["status"]
             shift_id = shift_swap["shifts_swaps"][0]["shift_id"]
 
             if status == 'wait_for_swap':
                 # update the name and id of employee can swap
                 doc = db.companies_collection.find_one_and_update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
-                                                               {'$set': {'shifts_swaps.$.id_employee_can': current_user["_id"]}})
+                                                                   {'$set': {'shifts_swaps.$.id_employee_can': logged_in_user["_id"]}})
 
                 # Update status to 'wait_for_confirm'
                 doc = db.companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
-                                            {'$set': {'shifts_swaps.$.status': 'wait_for_confirm'}})
+                                                      {'$set': {'shifts_swaps.$.status': 'wait_for_confirm'}})
 
                 return jsonify({'ok': True, 'msg': 'update shift swap request successfully'}), 200
             else:
