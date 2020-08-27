@@ -174,7 +174,7 @@ def send_messages_to_employee(users):
         '/sendmessage',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
-            "to" : users_id,
+            "to" : {"employees": users_id},
             "title" : "wellcome to shifter",
             "message" : "Hope you will have fun from this test!"
         }),

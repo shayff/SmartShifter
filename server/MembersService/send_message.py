@@ -18,7 +18,25 @@ def doSendMessage(user_input):
             company_id = current_user["company"]
 
             #we get the id's of employees we want to send message by employee, shift or date
-            set_ids = get_employees_id_to_send(company_id, data["to"])
+            send_to_data = data["to"]
+            set_ids = set()
+            shifts = []
+            dates = []
+
+            if "employees" in send_to_data:
+                set_ids.update(send_to_data["employees"])
+            shifts = db.companies_collection.find_one({'_id': company_id},
+                                                      {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})[
+                "shifts"]
+            if "shifts" in send_to_data:
+                send_shifts = send_to_data["shifts"]
+            if "dates" in send_to_data:
+                send_dates = send_to_data["dates"]
+            for shift in shifts:
+                if shift["id"] in send_shifts or shift["date"] in send_dates:
+                    set_ids.update(shift["employees"])
+
+            #set_ids = get_employees_id_to_send(company_id, data["to"])
 
             message = prepare_message(set_ids,current_user["_id"],data["title"],data["message"])
 
@@ -38,27 +56,6 @@ def doSendMessage(user_input):
             return jsonify({'ok': True, 'msg': 'Company not found'}), 401
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
-
-
-def get_employees_id_to_send(company_id, send_to_data):
-
-    set_ids = set()
-    shifts = []
-    dates = []
-
-    if "employees" in send_to_data:
-        set_ids.update(send_to_data["employees"])
-    shifts = db.companies_collection.find_one({'_id': company_id},
-                                           {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})["shifts"]
-    if "shifts" in send_to_data:
-        send_shifts = send_to_data["shifts"]
-    if "dates" in send_to_data:
-        send_dates = send_to_data["dates"]
-    for shift in shifts:
-        if shift["id"] in send_shifts or shift["date"] in send_dates:
-            set_ids.update(shift["employees"])
-
-    return set_ids
 
 def prepare_message(send_to,send_from, title, message):
 

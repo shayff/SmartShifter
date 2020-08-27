@@ -77,27 +77,31 @@ def profile():
 def Register():
     return doRegister(request.get_json())
 
+@app.route('/api/v1/user/password', methods=['PUT'])
 @app.route('/changepassword', methods=['POST'])
 @jwt_required
 def ChangePassword():
     return doChangePassword(request.get_json())
 
-
+@app.route('/api/v1/user', methods=['PUT'])
 @app.route('/updateprofile', methods=['POST'])
 @jwt_required
 def profileUpdate():
     return doUpdateProfile(request.get_json())
 
+@app.route('/api/v1/message', methods=['POST'])
 @app.route('/sendmessage', methods=['POST'])
 @jwt_required
 def SendMessage():
     return doSendMessage(request.get_json())
 
+@app.route('/api/v1/messages', methods=['GET'])
 @app.route('/getmessage', methods=['GET'])
 @jwt_required
 def GetMessages():
     return doGetMessages()
 
+@app.route('/api/v1/message',methods=['PUT'])
 @app.route('/updatemessage',methods=['POST'])
 @jwt_required
 def UpdateMessage():

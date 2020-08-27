@@ -15,3 +15,5 @@ class Mongo_DB:
         self.messages_collection = db["messages"]
 
 db = Mongo_DB()
+
+
