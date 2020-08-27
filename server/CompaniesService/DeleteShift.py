@@ -1,40 +1,44 @@
+from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from server.config import MongoConfig
-from pymongo import MongoClient
 from .schemas.deleteshift import validate_deleteshift
 
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db["companies"]
-users_collection = db["users"]
-
 def doDeleteShift(user_input):
+    '''
+    This method delete shift by given id, it's also check for shift_swaps request and remove them.
+    '''
     data = validate_deleteshift(user_input)
     if data["ok"]:
         data = data["data"]
 
         #check if user has company
-        current_user = get_jwt_identity()
-        result = users_collection.find_one({'_id': current_user['_id']})
-        if "company" in result:
+        logged_in_user = get_jwt_identity()
+        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
 
-            #update data of relevant company
-            company_id = result["company"]
+        shift_id = data["id"]
+        if "company" in user_from_db:
+            company_id = user_from_db["company"]
 
-            # delete from db
-            result = companies_collection.update_one({'_id': company_id}, {'$pull': {'shifts': {'id': data['id']}}})
+            if is_shift_exist(company_id, shift_id):
+                delete_shift(company_id, shift_id)
 
-            if result.modified_count > 0:
-                # update counter shifts in company
-                companies_collection.find_one_and_update({'_id': company_id}, {'$inc': {'shifts_counter': -1}})
                 return jsonify({'ok': True, 'msg': 'delete shift successfully'}), 200
             else:
-                return jsonify({'ok': True, 'msg': 'Shift is not exist'}), 200
-
+                return jsonify({'ok': True, 'msg': 'Shift is not exist'}), 206
         else:
             return jsonify({'ok': False, 'msg': 'the company not exist'}), 401
-
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
 
+
+def delete_shift(company_id, shift_id):
+    # delete relevant swaps
+    db.companies_collection.update_one({'_id': company_id}, {'$pull': {'shifts_swaps': {'shift_id': shift_id}}})
+    # delete the shift
+    db.companies_collection.update_one({'_id': company_id}, {'$pull': {'shifts': {'id': shift_id}}})
+
+
+def is_shift_exist(company_id, shift_id):
+    doc = db.companies_collection.find_one({'_id': company_id},
+                                        {"shifts": {"$elemMatch": {"id": shift_id}}, "shifts.employees": 1})
+    return "shifts" in doc

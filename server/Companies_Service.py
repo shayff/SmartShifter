@@ -55,64 +55,67 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
+@app.route("/api/v1/company", methods=['POST'])
 @app.route("/companies/create", methods=['POST'])
 @jwt_required
 def Create():
     return doCreate(request.get_json())
 
+@app.route("/api/v1/company/employee", methods=['POST'])
 @app.route("/companies/addemployees", methods=['POST'])
 @jwt_required
 def AddEmployees():
     return doAddEmployees(request.get_json())
 
+@app.route("/api/v1/company/employee/<employee_id>", methods=['DELETE'])
 @app.route("/companies/removeemployees", methods=['POST'])
 @jwt_required
 def RemoveEmployees():
     return doRemoveEmployees(request.get_json())
 
+@app.route("/api/v1/shift/<shift_id>", methods=['PUT'])
 @app.route("/companies/updateshift", methods=['POST'])
 @jwt_required
 def UpdateShift():
     return doUpdateShift(request.get_json())
 
+@app.route("/api/v1/shift", methods=['POST'])
 @app.route("/companies/addshift", methods=['POST'])
 @jwt_required
 def AddShifts():
     return doAddShifts(request.get_json())
 
+@app.route("/api/v1/company/shift/<shift_id>", methods=['DELETE'])
 @app.route("/companies/deleteshift", methods=['POST'])
 @jwt_required
 def DeleteShift():
     return doDeleteShift(request.get_json())
 
+@app.route("/api/v1/company", methods=['PUT'])
 @app.route("/companies/update", methods=['POST'])
 @jwt_required
 def Update():
     return doUpdate(request.get_json())
 
+@app.route("/api/v1/company/employees", methods=['GET'])
 @app.route("/companies/listofemployees", methods=['GET'])
 @jwt_required
 def ListOfEmployees():
     return doListOfEmployees()
 
+@app.route("/api/v1/company", methods=['GET'])
 @app.route("/companies/profile", methods=['GET'])
 @jwt_required
 def profile():
     return doProfile()
 
+@app.route("/api/v1/company/employee", methods=['PUT'])
 @app.route("/companies/updateemployee", methods=['POST'])
 @jwt_required
 def updateemployee():
     return doUpdateEmployee(request.get_json())
 
-
-
-@app.route("/companies/PrefenceFromManager", methods=['POST'])
-@jwt_required
-def PrefenceFromManager():
-    return doPrefenceFromManager(request.get_json())
-
-
+@app.route("/api/v1/company/preferences", methods=['GET'])
 @app.route("/companies/GetPreferences", methods=['GET'])
 @jwt_required
 def GetPreferences():
@@ -123,6 +126,10 @@ def GetPreferences():
 def PrefenceFromWorker():
     return doPrefenceFromWorker(request.get_json())
 
+@app.route("/companies/PrefenceFromManager", methods=['POST'])
+@jwt_required
+def PrefenceFromManager():
+    return doPrefenceFromManager(request.get_json())
 
 #for dubg
 if __name__== '__main__':

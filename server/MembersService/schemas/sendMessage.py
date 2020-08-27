@@ -6,7 +6,14 @@ sendmessage_schema = {
     "type": "object",
     "properties": {
         "to": {
-            "type": "array"
+            "type": "object",
+            "properties": {
+                "employees":{"type" : "array"},
+                "shifts":{"type" : "array"},
+                "dates":{"type" : "array"}
+             },
+            "additionalProperties": False
+
         },
         "title": {
             "type": "string"

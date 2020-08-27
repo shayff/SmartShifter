@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from . import db
 from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
 from .BL.BuildShiftLogic import buildshiftclass
@@ -9,16 +9,6 @@ from datetime import datetime
 from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
 from .BL.ShiftData import ShiftData
 
-MongoConfig ={
-    "ConnectionString": "mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority",
-    "ClusterName": "shifter_db"
-}
-
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db['companies']
-users_collection = db['users']
 
 def doBuildShift(userInput):
     data = validate_buildShift(userInput)
@@ -32,7 +22,7 @@ def doBuildShift(userInput):
         dates = pd.Series(dates.format())
 
         current_user = get_jwt_identity()
-        result = users_collection.find_one({'_id': current_user['_id']})
+        result = db.users_collection.find_one({'_id': current_user['_id']})
         if 'company' not in result:
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
         else:
@@ -57,7 +47,7 @@ def doBuildShift(userInput):
             #Add Full_data information about shifts and employees
             shift_Scheduled_to_display = dict()
             print(scheduled_shifts)
-            company = companies_collection.find_one({'_id': company_id})
+            company = db.companies_collection.find_one({'_id': company_id})
             if(scheduled_shifts):
                 for shift_id in scheduled_shifts:
                     employees_id = scheduled_shifts[shift_id]
@@ -65,7 +55,9 @@ def doBuildShift(userInput):
                     #count how many employees scheduled
                     count += len(employees_id)
 
+                    #find the shift details in the list_of_shifts
                     shift = next(x for x in list_of_shifts if x['id'] == shift_id)
+
                     add_full_data_of_employees_to_shifts(employees_id, shift, shift_data)
                     add_is_shift_full_field(shift)
                     add_empty_shifts_by_date(shift, shift_Scheduled_to_display)
@@ -74,10 +66,17 @@ def doBuildShift(userInput):
         sort_shifts_by_start_time(shift_Scheduled_to_display)
 
         #compute the success rate
-        success_rate = int(count/total  * 100)
-        return jsonify({'ok': True, 'msg': 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'Full_data': shift_Scheduled_to_display}), 200
+        success_rate = get_success_rate(count, total)
+        return jsonify({'ok': True, 'msg': 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'full_data': shift_Scheduled_to_display}), 200
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+
+
+def get_success_rate(count, total):
+    if(total == 0):
+        return 0
+    else:
+        return int(count / total * 100)
 
 
 def add_empty_shifts_by_date(shift, shift_Scheduled_to_display):
@@ -107,16 +106,13 @@ def add_is_shift_full_field(shift):
         shift['Is_shift_full'] = 'not_full'
 
 
-
-
-
 def get_list_of_shifts(companyId,dates):
-    company = companies_collection.find_one({'_id': companyId})
+    company = db.companies_collection.find_one({'_id': companyId})
     shifts = [x for x in company['shifts'] if x['date'] in dates.tolist()]
     return shifts
 
 def get_list_of_employees(companyId):
-    company = companies_collection.find_one({'_id': companyId})
+    company = db.companies_collection.find_one({'_id': companyId})
     return [x for x in company['employees'] if 'preference' in x]
 
 def update_pre_scheduled(list_of_shifts, data):

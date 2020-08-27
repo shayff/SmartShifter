@@ -1,34 +1,26 @@
-from pymongo import MongoClient
-from .schemas.updateemployee import validate_updateemployee
+from . import db
 from flask import jsonify
-from server.config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
-
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db["companies"]
-users_collection = db["users"]
-counters_collection = db["counters"]
+from .schemas.updateemployee import validate_updateemployee
 
 #
 #   NEED TO FIX THE SEARCH OF EMPLOYEE
 #
 
-def doUpdateEmployee(data):
-   data = validate_updateemployee(data)
+def doUpdateEmployee(user_input):
+   data = validate_updateemployee(user_input)
    if data["ok"]:
       employee = data["data"]
 
       #check if user has company
       logged_in_user = get_jwt_identity()
-      result = users_collection.find_one({'_id': logged_in_user['_id']})
-      if "company" in result:
-         company_id = result["company"]
+      user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+      if "company" in user_from_db:
+         company_id = user_from_db["company"]
 
          #search if the given employee in the company
-         company = companies_collection.find_one({'_id': company_id})
-         employee_to_update = next((x for x in company["employees"] if x["id"] == employee["id"]), None)
+         company_from_db = db.companies_collection.find_one({'_id': company_id})
+         employee_to_update = next((x for x in company_from_db["employees"] if x["id"] == employee["id"]), None)
 
          if(employee_to_update):
 
@@ -37,12 +29,11 @@ def doUpdateEmployee(data):
                employee_to_update[key] = employee[key]
 
             # update object in mongo
-            companies_collection.update({'_id': company_id, 'employees.id': employee_to_update["id"]},
+            db.companies_collection.update({'_id': company_id, 'employees.id': employee_to_update["id"]},
                                                             {'$set': {'employees.$': employee_to_update}})
+            return jsonify({'ok': True, 'msg': 'Updated successfully'}), 200
          else:
-             return jsonify({'ok': False, 'msg': 'User is not in company'}), 400
-
-         return jsonify({'ok': True, 'msg': 'Updated successfully'}), 200
+            return jsonify({'ok': False, 'msg': 'User is not in company'}), 400
       else:
          return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401
    else:

@@ -5,8 +5,9 @@ import json
 from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt
 from server.MembersService.Login import doLogin
 from server.MembersService.Register import doRegister
-from server.MembersService.SendMessage import doSendMessage
+from server.MembersService.send_message import doSendMessage
 from server.MembersService.GetMessage import doGetMessages
+from server.MembersService.get_sent_messages import doGetSentMessages
 from server.MembersService.Profile import doProfile
 from server.MembersService.UpdateMessage import doUpdateMessage
 from server.MembersService.UpdateProfile import doUpdateProfile
@@ -66,41 +67,51 @@ def Logout():
     blacklist.add(jti)
     return jsonify({"msg": "Successfully logged out"}), 200
 
+@app.route("/api/v1/user/profile", methods=['GET'])
 @app.route("/profile", methods=['GET'])
 @jwt_required
 def profile():
     return doProfile()
 
+@app.route('/api/v1/user', methods=['POST'])
 @app.route('/register', methods=['POST'])
 def Register():
     return doRegister(request.get_json())
 
+@app.route('/api/v1/user/password', methods=['PUT'])
 @app.route('/changepassword', methods=['POST'])
 @jwt_required
 def ChangePassword():
     return doChangePassword(request.get_json())
 
-
+@app.route('/api/v1/user', methods=['PUT'])
 @app.route('/updateprofile', methods=['POST'])
 @jwt_required
 def profileUpdate():
     return doUpdateProfile(request.get_json())
 
+@app.route('/api/v1/message', methods=['POST'])
 @app.route('/sendmessage', methods=['POST'])
 @jwt_required
 def SendMessage():
     return doSendMessage(request.get_json())
 
+@app.route('/api/v1/messages', methods=['GET'])
 @app.route('/getmessage', methods=['GET'])
 @jwt_required
 def GetMessages():
     return doGetMessages()
 
+@app.route('/api/v1/message',methods=['PUT'])
 @app.route('/updatemessage',methods=['POST'])
 @jwt_required
 def UpdateMessage():
     return doUpdateMessage(request.get_json())
 
+@app.route('/api/v1/messages/sent',methods=['GET'])
+@jwt_required
+def get_sent_message():
+    return doGetSentMessages()
 
 #for debug
 if __name__== '__main__':
