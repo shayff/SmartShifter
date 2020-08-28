@@ -17,7 +17,7 @@ cd server
 pip install requirements.txt
 ```
 
-To install the web app use npm.
+Use the package manager npm to install the web app.
 ```bash
 cd web
 npm install
