@@ -4,10 +4,17 @@ Smart Shifter is an automatic shift scheduler and shift managment system includi
 
 ## Installation
 
+### Clone
+
+Clone this repo to your local machine using https://github.com/shayff/SmartShifter
+
+
+### Setup
+
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install SmartShifter server.
 ```bash
 cd server
-pip install pip install requirements.txt
+pip install requirements.txt
 ```
 
 To install the web app use npm.
