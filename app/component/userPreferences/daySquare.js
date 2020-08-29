@@ -11,7 +11,7 @@ export default class daySquare extends Component {
             colorPrefer : [0,0,0],
         }
                                     
-      }
+      }//<Button title= "" onPress={() => this.updateSelected({typeOfShift: 0})} />
 
       updateSelected = (data)=>
       {
@@ -47,24 +47,24 @@ return (
   
             <Text style={Styles.Text}>{this.state.DayName}: {this.props.dateName}</Text>
             <View style={Styles.line}>
-                <View style={ this.state.colorPrefer[0] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[0] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
+                <View style={ this.state.colorPrefer[0] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[0] == 1 ? Styles.AvailableButton :(this.props.whichShiftToShowe[0]? Styles.NotAvailableButton:Styles.nullButton)) }>
                     {this.props.whichShiftToShowe[0] ? (
                         <Button title= "morning" onPress={() => this.updateSelected({typeOfShift: 0})} />
-                    ): <Button title= "" onPress={() => this.updateSelected({typeOfShift: 0})} />}
+                    ): null}
                     
                 </View>
             
-                <View style={ this.state.colorPrefer[1] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[1] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
+                <View style={ this.state.colorPrefer[1] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[1] == 1 ? Styles.AvailableButton : (this.props.whichShiftToShowe[1] ? Styles.NotAvailableButton:Styles.nullButton)) }>
                     {this.props.whichShiftToShowe[1] ? (
                         <Button title= "noon" onPress={() => this.updateSelected({typeOfShift: 1})} />
-                    ):  <Button title= "" onPress={() => this.updateSelected({typeOfShift: 1})} />}
+                    ):  null}
                     
                 </View>
 
-                <View style={ this.state.colorPrefer[2] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[2] == 1 ? Styles.AvailableButton : Styles.NotAvailableButton) }>
+                <View style={ this.state.colorPrefer[2] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[2] == 1 ? Styles.AvailableButton :(this.props.whichShiftToShowe[2] ? Styles.NotAvailableButton: Styles.nullButton)) }>
                     {this.props.whichShiftToShowe[2] ? (
                         <Button title= "evening" onPress={() => this.updateSelected({typeOfShift: 2})} />
-                    ):  <Button title= "" onPress={() => this.updateSelected({typeOfShift: 2})} />}
+                    ):  null}
                     
                 </View>
             </View>
@@ -77,10 +77,10 @@ return (
 const Styles = StyleSheet.create({
 line:
 {
-    justifyContent: 'center',
+   // justifyContent: 'center',
     padding:2,
     flexDirection : 'row',
-    alignItems: 'stretch',
+   // alignItems: 'stretch',
     
 },
 Text: {
@@ -105,6 +105,11 @@ PreferButton : {
     borderRadius: 2,
     width:115,
 },
-
+nullButton:{
+    borderColor: '#36485f',
+    borderWidth: 3,
+    borderRadius: 2,
+    width:110,
+}
 
 })
