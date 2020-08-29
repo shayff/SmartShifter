@@ -125,8 +125,7 @@ export const sendMessage = message => {
         .post("/sendmessage",{
         "to":message.toWho,
         "title":message.title,
-        "message":message.textMessage,
-        "attached":message.attached
+        "message":message.textMessage
         },
         {
             headers: {

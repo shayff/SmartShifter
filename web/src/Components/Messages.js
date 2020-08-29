@@ -20,7 +20,6 @@ class Messages extends Component {
             employeeToSend:[],
             title:'',
             senderFilter: [],
-            attached:[],
             isShiftOptionAllChosen: false,
             isFilterAllChosen: false,
             isEmployeeOptionAllChosen: false,
@@ -221,10 +220,8 @@ class Messages extends Component {
         const message = document.forms["myForm7"]["textMessage"].value;
         const employeeToSend = this.state.employeeToSend.length;
         const shiftsToSend = this.state.shiftsToSend.length;
-       // const attached = document.forms["myForm6"]["attached"].value;
         let validate = true;
 
-        /*|| attached === ""*/
         if (title === "" || message === "" || (employeeToSend === 0 && shiftsToSend === 0))
          {
           alert("All Fields Must Be Filled");
@@ -299,7 +296,6 @@ class Messages extends Component {
             //toShfits: this.state.shiftsToSend, ***********************************
             title: this.state.title,
             textMessage: this.state.textMessage,
-            attached: this.state.attached,
         }
         
         if(this.validateMessage()) {
