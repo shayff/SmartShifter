@@ -156,6 +156,22 @@ export const getMessages= () => {
         })
 }
 
+export const getSentMessages= () => {
+    return axios
+        .get("/api/v1/messages/sent",
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+             }
+        })
+        .then(response => {
+            return response.data.data;
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
 export const getSettings = () => {
     return axios
     .get("http://localhost:5001/companies/profile",

@@ -178,7 +178,7 @@ class AddShifts extends Component {
                                 <input type="date"
                                     className="form-control"
                                     name="date"
-                                    min= {moment().day(7).format('YYYY-MM-DD')}
+                                    min= {moment().day(0).format('YYYY-MM-DD')}
                                     max= {moment().day(13).format('YYYY-MM-DD')}
                                     onChange={this.onChange} />
                             </div>

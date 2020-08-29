@@ -292,8 +292,15 @@ class Messages extends Component {
         e.preventDefault()
 
         const meesage = {
-            toWho: this.state.employeeToSend,
-            //toShfits: this.state.shiftsToSend, ***********************************
+            toWho: 
+            {
+                properties:
+                {
+                    employees: this.state.employeeToSend,
+                    shifts: this.state.shiftsToSend,
+                    data:[]
+                }
+            },
             title: this.state.title,
             textMessage: this.state.textMessage,
         }

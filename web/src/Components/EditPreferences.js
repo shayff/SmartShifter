@@ -3,7 +3,7 @@ import moment from 'moment'
 import { submitWantedShift } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 
-class EditShifts extends Component {
+class EditPreferences extends Component {
    constructor() {
       super()
       this.state = {
@@ -14,8 +14,8 @@ class EditShifts extends Component {
          thursday:moment().day(11),
          friday:moment().day(12),
          saturday:moment().day(13),
-         lastSunday:moment().day(7),
-         previousDisabled:true
+         // lastSunday:moment().day(7),
+         // previousDisabled:true
       }
 
       this.onSubmit = this.onSubmit.bind(this)
@@ -169,10 +169,10 @@ class EditShifts extends Component {
                 <form name="myForm8" onSubmit={this.onSubmit}>
                 <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
                     <div className="col-sm-8 mx-auto">
-                         <h1 className="text-center">Edit Shifts</h1>                
+                         <h1 className="text-center">Employee Preferences</h1>                
                     </div>
-                    <table className="table table-borderless">
-                    {/* <thead>                          
+                    {/* <table className="table table-borderless">
+                    <thead>                          
                             <tr>    
                             <th scope="col"><button type="button" id= "previous" className="btn btn-lg btn-primary btn-block" disabled={this.state.previousDisabled} onClick={() => this.onClickPreviousWeek()}>
                                 Previous Week
@@ -186,8 +186,8 @@ class EditShifts extends Component {
                                 Next Week
                             </button></th>                     
                             </tr>
-                        </thead> */}
-                    </table>
+                        </thead>
+                    </table> */}
                     <table className="table table-bordered ">
                         <thead className="thead-dark">                          
                             <tr>    
@@ -285,4 +285,4 @@ class EditShifts extends Component {
     }
 }
 
-export default withRouter(EditShifts)
+export default withRouter(EditPreferences)
