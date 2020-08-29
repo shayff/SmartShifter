@@ -16,7 +16,7 @@ def doGetShifts(user_input):
         # check if user has company
         if 'company' in user_from_db:
             company_id = user_from_db['company']
-            company = companies_collection.find_one({'_id': company_id})
+            company = db.companies_collection.find_one({'_id': company_id})
             list_of_shifts = company['shifts']
 
             # filter shifts by status

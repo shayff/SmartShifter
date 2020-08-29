@@ -10,11 +10,15 @@ def doListOfEmployees():
         company_id = user_from_db['company']
         company_from_db = db.companies_collection.find_one({'_id': company_id})
 
+        print(company_from_db)
+
         #Get all the employees from the company
         employees = company_from_db['employees']
 
+
         #iterate through each employee and get his full details
         for employee in employees:
+            print(employee)
             employee_from_db = db.users_collection.find_one({'_id': employee['id']})
             employee_from_db['job type'] = employee['job type']
             employee_from_db['rank'] = employee['rank']
