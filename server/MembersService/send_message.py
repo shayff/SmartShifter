@@ -1,7 +1,6 @@
 from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from pymongo import collection, MongoClient, ReturnDocument
 from .schemas.sendMessage import validate_sendMessage
 from datetime import datetime
 
@@ -35,8 +34,6 @@ def doSendMessage(user_input):
                 if shift["id"] in send_shifts or shift["date"] in send_dates:
                     set_ids.update(shift["employees"])
 
-            #set_ids = get_employees_id_to_send(company_id, data["to"])
-
         message = prepare_message(set_ids,current_user["_id"],data["title"],data["message"])
 
         # insert message to message collection
@@ -57,9 +54,7 @@ def doSendMessage(user_input):
 def prepare_message(send_to,send_from, title, message):
 
     # update counter message id
-    doc = db.counters_collection.find_one_and_update({'_id': 'messageid'}, {'$inc': {'value': 1}},
-                                                      return_document=ReturnDocument.AFTER)
-    count_id = doc['value']
+    count_id = db.inc_message_counter()
 
     message = {
         "_id": count_id,

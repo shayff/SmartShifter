@@ -20,9 +20,6 @@ sendmessage_schema = {
         },
         "message": {
             "type": "string"
-        },
-        "attached": {
-            "type": "array"
         }
     },
     "required": [
