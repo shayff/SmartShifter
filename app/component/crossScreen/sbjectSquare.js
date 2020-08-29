@@ -3,7 +3,6 @@ import {StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
 
-
 export default class sbjectSquare extends Component {
 
     render() {  

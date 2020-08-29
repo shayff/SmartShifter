@@ -12,7 +12,7 @@ export default class SwapSingle extends Component {
         this.state = {
         status_type:false,
         color:'#faf0e6',
-        status_new:'wait for confirm'
+        status_title:this.props.item.status,
 
       }
       
@@ -20,18 +20,30 @@ export default class SwapSingle extends Component {
 
     componentDidMount =  () => {
 
-        if(this.props.item.status!="wait for swap")
+        if(this.state.status_title == "wait for swap")
+        {
+            this.setState({color:'#faf0e6'});
+        }
+        if(this.state.status_title == "wait for confirm")
         {
             this.setState({status_type:true});
             this.setState({color:'#f08080'});
 
         }        
+        if(this.state.status_title == "confirmed")
+        {
+            this.setState({status_type:true});
+            this.setState({color:'#8fbc8f'});
+        }
     }
 
 
 
     ifWaitToSwap = async() =>
     {
+        this.setState({status_title:"wait for confirm"});
+        this.setState({color:'#f08080'});
+
         let toSend ={'swap_id':this.props.item.id}
         let token = await AsyncStorage.getItem('token');
         const response = await shiftManager_server.post('/CanShiftSwap',toSend, {
@@ -45,9 +57,6 @@ export default class SwapSingle extends Component {
 
       });
 
-      this.setState({color:'#f08080'});
-      this.props.item.status=status_new;
-
     } 
 
     render() { 
@@ -56,7 +65,7 @@ return (
         <View>
             <View style={Styles.line_Status}>
                 <Text style={Styles.title}>Status: </Text>
-                <Text style={Styles.secendTitle}>{this.props.item.status}</Text>
+                <Text style={Styles.secendTitle}>{this.state.status_title}</Text>
             </View>
 
             <View style={Styles.line}>
@@ -107,10 +116,8 @@ return (
 
     }
 }
-//a@gmail.com
 const Styles = StyleSheet.create({
    
-    
     line:
     {
         flexDirection : 'row',

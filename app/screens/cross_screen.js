@@ -8,6 +8,7 @@ export default class Cross_screen extends Component {
       super(inside);
       this.state = {
           Name:'',
+          isHaveCompany: false,
 
       }
     }
@@ -19,9 +20,22 @@ export default class Cross_screen extends Component {
   get = async (data_send) =>
   {
     let firstName = await AsyncStorage.getItem('name');
-    let name = "welcome "+ firstName;
+    let name = "Welcome "+ firstName;
+    let company = await AsyncStorage.getItem('company');
+    
+    if(company != "null")
+      {
+        this.setState({isHaveCompany:true});
+      }
+      else
+      {
+        this.setState({isHaveCompany:false});
+      }
+    
     this.setState({Name:name});
+
   }
+
 
   render() {  
         return(
@@ -38,29 +52,41 @@ export default class Cross_screen extends Component {
           </View>
 
                 <View  style={Styles.line}>
+                  {this.state.isHaveCompany ?(
+                            <View>
+                            <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'}  nevTo = {'Weekly_shift_arrangement'}/>
+                          </View>
+                  ):(null)}
+
+                </View>
+          
+                <View  style={Styles.line}>
+                {this.state.isHaveCompany ?(
                   <View>
-                    <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'}  nevTo = {'Weekly_shift_arrangement'}/>
+                  <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  nevTo = {'Switching_shifts'}/>
                   </View>
-                </View>
-          
-                <View  style={Styles.line}>
-                  <View>
-                    <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  nevTo = {'Switching_shifts'}/>
-                    </View>
+                  ):(null)}
+
                 </View>
 
                 <View  style={Styles.line}>
+                {this.state.isHaveCompany ?(
                   <View>
-                   <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'}  nevTo = {'Messages'}/>
-                   </View>
+                  <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'}  nevTo = {'Messages'}/>
+                  </View>
+                  ):(null)}
+
                 </View>
           
 
                 <View  style={Styles.line}>
+                {this.state.isHaveCompany ?(
                   <View>
-                <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  nevTo = {'User_preferences'} />
-                </View>
+                  <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  nevTo = {'User_preferences'} />
+                  </View>
+                  ):(null)}
                </View>
+
 
         </View>
       );
@@ -72,7 +98,7 @@ export default class Cross_screen extends Component {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#36485f",// צבע רקע של כל האפליקציה
+    backgroundColor: "#36485f",
     alignItems: 'center'
   },
   line:
@@ -80,19 +106,21 @@ const Styles = StyleSheet.create({
     flexDirection : 'row',
     alignItems: 'stretch',
     paddingTop: 5,
-    backgroundColor:'#36485f',// צבע רגע של השורה
+    backgroundColor:'#36485f',
   },
   firstLine:{
     
     flexDirection : 'row',
     alignItems: 'stretch',
-    paddingTop: 50,
-    backgroundColor:'#36485f',// צבע רגע של השורה
+    paddingTop: 20,
+    backgroundColor:'#36485f',
   },
   text: {
+    color: "#f5fffa",
     fontSize: 40,
+    fontWeight: "bold",
     paddingTop: 30,
-    color:"#638cb0",
+
   }
 
 });

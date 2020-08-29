@@ -1,5 +1,5 @@
 import React, {useState, Component} from 'react';
-import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, Keyboard, TouchableOpacity,ScrollView, Alert } from 'react-native';
+import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, ActivityIndicator, TouchableOpacity,ScrollView, Alert } from 'react-native';
 import member_server from '../networking/member_server';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -13,18 +13,20 @@ export default class Private_profile extends Component {
             "first name": "loding...",
             "last name": "loding...",
             "date of birth": "loding...",
-            "address": "loding...",// להוסיף
+            "address": "loding...",
+            "gender": "loding...",
             "company": 'loding...',
             "email": "loding...",
             "password": "",
-            "password to confirm":"*****"},
+            "password to confirm":"******"},
 
             titleBTpasseord : "Confirm first",
             isWriteToConfirmPassword : true,
             titleOldPassword : "Enter password",
             saveText:'not been a change',
             currectAnswer: true,
-            
+            thereIsDataFromServer : false,
+
 
       }
     }
@@ -54,6 +56,7 @@ export default class Private_profile extends Component {
         "first name": resData["first name"],
         "last name": resData["last name"],
         "date of birth": resData["date of birth"],
+        "gender": resData['gender'],
         "address": resData["address"],
         "company": resData["company name"],
         "email": resData["email"],
@@ -61,6 +64,7 @@ export default class Private_profile extends Component {
         "password to confirm": "*****"};
 
         this.setState({profileDataUser:details});
+        this.setState({thereIsDataFromServer:true});
 
       }
     
@@ -128,6 +132,7 @@ export default class Private_profile extends Component {
               "first name":this.state.profileDataUser["first name"],
               "last name":this.state.profileDataUser["last name"],
               "address":this.state.profileDataUser["address"],
+              "gender":this.state.profileDataUser["gender"],
               "date of birth":this.state.profileDataUser["date of birth"]
             }
 
@@ -148,12 +153,17 @@ export default class Private_profile extends Component {
         console.log("EROR "+err.response.data);
 
       });
+
       this.props.navigation.goBack(null);
 
 
       }
 
     render() {  
+        if(this.state.thereIsDataFromServer == false)
+        {
+            return (<View style={Styles.center}><ActivityIndicator  size="large" color="#0000ff" /></View>);
+        }
         return(
             
             <View style={Styles.all}>
@@ -205,6 +215,16 @@ export default class Private_profile extends Component {
                                 name="edit"
                                 backgroundColor="#a9a9a9"
                                 onPress={(data)=>{this.refs.address.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.address.focus();}}>  
+                        </Icon.Button> 
+                </View>
+
+                <View style={Styles.line}>
+                        <Text style={Styles.titel}>gender: </Text>
+                        <TextInput style={Styles.TextInput} ref='gender' onChangeText={(data) => {this.state.profileDataUser["gender"]=data}} editable =  {false}>{this.state.profileDataUser["gender"]}</TextInput>
+                        <Icon.Button
+                                name="edit"
+                                backgroundColor="#a9a9a9"
+                                onPress={(data)=>{this.refs.gender.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.gender.focus();}}>  
                         </Icon.Button> 
                 </View>
 
@@ -327,8 +347,8 @@ const Styles = StyleSheet.create({
       },
       all:{
       backgroundColor: '#2980b9',
-       width:410,
-       height:600,
+       width:412,
+       height:610,
        
       },
 });

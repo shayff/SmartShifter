@@ -1,15 +1,10 @@
 import React, {useState, Component} from 'react';
-import {AsyncStorage,FlatList,ActivityIndicator,StyleSheet, Text, View, Image, Keyboard, TouchableOpacity, Button,ScrollView, Alert } from 'react-native';
-//import {Get_arrangement_shifts} from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/company_server';
+import {AsyncStorage,FlatList,ActivityIndicator,StyleSheet, Text, View,ScrollView, Alert } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Calendar} from 'react-native-calendars';
 import Moment from 'moment';
-import meneger_server from '.././networking/shiftManager_server';
-import SingleShift from '.././component/shift_arrangement/singleShift';
-
-
-//import RNSchedule from 'rnschedule';
-
+import meneger_server from '../networking/shiftManager_server';
+import SingleShift from '../component/shift_arrangement/singleShift';
 
 
 export default class Weekly_shift_arrangement extends Component {
