@@ -38,7 +38,7 @@ class UpdateShift extends Component {
     }
 
     onSelectOrRemoveJobType(selectedList) {
-        this.setState({job_type: selectedList});
+        this.setState({job_type: selectedList[0].value});
     }
 
     onSelectOrRemoveEmployees(selectedList) {
@@ -187,7 +187,7 @@ class UpdateShift extends Component {
             shift_name: this.state.shift_name,
             start_time: this.state.start_time,
             end_time: this.state.end_time,
-            job_type: this.state.job_type[0].value,
+            job_type: this.state.job_type,
             difficulty: parseInt(this.state.difficulty),
             date: this.state.date,
             amount_of_employees: parseInt(this.state.amount_of_employees),
@@ -196,7 +196,6 @@ class UpdateShift extends Component {
             shift_note: this.state.shift_note,
         }
 
-        console.log(newShift)
          if(this.validateRegisterForm()) {
             updateShift(newShift).then(res => {
             this.props.history.push(`/generateShifts`)

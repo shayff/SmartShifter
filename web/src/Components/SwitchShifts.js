@@ -50,16 +50,14 @@ class SwitchShifts extends Component {
      getSwitches(this.state.filter).then(requestSwitches =>{
            if (requestSwitches)
            {
-                if (requestSwitches.length !== 0)
-                {
-                    if(this._isMounted)
-                    {
-                        this.setState({switchData: requestSwitches});
-                    }
-                }
-                else
+                if (requestSwitches.length === 0)
                 {
                     alert("No Requested Switches For This Filter")
+
+                }
+                if(this._isMounted)
+                {
+                    this.setState({switchData: requestSwitches});
                 }
            }       
        });  
@@ -100,7 +98,7 @@ class SwitchShifts extends Component {
         {
             return( 
             <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDecision(switchData.id,"confirm")}>
-                                Approve Switch
+                        Approve Switch
             </button>)
         }
     }

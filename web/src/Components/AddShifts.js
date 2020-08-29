@@ -63,7 +63,7 @@ class AddShifts extends Component {
             let dayParts=[];
             for(let i=0; i<selectedList.length; i++)
             {
-                dayParts.push(selectedList.key)
+                dayParts.push(selectedList[i].key)
             }
 
             this.setState({day_part: dayParts});

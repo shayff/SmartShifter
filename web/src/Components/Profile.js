@@ -40,7 +40,7 @@ class Profile extends Component {
                 phone: data["phone"],
                 address: data["address"],
                 date_of_birth: data["date of birth"],
-                gender:data["gender"]});
+                gender:data["gender"]})
                 }
             }
     })};
@@ -74,7 +74,7 @@ class Profile extends Component {
                             </tr>
                             <tr>
                                 <td>Gender</td>
-                                <td>{this.state.gender}</td>
+                                <td>{this.state.gender === '' ? '-' : this.state.gender}</td>
                             </tr>
                             <tr>
                                 <td>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListOfEmployees,acceptBuildShift } from './UserFunctions'
+import { acceptBuildShift } from './UserFunctions'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 
@@ -12,7 +12,6 @@ class ShowGeneratedShifts extends Component {
         this.state = {
             dataBuildShifts:{},
             arrBuildShifts:[],
-            arrEmployees:[],
             sunday:moment().day(7),
             monday:moment().day(8),
             tuesday:moment().day(9),
@@ -54,16 +53,6 @@ class ShowGeneratedShifts extends Component {
                 alert("The Algorithm Could Not Build The Requested Shifts ")
             }
         }
-        
-        ListOfEmployees().then(employees =>{ 
-            if (employees)
-            {
-                if (this._isMounted)
-                {
-                    this.setState({arrEmployees: employees});
-                }
-            }
-         });
     };
 
     parseShifts(shifts,parserShifts,minDate,maxDate)
@@ -114,17 +103,17 @@ class ShowGeneratedShifts extends Component {
         this.props.history.push(path);
     }
 
-//     onUpdateInfoShift(path, shift) {
-//         this.props.history.push(path, { detail: shift})
-//    }
+    onUpdateInfoShift(path, shift) {
+        this.props.history.push(path, { detail: shift})
+   }
 
    initializeTableModal(shift,index)
    {
        const modalButton = '#exampleModal' + index;
        const ModalId = "exampleModal" + index;
        const modalLabel = 'exampleModalLabel' + index;
-       let shiftIsOk = "btn btn-info btn-block";
-       let shiftIsNotOk = "btn btn-danger btn-block";
+       const shiftIsOk = "btn btn-success btn-block";
+       const shiftIsNotOk = "btn btn-danger btn-block";
        
        return(
        <div key = {index} style={{padding:'5px'}}>
@@ -204,9 +193,9 @@ class ShowGeneratedShifts extends Component {
                    </div>
                </div>
                    <div className="modal-footer">
-                       {/* <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
+                       <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
                            Update Shift
-                       </button> */}
+                       </button>
                        <button type="button" className="btn btn-secondary" data-dismiss="modal">
                            Close
                        </button>
@@ -285,7 +274,7 @@ class ShowGeneratedShifts extends Component {
                     </div>
                 </div>  
              </div>
-                <table className="table table-bordered">
+                <table className="table table-bordered" style={{marginBottom: '30px'}}>
                     <thead className="thead-dark">                          
                         <tr className="text-center">    
                         <th scope="col"> {this.state.sunday.format('YYYY-MM-DD')}<br/> Sunday</th>
@@ -301,92 +290,20 @@ class ShowGeneratedShifts extends Component {
                     {this.initializeTable()}
                     </tbody>
                  </table>
-             </div>
-             <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '11%'}} onClick={() => this.onAcceptBuild(`/shifts`)}>
+                 <div style={{backgroundColor:'#28a745',height:"30px",width:"40px",float:'left'}}></div>
+                 <label style={{marginLeft:"10px"}}>A Shift That Has Been Set And Is Good </label><br/>
+                 <div style={{backgroundColor:'#dc3545',height:"30px",width:"40px",float:'left'}}></div>
+                 <label style={{marginLeft:"10px", marginBottom: '30px'}}>A Shift That Has Been Set And Is Not Good</label><br/>
+                 <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onAcceptBuild(`/shifts`)}>
                         Accept Build
                 </button>   
-                <button type="button" className="btn btn-lg btn-primary btn-block" style={{marginLeft: '11%'}} onClick={() => this.onDeclineBuild(`/generateShifts`)}>
-                      Decline Build
+                <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onDeclineBuild(`/generateShifts`)}>
+                        Decline Build
                 </button>  
+             </div>
             </div>
         )
     }
 }
 
 export default withRouter(ShowGeneratedShifts)
-
-
- // initializeTableModal(shift,index)
-    // {
-    //     const collapseCard = '#collapseOne' + index;
-    //     const collapseId = "collapseOne" + index;
-    //     const collapseLabel = 'headingOne' + index;
-    //     const collapseAccordion = 'accordion' + index;
-    //     const collapseAccordionCard = '#accordion' + index;
-
- 
-    //     return(
-    //     <div key = {index} style={{padding:'5px'}}>
-    //             <div id={collapseAccordion}>
-    //                 <div className="card">
-    //                     <div className="card-header" id={collapseLabel}>
-    //                     <h5 className="mb-0">
-    //                         <button className="btn btn-link" data-toggle="collapse" data-target={collapseCard} aria-expanded="true" aria-controls={collapseId}>
-    //                         {shift.name}<br/>{shift["start time"]}-{shift["end time"]}<br/>{shift.employees.map((employee) => (
-    //                                     employee["first name"] + " " + employee["last name"] + ", "))}
-    //                         </button>
-    //                     </h5>
-    //                     </div>
-    //                     <div id={collapseId} className="collapse" aria-labelledby={collapseLabel} data-parent={collapseAccordionCard}>
-    //                     <div className="card-body">
-    //                         <table className="table table-bordered">
-    //                         <tbody>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Name Of The Shift</td>
-    //                                 <td className="table-secondary">{shift.name}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Date Of The Shift</td>
-    //                                 <td className="table-secondary">{shift.date}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Start Time Of The Shift</td>
-    //                                 <td className="table-secondary">{shift["start time"]}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">End Time Of The Shift</td>
-    //                                 <td className="table-secondary">{shift["end time"]}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Job Type For The Shift</td>
-    //                                 <td className="table-secondary">{shift["job type"]}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Difficulty Of The Shift</td>
-    //                                 <td className="table-secondary">{shift.difficulty}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Day Part Of The Shift</td>
-    //                                 <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Amount Of Employees</td>
-    //                                 <td className="table-secondary">{shift.amount}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Employees For The Shift</td>
-    //                                 <td className="table-secondary">{shift.employees.map((employee) => (
-    //                                     employee["first name"] + " " + employee["last name"] + ", "))}</td>
-    //                             </tr>
-    //                             <tr className="text-center">
-    //                                 <td className="table-primary">Note For The Shift</td>
-    //                                 <td className="table-secondary">{shift.note}</td>
-    //                             </tr>
-    //                         </tbody>
-    //                         </table>
-    //                     </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //     </div>)
-    // }
