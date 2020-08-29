@@ -282,7 +282,7 @@ class GenerateShifts extends Component {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
             <form name="myForm15" onSubmit={this.onSubmit}>
-            <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
+            <div className="jumbotron mt-5" style={{display: 'inline-block', marginLeft:'-100px'}}>
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Build Shifts </h1>
              </div>
