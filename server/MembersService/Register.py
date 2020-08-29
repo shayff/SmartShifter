@@ -4,7 +4,6 @@ from flask import jsonify
 from pymongo import ReturnDocument #check if needed?
 from datetime import datetime
 
-
 def doRegister(user_input):
    data = validate_register(user_input)
    if data["ok"]:

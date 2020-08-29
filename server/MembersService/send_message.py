@@ -14,12 +14,12 @@ def doSendMessage(user_input):
         data = data['data']
         current_user = get_jwt_identity()
 
+        # we get the id's of employees we want to send message by employee, shift or date
+        send_to_data = data["to"]
+        set_ids = set()
+
         if "company" in current_user:
             company_id = current_user["company"]
-
-            #we get the id's of employees we want to send message by employee, shift or date
-            send_to_data = data["to"]
-            set_ids = set()
             shifts = []
             dates = []
 
@@ -37,22 +37,20 @@ def doSendMessage(user_input):
 
             #set_ids = get_employees_id_to_send(company_id, data["to"])
 
-            message = prepare_message(set_ids,current_user["_id"],data["title"],data["message"])
+        message = prepare_message(set_ids,current_user["_id"],data["title"],data["message"])
 
-            # insert message to message collection
-            db.messages_collection.insert_one(message)
+        # insert message to message collection
+        db.messages_collection.insert_one(message)
 
-            # insert the message to each employee
-            for user_id in set_ids:
-                db.users_collection.update({'_id': user_id}, {'$push':
-                                                               {'messages':
-                                                                    {'$each': [
-                                                                        {'id': message['_id'], 'status': 'unread'}],'$position': 0}}})
+        # insert the message to each employee
+        for user_id in set_ids:
+            db.users_collection.update({'_id': user_id}, {'$push':
+                                                           {'messages':
+                                                                {'$each': [
+                                                                    {'id': message['_id'], 'status': 'unread'}],'$position': 0}}})
 
-            print(message)
-            return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
-        else:
-            return jsonify({'ok': True, 'msg': 'Company not found'}), 401
+        print(message)
+        return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
 

@@ -18,7 +18,6 @@ def doLogin(user_input):
             create_and_add_token(user_from_db)
 
             user_from_db["is_has_company"] = "company" in user_from_db
-            print(user_from_db)
 
             #Check if user is manager of company
             if('company' in user_from_db):
@@ -31,6 +30,7 @@ def doLogin(user_input):
             else:
                 user_from_db['isManagerOfCompany'] = "false"
 
+            print(user_from_db)
             return jsonify({'ok': True, 'data': user_from_db}), 200
         else:
             return jsonify({'ok': False, 'msg': 'invalid username or password'}), 401

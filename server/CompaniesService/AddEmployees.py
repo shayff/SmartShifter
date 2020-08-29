@@ -8,7 +8,7 @@ def doAddEmployees(user_input):
     if data['ok']:
         employee_to_add = data['data']
         logged_in_user = get_jwt_identity()
-        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+        user_from_db = db.get_user(logged_in_user['_id'])
         if 'company' in user_from_db:
             company_id = user_from_db['company']
 
