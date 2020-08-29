@@ -11,14 +11,14 @@ def doSendMessage(user_input):
     data = validate_sendMessage(user_input)
     if data["ok"]:
         data = data['data']
-        current_user = get_jwt_identity()
+        logged_in_user = get_jwt_identity()
 
         # we get the id's of employees we want to send message by employee, shift or date
         send_to_data = data["to"]
         set_ids = set()
 
-        if "company" in current_user:
-            company_id = current_user["company"]
+        if "company" in logged_in_user:
+            company_id = logged_in_user["company"]
             shifts = []
             dates = []
 
@@ -34,7 +34,7 @@ def doSendMessage(user_input):
                 if shift["id"] in send_shifts or shift["date"] in send_dates:
                     set_ids.update(shift["employees"])
 
-        message = prepare_message(set_ids,current_user["_id"],data["title"],data["message"])
+        message = prepare_message(set_ids,logged_in_user["_id"],data["title"],data["message"])
 
         # insert message to message collection
         db.messages_collection.insert_one(message)

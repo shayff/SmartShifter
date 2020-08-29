@@ -18,3 +18,11 @@ class Mongo_db:
         doc = self.counters_collection.find_one_and_update({'_id': 'messageid'}, {'$inc': {'value': 1}},
                                                          return_document=ReturnDocument.AFTER)
         return doc['value']
+
+    def inc_users_counter(self):
+        doc = self.counters_collection.find_one_and_update({'_id': 'userid'}, {'$inc': {'value': 1}},
+                                                         return_document=ReturnDocument.AFTER)
+        return doc['value']
+
+    def get_company(self, company_id):
+        return self.companies_collection.find_one({'_id': company_id})

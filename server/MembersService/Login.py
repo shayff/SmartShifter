@@ -8,7 +8,7 @@ def doLogin(user_input):
     if data['ok']:
         data = data['data']
 
-        #Search for user in database
+        # search for user in database
         user_from_db = db.users_collection.find_one({'email': data['email']})
 
         if user_from_db and user_from_db['password'] == data['password']:
@@ -19,10 +19,10 @@ def doLogin(user_input):
 
             user_from_db["is_has_company"] = "company" in user_from_db
 
-            #Check if user is manager of company
+            # check if user is manager of company
             if('company' in user_from_db):
                 company_id = user_from_db['company']
-                company = db.companies_collection.find_one({'_id': company_id})
+                company = db.get_company(company_id)
                 if (company and user_from_db['_id'] in company['managers']):
                     user_from_db['isManagerOfCompany'] = "true"
                 else:

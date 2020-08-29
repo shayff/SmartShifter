@@ -1,7 +1,6 @@
 from . import db
-from .schemas.register import validate_register
 from flask import jsonify
-from pymongo import ReturnDocument #check if needed?
+from .schemas.register import validate_register
 from datetime import datetime
 
 def doRegister(user_input):
@@ -31,7 +30,7 @@ def prepare_new_user(new_user):
    Add relevant fields for new user
    '''
    # update counter Users
-   new_user_id = inc_and_get_counter()
+   new_user_id = db.inc_users_counter()
    new_user.update({'_id': new_user_id})
 
    # update time created and messages
@@ -40,8 +39,3 @@ def prepare_new_user(new_user):
 
    # empty message
    new_user.update({'messages': []})
-
-def inc_and_get_counter():
-   doc = db.counters_collection.find_one_and_update({'_id': 'userid'}, {'$inc': {'value': 1}},
-                                                     return_document=ReturnDocument.AFTER)
-   return doc['value']
