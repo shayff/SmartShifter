@@ -14,7 +14,7 @@ class SentMessages extends Component {
             filterViewOptions: [{key:'All' ,value: 'All'}],
             textMessage:'',
             title:'',
-            recipientFilter: [],
+            recipientFilter: [{key:'All' ,value: 'All'}],
             isFilterAllChosen: true,
         }
 
@@ -44,7 +44,7 @@ class SentMessages extends Component {
         {
             for(let i=0; i<this.state.arrEmployees.length; i++)
             {
-                newFilter.push(parseInt(this.state.arrEmployees[i]["First Name"]))
+                newFilter.push(parseInt(this.state.arrEmployees[i]["_id"]))
             }
 
             isAllChosen = true;
@@ -54,7 +54,7 @@ class SentMessages extends Component {
         {
             for(let i=0; i<selectedList.length; i++)
             {
-                newFilter.push(parseInt(selectedList[i].value))
+                newFilter.push(parseInt(selectedList[i].key))
             }
 
             isAllChosen = false;
@@ -72,7 +72,7 @@ class SentMessages extends Component {
         messagesFilterd = messages.filter((message) => { 
             for(let i=0 ; i<optionsFilter.length; i++)
             {
-                if(message["name_sender"].indexOf(optionsFilter[i])>-1)
+                if(message["to"].indexOf(optionsFilter[i])>-1)
                 {
                     return true;
                 }
@@ -84,15 +84,48 @@ class SentMessages extends Component {
         return messagesFilterd;
     }
 
+    parseIdToName(arrOfID)
+    {
+        let employeeFilterd = [];
+        let arrOfNames = [];
+        const listOfEmployees = this.state.arrEmployees;
+
+        employeeFilterd = listOfEmployees.filter((employee) => { 
+            for(let i=0 ; i<arrOfID.length; i++)
+            {
+                if(employee["_id"] === arrOfID[i])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        employeeFilterd.map((employee) => (
+            arrOfNames.push(employee["first name"] + ' ' + employee["last name"])));
+
+        return arrOfNames.join(', ');
+    }
+
     initializeTable = (userMessages,optionsFilter) => {
         if(userMessages)
         {
-            let userMessagesFilterd = this.filterMessages(userMessages,optionsFilter);
+            let userMessagesFilterd;
+
+            if(this.isAllOptionInArray(optionsFilter))
+            {
+                userMessagesFilterd = userMessages;
+            }
+            else
+            {
+                userMessagesFilterd = this.filterMessages(userMessages,optionsFilter);
+            }
 
             return userMessagesFilterd.map((messages,index) => (
                 <tr key = {index} >
                 <th scope="row" className="text-center"> {index + 1}</th>
-                <td className="text-center">{messages["name_sender"]}</td>
+                <td className="text-center">{this.parseIdToName(messages["to"])}</td>
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
@@ -118,10 +151,9 @@ class SentMessages extends Component {
      {
         this._isMounted = true;
 
-        getSentMessages().then(userMessages =>{
+        getSentMessages().then(userMessages => {
             if (userMessages && userMessages.length !== 0)
             {
-                console.log(userMessages)
                 if (this._isMounted)
                 {
                     this.setState({messages: userMessages});
@@ -147,7 +179,7 @@ class SentMessages extends Component {
     render () {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
-                <div className="jumbotron mt-5">
+                <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
                     <div className="col-sm-8 mx-auto">
                         <h1 className="text-center">
                             {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-chat-text-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
