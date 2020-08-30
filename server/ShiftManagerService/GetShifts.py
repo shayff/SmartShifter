@@ -80,7 +80,7 @@ def add_is_shift_full_field(shift):
 
 def add_is_asked_swap_field(shift,company_id, user_id):
     if user_id in shift["employees"]:
-        doc = db.companies_collection.find_one({'_id': company_id},{"shifts_swaps": {"$elemMatch": {"id_employee_ask": user_id}}})
+        doc = db.companies_collection.find_one({'_id': company_id},{"shifts_swaps": {"$elemMatch": {"id_employee_ask": user_id, "shift_id": shift["id"]}}})
         if doc is not None:
             shift["is_asked_swap"] = True
         else:
