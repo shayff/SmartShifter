@@ -15,12 +15,12 @@ def doDeleteShift(user_input):
         logged_in_user = get_jwt_identity()
         user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
 
-        shift_id = data["id"]
+        shift_ids = data["id"]
         if "company" in user_from_db:
             company_id = user_from_db["company"]
-
-            if is_shift_exist(company_id, shift_id):
-                delete_shift(company_id, shift_id)
+            for shift_id in shift_ids:
+                if is_shift_exist(company_id, shift_id):
+                    delete_shift(company_id, shift_id)
 
                 return jsonify({'ok': True, 'msg': 'delete shift successfully'}), 200
             else:
