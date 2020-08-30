@@ -16,6 +16,9 @@ def doGetMessages():
         msg["status"] = msg_id["status"]
         list_messages.append(msg)
 
+        #add sender name
+        #for
+
     print(list_messages)
     #check if List is empty
     if not list_messages:

@@ -10,6 +10,7 @@ def doGetSentMessages():
 
     for item in messages:
         list_messages.append(item)
+        print(item)
 
     print(list_messages)
     #check if List is empty

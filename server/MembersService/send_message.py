@@ -19,8 +19,8 @@ def doSendMessage(user_input):
 
         if "company" in logged_in_user:
             company_id = logged_in_user["company"]
-            shifts = []
-            dates = []
+            send_shifts = []
+            send_dates = []
 
             if "employees" in send_to_data:
                 set_ids.update(send_to_data["employees"])
@@ -30,6 +30,7 @@ def doSendMessage(user_input):
                 send_shifts = send_to_data["shifts"]
             if "dates" in send_to_data:
                 send_dates = send_to_data["dates"]
+
             for shift in shifts:
                 if shift["id"] in send_shifts or shift["date"] in send_dates:
                     set_ids.update(shift["employees"])
@@ -59,6 +60,7 @@ def prepare_message(send_to,send_from, title, message):
     message = {
         "_id": count_id,
         "to": list(send_to),
+        "title": title,
         "from": send_from,
         "message": message,
         "time_created": datetime.now().ctime()
