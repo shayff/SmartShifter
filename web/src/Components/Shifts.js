@@ -134,15 +134,12 @@ class Shifts extends Component {
                  <div className='scheduler-container'>
                     <Scheduler/>
                  </div>  
-                </div>
-                <button type="button" className="btn btn-lg btn-primary btn-block"  onClick={() => this.onEditShifts(`/`)}>
-                                Update Current Week Shifts
-                </button>  
+                </div> 
                 <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onEditShifts(`/editPreferences`)}>
                                 Edit Employee Preference
                 </button>   
                 <button type="button" className="btn btn-lg btn-primary btn-block"  onClick={() => this.onGenerateShifts(`/generateShifts`)}>
-                                Generate Shifts
+                                Update And Build Shifts
                 </button> 
             </div>
         )

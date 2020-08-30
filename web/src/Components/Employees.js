@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { getSettings ,ListOfEmployees, removeEmployee } from './UserFunctions'
+import { getSettings ,listOfEmployees, removeEmployee } from './UserFunctions'
 import { Multiselect } from 'multiselect-react-dropdown'
 
 class Employees extends Component {
@@ -81,7 +81,7 @@ class Employees extends Component {
 
     getListListOfEmployees()
     {
-        ListOfEmployees().then(employees => {
+        listOfEmployees().then(employees => {
             if (employees && employees.length === 0)
             {
                 alert("No Employees To Show")

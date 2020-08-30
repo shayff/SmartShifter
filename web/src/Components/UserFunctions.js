@@ -259,7 +259,7 @@ export const updateEmployeeInfo = user => {
         })
 }
 
-export const ListOfEmployees = () => {
+export const listOfEmployees = () => {
     return axios
         .get("http://localhost:5001/companies/listofemployees",
         {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListOfEmployees, updateShift,getSettings } from './UserFunctions'
+import { listOfEmployees, updateShift,getSettings } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
@@ -117,7 +117,7 @@ class UpdateShift extends Component {
             }
         });
 
-        ListOfEmployees().then(employees =>{ 
+        listOfEmployees().then(employees =>{ 
             if (employees)
             {
                 if (this._isMounted)

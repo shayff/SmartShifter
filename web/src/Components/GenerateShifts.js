@@ -109,6 +109,13 @@ class GenerateShifts extends Component {
         });
     }
 
+    onRemoveAll()
+    {
+        removeShift().then(()=> {
+            this.updateDatesAndGetShifts();
+       });
+    }
+
     onAddShifts(path)
     {
         this.props.history.push(path);
@@ -260,6 +267,43 @@ class GenerateShifts extends Component {
             );
     }
 
+    onClickNextWeek()
+    {
+        if(this.state.isCurrentWeek)
+        {
+            this.setState({
+                sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
+                monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
+                tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
+                wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
+                thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
+                friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
+                saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
+                nextDisabled: true,
+                previousDisabled: false,
+                isCurrentWeek: false
+            },() =>  this.updateDatesAndGetShifts());
+        }
+    }
+
+    onClickPreviousWeek(){
+       if(!this.state.isCurrentWeek)
+        {
+            this.setState({
+                sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
+                monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
+                tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
+                wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
+                thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
+                friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
+                saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
+                nextDisabled: false,
+                previousDisabled: true,
+                isCurrentWeek: true
+            },() =>  this.updateDatesAndGetShifts());
+        }
+    }
+
     onSubmit (e) {
         e.preventDefault()
         
@@ -281,50 +325,13 @@ class GenerateShifts extends Component {
         })
     }
 
-    onClickNextWeek()
-    {
-        if(this.state.isCurrentWeek)
-        {
-            this.setState({
-                sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
-                monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
-                tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
-                wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
-                thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
-                friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
-                saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
-                nextDisabled: true,
-                previousDisabled: false,
-                isCurrentWeek: false
-            });
-        }
-    }
-
-    onClickPreviousWeek(){
-       if(!this.state.isCurrentWeek)
-        {
-            this.setState({
-                sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
-                monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
-                tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
-                wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
-                thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
-                friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
-                saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
-                nextDisabled: false,
-                previousDisabled: true,
-                isCurrentWeek: true
-            });
-        }
-    }
-
     render () {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
             <form name="myForm15" onSubmit={this.onSubmit}>
             <div className="jumbotron mt-5" style={{display: 'inline-block', marginLeft:'-100px'}}>
              <div className="col-sm-8 mx-auto">
-                <h1 className="text-center"> Build Shifts </h1>
+                <h1 className="text-center"> Update And Build Shifts </h1>
              </div>
                 <table className="table table-borderless">
                     <thead>                          
@@ -377,7 +384,10 @@ class GenerateShifts extends Component {
                         <path fillRule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z"/>
                         <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
                     </svg>}<br/> Add Shifts 
-                </button>   
+                </button> 
+                <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onRemoveAll()}>
+                               Remove All Displayed Shifts
+                </button>    
                 <button type="submit" className="btn btn-lg btn-primary btn-block">
                                Build Shifts
                 </button>  

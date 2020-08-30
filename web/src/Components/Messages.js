@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getMessages,ListOfEmployees,sendMessage,getShifts } from './UserFunctions'
+import { getMessages,listOfEmployees,sendMessage,getShifts } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
@@ -12,7 +12,7 @@ class Messages extends Component {
         this.state = { 
             messages: [],
             arrEmployees:[],
-            filterViewOptions: [],
+            filterViewOptions: [{key:'All' ,value: 'All'}],
             shiftsViewOptions: [],
             employeeViewOptions: [],
             textMessage:'',
@@ -21,7 +21,7 @@ class Messages extends Component {
             title:'',
             senderFilter: [],
             isShiftOptionAllChosen: false,
-            isFilterAllChosen: false,
+            isFilterAllChosen: true,
             isEmployeeOptionAllChosen: false,
             shiftsOptions:[],
             minDate: moment().day(0).format('YYYY-MM-DD'),
@@ -90,7 +90,7 @@ class Messages extends Component {
         messagesFilterd = messages.filter((message) => { 
             for(let i=0 ; i<optionsFilter.length; i++)
             {
-                if(messages["name_sender"].indexOf(optionsFilter[i])>-1)
+                if(message["name_sender"].indexOf(optionsFilter[i])>-1)
                 {
                     return true;
                 }
@@ -277,7 +277,7 @@ class Messages extends Component {
             }
         });  
         
-        ListOfEmployees().then(employees =>{
+        listOfEmployees().then(employees =>{
             if (employees)
             {
                 if (this._isMounted)
@@ -287,26 +287,29 @@ class Messages extends Component {
             }
          });
     }
+
+    onMyMessages(path)
+    {
+        this.props.history.push(path);
+    }
     
       onSubmit (e) {
         e.preventDefault()
 
-        const meesage = {
+        const message = {
             toWho: 
             {
-                properties:
-                {
-                    employees: this.state.employeeToSend,
-                    shifts: this.state.shiftsToSend,
-                    data:[]
-                }
+                employees: this.state.employeeToSend,
+                shifts: this.state.shiftsToSend,
+                dates:[]
             },
             title: this.state.title,
             textMessage: this.state.textMessage,
         }
         
+        console.log(message)
         if(this.validateMessage()) {
-            sendMessage(meesage).then(res => {
+            sendMessage(message).then(res => {
                 window.location.reload(false);
            })
         }
@@ -335,7 +338,7 @@ class Messages extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.initializeTable(this.state.messages)}  
+                            {this.initializeTable(this.state.messages,this.state.senderFilter)}  
                         </tbody>
                         </table>
                         <div>
@@ -344,7 +347,8 @@ class Messages extends Component {
                             id='senderFilter'
                             options= {this.initializeEmployeeOptions()}
                             style={{searchBox: {background: 'white'}}}
-                            selectedValues= {[{key:'All' ,value: 'All'}]}
+                            selectedValues={this.state.filterViewOptions}
+                            selectionLimit={this.state.isFilterAllChosen === true ? '1' : null}
                             displayValue="value"
                             groupBy="cat"
                             closeIcon="cancel"
@@ -353,7 +357,10 @@ class Messages extends Component {
                             hidePlaceholder={true}
                             onSelect={this.onSelectOrRemoveFilter}
                             onRemove={this.onSelectOrRemoveFilter}/>
-                        </div>
+                        </div><br/>
+                        <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onMyMessages(`/sentMessages`)}>
+                                    My Messages
+                    </button>
                 </div>
                 <form name="myForm7" onSubmit={this.onSubmit}>
                 <div className="input-group mb-3">

@@ -14,8 +14,9 @@ class EditPreferences extends Component {
          thursday:moment().day(11),
          friday:moment().day(12),
          saturday:moment().day(13),
-         // lastSunday:moment().day(7),
-         // previousDisabled:true
+         // isCurrentWeek: false,
+         // nextDisabled: true,
+         // previousDisabled: false
       }
 
       this.onSubmit = this.onSubmit.bind(this)
@@ -52,38 +53,41 @@ class EditPreferences extends Component {
       });
     }
 
-   //  onClickNextWeek(){
-   //    this.setState({
-   //       sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
-   //       monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
-   //       tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
-   //       wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
-   //       thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
-   //       friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
-   //       saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
-   //       previousDisabled:false
-   //    });
+   //  onClickNextWeek()
+   //  {
+   //      if(this.state.isCurrentWeek)
+   //      {
+   //          this.setState({
+   //              sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
+   //              monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
+   //              tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
+   //              wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
+   //              thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
+   //              friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
+   //              saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
+   //              nextDisabled: true,
+   //              previousDisabled: false,
+   //              isCurrentWeek: false
+   //          });
+   //      }
    //  }
 
    //  onClickPreviousWeek(){
-   //     if(this.state.lastSunday<=moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'))
-   //     {
-   //       this.setState({
-   //          sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
-   //          monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
-   //          tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
-   //          wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
-   //          thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
-   //          friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
-   //          saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
-   //          previousDisabled:false
-   //       });
-   //     }
-   //    else{
-   //       this.setState({
-   //          previousDisabled:true
-   //       })
-   //    }
+   //     if(!this.state.isCurrentWeek)
+   //      {
+   //          this.setState({
+   //              sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
+   //              monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
+   //              tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
+   //              wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
+   //              thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
+   //              friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
+   //              saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
+   //              nextDisabled: false,
+   //              previousDisabled: true,
+   //              isCurrentWeek: true
+   //          });
+   //      }
    //  }
     
     onSubmit (e) {
@@ -170,24 +174,28 @@ class EditPreferences extends Component {
                 <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
                     <div className="col-sm-8 mx-auto">
                          <h1 className="text-center">Employee Preferences</h1>                
-                    </div>
-                    {/* <table className="table table-borderless">
-                    <thead>                          
-                            <tr>    
-                            <th scope="col"><button type="button" id= "previous" className="btn btn-lg btn-primary btn-block" disabled={this.state.previousDisabled} onClick={() => this.onClickPreviousWeek()}>
-                                Previous Week
-                            </button></th>                     
-                            <th scope="col"></th>                     
-                            <th scope="col"></th>                     
-                            <th scope="col"></th>                     
-                            <th scope="col"></th>                     
-                            <th scope="col"></th>                     
-                            <th scope="col" ><button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onClickNextWeek()}>
-                                Next Week
-                            </button></th>                     
-                            </tr>
-                        </thead>
-                    </table> */}
+                    </div><br/>
+                  {/* <table className="table table-borderless">
+                     <thead>                          
+                           <tr>    
+                           <th scope="col">
+                              <button type="button" id= "previous" className="btn btn-lg btn-primary btn-block" disabled={this.state.previousDisabled} onClick={() => this.onClickPreviousWeek()}>
+                                 Previous Week
+                              </button>
+                           </th>                     
+                           <th scope="col"></th>                     
+                           <th scope="col"></th>                     
+                           <th scope="col"></th>                     
+                           <th scope="col"></th>                     
+                           <th scope="col"></th>                     
+                           <th scope="col" >
+                              <button type="button" className="btn btn-lg btn-primary btn-block"  disabled={this.state.nextDisabled} onClick={() => this.onClickNextWeek()}>
+                                 Next Week
+                              </button>
+                           </th>                     
+                           </tr>
+                     </thead>
+                  </table> */}
                     <table className="table table-bordered ">
                         <thead className="thead-dark">                          
                             <tr>    
