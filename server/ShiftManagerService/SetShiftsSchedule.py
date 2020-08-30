@@ -17,6 +17,8 @@ def doSetShiftsSchedule(data):
             #send message to employees
             send_message_to_employees(employees)
 
+            company = db.companies_collection.find_one_and_update({'_id': company_id},{'$set': {"prefence_from_manager" : []}})
+
             return jsonify({'ok': True, 'msg': 'Update shift successfully'}), 200
         else:
             return jsonify({'ok': False, 'msg': 'User has no company'}), 401

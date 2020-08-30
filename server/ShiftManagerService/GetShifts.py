@@ -5,6 +5,8 @@ from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employee
 from .BL.ShiftData import ShiftData
 from .schemas.getshifts import validate_GetShifts
 
+
+
 def doGetShifts(user_input):
     data = validate_GetShifts(user_input)
     if data['ok']:
@@ -23,7 +25,7 @@ def doGetShifts(user_input):
             list_of_shifts = filter_by_status(data, list_of_shifts)
 
             # filter by dates and add full data
-            get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled)
+            get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, logged_in_user['_id'])
 
             #sort the shifts by start date
             sort_shifts_by_start_time(shiftScheduled)
@@ -35,11 +37,14 @@ def doGetShifts(user_input):
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 
 
-def get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled):
+def get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, user_id):
     shift_data = ShiftData(company_id)
     for shift in list_of_shifts:
         dic_employees = {}
         if shift and shift['date'] >= data['start_date'] and shift['date'] <= data['end_date']:
+
+            add_is_asked_swap_field(shift,company_id,user_id)
+
 
             # For each employee id we get frmo DB the name and appened to the employees array of the shift
             add_full_data_of_employees_to_shifts(shift["employees"], shift, shift_data)
@@ -49,7 +54,6 @@ def get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled):
 
             if shift["status"] == "scheduled":
                 add_is_shift_full_field(shift)  # duplicate with build shift
-
 
 def add_shift_to_shiftScheduled(shift, shiftScheduled):
     if shift['date'] in shiftScheduled:
@@ -73,3 +77,13 @@ def add_is_shift_full_field(shift):
         shift['Is_shift_full'] = 'full'
     else:
         shift['Is_shift_full'] = 'not_full'
+
+def add_is_asked_swap_field(shift,company_id, user_id):
+    if user_id in shift["employees"]:
+        doc = db.companies_collection.find_one({'_id': company_id},{"shifts_swaps": {"$elemMatch": {"id_employee_ask": user_id}}})
+        if doc is not None:
+            shift["is_asked_swap"] = True
+        else:
+            shift["is_asked_swap"] = False
+    else:
+        shift["is_asked_swap"] = False
