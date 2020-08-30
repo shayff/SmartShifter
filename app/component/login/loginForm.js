@@ -71,18 +71,9 @@ get_from_server = async (data_send) =>
 
     this.props.fatherProps.navigation.navigate('Cross_screen');
   }catch(err){
-      if(err.response.data == 400)
-      {
-        Alert.alert("You entered incorrect parameters");
-      }
-      else // is 401
-      {
-        Alert.alert("One of the data is incorrect or you are not registered in the system");
-      }
+      Alert.alert(err.response.data.msg);
       this.setState({isCheckData:false});
-      console.log(err.response.data);
-      console.log(err.response.status); // 400 401 // לטפל בבעיות
-    
+      //console.log(err.response.status); // 400 401 // לטפל בבעיות
   }
 }
 

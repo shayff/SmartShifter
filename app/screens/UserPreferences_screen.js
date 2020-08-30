@@ -21,6 +21,7 @@ export default class User_preferences extends Component {
             availability: -1,
             thereIsDataFromServer: false,
             menegerSendShift : false,
+            MSGtoEMP: "",
         }
         
     }
@@ -35,10 +36,10 @@ export default class User_preferences extends Component {
                     Authorization: "Bearer " + token
                 }
             }).then(response => {
-                console.log("look= " + response.data);
-                let myData = {};
-                if(response.data.data == myData)// empty
+
+                if(response.data.msg != "Successfully") // empty
                 {
+                    this.setState({MSGtoEMP:response.data.msg});
                     this.setState({menegerSendShift:false});
                 }
                 else
@@ -260,7 +261,7 @@ export default class User_preferences extends Component {
                 </View>
 
                 ):(
-                    <View><Text>There is no shifts to select</Text></View>
+                <View><Text>{this.state.MSGtoEMP}</Text></View> // need styles
                 )}
                 
             </ScrollView>

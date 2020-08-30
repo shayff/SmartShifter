@@ -9,9 +9,8 @@ export default class daySquare extends Component {
         this.state = {
             DayName : this.props.dayName,
             colorPrefer : [0,0,0],
-        }
-                                    
-      }//<Button title= "" onPress={() => this.updateSelected({typeOfShift: 0})} />
+        }                      
+      }
 
       updateSelected = (data)=>
       {
@@ -44,7 +43,6 @@ export default class daySquare extends Component {
     render() {  
 return (
     <View>
-  
             <Text style={Styles.Text}>{this.state.DayName}: {this.props.dateName}</Text>
             <View style={Styles.line}>
                 <View style={ this.state.colorPrefer[0] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[0] == 1 ? Styles.AvailableButton :(this.props.whichShiftToShowe[0]? Styles.NotAvailableButton:Styles.nullButton)) }>
@@ -77,11 +75,8 @@ return (
 const Styles = StyleSheet.create({
 line:
 {
-   // justifyContent: 'center',
     padding:2,
     flexDirection : 'row',
-   // alignItems: 'stretch',
-    
 },
 Text: {
     alignSelf:'center',
@@ -111,5 +106,4 @@ nullButton:{
     borderRadius: 2,
     width:110,
 }
-
 })

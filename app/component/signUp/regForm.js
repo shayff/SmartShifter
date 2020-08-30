@@ -61,15 +61,7 @@ export default class Regform extends Component {
       Alert.alert("you have successfully registered");
       this.props.fatherProps.navigation.navigate('Enter_Screen');
     }catch(err){
-        if(err.response.data == 400)
-        {
-          Alert.alert("You entered incorrect parameters");
-        }
-        else // is 401
-        {
-          Alert.alert("You already exist in the system");
-        }
-  
+        Alert.alert(err.response.data.msg);
     }
   }
 

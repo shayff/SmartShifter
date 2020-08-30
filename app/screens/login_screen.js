@@ -9,11 +9,9 @@ export default class Login extends Component {
         return(
             
             <View style={Styles.container}>
-                <View style={Styles.bigTitleView}>
-                <Text style={Styles.bigTitle}>Smart Shifter</Text>
-                </View>
+
                 <View style={Styles.logo_container}>
-                <Image style={Styles.image} source={require('../component/login/images/logo.png')}/>
+                <Image style={Styles.image} source={require('../component/login/images/Logo_w.png')}/>
                 <Text style={Styles.smallTitle}>Make It Simple</Text>
                 </View>
                 <View>
@@ -37,13 +35,8 @@ export default class Login extends Component {
     {
         color: '#fff',
         opacity: 0.7,
-        paddingTop:8,
-
-    },
-    bigTitleView:
-    {
-        paddingTop:15,
-        alignItems: 'center',
+        paddingTop:1,
+        paddingBottom:10
 
     },
     bigTitle:
@@ -54,16 +47,15 @@ export default class Login extends Component {
     },
     logo_container:
     {
-        paddingTop:10,
+        paddingTop:15,
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop:10,
-       
     },
     image:
     {
-        width: 100,
-        height: 100,
+        width: 200,
+        height: 110,
     }
     
     });

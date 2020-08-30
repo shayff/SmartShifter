@@ -11,7 +11,7 @@ export default class SignUp extends Component {
 
            <View style={Styles.container}>           
                 <View style={global_styles.logo_container}>
-                <Image style={global_styles.image} source={require('../component/login/images/logo.png')}/>
+                <Image style={global_styles.image} source={require('../component/login/images/Logo_w.png')}/>
                 <Text style={global_styles.smallTitle, Styles.smallTitle}>Happy to see you joining</Text>
                 </View>
              <ScrollView >
@@ -32,23 +32,20 @@ const Styles = StyleSheet.create({
     {
         flex:1,
         backgroundColor:'#36485f',
-        paddingLeft:12,
-        paddingRight:12,
-        
-        paddingTop:15,
+      //  paddingTop:1,
     },
     reg:
     {
-        paddingTop : 30,
+        paddingTop : 20,
         backgroundColor: '#486180',
     },
     smallTitle:
     {
         color: '#fff',
+        paddingBottom:10,
     },
     logo_container:
     {
-        paddingTop:10,
         alignItems: 'center',
         justifyContent: 'center',       
     },
