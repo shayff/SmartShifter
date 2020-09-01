@@ -111,7 +111,11 @@ class GenerateShifts extends Component {
 
     onRemoveAll()
     {
-        removeShift().then(()=> {
+        let arrID = [];
+        this.state.arrShiftsNotScheduled.map((shift) => (
+            arrID.push(shift.id)));
+
+        removeShift(arrID).then(()=> {
             this.updateDatesAndGetShifts();
        });
     }
@@ -123,7 +127,7 @@ class GenerateShifts extends Component {
 
     onRemoveShift(id)
     {
-        removeShift(id).then(()=> {
+        removeShift([id]).then(()=> {
             this.updateDatesAndGetShifts();
        });
     }
@@ -329,7 +333,7 @@ class GenerateShifts extends Component {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
             <form name="myForm15" onSubmit={this.onSubmit}>
-            <div className="jumbotron mt-5" style={{display: 'inline-block', marginLeft:'-100px'}}>
+            <div className="jumbotron mt-5" >
              <div className="col-sm-8 mx-auto">
                 <h1 className="text-center"> Update And Build Shifts </h1>
              </div>

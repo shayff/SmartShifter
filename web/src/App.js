@@ -23,8 +23,6 @@ import UpdateShift from './Components/UpdateShift'
 import ShowGeneratedShifts from './Components/ShowGeneratedShifts'
 import UpdatePassword from './Components/UpdatePassword'
 import ProtectedRoute from './Components/ProtectedRoute'
-import SentMessages from './Components/SentMessages'
-
 
 class App extends Component {
   render () {
@@ -54,7 +52,6 @@ class App extends Component {
             <ProtectedRoute exact path="/updateShift" component={UpdateShift} />
             <ProtectedRoute exact path="/showGeneratedShifts" component={ShowGeneratedShifts} />
             <ProtectedRoute exact path="/updatePassword" component={UpdatePassword} />
-            <ProtectedRoute exact path="/sentMessages" component={SentMessages} />
             </Switch>
           </div>
         </div>

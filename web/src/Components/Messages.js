@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getMessages,listOfEmployees,sendMessage,getShifts } from './UserFunctions'
+import { getSentMessages,listOfEmployees,sendMessage,getShifts } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
@@ -19,7 +19,7 @@ class Messages extends Component {
             shiftsToSend:[],
             employeeToSend:[],
             title:'',
-            senderFilter: [{key:'All' ,value: 'All'}],
+            recipientFilter: [{key:'All' ,value: 'All'}],
             isShiftOptionAllChosen: false,
             isFilterAllChosen: true,
             isEmployeeOptionAllChosen: false,
@@ -79,9 +79,9 @@ class Messages extends Component {
             showView = selectedList;
         }
         
-        this.setState({senderFilter: newFilter,
+        this.setState({recipientFilter: newFilter,
                        filterViewOptions: showView,
-                       isFilterAllChosen: isAllChosen}, () => this.initializeTable(this.state.messages,this.state.senderFilter));
+                       isFilterAllChosen: isAllChosen}, () => this.initializeTable(this.state.messages,this.state.recipientFilter));
     }
 
     filterMessages(messages,optionsFilter)
@@ -90,7 +90,7 @@ class Messages extends Component {
         messagesFilterd = messages.filter((message) => { 
             for(let i=0 ; i<optionsFilter.length; i++)
             {
-                if(message["name_sender"] === optionsFilter[i])
+                if(message["to"].indexOf(optionsFilter[i])>-1)
                 {
                     return true;
                 }
@@ -164,17 +164,28 @@ class Messages extends Component {
                        employeeViewOptions: showView});
     }
 
-    parseIdToName(ID)
+    parseIdToName(arrOfID)
     {
+        let employeeFilterd = [];
+        let arrOfNames = [];
         const listOfEmployees = this.state.arrEmployees;
 
-        for(let i=0; i<listOfEmployees.length; i++)
-        {
-            if(listOfEmployees[i]["_id"] === ID)
+        employeeFilterd = listOfEmployees.filter((employee) => { 
+            for(let i=0 ; i<arrOfID.length; i++)
             {
-                return listOfEmployees[i]["first name"] + " "  + listOfEmployees[i]["last name"] 
+                if(employee["_id"] === arrOfID[i])
+                {
+                    return true;
+                }
             }
-        }
+
+            return false;
+        });
+
+        employeeFilterd.map((employee) => (
+            arrOfNames.push(employee["first name"] + ' ' + employee["last name"])));
+
+        return arrOfNames.join(', ');
     }
 
     initializeTable = (userMessages,optionsFilter) => {
@@ -190,11 +201,11 @@ class Messages extends Component {
             {
                 userMessagesFilterd = this.filterMessages(userMessages,optionsFilter);
             }
-            
+
             return userMessagesFilterd.map((messages,index) => (
                 <tr key = {index} >
                 <th scope="row" className="text-center"> {index + 1}</th>
-                <td className="text-center">{this.parseIdToName(messages["name_sender"])}</td>
+                <td className="text-center">{this.parseIdToName(messages["to"])}</td>
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
@@ -285,7 +296,7 @@ class Messages extends Component {
 
         this.getShiftsOptions();
 
-        getMessages().then(userMessages =>{
+        getSentMessages().then(userMessages => {
             if (userMessages && userMessages.length !== 0)
             {
                 if (this._isMounted)
@@ -353,20 +364,20 @@ class Messages extends Component {
                         <thead className="thead-dark">
                             <tr>
                             <th scope="col" className="text-center">#</th>
-                            <th scope="col" className="text-center">The Sender</th>
+                            <th scope="col" className="text-center">To</th>
                             <th scope="col" className="text-center">Title</th>
                             <th scope="col" className="text-center">The Message</th>
                             <th scope="col" className="text-center">Time Created</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.initializeTable(this.state.messages,this.state.senderFilter)}  
+                            {this.initializeTable(this.state.messages,this.state.recipientFilter)}  
                         </tbody>
                         </table>
                         <div>
-                            <label htmlFor="sender_filter"> Filter By Sender</label>   
+                            <label htmlFor="recipient_filter"> Filter By Recipient </label>   
                             <Multiselect
-                            id='senderFilter'
+                            id='recipientFilter'
                             options= {this.initializeEmployeeOptions()}
                             style={{searchBox: {background: 'white'}}}
                             selectedValues={this.state.filterViewOptions}
@@ -374,16 +385,13 @@ class Messages extends Component {
                             displayValue="value"
                             groupBy="cat"
                             closeIcon="cancel"
-                            placeholder="Choose Sender"
+                            placeholder="Choose Recipient"
                             avoidHighlightFirstOption= {true}
                             hidePlaceholder={true}
                             onSelect={this.onSelectOrRemoveFilter}
                             onRemove={this.onSelectOrRemoveFilter}/>
-                        </div><br/>
-                        <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onMyMessages(`/sentMessages`)}>
-                                    My Messages
-                    </button>
-                </div>
+                        </div>
+                    </div>
                 <form name="myForm7" onSubmit={this.onSubmit}>
                 <div className="input-group mb-3">
                     <label htmlFor="shifts_to_send">Choose Shift To Send</label>   
