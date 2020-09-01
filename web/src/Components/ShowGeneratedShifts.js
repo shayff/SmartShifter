@@ -33,7 +33,7 @@ class ShowGeneratedShifts extends Component {
         this._isMounted = true;
         const minDate = moment().day(7).format('YYYY-MM-DD');
         const maxDate = moment().day(13).format('YYYY-MM-DD');
-        const buildedShifts = this.props.location.state.detail.Full_data;
+        const buildedShifts = this.props.location.state.detail.full_data;
         
         if(buildedShifts)
         {
