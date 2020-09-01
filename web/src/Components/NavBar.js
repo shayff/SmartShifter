@@ -81,7 +81,7 @@ class Navbar extends Component {
                         <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
                     </svg>}<br/>Shifts
                     </Link>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <Link to="/shifts" className="dropdown-item">
                         Shifts
                     </Link>
