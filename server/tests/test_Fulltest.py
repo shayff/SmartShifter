@@ -21,7 +21,7 @@ from faker import Faker
 def test_Fulltest():
     #Settings
     num_of_users = 10
-    start_date = datetime.datetime(year=2020, month=8, day=30)
+    start_date = datetime.datetime(year=2020, month=9, day=6)
 
     #Prepare test
     he_fake = Faker("he_IL")

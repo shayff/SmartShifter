@@ -12,7 +12,9 @@ def doGetPreferences():
         company_from_db = db.companies_collection.find_one({'_id': company_id})
         preferences = company_from_db['prefence_from_manager']
         print(preferences)
-
-        return jsonify({'ok': True, 'msg': 'Successfully', 'data': preferences}), 200
+        if preferences:
+            return jsonify({'ok': True, 'msg': 'Successfully', 'data': preferences}), 200
+        else:
+            return jsonify({'ok': True, 'msg': 'There is no need to submit shifts now', 'data': preferences}), 200
     else:
         return jsonify({'ok': False, 'msg': 'User has no company'}), 401

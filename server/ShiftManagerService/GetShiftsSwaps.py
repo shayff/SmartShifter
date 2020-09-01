@@ -61,7 +61,7 @@ def doGetShiftsSwaps(user_input):
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 
 
-def update_full_name_of_employee_can(swap, field):
+def update_full_name_of_employee(swap, field):
     '''
     add full name of employee_can or employee_ask
     '''
