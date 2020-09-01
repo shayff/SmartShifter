@@ -22,6 +22,7 @@ export default class User_preferences extends Component {
             thereIsDataFromServer: false,
             menegerSendShift : false,
             MSGtoEMP: "",
+            minimumShifts: "",
         }
         
     }
@@ -36,6 +37,8 @@ export default class User_preferences extends Component {
                     Authorization: "Bearer " + token
                 }
             }).then(response => {
+                let minShiftsMSG = " Please submit at least " + response.data["minimum shifts"].toString()+ " shifts"; // or Minimum shifts are required
+                this.setState({minimumShifts:minShiftsMSG});
 
                 if(response.data.msg != "Successfully") // empty
                 {
@@ -52,10 +55,9 @@ export default class User_preferences extends Component {
 
                 return  response.data;
             }).catch(err => {
-                console.log("EROR "+err.response.data);
-        
+                Alert.alert("something get wrong, please try again");
             });
-
+            Alert.alert(this.state.minimumShifts);
  
         }
         
@@ -63,9 +65,6 @@ export default class User_preferences extends Component {
         {
             let update = this.getShiftByDay();
             this.setState({whichShiftToShowe:update});
-            //this.state.whichShiftToShowe = update;
-            //this.state.whichShiftToShowe = true;
-
         }
                                     
         

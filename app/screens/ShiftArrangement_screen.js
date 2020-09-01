@@ -129,7 +129,6 @@ export default class Weekly_shift_arrangement extends Component {
     this.setState({isLodingDataMonth:true});
 
     let formatCurrentDay = this.formatDay(this.getCurrentDate());
-    console.log(formatCurrentDay);
     
     let formatDateSelect = this.formatDay(dateSelect);
 
@@ -146,7 +145,6 @@ export default class Weekly_shift_arrangement extends Component {
       "statuses": ["scheduled"]
     }
 
-    console.log(toSent);
 
     let token = await AsyncStorage.getItem('token');
     let _id = await AsyncStorage.getItem('_id');
@@ -158,6 +156,8 @@ export default class Weekly_shift_arrangement extends Component {
               Authorization: "Bearer " + token
           }
       }).then(response => {
+        console.log(response.data);
+
         return  response.data;
       }).catch(err => {
         Alert.alert("something get wrong, please try again");
@@ -285,24 +285,12 @@ export default class Weekly_shift_arrangement extends Component {
       "end time": shift.shiftDetails["end time"],
       "employees": arryEMP,
       "id": shift.shiftDetails["id"],
+      "is asked swap": shift.shiftDetails["is_asked_swap"]
     }
 
     shift.sections.content.push(temp);
 
-    // shift.sections.content += "title: "+shift.shiftDetails["job type"]+"||"
-    //                         +"start time: "+shift.shiftDetails["start time"]+"||"
-    //                         +"end time: "+shift.shiftDetails["end time"]+"||"
-    //                         +"note: "+shift.shiftDetails["note"]+"||"
-    //                         +"employees: ";
-
-    // let empArray = shift.shiftDetails["employees"];
-
-    // for (let i=0; i<empArray.length;i++)
-    // {
-    //   shift.sections.content += empArray[i]["first name"]+" "+empArray[i]["last name"]+ ", ";
-    // }
-    // shift.sections.content += '\n';     
-
+   
   }
 
   get_shift_from_server = (data) =>

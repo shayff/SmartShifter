@@ -18,6 +18,7 @@ export default class SingleShift extends Component {
       componentDidMount = async () => {
     
         let my_id = await AsyncStorage.getItem('_id');
+        this.setState({isSendSwap:this.props.item["is asked swap"]});
         this.setState({_id:my_id});
     }
 

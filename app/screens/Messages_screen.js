@@ -66,7 +66,8 @@ export default class Messages extends Component {
                         massege:this.state.massegesData.data[i].message,
                         title: this.state.massegesData.data[i].title,
                         time_created: this.state.massegesData.data[i].time_created,
-                        id: this.state.massegesData.data[i]._id};
+                        id: this.state.massegesData.data[i]._id,
+                        is_read: this.state.massegesData.data[i].status};
             updatList.push(temp);
         }
 
