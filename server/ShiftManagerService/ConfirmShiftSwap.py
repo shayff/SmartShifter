@@ -51,6 +51,8 @@ def doConfirmShiftSwap(user_input):
                                                     {'$set': {'shifts_swaps.$.status': new_status}})
 
                     #notice the employees
+                    print("message:")
+                    print(message)
                     doSendMessage(message)
 
                     return jsonify({'ok': True, 'msg': 'Update swap request successfully'}), 200

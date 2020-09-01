@@ -54,7 +54,7 @@ def doGetShiftsSwaps(user_input):
                     swap.update({"shift_details": doc})
                 print(swaps_filtered)
 
-            return jsonify({"ok": True, "data": swaps_filtered}), 200
+            return jsonify({"ok": True,  "msg": "There are no shift swap ", "data": swaps_filtered}), 200
         else:
             return jsonify({"ok": False, "msg": "User has no company"}), 401
     else:
