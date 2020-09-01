@@ -261,7 +261,7 @@ export default class User_preferences extends Component {
                 </View>
 
                 ):(
-                <View><Text>{this.state.MSGtoEMP}</Text></View> // need styles
+                <View style={Styles.global} ><Text style={Styles.text} >{this.state.MSGtoEMP}</Text></View> 
                 )}
                 
             </ScrollView>
@@ -272,6 +272,16 @@ export default class User_preferences extends Component {
 
     
     const Styles = StyleSheet.create({
+        text: {
+            color: "#f5fffa",
+            fontSize: 20,
+            fontWeight: "bold",
+            alignItems: 'center',
+          },
+        global:{
+            alignSelf: 'center',
+            paddingTop: 160,           
+        },
         titleNameDate : {
             alignSelf:'center',
             fontSize:20,

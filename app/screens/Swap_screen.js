@@ -11,18 +11,20 @@ export default class Switching_shifts extends Component {
         this.state = {
             massegesData : {
                 "data":[],
+                "msg":"",
                 "ok":true
             },
             listMasseges : [], 
             thereIsDataFromServer : false,
-            frontText: "loding..." 
-
+            frontText: "loding...",
+            thereIsShiftsSwap: false,
+            MSGtoEMP: "",
         }                              
     }
 
     componentDidMount = async () => {
         this.setState({thereIsDataFromServer:false});
-        let toSend = {"statuses" : ["confirmed","wait_for_swap","wait_for_confirm"]}
+        let toSend = {"statuses" : ["wait_for_swap","wait_for_confirm"]}
 
         let token = await AsyncStorage.getItem('token');
         const response = await shiftManager_server.post('/GetShiftsSwaps',toSend, {
@@ -30,6 +32,15 @@ export default class Switching_shifts extends Component {
               Authorization: "Bearer " + token
           }
       }).then(response => {
+
+        if (response.data.data.length == 0) // there is no swap
+        {
+            this.setState({thereIsShiftsSwap:false});
+            this.setState({MSGtoEMP:response.data.msg});
+        }
+        else{
+            this.setState({thereIsShiftsSwap:true});
+        }
         return  response.data;
       }).catch(err => {
         console.log("EROR "+err.response.data);
@@ -98,7 +109,7 @@ export default class Switching_shifts extends Component {
             }
             return(
             <View  style={Styles.content}>
-               
+               { this.state.thereIsShiftsSwap ? (
                     <View style={Styles.container} >
                             <FlatList
                                 data={this.state.listMasseges}
@@ -106,19 +117,15 @@ export default class Switching_shifts extends Component {
                                 renderItem={({item})=>(<SwapSingle item={item}/>)}
                             />
                     </View>
+               ):(
+                <View style={Styles.global} ><Text style={Styles.msgtext} >{this.state.MSGtoEMP}</Text></View> // need styles
+               )}
             </View>
             );
         }
         
 }
-{/* <SafeAreaView style={Styles.container} >
-<FlatList
-    data={this.state.listMasseges}
-    keyExtractor={(item, index) => {return item.id.toString();}}
-    renderItem={({item})=>(<SwapSingle item={item}/>)}
-/>
-</SafeAreaView>
-     */}
+
 const Styles = StyleSheet.create({
 
     container: {
@@ -165,6 +172,16 @@ const Styles = StyleSheet.create({
     saveElement: {
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    msgtext: {
+        color: "#f5fffa",
+        fontSize: 20,
+        fontWeight: "bold",
+        alignItems: 'center',
+      },
+    global:{
+        alignSelf: 'center',
+        paddingTop: 160,           
     },
 })
 

@@ -22,7 +22,7 @@ export default class SwapSingle extends Component {
 
         if(this.state.status_title == "wait for swap")
         {
-            this.setState({color:'#faf0e6'});
+            this.setState({color:'#8fbc8f'});
         }
         if(this.state.status_title == "wait for confirm")
         {

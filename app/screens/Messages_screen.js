@@ -14,8 +14,9 @@ export default class Messages extends Component {
                 "msg":'',
                 "ok":false
             },
-            listMasseges : [], 
-
+            listMasseges : [],
+            thereIsMSG: false,
+            MSGtoEMP: "",
         }
                                     
       }
@@ -31,6 +32,15 @@ export default class Messages extends Component {
           }
       }).then(response => {
         console.log("GOOD " + response.data.data);
+        if (response.data.data.length == 0) // there is no messages
+        {
+            this.setState({thereIsMSG:false});
+            this.setState({MSGtoEMP:response.data.msg});
+        }
+        else{
+            this.setState({thereIsMSG:true});
+        }
+
         return  response.data;
       }).catch(err => {
         console.log("EROR "+err.response.data);
@@ -75,6 +85,7 @@ export default class Messages extends Component {
         return(
             
             <View style={Styles.content}>
+                {this.state.thereIsMSG ? (
                 <View>
                     <FlatList
                         data={this.state.listMasseges}
@@ -82,6 +93,9 @@ export default class Messages extends Component {
                         renderItem={({item})=>(<SingleMessage item={item}/>)}
                     />
                 </View>
+                ) : (
+                    <View style={Styles.global} ><Text style={Styles.msgtext} >{this.state.MSGtoEMP}</Text></View> // need styles
+                )} 
 
             </View>
 
@@ -113,7 +127,19 @@ export default class Messages extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#1d9aad',
-        }
+        },
+        msgtext: {
+            color: "#f5fffa",
+            fontSize: 20,
+            fontWeight: "bold",
+            alignItems: 'center',
+          },
+        global:{
+            alignSelf: 'center',
+            paddingTop: 160,           
+        },
+        
+
         
         })
 
