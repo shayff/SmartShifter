@@ -14,6 +14,7 @@ def doGetMessages():
 
         #add the status
         msg["status"] = msg_id["status"]
+        msg["sender_name"] = user_from_db["first name"] + " " + user_from_db["last name"]
         list_messages.append(msg)
 
         #add sender name
