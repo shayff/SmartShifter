@@ -23,26 +23,20 @@ def doSendMessage(user_input):
             print(company)
             send_shifts = []
             send_dates = []
-            if "all" in send_to_data and send_to_data["all"]:
-                #logic to send all employes
-
-            else:
-                if "job_role" in send_to_data:
-                    #iterate through each employee and look for job role
 
 
-                if "employees" in send_to_data:
-                    set_ids.update(send_to_data["employees"])
-                shifts = db.companies_collection.find_one({'_id': company_id},
-                                                           {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})["shifts"]
-                if "shifts" in send_to_data:
-                    send_shifts = send_to_data["shifts"]
-                if "dates" in send_to_data:
-                    send_dates = send_to_data["dates"]
+            if "employees" in send_to_data:
+                set_ids.update(send_to_data["employees"])
+            shifts = db.companies_collection.find_one({'_id': company_id},
+                                                       {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})["shifts"]
+            if "shifts" in send_to_data:
+                send_shifts = send_to_data["shifts"]
+            if "dates" in send_to_data:
+                send_dates = send_to_data["dates"]
 
-                for shift in shifts:
-                    if shift["id"] in send_shifts or shift["date"] in send_dates:
-                        set_ids.update(shift["employees"])
+            for shift in shifts:
+                if shift["id"] in send_shifts or shift["date"] in send_dates:
+                    set_ids.update(shift["employees"])
 
         message = prepare_message(set_ids,logged_in_user["_id"],data["title"],data["message"])
 
