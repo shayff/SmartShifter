@@ -18,7 +18,7 @@ export default class Scheduler extends Component {
             'next'
         ];
 
-        scheduler.config.hour_size_px = 100; // was 50
+        scheduler.config.hour_size_px = 100;
         scheduler.config.start_on_monday = false;
         scheduler.config.readonly = true;
         const { events } = this.props;

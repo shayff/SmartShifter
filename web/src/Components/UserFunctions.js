@@ -140,22 +140,6 @@ export const sendMessage = message => {
         })
 }
 
-export const getMessages= () => {
-    return axios
-        .get("/getmessage",
-        {
-            headers: {
-                Authorization: "Bearer " + localStorage.usertoken
-             }
-        })
-        .then(response => {
-            return response.data.data;
-        })
-        .catch(eror => {
-            console.log(eror)
-        })
-}
-
 export const getSentMessages= () => {
     return axios
         .get("/api/v1/messages/sent",
@@ -259,7 +243,7 @@ export const updateEmployeeInfo = user => {
         })
 }
 
-export const ListOfEmployees = () => {
+export const listOfEmployees = () => {
     return axios
         .get("http://localhost:5001/companies/listofemployees",
         {

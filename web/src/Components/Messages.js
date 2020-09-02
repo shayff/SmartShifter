@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getMessages,ListOfEmployees,sendMessage,getShifts } from './UserFunctions'
+import { getSentMessages,listOfEmployees,sendMessage,getShifts, getSettings} from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
@@ -10,28 +10,38 @@ class Messages extends Component {
     constructor() {
         super()
         this.state = { 
+            title:'',
+            textMessage:'',
             messages: [],
             arrEmployees:[],
-            filterViewOptions: [],
+            daysViewOptions: [],
             shiftsViewOptions: [],
             employeeViewOptions: [],
-            textMessage:'',
+            jobsViewOptions: [],
+            daysToSend:[],
             shiftsToSend:[],
             employeeToSend:[],
-            title:'',
-            senderFilter: [],
+            jobsToSend:[],
+            filterViewOptions: [{key:'All' ,value: 'All'}],
+            recipientFilter: [{key:'All' ,value: 'All'}],
+            isFilterAllChosen: true,
+            isDaysOptionAllChosen: false,
             isShiftOptionAllChosen: false,
-            isFilterAllChosen: false,
             isEmployeeOptionAllChosen: false,
+            isJobsOptionAllChosen: false,
             shiftsOptions:[],
+            daysOptions:[],
+            jobsOptions:[],
             minDate: moment().day(0).format('YYYY-MM-DD'),
             maxDate: moment().day(13).format('YYYY-MM-DD')
         }
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-        this.onSelectOrRemoveEmployees = this.onSelectOrRemoveEmployees.bind(this)
+        this.onSelectOrRemoveDays = this.onSelectOrRemoveDays.bind(this)
         this.onSelectOrRemoveShifts = this.onSelectOrRemoveShifts.bind(this)
+        this.onSelectOrRemoveEmployees = this.onSelectOrRemoveEmployees.bind(this)
+        this.onSelectOrRemoveJobs = this.onSelectOrRemoveJobs.bind(this)
         this.onSelectOrRemoveFilter = this.onSelectOrRemoveFilter.bind(this)
     }
 
@@ -62,7 +72,7 @@ class Messages extends Component {
         {
             for(let i=0; i<this.state.arrEmployees.length; i++)
             {
-                newFilter.push(parseInt(this.state.arrEmployees[i]["First Name"]))
+                newFilter.push(parseInt(this.state.arrEmployees[i]["_id"]))
             }
 
             isAllChosen = true;
@@ -72,16 +82,16 @@ class Messages extends Component {
         {
             for(let i=0; i<selectedList.length; i++)
             {
-                newFilter.push(parseInt(selectedList[i].value))
+                newFilter.push(parseInt(selectedList[i].key))
             }
 
             isAllChosen = false;
             showView = selectedList;
         }
         
-        this.setState({senderFilter: newFilter,
+        this.setState({recipientFilter: newFilter,
                        filterViewOptions: showView,
-                       isFilterAllChosen: isAllChosen}, () => this.initializeTable(this.state.messages,this.state.senderFilter));
+                       isFilterAllChosen: isAllChosen}, () => this.initializeTable(this.state.messages,this.state.recipientFilter));
     }
 
     filterMessages(messages,optionsFilter)
@@ -90,7 +100,7 @@ class Messages extends Component {
         messagesFilterd = messages.filter((message) => { 
             for(let i=0 ; i<optionsFilter.length; i++)
             {
-                if(messages["name_sender"].indexOf(optionsFilter[i])>-1)
+                if(message["to"].indexOf(optionsFilter[i])>-1)
                 {
                     return true;
                 }
@@ -100,6 +110,37 @@ class Messages extends Component {
         });
 
         return messagesFilterd;
+    }
+
+    onSelectOrRemoveDays(selectedList) {
+        let days=[];
+        let isAllChosen;
+        let showView;
+
+        if(this.isAllOptionInArray(selectedList))
+        {
+            for(let i=0; i<this.state.daysOptions.length; i++)
+            {
+                days.push(parseInt(this.state.daysOptions[i]))
+            }
+
+            isAllChosen = true;
+            showView = [{key:'All' ,value: 'All'}];
+        }
+        else
+        {
+            for(let i=0; i<selectedList.length; i++)
+            {
+                days.push(parseInt(selectedList[i].value))
+            }
+
+            isAllChosen = false;
+            showView = selectedList;
+        }
+        
+        this.setState({daysToSend: days,
+                       isDaysOptionAllChosen: isAllChosen,
+                       daysViewOptions: showView});
     }
 
     onSelectOrRemoveShifts(selectedList) {
@@ -164,15 +205,79 @@ class Messages extends Component {
                        employeeViewOptions: showView});
     }
 
+    onSelectOrRemoveJobs(selectedList) {
+        let jobs=[];
+        let isAllChosen;
+        let showView;
+
+        if(this.isAllOptionInArray(selectedList))
+        {
+            for(let i=0; i<this.state.jobsOptions.length; i++)
+            {
+                jobs.push(parseInt(this.state.jobsOptions[i]))
+            }
+
+            isAllChosen = true;
+            showView = [{key:'All' ,value: 'All'}];
+        }
+        else
+        {
+            for(let i=0; i<selectedList.length; i++)
+            {
+                jobs.push(parseInt(selectedList[i].value))
+            }
+
+            isAllChosen = false;
+            showView = selectedList;
+        }
+        
+        this.setState({jobsToSend: jobs,
+                       isJobsOptionAllChosen: isAllChosen,
+                       jobsViewOptions: showView});
+    }
+
+    parseIdToName(arrOfID)
+    {
+        let employeeFilterd = [];
+        let arrOfNames = [];
+        const listOfEmployees = this.state.arrEmployees;
+
+        employeeFilterd = listOfEmployees.filter((employee) => { 
+            for(let i=0 ; i<arrOfID.length; i++)
+            {
+                if(employee["_id"] === arrOfID[i])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        employeeFilterd.map((employee) => (
+            arrOfNames.push(employee["first name"] + ' ' + employee["last name"])));
+
+        return arrOfNames.join(', ');
+    }
+
     initializeTable = (userMessages,optionsFilter) => {
         if(userMessages)
         {
-            let userMessagesFilterd = this.filterMessages(userMessages,optionsFilter);
+            let userMessagesFilterd;
+
+            if(this.isAllOptionInArray(optionsFilter))
+            {
+                userMessagesFilterd = userMessages;
+            }
+            else
+            {
+                userMessagesFilterd = this.filterMessages(userMessages,optionsFilter);
+            }
 
             return userMessagesFilterd.map((messages,index) => (
                 <tr key = {index} >
                 <th scope="row" className="text-center"> {index + 1}</th>
-                <td className="text-center">{messages["name_sender"]}</td>
+                <td className="text-center">{this.parseIdToName(messages["to"])}</td>
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
@@ -187,7 +292,7 @@ class Messages extends Component {
         const maxDate = this.state.maxDate;
         let j = 0;
         let startDate = minDate;
-        let options = [{key:'All' ,value: 'All'}];
+        let shiftsOptions = [{key:'All' ,value: 'All'}];
 
         while(startDate <= maxDate)
         {
@@ -195,7 +300,7 @@ class Messages extends Component {
             {
                 for(let i=0; i<shifts[startDate].length; i++)
                 {
-                    options.push({key:(shifts[startDate][i])["id"] ,value: (shifts[startDate][i]).name + ' ' + 
+                    shiftsOptions.push({key:(shifts[startDate][i])["id"] ,value: (shifts[startDate][i]).name + ' ' + 
                         (shifts[startDate][i])["start time"] + '-' + (shifts[startDate][i])["end time"], cat: (shifts[startDate][i]).date})
                 }
             }
@@ -204,15 +309,15 @@ class Messages extends Component {
             startDate = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
         }
 
-        return options;
+        return shiftsOptions;
     }
     
     initializeEmployeeOptions = () => { 
-        let options = [{key:'All' ,value: 'All'}]
+        let employeeOptions = [{key:'All' ,value: 'All'}]
         this.state.arrEmployees.map((employee) => (
-        options.push({key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]})
+        employeeOptions.push({key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]})
         ));
-        return options;
+        return employeeOptions;
     }
 
     validateMessage() {
@@ -229,6 +334,36 @@ class Messages extends Component {
         }
 
         return validate;
+    }
+
+    getDaysOptions()
+    {
+        const minDate = this.state.minDate;
+        const middleDate = moment(minDate, "YYYY-MM-DD").add(7, 'days').format('YYYY-MM-DD');
+        const maxDate = this.state.maxDate;
+        let daysOptions = [{key:'All' ,value: 'All'}];
+        let j = 0;
+        let startDate = minDate;
+
+        while(startDate <= maxDate)
+        {
+            if(startDate < middleDate)
+            {
+                daysOptions.push({key: startDate, value: startDate, cat: "Current Week"})       
+            }
+            else
+            {
+                daysOptions.push({key: startDate, value: startDate, cat: "Next Week"})       
+            }
+
+            j++;
+            startDate = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
+        }
+
+        if (this._isMounted)
+        {
+            this.setState({ daysOptions: daysOptions});
+        }
     }
 
     getShiftsOptions()
@@ -252,6 +387,23 @@ class Messages extends Component {
          })
     }
 
+    getJobsOptions = () => { 
+        let jobsOptions = [{key:'All' ,value: 'All'}];
+
+        getSettings().then(data => {
+            if(data)
+            {   
+                data["roles"].map((jobType,index) => (
+                    jobsOptions.push({key:index ,value: jobType})));
+            }
+        });
+
+        if (this._isMounted)
+        {
+            this.setState({jobsOptions: jobsOptions});
+        }
+    }
+
     componentWillUnmount() 
     {
         this._isMounted = false;
@@ -262,8 +414,10 @@ class Messages extends Component {
         this._isMounted = true;
 
         this.getShiftsOptions();
+        this.getDaysOptions();
+        this.getJobsOptions();
 
-        getMessages().then(userMessages =>{
+        getSentMessages().then(userMessages => {
             if (userMessages && userMessages.length !== 0)
             {
                 if (this._isMounted)
@@ -277,7 +431,7 @@ class Messages extends Component {
             }
         });  
         
-        ListOfEmployees().then(employees =>{
+        listOfEmployees().then(employees =>{
             if (employees)
             {
                 if (this._isMounted)
@@ -288,30 +442,27 @@ class Messages extends Component {
          });
     }
     
-      onSubmit (e) {
+    onSubmit (e) {
         e.preventDefault()
 
-        const meesage = {
+        const message = {
             toWho: 
             {
-                properties:
-                {
-                    employees: this.state.employeeToSend,
-                    shifts: this.state.shiftsToSend,
-                    data:[]
-                }
+                employees: this.state.employeeToSend,
+                shifts: this.state.shiftsToSend,
+                dates:[]
             },
             title: this.state.title,
             textMessage: this.state.textMessage,
         }
         
+        console.log(message)
         if(this.validateMessage()) {
-            sendMessage(meesage).then(res => {
+            sendMessage(message).then(res => {
                 window.location.reload(false);
            })
         }
     }
-
 
     render () {
         return (
@@ -328,67 +479,101 @@ class Messages extends Component {
                         <thead className="thead-dark">
                             <tr>
                             <th scope="col" className="text-center">#</th>
-                            <th scope="col" className="text-center">The Sender</th>
+                            <th scope="col" className="text-center">To</th>
                             <th scope="col" className="text-center">Title</th>
                             <th scope="col" className="text-center">The Message</th>
                             <th scope="col" className="text-center">Time Created</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.initializeTable(this.state.messages)}  
+                            {this.initializeTable(this.state.messages,this.state.recipientFilter)}  
                         </tbody>
                         </table>
                         <div>
-                            <label htmlFor="sender_filter"> Filter By Sender</label>   
+                            <label htmlFor="recipient_filter"> Filter By Recipient </label>   
                             <Multiselect
-                            id='senderFilter'
+                            id='recipientFilter'
                             options= {this.initializeEmployeeOptions()}
                             style={{searchBox: {background: 'white'}}}
-                            selectedValues= {[{key:'All' ,value: 'All'}]}
+                            selectedValues={this.state.filterViewOptions}
+                            selectionLimit={this.state.isFilterAllChosen === true ? '1' : null}
                             displayValue="value"
                             groupBy="cat"
                             closeIcon="cancel"
-                            placeholder="Choose Sender"
+                            placeholder="Choose Recipient"
                             avoidHighlightFirstOption= {true}
                             hidePlaceholder={true}
                             onSelect={this.onSelectOrRemoveFilter}
                             onRemove={this.onSelectOrRemoveFilter}/>
                         </div>
-                </div>
+                    </div>
                 <form name="myForm7" onSubmit={this.onSubmit}>
-                <div className="input-group mb-3">
-                    <label htmlFor="shifts_to_send">Choose Shift To Send</label>   
-                    <Multiselect
-                    id='shiftsSend'
-                    options= {this.initializeShiftsOptions()}
-                    selectedValues={this.state.shiftsViewOptions}
-                    selectionLimit={this.state.isShiftOptionAllChosen === true ? '1' : null}
-                    style={{searchBox: {background: 'white'}}}
-                    displayValue="value"
-                    closeIcon="cancel"
-                    placeholder="Choose Shifts"
-                    avoidHighlightFirstOption= {true}
-                    groupBy="cat"
-                    hidePlaceholder={true}
-                    onSelect={this.onSelectOrRemoveShifts}
-                    onRemove={this.onSelectOrRemoveShifts}/>
+                    <div className="input-group mb-3">
+                        <label htmlFor="days_to_send">Choose Day To Send</label>   
+                        <Multiselect
+                        id='daysToSend'
+                        options= {this.state.daysOptions}
+                        selectedValues={this.state.daysViewOptions}
+                        selectionLimit={this.state.isDaysOptionAllChosen === true ? '1' : null}
+                        style={{searchBox: {background: 'white'}}}
+                        displayValue="value"
+                        closeIcon="cancel"
+                        placeholder="Choose Days"
+                        avoidHighlightFirstOption= {true}
+                        groupBy="cat"
+                        hidePlaceholder={true}
+                        onSelect={this.onSelectOrRemoveDays}
+                        onRemove={this.onSelectOrRemoveDays}/>
                     </div>
                     <div className="input-group mb-3">
-                    <label htmlFor="employees_to_send">Choose To Who To Send</label>   
-                    <Multiselect
-                    id='employeeSend'
-                    options= {this.initializeEmployeeOptions()}
-                    selectedValues={this.state.employeeViewOptions}
-                    selectionLimit={this.state.isEmployeeOptionAllChosen === true ? '1' : null}
-                    style={{searchBox: {background: 'white'}}}
-                    displayValue="value"
-                    closeIcon="cancel"
-                    placeholder="Choose Employees"
-                    avoidHighlightFirstOption= {true}
-                    groupBy="cat"
-                    hidePlaceholder={true}
-                    onSelect={this.onSelectOrRemoveEmployees}
-                    onRemove={this.onSelectOrRemoveEmployees}/>
+                        <label htmlFor="shifts_to_send">Choose Shift To Send</label>   
+                        <Multiselect
+                        id='shiftsToSend'
+                        options= {this.initializeShiftsOptions()}
+                        selectedValues={this.state.shiftsViewOptions}
+                        selectionLimit={this.state.isShiftOptionAllChosen === true ? '1' : null}
+                        style={{searchBox: {background: 'white'}}}
+                        displayValue="value"
+                        closeIcon="cancel"
+                        placeholder="Choose Shifts"
+                        avoidHighlightFirstOption= {true}
+                        groupBy="cat"
+                        hidePlaceholder={true}
+                        onSelect={this.onSelectOrRemoveShifts}
+                        onRemove={this.onSelectOrRemoveShifts}/>
+                    </div>
+                    <div className="input-group mb-3">
+                        <label htmlFor="employees_to_send">Choose Employee To Send</label>   
+                        <Multiselect
+                        id='employeesToSend'
+                        options= {this.initializeEmployeeOptions()}
+                        selectedValues={this.state.employeeViewOptions}
+                        selectionLimit={this.state.isEmployeeOptionAllChosen === true ? '1' : null}
+                        style={{searchBox: {background: 'white'}}}
+                        displayValue="value"
+                        closeIcon="cancel"
+                        placeholder="Choose Employees"
+                        avoidHighlightFirstOption= {true}
+                        groupBy="cat"
+                        hidePlaceholder={true}
+                        onSelect={this.onSelectOrRemoveEmployees}
+                        onRemove={this.onSelectOrRemoveEmployees}/>
+                    </div>
+                    <div className="input-group mb-3">
+                        <label htmlFor="jobs_to_send">Choose Job To Send</label>   
+                        <Multiselect
+                        id='jobsToSend'
+                        options= {this.state.jobsOptions}
+                        selectedValues={this.state.jobsViewOptions}
+                        selectionLimit={this.state.isJobsOptionAllChosen === true ? '1' : null}
+                        style={{searchBox: {background: 'white'}}}
+                        displayValue="value"
+                        closeIcon="cancel"
+                        placeholder="Choose Jobs"
+                        avoidHighlightFirstOption= {true}
+                        hidePlaceholder={true}
+                        onSelect={this.onSelectOrRemoveJobs}
+                        onRemove={this.onSelectOrRemoveJobs}/>
                     </div>
                     <div className="form-group">
                     <label htmlFor="titleComment" >Write Here The Title</label>

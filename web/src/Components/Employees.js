@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { getSettings ,ListOfEmployees, removeEmployee } from './UserFunctions'
+import { getSettings ,listOfEmployees, removeEmployee } from './UserFunctions'
 import { Multiselect } from 'multiselect-react-dropdown'
 
 class Employees extends Component {
@@ -47,7 +47,7 @@ class Employees extends Component {
             <td>{employee["first name"]}</td>
             <td>{employee["last name"]}</td>
             <td>{employee["id number"]}</td>
-            <td>{employee["job type"].map((jobType,index) => <li key = {index}>{jobType}</li>)} </td>
+            <td>{employee["job type"].join(', ')}</td>
             <td>{employee["phone"]}</td>
             <td>{employee["email"]}</td>
             <td>{employee["address"]}</td>
@@ -81,7 +81,7 @@ class Employees extends Component {
 
     getListListOfEmployees()
     {
-        ListOfEmployees().then(employees => {
+        listOfEmployees().then(employees => {
             if (employees && employees.length === 0)
             {
                 alert("No Employees To Show")
