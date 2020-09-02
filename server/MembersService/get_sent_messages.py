@@ -10,9 +10,10 @@ def doGetSentMessages():
 
     for item in messages:
         list_messages.append(item)
-        print(item)
 
     print(list_messages)
+    #list_messages = sorted(list_messages, key=lambda message: message["time_created"])
+
     #check if List is empty
     if list_messages:
         return jsonify({'ok': True, 'msg': 'list of messages:', 'data': list_messages}), 200
