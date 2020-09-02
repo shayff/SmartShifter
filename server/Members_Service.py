@@ -28,7 +28,7 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-app = Flask(__name__, static_folder='./build', static_url_path='/')
+app = Flask(__name__, static_folder='./web/build', static_url_path='/')
 
 #app = Flask(__name__)
 cors = CORS(app)
