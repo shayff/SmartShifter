@@ -1,1 +1,1 @@
-web: gunicorn server/MemberService:app
+web: gunicorn server/Members_Service:app
