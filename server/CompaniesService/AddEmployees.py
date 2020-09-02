@@ -1,42 +1,34 @@
-from pymongo import MongoClient
-from .schemas.addemployees import validate_addemployees
+from . import db
 from flask import jsonify
-from config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
+from .schemas.addemployees import validate_addemployees
 
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db["companies"]
-users_collection = db["users"]
-counter = db["counters"]
+def doAddEmployees(user_input):
+    data = validate_addemployees(user_input)
+    if data['ok']:
+        employee_to_add = data['data']
+        logged_in_user = get_jwt_identity()
+        user_from_db = db.get_user(logged_in_user['_id'])
+        if 'company' in user_from_db:
+            company_id = user_from_db['company']
 
-def doAddEmployees(data):
-   data = validate_addemployees(data)
-   if data["ok"]:
-      data=data["data"]
-      current_user = get_jwt_identity()
-      result = users_collection.find_one({'_id': current_user['_id']})
-      if "company" in result:
-         company_id = result["company"]
-         employees = data["employees"]
-         employees_not_updated=[]
+            #look for the employee
+            employee_from_db = db.users_collection.find_one({'email': employee_to_add['email']})
+            if employee_from_db and 'company' not in employee_from_db:
+                # switch the email given from the user to the id
+                employee_to_add["id"] = employee_from_db["_id"]
+                del employee_to_add["email"]
 
-         #iterate for each epmloye, check if he has company and add if not
-         for employe in employees:
-            user_result = users_collection.find_one({"_id":employe["id"]})
-            if user_result and "company" not in user_result:
-               users_collection.find_one_and_update({"_id":employe["id"]},{"$set": {"company": company_id}})
+                # update employees in the company
+                db.users_collection.find_one_and_update({'_id': employee_to_add["id"]}, {'$set': {'company': company_id}})
+
+                doc = db.companies_collection.find_one_and_update({'_id': company_id},
+                                                               {'$addToSet': {"employees": employee_to_add}})
+                if doc:
+                    return jsonify({'ok': True, 'msg': 'Employee has been added'}), 200
             else:
-               employees_not_updated.append(employe)
-
-         #remove employees that already have company
-         employees = [x for x in employees if x not in employees_not_updated]
-         print(employees)
-         # update employees in the company
-         companies_collection.find_one_and_update({'_id': company_id}, {"$addToSet": {'employees': {"$each": employees}}})
-         return jsonify({'ok': True, 'msg': 'Added employees', 'added': employees, 'not added': employees_not_updated}), 200
-      else:
-         return jsonify({'ok': False, 'msg': 'User has no company', 'data': data}), 401
-   else:
-      return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+                return jsonify({'ok': False, 'msg': 'User already have company'}), 409
+        else:
+            return jsonify({'ok': False, 'msg': 'Manager has no company'}), 401
+    else:
+        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400

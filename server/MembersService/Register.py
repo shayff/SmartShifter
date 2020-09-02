@@ -1,37 +1,42 @@
-from pymongo import MongoClient
-from .schemas.register import validate_register
+from . import db
 from flask import jsonify
-from pymongo import ReturnDocument
+from .schemas.register import validate_register
 from datetime import datetime
-from config import MongoConfig
 
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-collection = db["users"]
-counter = db["counters"]
-
-def doRegister(data):
-   data = validate_register(data)
+def doRegister(user_input):
+   data = validate_register(user_input)
    if data["ok"]:
-      data=data["data"]
-      data['email'] = data['email'].lower()
-      result = collection.find_one({'email': data['email']})
-      if result:
-         return jsonify({'ok': False, 'msg': 'User with email address already exists'}), 401
+      new_user = data["data"]
+      new_user['email'] = new_user['email'].lower()
+
+      result_email = db.users_collection.find_one({'email': new_user['email']})
+      # [check] look like id not really work
+      result_id_number = db.users_collection.find_one({'id number': new_user['id number']})
+      if not result_email:
+         count_id = prepare_new_user(new_user)
+         print(count_id)
+         # insert user to db
+         db.users_collection.insert_one(new_user)
+         print(new_user)
+         return jsonify({'ok': True, 'msg': "user registered successfully", "id": count_id}), 200
       else:
-         # update counter Users
-         doc = counter.find_one_and_update({'_id': 'userid'}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
-         countId = doc['value']
-         data.update({"_id": countId})
-
-         # update time created
-         date = datetime.now()
-         data.update({"time_created": date.ctime()})
-
-         # insert to db
-         collection.insert_one(data)
-         return jsonify({'ok': True, 'msg': 'user registered successfully'}), 200
-
+         return jsonify({'ok': False, 'msg': 'User with email address or id number already exists'}), 409
    else:
-      return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+      return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(new_user['msg'])}), 400
+
+
+def prepare_new_user(new_user):
+   '''
+   Add relevant fields for new user
+   '''
+   # update counter Users
+   new_user_id = db.inc_users_counter()
+   new_user.update({'_id': new_user_id})
+
+   # update time created and messages
+   date = datetime.now()
+   new_user.update({'time_created': date.ctime()})
+
+   # empty message
+   new_user.update({'messages': []})
+   return new_user_id

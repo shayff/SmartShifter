@@ -3,7 +3,6 @@ from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
 
 
-
 update_schema = {
     "type": "object",
     "properties": {
@@ -31,7 +30,19 @@ update_schema = {
                     },
                     "required": ["id","name","start time", "end time"]
                   }
-                }
+                },
+        "shifts":
+            {
+                "type": "array"
+            },
+        "settings":
+            {
+                "type": "object"
+            },
+        "roles":
+            {
+                "type": "array"
+            }
     },
     "required": [],
     "additionalProperties": False

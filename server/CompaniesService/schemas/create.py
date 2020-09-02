@@ -7,7 +7,15 @@ create_schema = {
     "properties": {
         "company name": {
             "type": "string"
-        }
+        },
+        "settings":
+        {
+            "type": "object"
+        },
+        "roles":
+            {
+                "type": "array"
+            }
     },
     "required": [
         "company name"

@@ -1,41 +1,61 @@
-from pymongo import MongoClient
-from .schemas.create import validate_create
+from . import db
 from flask import jsonify
 from pymongo import ReturnDocument
 from datetime import datetime
-from config import MongoConfig
 from flask_jwt_extended import get_jwt_identity
+from .schemas.create import validate_create
 
-#connect to database
-cluster = MongoClient(MongoConfig['ConnectionString'])
-db = cluster[MongoConfig['ClusterName']]
-companies_collection = db["companies"]
-users_collection = db["users"]
-counter = db["counters"]
-
-def doCreate(data):
-   data = validate_create(data)
+def doCreate(user_input):
+   data = validate_create(user_input)
    if data["ok"]:
-      data=data["data"]
-      current_user = get_jwt_identity()
-      result = users_collection.find_one({'_id': current_user['_id']})
-      if "company" in result:
-         return jsonify({'ok': False, 'msg': 'User has already company'}), 401
-      else:
+      new_company = data["data"]
+      logged_in_user = get_jwt_identity()
+      user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+      if "company" not in user_from_db:
          # update counter Companies
-         doc = counter.find_one_and_update({"_id":"companyid"}, {"$inc": {"value": 1}}, return_document=ReturnDocument.AFTER)
-         countId = doc['value']
-         data.update({"_id": countId})
+         doc = db.counters_collection.find_one_and_update({"_id": "companyid"}, {"$inc": {"value": 1}},
+                                                       return_document=ReturnDocument.AFTER)
+         id_counter = doc['value']
+         new_company.update({"_id": id_counter})
 
-         # update time created
-         date = datetime.now()
-         data.update({"managers":[current_user['_id']],"employees":[],"time_created": date.ctime()})
+         prepare_new_company(logged_in_user, new_company)
 
          # insert to db
-         companies_collection.insert_one(data)
+         db.companies_collection.insert_one(new_company)
 
          # update user company
-         users_collection.find_one_and_update({'_id':current_user['_id']},{ "$set": {'company':countId}})
-         return jsonify({'ok': True, 'msg': 'company created successfully', 'data': data}), 200
+         db.users_collection.find_one_and_update({'_id': logged_in_user['_id']}, { "$set": {'company':id_counter}})
+
+         print(new_company)
+         return jsonify({'ok': True, 'msg': 'company created successfully', 'data': new_company}), 200
+      else:
+         return jsonify({'ok': False, 'msg': 'User has already company'}), 401
    else:
       return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+
+
+def prepare_new_company(logged_in_user, new_company):
+   # update time created
+   date = datetime.now()
+   new_company.update({"time_created": date.ctime()})
+
+   # add the current manager and employees:
+   new_company.update({"managers": [logged_in_user['_id']], "employees": []})
+
+   # add shifts_counter
+   new_company.update({'shifts_counter': 0})
+
+   # add shifts_swaps_counter
+   new_company.update({'shifts_swaps_counter': 0})
+
+   # add an array of shift swaps
+   new_company.update({'shifts_swaps': []})
+
+   # add empty shift array
+   new_company.update({"shifts": []})
+
+   # add empty prefence_from_manager
+   new_company.update({"prefence_from_manager": {}})
+   # add roles array
+   if "roles" not in new_company:
+      new_company.update({"roles": []})

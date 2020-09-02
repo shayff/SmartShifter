@@ -5,6 +5,10 @@ from jsonschema.exceptions import SchemaError
 updateProfile_schema = {
     "type": "object",
     "properties": {
+        "email": {
+            "type": "string",
+            "format": "email"
+        },
         "password": {
             "type": "string",
             "minLength": 5
@@ -26,6 +30,9 @@ updateProfile_schema = {
             "type": "string"
         },
         "date of birth": {
+            "type": "string"
+        },
+        "gender": {
             "type": "string"
         }
 

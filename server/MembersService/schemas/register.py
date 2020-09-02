@@ -15,7 +15,7 @@ register_schema = {
         },
         "id number": {
             "type": "string",
-            "minLength": 8
+            "minLength": 9
         },
         "phone": {
             "type": "string"
@@ -31,8 +31,10 @@ register_schema = {
         },
         "date of birth": {
             "type": "string"
+        },
+        "gender":{
+            "type": "string"
         }
-
     },
     "required": [
         "email",
@@ -40,7 +42,7 @@ register_schema = {
         "id number",
         "phone",
         "first name",
-        "last name"
+        "last name",
     ],
     "additionalProperties": False
 }
