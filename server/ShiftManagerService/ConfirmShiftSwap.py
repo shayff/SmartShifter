@@ -35,7 +35,7 @@ def doConfirmShiftSwap(user_input):
                                                         {'$set': {'shifts.$.employees': employees}})
 
                         new_status = 'confirmed'
-                        message = {'to': [shift_swap['id_employee_can'], shift_swap['id_employee_ask']],
+                        message = {'to': {"employees": [shift_swap['id_employee_can'], shift_swap['id_employee_ask']]},
                                            'title': "Swap request confirm", "message": "your swap request confirmed"}
 
                     else:
@@ -43,14 +43,19 @@ def doConfirmShiftSwap(user_input):
                         doc = db.companies_collection.find_one_and_update(
                             {'_id': company_id, 'shifts_swaps.id': data['swap_id']},
                             {'$unset': {'shifts_swaps.$.id_employee_can': "" }}) #need to delete
-                        message = {'to': [shift_swap['id_employee_can']],
-                                           'title': "Swap request denied", "message": "denied"}
+                        message = {
+                                    'to': {"employees": [shift_swap['id_employee_can']]},
+                                    'title': "Swap request denied",
+                                   "message": "denied"
+                                   }
 
                     #change the status of the shiftswap
                     db.companies_collection.update({'_id': company_id, 'shifts_swaps.id': data['swap_id']},
                                                     {'$set': {'shifts_swaps.$.status': new_status}})
 
                     #notice the employees
+                    print("message:")
+                    print(message)
                     doSendMessage(message)
 
                     return jsonify({'ok': True, 'msg': 'Update swap request successfully'}), 200

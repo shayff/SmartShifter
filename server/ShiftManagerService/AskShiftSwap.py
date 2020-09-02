@@ -38,7 +38,7 @@ def doAskShiftSwap(user_input):
             print(data['shift_id'])
 
             company = db.companies_collection.find_one({'_id': company_id},{'shifts':1})
-            print(company)
+
             for x in company['shifts']:
                 if data['shift_id'] == x['id']:
                     print(x)

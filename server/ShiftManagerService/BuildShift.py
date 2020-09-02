@@ -1,11 +1,11 @@
 from . import db
 from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
-from .BL.BuildShiftLogic import buildshiftclass
 from .schemas.buildshift import validate_buildShift
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from .BL.BuildShiftLogic import buildshiftclass
 from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
 from .BL.ShiftData import ShiftData
 
@@ -22,7 +22,7 @@ def doBuildShift(userInput):
         dates = pd.Series(dates.format())
 
         current_user = get_jwt_identity()
-        result = db.users_collection.find_one({'_id': current_user['_id']})
+        result = db.get_user(current_user['_id'])
         if 'company' not in result:
             return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
         else:

@@ -1,8 +1,6 @@
 from server.MembersService import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from pymongo import collection, MongoClient, ReturnDocument
-from bson.json_util import dumps, loads
 
 def doGetMessages():
     list_messages = []
@@ -11,13 +9,16 @@ def doGetMessages():
     messages_ids = user_from_db['messages']
 
     #Search for id_messages in all messages
-
     for msg_id in messages_ids:
         msg = db.messages_collection.find_one({'_id': msg_id['id']})
 
         #add the status
         msg["status"] = msg_id["status"]
+        msg["sender_name"] = user_from_db["first name"] + " " + user_from_db["last name"]
         list_messages.append(msg)
+
+        #add sender name
+        #for
 
     print(list_messages)
     #check if List is empty

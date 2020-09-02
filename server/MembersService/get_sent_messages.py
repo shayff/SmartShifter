@@ -1,8 +1,6 @@
 from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from pymongo import collection, MongoClient, ReturnDocument
-from bson.json_util import dumps, loads
 
 def doGetSentMessages():
     list_messages = []
@@ -12,6 +10,7 @@ def doGetSentMessages():
 
     for item in messages:
         list_messages.append(item)
+        print(item)
 
     print(list_messages)
     #check if List is empty

@@ -8,15 +8,15 @@ def doAddEmployees(user_input):
     if data['ok']:
         employee_to_add = data['data']
         logged_in_user = get_jwt_identity()
-        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+        user_from_db = db.get_user(logged_in_user['_id'])
         if 'company' in user_from_db:
             company_id = user_from_db['company']
 
             #look for the employee
-            employee_to_add = db.users_collection.find_one({'email': employee_to_add['email']})
-            if employee_to_add and 'company' not in employee_to_add:
+            employee_from_db = db.users_collection.find_one({'email': employee_to_add['email']})
+            if employee_from_db and 'company' not in employee_from_db:
                 # switch the email given from the user to the id
-                employee_to_add["id"] = employee_to_add["_id"]
+                employee_to_add["id"] = employee_from_db["_id"]
                 del employee_to_add["email"]
 
                 # update employees in the company

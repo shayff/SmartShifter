@@ -22,5 +22,5 @@ def update_company_field(user):
     user["is_has_company"] = "company" in user
     if "company" in user:
         company_id = user['company']
-        company = db.companies_collection.find_one({'_id': company_id})
+        company = db.get_company(company_id)
         user["company name"] = company["company name"]

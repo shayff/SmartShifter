@@ -7,7 +7,7 @@ deleteshift_schema = {
     "type": "object",
     "properties": {
         "id": {
-             "type": "integer"
+             "type": "array"
         }
     },
     "required": ["id"],

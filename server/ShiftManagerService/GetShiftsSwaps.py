@@ -54,14 +54,17 @@ def doGetShiftsSwaps(user_input):
                     swap.update({"shift_details": doc})
                 print(swaps_filtered)
 
-            return jsonify({"ok": True, "data": swaps_filtered}), 200
+            swaps_filtered = sorted(swaps_filtered,  key=lambda swap: swap["time_created"])
+
+            return jsonify({"ok": True,  "msg": "There are no shift swap ", "data": swaps_filtered}), 200
         else:
             return jsonify({"ok": False, "msg": "User has no company"}), 401
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 
 
-def update_full_name_of_employee_can(swap, field):
+# its was update_full_name_of_employee_can
+def update_full_name_of_employee(swap, field):
     '''
     add full name of employee_can or employee_ask
     '''

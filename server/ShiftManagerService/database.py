@@ -14,6 +14,6 @@ class Mongo_db:
         self.counters_collection = db["counters"]
         self.messages_collection = db["messages"]
 
-    def test(self):
-        return "work"
+    def get_user(self, user_id):
+        return self.users_collection.find_one({'_id': user_id})
 
