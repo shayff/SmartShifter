@@ -28,7 +28,9 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./build', static_url_path='/')
+
+#app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['JWT_SECRET_KEY'] = "1asdasd#$$!1ddX"
@@ -52,9 +54,11 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route("/")
-def main():
-    return "Looking for something?"
+
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 @app.route("/login", methods=['POST'])
 def Login():
