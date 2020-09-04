@@ -4,13 +4,8 @@ MongoConfig ={
     "ClusterName": "shifter_db"
 }
 
-'''
-class FlaskConfig:
-    DEBUG = """Mongo configuration."""
-    # DataBaseDetails.ConnectionString = "mongodb+srv://test:tester123@cluster0-pnljo.mongodb.net/test?retryWrites=true&w=majority"
-    # DataBaseDetails.ClusterName = "SmartShifter"
-True
-    PORT = 5000
-'''
+FlaskConfig = {
+ "SECRET_KEY" : "nP2ks!5!Ha%aa@LK",
+    "JWT_SECRET_KEY" : "1asdasd#$$!1ddX"
+}
 
-#Ports.LoginRegister = 5000

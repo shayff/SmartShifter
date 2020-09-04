@@ -1,8 +1,8 @@
-#from config import FlaskConfig
+import datetime, json
+from server.config import FlaskConfig
 from flask import Flask, request, jsonify
-import datetime
-import json
 from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt
+from flask_cors import CORS
 from server.MembersService.Login import doLogin
 from server.MembersService.Register import doRegister
 from server.MembersService.send_message import doSendMessage
@@ -12,10 +12,12 @@ from server.MembersService.Profile import doProfile
 from server.MembersService.UpdateMessage import doUpdateMessage
 from server.MembersService.UpdateProfile import doUpdateProfile
 from server.MembersService.ChangePassword import doChangePassword
-from flask_cors import CORS
+
 from bson.objectid import ObjectId
 
+app = Flask(__name__, static_folder='./build', static_url_path='/')
 
+#app = Flask(__name__)
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -28,12 +30,9 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-app = Flask(__name__, static_folder='./build', static_url_path='/')
-
-#app = Flask(__name__)
 cors = CORS(app)
-app.config['SECRET_KEY'] = 'JustDemonstrating'
-app.config['JWT_SECRET_KEY'] = "1asdasd#$$!1ddX"
+app.config['SECRET_KEY'] = FlaskConfig["SECRET_KEY"]
+app.config['JWT_SECRET_KEY'] = FlaskConfig["JWT_SECRET_KEY"]
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
@@ -53,8 +52,6 @@ def unauthorized_response(callback):
 def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
-
-
 
 @app.route('/')
 def index():
@@ -120,3 +117,4 @@ def get_sent_message():
 #for debug
 if __name__== '__main__':
     app.run(debug=True, port=5000)
+
