@@ -20,20 +20,19 @@ def doSendMessage(user_input):
         if "company" in logged_in_user:
             company_id = logged_in_user["company"]
             company = db.get_company(company_id)
-            print(company)
             send_shifts = []
             send_dates = []
             if "all" in send_to_data and send_to_data["all"]:
-                #logic to send all employes
-                print("all")
+                all_employees_ids = [x["id"] for x in company["employees"]]
+                set_ids.update(all_employees_ids)
             else:
-
                 shifts = db.companies_collection.find_one({'_id': company_id},
-                                                          {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})[
-                    "shifts"]
+                                                          {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})["shifts"]
 
-                if "job_role" in send_to_data:
-                    print("job")#iterate through each employee and look for job role
+                if "job_type" in send_to_data:
+                    #make a list of employees where any of employee job in any of job we want to send message
+                    ids_by_jobs = [emp["id"] for emp in company["employees"] if(any(job in emp["job type"] for job in send_to_data["job_type"]))]
+                    set_ids.update(ids_by_jobs)
 
                 if "employees" in send_to_data:
                     set_ids.update(send_to_data["employees"])

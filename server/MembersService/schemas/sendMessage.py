@@ -11,7 +11,7 @@ sendmessage_schema = {
                 "employees":{"type" : "array"},
                 "shifts":{"type" : "array"},
                 "dates":{"type" : "array"},
-                "job_role": {"type": "array"},
+                "job_type": {"type": "array"},
                 "all": {"type" : "boolean"}
              },
             "additionalProperties": False
