@@ -20,6 +20,7 @@ def doGetMessages():
         #add sender name
         #for
 
+    list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"], "%a %b %d %H:%M:%S %Y"), reverse=True)
     print(list_messages)
     #check if List is empty
     if not list_messages:

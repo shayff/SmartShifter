@@ -14,7 +14,7 @@ def doGetSentMessages():
         list_messages.append(item)
 
     #sort the messages
-    list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"], "%a %b %d %H:%M:%S %Y"))
+    list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"], "%a %b %d %H:%M:%S %Y"), reverse=True)
 
 
     print(list_messages)
