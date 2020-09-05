@@ -4,13 +4,13 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 import datetime, json
 from bson.objectid import ObjectId
-from ShiftManagerService.BuildShift import doBuildShift
-from ShiftManagerService.AskShiftSwap import doAskShiftSwap
-from ShiftManagerService.CanShiftSwap import doCanShiftSwap
-from ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
+from server.ShiftManagerService.BuildShift import doBuildShift
+from server.ShiftManagerService.AskShiftSwap import doAskShiftSwap
+from server.ShiftManagerService.CanShiftSwap import doCanShiftSwap
+from server.ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
 from server.ShiftManagerService.GetShifts import doGetShifts
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
-from ShiftManagerService.GetShiftsSwaps import doGetShiftsSwaps
+from server.ShiftManagerService.GetShiftsSwaps import doGetShiftsSwaps
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''

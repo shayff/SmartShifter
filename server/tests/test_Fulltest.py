@@ -1,27 +1,22 @@
-#Menu
-    #1. Create users
-    #2. Login and get JWT
-    #3. Create Company
-    #4. Add employees to company
-    #5. set prefernce from manager
-    #6. Send messages
-    #7. set prefernce from workers
-    #8. Create shifts
-    #9. Build shift schedule
-
 from string import Formatter
 import datetime, random
+from server.config import MongoConfig
+from pymongo import MongoClient
 from datetime import timedelta
 from flask import json
 from server.Members_Service import app as memb_app
 from server.Companies_Service import app as comp_app
+from server.ShiftManager_Service import app as shift_app
 from faker import Faker
+
+cluster = MongoClient(MongoConfig['ConnectionString'])
+db = cluster[MongoConfig['ClusterName']]
+companies_collection = db["companies"]
+
 
 def test_Fulltest():
     #Settings
     num_of_users = 10
-
-
 
     #start_date = datetime.datetime(get_next_sunay())
     start_date = get_next_sunday()
@@ -47,7 +42,7 @@ def test_Fulltest():
 
     #3. Create company
     print("========= Create Company =========")
-    create_company(fake, users)
+    company_id = create_company(fake, users)
 
     #4. Add employees to company
     add_employees_to_company(num_of_users, users)
@@ -65,6 +60,21 @@ def test_Fulltest():
     print("========= Create Shifts =========")
     create_shifts(fake, users, week)
 
+    #9. Run and check builld shift
+
+    response = shift_app.test_client().post(
+        '/buildshift',
+        headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
+        data=json.dumps({
+            "start_date" : week[0],
+	        "end_date" : week[6]
+        }),
+        content_type='application/json',
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data['ok']
+    check_build_shift(data["data"],company_id)
 
 def get_next_sunday():
     date = datetime.date.today()
@@ -154,6 +164,7 @@ def create_company(fake, users):
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
     assert data['ok']
+    return data["data"]["_id"]
 
 
 def add_employees_to_company(num_of_users, users):
@@ -342,3 +353,28 @@ def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelt
             values[field], remainder = divmod(remainder, constants[field])
     return f.format(fmt, **values)
 
+def check_build_shift(buildshift, company_id):
+
+    company = companies_collection.find_one({'_id': company_id})
+    employees_dict = dict()
+    for emp in company["employees"]:
+        employees_dict[emp["id"]] = emp
+
+    shifts_dict = dict()
+    for shift in company["shifts"]:
+        shifts_dict[shift["id"]] = shift
+
+    for shift_id in buildshift:
+        employees = buildshift[shift_id]
+        shift = shifts_dict[int(shift_id)]
+        for emp in employees:
+            preference = employees_dict[emp]["preference"]
+            # find the prefrence for this date
+            prefer_of_given_date = next(x for x in preference if x["date"] == shift["date"])
+            # if there is no prefer this is eror
+            assert prefer_of_given_date
+
+            prefer_of_given_date = set(prefer_of_given_date["prefer"] + prefer_of_given_date["available"])
+
+            # check if the employee scheduled ask to work that
+            assert (set(shift["day part"]).issubset(prefer_of_given_date))
