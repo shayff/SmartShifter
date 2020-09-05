@@ -12,7 +12,7 @@ def doGetSentMessages():
         list_messages.append(item)
 
     print(list_messages)
-    #list_messages = sorted(list_messages, key=lambda message: message["time_created"])
+    list_messages = sorted(list_messages, key=lambda message: message["time_created"])
 
     #check if List is empty
     if list_messages:
