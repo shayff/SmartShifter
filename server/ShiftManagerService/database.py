@@ -17,3 +17,5 @@ class Mongo_db:
     def get_user(self, user_id):
         return self.users_collection.find_one({'_id': user_id})
 
+    def get_company(self, company_id):
+        return self.companies_collection.find_one({'_id': company_id})

@@ -14,7 +14,7 @@ def doRegister(user_input):
       result_id_number = db.users_collection.find_one({'id number': new_user['id number']})
       if not result_email:
          count_id = prepare_new_user(new_user)
-         print(count_id)
+
          # insert user to db
          db.users_collection.insert_one(new_user)
          print(new_user)

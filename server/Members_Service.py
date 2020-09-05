@@ -103,7 +103,7 @@ def SendMessage():
 def GetMessages():
     return doGetMessages()
 
-@app.route('/api/v1/message',methods=['PUT'])
+@app.route('/api/v1/message/status',methods=['PUT'])
 @app.route('/updatemessage',methods=['POST'])
 @jwt_required
 def UpdateMessage():

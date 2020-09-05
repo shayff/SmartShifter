@@ -26,3 +26,12 @@ class Mongo_db:
 
     def get_company(self, company_id):
         return self.companies_collection.find_one({'_id': company_id})
+
+    def add_message(self, message):
+        return self.messages_collection.insert_one(message)
+
+    def update_message_to_user(self, user_id, message):
+        return self.users_collection.update({'_id': user_id}, {'$push':
+            {'messages':
+                {'$each': [
+                    {'id': message['_id'], 'status': 'unread'}], '$position': 0}}})

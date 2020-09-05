@@ -50,14 +50,11 @@ def doSendMessage(user_input):
         message = prepare_message(set_ids,logged_in_user["_id"],data["title"],data["message"])
 
         # insert message to message collection
-        db.messages_collection.insert_one(message)
+        db.add_message(message)
 
         # insert the message to each employee
         for user_id in set_ids:
-            db.users_collection.update({'_id': user_id}, {'$push':
-                                                           {'messages':
-                                                                {'$each': [
-                                                                    {'id': message['_id'], 'status': 'unread'}],'$position': 0}}})
+            db.update_message_to_user(user_id, message)
 
         print(message)
         return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200

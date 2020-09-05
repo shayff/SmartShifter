@@ -10,19 +10,21 @@
     #9. Build shift schedule
 
 from string import Formatter
-import datetime
+import datetime, random
 from datetime import timedelta
 from flask import json
 from server.Members_Service import app as memb_app
 from server.Companies_Service import app as comp_app
-import random
 from faker import Faker
 
 def test_Fulltest():
     #Settings
     num_of_users = 10
-    start_date = datetime.datetime(year=2020, month=9, day=6)
 
+
+
+    #start_date = datetime.datetime(get_next_sunay())
+    start_date = get_next_sunday()
     #Prepare test
     he_fake = Faker("he_IL")
     fake = Faker()
@@ -64,6 +66,12 @@ def test_Fulltest():
     create_shifts(fake, users, week)
 
 
+def get_next_sunday():
+    date = datetime.date.today()
+    while date.weekday() != 6:
+        date += datetime.timedelta(1)
+    return date
+
 def create_shifts(fake, users, week):
     for day in range(7):
         for shift in range(random.randint(2, 4)):
@@ -94,7 +102,7 @@ def create_users(fake,he_fake, num_of_users, users):
     for i in range(num_of_users):
         user_email = fake.email()
         response = memb_app.test_client().post(
-            '/register',
+            '/api/v1/user',
             data=json.dumps({"email": user_email,
                              "password": "00000",
                              "id number": str(random.randint(100000000, 999999999)),
@@ -130,7 +138,7 @@ def login_users(num_of_users, users):
 
 def create_company(fake, users):
     response = comp_app.test_client().post(
-        '/companies/create',
+        '/api/v1/company',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
             "company name": fake.company(),

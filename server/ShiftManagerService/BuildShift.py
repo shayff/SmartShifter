@@ -106,13 +106,13 @@ def add_is_shift_full_field(shift):
         shift['Is_shift_full'] = 'not_full'
 
 
-def get_list_of_shifts(companyId,dates):
-    company = db.companies_collection.find_one({'_id': companyId})
+def get_list_of_shifts(company_id, dates):
+    company = db.get_company(company_id)
     shifts = [x for x in company['shifts'] if x['date'] in dates.tolist()]
     return shifts
 
-def get_list_of_employees(companyId):
-    company = db.companies_collection.find_one({'_id': companyId})
+def get_list_of_employees(company_id):
+    company = db.get_company(company_id)
     return [x for x in company['employees'] if 'preference' in x]
 
 def update_pre_scheduled(list_of_shifts, data):

@@ -73,24 +73,6 @@ def AddEmployees():
 def RemoveEmployees():
     return doRemoveEmployees(request.get_json())
 
-@app.route("/api/v1/shift/<shift_id>", methods=['PUT'])
-@app.route("/companies/updateshift", methods=['POST'])
-@jwt_required
-def UpdateShift():
-    return doUpdateShift(request.get_json())
-
-@app.route("/api/v1/shift", methods=['POST'])
-@app.route("/companies/addshift", methods=['POST'])
-@jwt_required
-def AddShifts():
-    return doAddShifts(request.get_json())
-
-@app.route("/api/v1/company/shift/<shift_id>", methods=['DELETE'])
-@app.route("/companies/deleteshift", methods=['POST'])
-@jwt_required
-def DeleteShift():
-    return doDeleteShift(request.get_json())
-
 @app.route("/api/v1/company", methods=['PUT'])
 @app.route("/companies/update", methods=['POST'])
 @jwt_required
@@ -130,6 +112,26 @@ def PrefenceFromWorker():
 @jwt_required
 def PrefenceFromManager():
     return doPrefenceFromManager(request.get_json())
+
+@app.route("/api/v1/shift/<shift_id>", methods=['PUT'])
+@app.route("/companies/updateshift", methods=['POST'])
+@jwt_required
+def UpdateShift():
+    return doUpdateShift(request.get_json())
+
+@app.route("/api/v1/shift", methods=['POST'])
+@app.route("/companies/addshift", methods=['POST'])
+@jwt_required
+def AddShifts():
+    return doAddShifts(request.get_json())
+
+@app.route("/api/v1/company/shift/<shift_id>", methods=['DELETE'])
+@app.route("/companies/deleteshift", methods=['POST'])
+@jwt_required
+def DeleteShift():
+    return doDeleteShift(request.get_json())
+
+
 
 #for dubg
 if __name__== '__main__':
