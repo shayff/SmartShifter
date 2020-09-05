@@ -1,6 +1,8 @@
 from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
+import datetime
+import time
 
 def doGetSentMessages():
     list_messages = []
@@ -11,8 +13,11 @@ def doGetSentMessages():
     for item in messages:
         list_messages.append(item)
 
+    #sort the messages
+    list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"], "%a %b %d %H:%M:%S %Y"))
+
+
     print(list_messages)
-    list_messages = sorted(list_messages, key=lambda message: message["time_created"])
 
     #check if List is empty
     if list_messages:
