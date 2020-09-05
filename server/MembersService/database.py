@@ -35,3 +35,6 @@ class Mongo_db:
             {'messages':
                 {'$each': [
                     {'id': message['_id'], 'status': 'unread'}], '$position': 0}}})
+
+    def get_user(self, user_id):
+        return self.users_collection.find_one({'_id': user_id})

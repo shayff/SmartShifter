@@ -5,7 +5,7 @@ from flask_jwt_extended import get_jwt_identity
 def doGetMessages():
     list_messages = []
     logged_in_user = get_jwt_identity()
-    user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+    user_from_db = db.get_user(logged_in_user['_id'])
     messages_ids = user_from_db['messages']
 
     #Search for id_messages in all messages
@@ -17,10 +17,9 @@ def doGetMessages():
         msg["sender_name"] = user_from_db["first name"] + " " + user_from_db["last name"]
         list_messages.append(msg)
 
-        #add sender name
-        #for
-
+    #sort the messages
     list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"], "%a %b %d %H:%M:%S %Y"), reverse=True)
+
     print(list_messages)
     #check if List is empty
     if not list_messages:

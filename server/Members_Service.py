@@ -8,9 +8,9 @@ from server.MembersService.Register import doRegister
 from server.MembersService.send_message import doSendMessage
 from server.MembersService.get_message import doGetMessages
 from server.MembersService.get_sent_messages import doGetSentMessages
-from server.MembersService.Profile import doProfile
+from server.MembersService.get_profile import doProfile
 from server.MembersService.UpdateMessage import doUpdateMessage
-from server.MembersService.UpdateProfile import doUpdateProfile
+from server.MembersService.update_profile import doUpdateProfile
 from server.MembersService.ChangePassword import doChangePassword
 
 from bson.objectid import ObjectId
