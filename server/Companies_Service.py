@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
-from server.CompaniesService.Create import doCreate
+from server.CompaniesService.create_company import doCreate
 from server.CompaniesService.AddEmployees import doAddEmployees
 from server.CompaniesService.RemoveEmployees import doRemoveEmployees
 from server.CompaniesService.ListOfEmployees import doListOfEmployees
@@ -15,9 +15,9 @@ from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
 from server.CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
 
-from server.ShiftManagerService.UpdateShift import doUpdateShift
-from server.ShiftManagerService.DeleteShift import doDeleteShift
-from server.ShiftManagerService.addshifts import doAddShifts
+from server.ShiftManagerService.update_shift import update_shift
+from server.ShiftManagerService.delete_shifts import delete_shifts
+from server.ShiftManagerService.create_shift import create_shift
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -122,17 +122,17 @@ def PrefenceFromManager():
 @app.route("/companies/updateshift", methods=['POST'])
 @jwt_required
 def UpdateShift():
-    return doUpdateShift(request.get_json())
+    return update_shift(request.get_json())
 
 @app.route("/companies/addshift", methods=['POST'])
 @jwt_required
 def AddShifts():
-    return doAddShifts(request.get_json())
+    return create_shift(request.get_json())
 
 @app.route("/companies/deleteshift", methods=['POST'])
 @jwt_required
 def DeleteShift():
-    return doDeleteShift(request.get_json())
+    return delete_shifts(request.get_json())
 
 
 

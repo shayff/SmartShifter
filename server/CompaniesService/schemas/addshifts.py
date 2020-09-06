@@ -41,7 +41,7 @@ addshifts_schema = {
     "additionalProperties": False
 }
 
-def validate_addshifts(data):
+def validate_create_shift(data):
     try:
         validate(data, addshifts_schema)
     except ValidationError as e:

@@ -10,12 +10,11 @@ def doCreate(user_input):
    if data["ok"]:
       new_company = data["data"]
       logged_in_user = get_jwt_identity()
-      user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+      user_from_db = db.get_user(logged_in_user['_id'])
       if "company" not in user_from_db:
+
          # update counter Companies
-         doc = db.counters_collection.find_one_and_update({"_id": "companyid"}, {"$inc": {"value": 1}},
-                                                       return_document=ReturnDocument.AFTER)
-         id_counter = doc['value']
+         id_counter = db.inc_company_counter()
          new_company.update({"_id": id_counter})
 
          prepare_new_company(logged_in_user, new_company)

@@ -10,8 +10,12 @@ from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employee
 from .BL.ShiftData import ShiftData
 
 
-def doBuildShift(userInput):
-    data = validate_buildShift(userInput)
+def doBuildShift(user_input):
+    '''
+    This method build the shift scheduled by all given prefernce and relevant data.
+    '''
+
+    data = validate_buildShift(user_input)
     if data['ok']:
         data = data['data']
 

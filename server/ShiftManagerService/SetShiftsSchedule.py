@@ -1,4 +1,4 @@
-from . import db
+from server.ShiftManagerService import db
 from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
 from server.MembersService.send_message import doSendMessage
@@ -9,7 +9,6 @@ def doSetShiftsSchedule(data):
         user_from_db = db.users_collection.find_one({'_id': current_user['_id']})
         employees = set()
         if "company" in user_from_db:
-            #update data of relevant company
             company_id = user_from_db["company"]
             shifts = data['data']
             doc = set_employees_to_shifts(company_id, employees, shifts)

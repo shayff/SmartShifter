@@ -5,16 +5,16 @@ from flask_cors import CORS
 import datetime, json
 from bson.objectid import ObjectId
 from server.ShiftManagerService.BuildShift import doBuildShift
-from server.ShiftManagerService.AskShiftSwap import doAskShiftSwap
-from server.ShiftManagerService.CanShiftSwap import doCanShiftSwap
-from server.ShiftManagerService.ConfirmShiftSwap import doConfirmShiftSwap
-from server.ShiftManagerService.GetShifts import doGetShifts
+from server.ShiftManagerService.create_shift_swap import doAskShiftSwap
+from server.ShiftManagerService.can_swap import doCanShiftSwap
+from server.ShiftManagerService.confirm_swap import doConfirmShiftSwap
+from server.ShiftManagerService.get_shifts import doGetShifts
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
-from server.ShiftManagerService.GetShiftsSwaps import doGetShiftsSwaps
+from server.ShiftManagerService.get_shifts_swaps import doGetShiftsSwaps
 
-from server.ShiftManagerService.UpdateShift import doUpdateShift
-from server.ShiftManagerService.DeleteShift import doDeleteShift
-from server.ShiftManagerService.addshifts import doAddShifts
+from server.ShiftManagerService.update_shift import update_shift
+from server.ShiftManagerService.delete_shifts import delete_shifts
+from server.ShiftManagerService.create_shift import create_shift
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -91,18 +91,18 @@ def GetShiftsSwaps():
 @app.route("/api/v1/shift", methods=['PUT'])
 @jwt_required
 def UpdateShift():
-    return doUpdateShift(request.get_json())
+    return update_shift(request.get_json())
 
 @app.route("/api/v1/shift", methods=['POST'])
 @jwt_required
 def AddShifts():
-    return doAddShifts(request.get_json())
+    return create_shift(request.get_json())
 
 @app.route("/api/v1/shift/<shift_id>", methods=['DELETE'])
 @jwt_required
 def DeleteShift():
     #return doDeleteShift(shift_id)
-    return doDeleteShift(request.get_json())
+    return delete_shifts(request.get_json())
 
 #we need here parameters
 @app.route('/api/v1/shifts', methods= ['GET'])
@@ -110,7 +110,6 @@ def DeleteShift():
 @jwt_required
 def GetShifts():
     return doGetShifts(request.get_json())
-
 
 #for dubg
 if __name__== '__main__':

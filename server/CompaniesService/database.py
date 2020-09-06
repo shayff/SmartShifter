@@ -1,5 +1,5 @@
 from server.config import MongoConfig
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument
 
 class Mongo_db:
     '''
@@ -17,4 +17,7 @@ class Mongo_db:
     def get_user(self,user_id):
         return self.users_collection.find_one({'_id': user_id})
 
-
+    def inc_company_counter(self):
+        doc = db.counters_collection.find_one_and_update({"_id": "companyid"}, {"$inc": {"value": 1}},
+                                                         return_document=ReturnDocument.AFTER)
+        return doc['value']

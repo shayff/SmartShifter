@@ -5,29 +5,29 @@ from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employee
 from .BL.ShiftData import ShiftData
 from .schemas.getshifts import validate_GetShifts
 
-
-
 def doGetShifts(user_input):
     data = validate_GetShifts(user_input)
     if data['ok']:
         data = data['data']
         logged_in_user = get_jwt_identity()
-        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+        user_from_db = db.get_user(logged_in_user['_id'])
         shiftScheduled = dict()
     
         # check if user has company
         if 'company' in user_from_db:
+
+            # get the list of shifts from db
             company_id = user_from_db['company']
-            company = db.companies_collection.find_one({'_id': company_id})
+            company = db.get_company(company_id)
             list_of_shifts = company['shifts']
 
-            # filter shifts by status
+            # filter shifts by status (scheduled or not)
             list_of_shifts = filter_by_status(data, list_of_shifts)
 
             # filter by dates and add full data
             get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, logged_in_user['_id'])
 
-            #sort the shifts by start date
+            # sort the shifts by start date
             sort_shifts_by_start_time(shiftScheduled)
 
             return jsonify({'ok': True, 'data': shiftScheduled}), 200
@@ -42,11 +42,9 @@ def get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, user_id
     for shift in list_of_shifts:
         dic_employees = {}
         if shift and shift['date'] >= data['start_date'] and shift['date'] <= data['end_date']:
-
             add_is_asked_swap_field(shift,company_id,user_id)
 
-
-            # For each employee id we get frmo DB the name and appened to the employees array of the shift
+            # For each employee id we get from DB the name and appened to the employees array of the shift
             add_full_data_of_employees_to_shifts(shift["employees"], shift, shift_data)
 
             # add the shift to our dict
