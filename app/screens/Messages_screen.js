@@ -62,7 +62,7 @@ export default class Messages extends Component {
         
         for (let i =0; i<numberOfMasseges; i++)
         {
-            let temp = {name_sender: this.state.massegesData.data[i].name_sender,
+            let temp = {name_sender: this.state.massegesData.data[i].sender_name,
                         massege:this.state.massegesData.data[i].message,
                         title: this.state.massegesData.data[i].title,
                         time_created: this.state.massegesData.data[i].time_created,

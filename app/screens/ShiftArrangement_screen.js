@@ -335,7 +335,7 @@ export default class Weekly_shift_arrangement extends Component {
                         // day from another month that is visible in calendar page. Default = false
                         disableMonthChange={true}
                         // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-                        firstDay={1}
+                        firstDay={7}
                         // Hide day names. Default = false
                         hideDayNames={false}
                         // Show week numbers to the left. Default = false
