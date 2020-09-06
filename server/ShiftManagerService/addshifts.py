@@ -1,7 +1,7 @@
-from . import db
+from server.CompaniesService import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from .schemas.addshifts import validate_addshifts
+from server.CompaniesService.schemas.addshifts import validate_addshifts
 from pymongo import ReturnDocument
 
 

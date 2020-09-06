@@ -3,15 +3,15 @@ from server.config import FlaskConfig
 from flask import Flask, request, jsonify
 from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt
 from flask_cors import CORS
-from server.MembersService.Login import doLogin
+from server.MembersService.login import doLogin
 from server.MembersService.Register import doRegister
 from server.MembersService.send_message import doSendMessage
 from server.MembersService.get_message import doGetMessages
 from server.MembersService.get_sent_messages import doGetSentMessages
 from server.MembersService.get_profile import doProfile
-from server.MembersService.UpdateMessage import doUpdateMessage
+from server.MembersService.update_message_status import doUpdateMessage
 from server.MembersService.update_profile import doUpdateProfile
-from server.MembersService.ChangePassword import doChangePassword
+from server.MembersService.change_password import doChangePassword
 
 from bson.objectid import ObjectId
 
@@ -57,10 +57,12 @@ def check_if_token_in_blacklist(decrypted_token):
 def index():
     return app.send_static_file('index.html')
 
+@app.route("/api/v1/login", methods=['POST'])
 @app.route("/login", methods=['POST'])
 def Login():
     return doLogin(request.get_json())
 
+@app.route("/api/v1/logout")
 @app.route("/logout")
 @jwt_required
 def Logout():

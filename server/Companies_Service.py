@@ -9,14 +9,15 @@ from server.CompaniesService.AddEmployees import doAddEmployees
 from server.CompaniesService.RemoveEmployees import doRemoveEmployees
 from server.CompaniesService.ListOfEmployees import doListOfEmployees
 from server.CompaniesService.Update import doUpdate
-from server.CompaniesService.UpdateShift import doUpdateShift
-from server.CompaniesService.addshifts import doAddShifts
 from server.CompaniesService.Profile import doProfile
 from server.CompaniesService.GetPreferences import doGetPreferences
 from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
 from server.CompaniesService.UpdateEmployee import doUpdateEmployee
-from server.CompaniesService.DeleteShift import doDeleteShift
 from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
+
+from server.ShiftManagerService.UpdateShift import doUpdateShift
+from server.ShiftManagerService.DeleteShift import doDeleteShift
+from server.ShiftManagerService.addshifts import doAddShifts
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -103,29 +104,31 @@ def updateemployee():
 def GetPreferences():
     return doGetPreferences()
 
+@app.route("/api/v1/company/preference/employee", methods=['POST'])
 @app.route("/companies/PrefenceFromWorker", methods=['POST'])
 @jwt_required
 def PrefenceFromWorker():
     return doPrefenceFromWorker(request.get_json())
 
+@app.route("/api/v1/company/preference/manager", methods=['POST'])
 @app.route("/companies/PrefenceFromManager", methods=['POST'])
 @jwt_required
 def PrefenceFromManager():
     return doPrefenceFromManager(request.get_json())
 
-@app.route("/api/v1/shift/<shift_id>", methods=['PUT'])
+
+#delete after we will change urls
+
 @app.route("/companies/updateshift", methods=['POST'])
 @jwt_required
 def UpdateShift():
     return doUpdateShift(request.get_json())
 
-@app.route("/api/v1/shift", methods=['POST'])
 @app.route("/companies/addshift", methods=['POST'])
 @jwt_required
 def AddShifts():
     return doAddShifts(request.get_json())
 
-@app.route("/api/v1/company/shift/<shift_id>", methods=['DELETE'])
 @app.route("/companies/deleteshift", methods=['POST'])
 @jwt_required
 def DeleteShift():

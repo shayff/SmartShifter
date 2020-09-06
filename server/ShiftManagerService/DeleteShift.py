@@ -1,7 +1,7 @@
-from . import db
+from server.CompaniesService import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from .schemas.deleteshift import validate_deleteshift
+from server.CompaniesService.schemas.deleteshift import validate_deleteshift
 
 def doDeleteShift(user_input):
     '''

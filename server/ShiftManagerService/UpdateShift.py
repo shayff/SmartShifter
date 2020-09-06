@@ -1,7 +1,7 @@
-from . import db
+from server.CompaniesService import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from .schemas.updateshift import validate_updateshift
+from server.CompaniesService.schemas.updateshift import validate_updateshift
 
 def doUpdateShift(user_input):
     data = validate_updateshift(user_input)
