@@ -24,7 +24,7 @@ class Mongo_db:
         return self.companies_collection.update_one({'_id': company_id, 'shifts.id': shift_id}, {'$set':
                                                                                                    {'shifts.$': shift_data}})
 
-    def inc_shifts_counter(self):
+    def inc_shifts_counter(self, company_id):
         doc = self.companies_collection.find_one_and_update({'_id': company_id}, {'$inc': {'shifts_counter': 1}},
                                                            return_document=ReturnDocument.AFTER)
         return doc['shifts_counter']

@@ -15,7 +15,7 @@ def create_shift(user_input):
             company_id = user_from_db["company"]
 
             # update id shift
-            shift_id = db.inc_shifts_counter()
+            shift_id = db.inc_shifts_counter(company_id)
             new_shift.update({'id': shift_id})
 
             # add shift status
