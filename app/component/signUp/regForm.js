@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View,TextInput, TouchableOpacity, Alert,ScrollView } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-//import serverApi from '/Users/BENEDIK/Desktop/app/SmartShifter/app/networking/Server'
-//import DatePicker from 'react-native-datepicker';
 import member_server from '../../networking/member_server';
 
 export default class Regform extends Component {
@@ -24,7 +21,7 @@ export default class Regform extends Component {
     }
     check_input_user = () =>
     {
-      if (this.state.password.length >= 5 && this.state.ID >=8) // correct email && all the form neet to be full
+      if (this.state.password.length >= 5 && this.state.ID >=8)
       {
         if (this.state.password == this.state.confirmePassword)
         {
@@ -36,8 +33,8 @@ export default class Regform extends Component {
              "first name":this.state.firstName,
              "last name":this.state.lastName,
              "address":this.state.address,
-             "date of birth":this.state.dateBirth, // need to add to screen
-             "gender":this.state.gender, // need to add to screen
+             "date of birth":this.state.dateBirth,
+             "gender":this.state.gender,
            };
 
            this.send_to_server(dataSend);
@@ -51,7 +48,6 @@ export default class Regform extends Component {
       {
         Alert.alert('The password need to be at least 5 char AND the ID need be at least 8');
       }
-
     }  
 
     send_to_server = async (data_send) =>
@@ -152,7 +148,5 @@ export default class Regform extends Component {
       touchUP:
       {
         backgroundColor:'#1d9aad',
-
       }
-    
-      });
+});

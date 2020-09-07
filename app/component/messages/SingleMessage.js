@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { CheckBox,AsyncStorage,StyleSheet, Text, View } from 'react-native';
 import member_server from '../../networking/member_server';
 
@@ -83,16 +83,9 @@ return (
             <Text  style={this.state.isRead ? Styles.verifyTitle_read : Styles.verifyTitle_unRead}>{this.state.textIsRead}</Text>
             <CheckBox disabled={this.state.isRead} value = {this.state.isRead} onValueChange = {this.click_to_verify} />
         </View>
-
     </View>
-    
-
 );
-
- }
-
-
-}
+ }}
 
 const Styles = StyleSheet.create({
     titleLine:
@@ -102,7 +95,6 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         textDecorationLine: 'underline',
         paddingBottom: 16,
-
     },
     secendTitle:
     {
@@ -147,6 +139,4 @@ const Styles = StyleSheet.create({
         alignItems: 'stretch',
         paddingTop:10,
     }
-
-
-})
+});

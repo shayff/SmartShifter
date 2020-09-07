@@ -1,7 +1,4 @@
-// להגדיר ללוח שנה איזה ימים יהיו יכולים לליחצה
-// לעצב הכל
-
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { ActivityIndicator ,AsyncStorage,StyleSheet, Text, View,TouchableOpacity, Alert,Button, ScrollView } from 'react-native';
 import DaySquare from '../component/userPreferences/daySquare';
 import company_server from '../networking/company_server';
@@ -27,47 +24,44 @@ export default class User_preferences extends Component {
         
     }
 
-         // function that call after the constractor 
-         componentDidMount = async () => {
+        componentDidMount = async () => {
+
+        let token = await AsyncStorage.getItem('token');
+        const response = await company_server.get('/companies/GetPreferences', {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }).then(response => {
+            let minShiftsMSG = " Please submit at least " + response.data["minimum shifts"].toString()+ " shifts"; // MSG to Minimum shifts are required
+            this.setState({minimumShifts:minShiftsMSG});
+
+            if(response.data.msg != "Successfully")
+            {
+                this.setState({MSGtoEMP:response.data.msg});
+                this.setState({menegerSendShift:false});
+            }
+            else
+            {
+                this.setState({ShiftsFromManager:response.data.data}, () => this.daysShift());
+                this.setState({menegerSendShift:true});
+            }
+                this.setState({thereIsDataFromServer:true});
+
+            return  response.data;
+        }).catch(err => {
+            Alert.alert("something get wrong, please try again");
+            this.props.navigation.goBack(null);
+        });
+        Alert.alert(this.state.minimumShifts);
+
+    }
     
-            let token = await AsyncStorage.getItem('token');
-
-            const response = await company_server.get('/companies/GetPreferences', {
-                headers: {
-                    Authorization: "Bearer " + token
-                }
-            }).then(response => {
-                let minShiftsMSG = " Please submit at least " + response.data["minimum shifts"].toString()+ " shifts"; // or Minimum shifts are required
-                this.setState({minimumShifts:minShiftsMSG});
-
-                if(response.data.msg != "Successfully") // empty
-                {
-                    this.setState({MSGtoEMP:response.data.msg});
-                    this.setState({menegerSendShift:false});
-                }
-                else
-                {
-                    this.setState({ShiftsFromManager:response.data.data}, () => this.daysShift());
-                    this.setState({menegerSendShift:true});
-                }
-                 this.setState({thereIsDataFromServer:true});
-
-
-                return  response.data;
-            }).catch(err => {
-                Alert.alert("something get wrong, please try again");
-            });
-            Alert.alert(this.state.minimumShifts);
- 
-        }
-        
-        daysShift = () =>
-        {
-            let update = this.getShiftByDay();
-            this.setState({whichShiftToShowe:update});
-        }
-                                    
-        
+    daysShift = () =>
+    {
+        let update = this.getShiftByDay();
+        this.setState({whichShiftToShowe:update});
+    }
+    
     getShiftByDay = () =>
     {
         let update =[[false,false,false],[false,false,false],[false,false,false],[false,false,false],[false,false,false],[false,false,false],[false,false,false]];
@@ -94,7 +88,6 @@ export default class User_preferences extends Component {
       return daySelectedShift;
   }
 
-
     update_select_prefers = (prefer) =>
     {
         if(this.state.availability == -1)
@@ -106,14 +99,14 @@ export default class User_preferences extends Component {
             var objectDay = new Date(prefer.dateName);
             var dayName = objectDay.getDay();
     
-            if(this.state.availability == 2) // if it 'prefer' availability , check thath there is no 2 like that in the same day
+            if(this.state.availability == 2) // if it 'prefer' availability , check that there is no 2 'prefer' shift in the same day
             {
                 if (this.state.currentSelectShift[dayName].prefereces[0] == 2 || this.state.currentSelectShift[dayName].prefereces[1] == 2 || this.state.currentSelectShift[dayName].prefereces[2] == 2)
                 {
                     Alert.alert('You already have "prefer" shift in this day');
     
                 }
-                else // he is good
+                else
                 {
                     this.state.currentSelectShift[dayName].prefereces[prefer.typeOfShift] = this.state.availability;
                 }
@@ -145,7 +138,7 @@ export default class User_preferences extends Component {
                         this.state.shiftOfTheWeek[i].prefer.push(j);
                         break;
                     default:
-                        Alert.alert("NUMBER NOT FOUND"); // not gonna hepend :)
+                        Alert.alert("NUMBER NOT FOUND");
                     
                     }
             }
@@ -294,7 +287,6 @@ export default class User_preferences extends Component {
             borderColor: '#f5f5f5',
             borderWidth: 1,
             borderRadius: 2,
-            
         },
         container:
         {
@@ -303,7 +295,6 @@ export default class User_preferences extends Component {
         },
         selectButton : {
             borderColor: '#5fe39d',
-
         },
         MorningTouchArea : {
             paddingRight: 40,
@@ -329,25 +320,6 @@ export default class User_preferences extends Component {
             flexDirection : 'row',
             alignItems: 'stretch',
         },
-        // notAvailable:
-        // {
-        //     textAlign: 'center',
-        //     color: '#ff0d41',
-        //     fontWeight:'700',
-        // },
-        // Available:
-        // {
-        //     textAlign: 'center',
-        //     color: '#1ff2f2',
-        //     fontWeight:'700', 
-        // },
-        // Prefer:
-        // {
-        //     // textAlign: 'center',
-        //     // color: '#db7093',
-        //     // fontWeight:'700',
-        // },
-
     });
 
 

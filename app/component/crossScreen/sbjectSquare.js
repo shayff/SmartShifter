@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View,TouchableOpacity } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default class sbjectSquare extends Component {
@@ -20,12 +19,7 @@ return (
             </TouchableOpacity>
     </View>
 );
-
-
-
-
-}
-}
+}}
 
 const Styles = StyleSheet.create({
 
@@ -41,7 +35,6 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 1,
         padding: 6, 
-
     },
     touchArea: {
         textAlign: 'center',
@@ -51,17 +44,15 @@ const Styles = StyleSheet.create({
     },
     line:
     {
-    alignItems: 'center',
-    flexDirection : 'row',
-    paddingTop: 10,
-    backgroundColor:'#638cb0',// צבע רגע של השורה
+        alignItems: 'center',
+        flexDirection : 'row',
+        paddingTop: 10,
+        backgroundColor:'#638cb0',
     },
     Center:
     {
         alignItems: 'stretch',
         paddingLeft:30,
         backgroundColor:"#638cb0",
-        
     },
-
-})
+});

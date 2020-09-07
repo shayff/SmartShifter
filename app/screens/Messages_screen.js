@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { AsyncStorage,StyleSheet, Text, View, ActivityIndicator,Alert,FlatList} from 'react-native';
 import SingleMessage from '../component/messages/SingleMessage'
 import member_server from '../networking/member_server';
@@ -21,10 +21,7 @@ export default class Messages extends Component {
                                     
       }
 
-      // function that call after the constractor 
       componentDidMount = async () => {
-   
-
         let token = await AsyncStorage.getItem('token');
         const response = await member_server.get('/getmessage', {
           headers: {
@@ -43,11 +40,9 @@ export default class Messages extends Component {
 
         return  response.data;
       }).catch(err => {
-        console.log("EROR "+err.response.data);
-
+        Alert.alert("something get wrong, please try again");
+        this.props.navigation.goBack(null);
       });
-      console.log(response);
-
       this.setState({massegesData:response});
       
       if(this.state.massegesData.ok != true)
@@ -99,8 +94,6 @@ export default class Messages extends Component {
                 )} 
 
             </View>
-
-        
         );
     }
     }
@@ -139,8 +132,5 @@ export default class Messages extends Component {
             alignSelf: 'center',
             paddingTop: 160,           
         },
-        
-
-        
-        })
+    });
 

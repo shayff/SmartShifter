@@ -106,4 +106,4 @@ nullButton:{
     borderRadius: 2,
     width:110,
 }
-})
+});

@@ -1,5 +1,5 @@
-import React, {useState, Component} from 'react';
-import {AsyncStorage,FlatList,ActivityIndicator,StyleSheet, Text, View,ScrollView, Alert } from 'react-native';
+import React, {Component} from 'react';
+import {AsyncStorage,ActivityIndicator,StyleSheet, Text, View,ScrollView, Alert } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Calendar} from 'react-native-calendars';
 import Moment from 'moment';
@@ -29,7 +29,7 @@ export default class Weekly_shift_arrangement extends Component {
                 ],
             activeSections:[],
             markedDates: {},
-            rangeToSelect: ['','select day',''], // [minDat,currentDay,maxDay] to choose on the borde,
+            rangeToSelect: ['','select day',''],
             isLodingDataMonth: true,
       }
     }
@@ -40,18 +40,15 @@ export default class Weekly_shift_arrangement extends Component {
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
 
-      
-      //Alert.alert(date + '-' + month + '-' + year);
-      // You can turn it in to your desired format
       let res = {
         'year': year,
         'month': month,
         'day': date,
         'dateString':year+"-"+month+"-"+date
       }
-      return res; //date + '-' + month + '-' + year;//format: dd-mm-yyyy;
+      return res;
 }
-    // function that call after the constractor 
+    
     componentDidMount(){
 
       let today = this.getCurrentDate();
@@ -121,7 +118,6 @@ export default class Weekly_shift_arrangement extends Component {
     }
 
     return res;
-    
   }
 
   updateShiftInBorde = async (dateSelect) =>
@@ -156,20 +152,14 @@ export default class Weekly_shift_arrangement extends Component {
               Authorization: "Bearer " + token
           }
       }).then(response => {
-        console.log(response.data);
-
         return  response.data;
       }).catch(err => {
         Alert.alert("something get wrong, please try again");
+        this.props.navigation.goBack(null);
       });
-    //let ShiftMonth = get_shift_from_server(toSent);
-
     this.setState({dataArrangement:ShiftMonth});
 
-
-    // start to uplode the borde the shifts
     let tempMarksDays = {};
-    var self = this;
 
      Object.keys(ShiftMonth.data).forEach(function (item) {
 
@@ -181,7 +171,7 @@ export default class Weekly_shift_arrangement extends Component {
         let EmployeesArray = date[i]["employees"];
           for(let i=0; i<EmployeesArray.length;i++)
           {
-            if(EmployeesArray[i]["_id"] == _id) // need to put her ID
+            if(EmployeesArray[i]["_id"] == _id)
             {
               tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black', color: '#50cebb',dotColor: '#ffff', endingDay: true};
             }
@@ -194,11 +184,11 @@ export default class Weekly_shift_arrangement extends Component {
 
       if(currentDay == null) // if there are no mark object in this day
       {
-        currentDay= {textColor:'#7d2934'}; //mast not white
+        currentDay= {textColor:'#7d2934'};
       }
       else
       {
-        currentDay["textColor"]= '#7d2934';//mast not white
+        currentDay["textColor"]= '#7d2934';
       }
       tempMarksDays[formatCurrentDay.dateString] = currentDay;
 
@@ -289,16 +279,7 @@ export default class Weekly_shift_arrangement extends Component {
     }
 
     shift.sections.content.push(temp);
-
-   
   }
-
-  get_shift_from_server = (data) =>
-  {
-
-  }
-
-  
 
     render() {  
         return(
@@ -353,7 +334,6 @@ export default class Weekly_shift_arrangement extends Component {
                         /** Replace default month and year title with custom one. the function receive a date as parameter. */
                         renderHeader={(date) => {/*Return JSX*/}}
                       />
-
               </View>
 
             <Text style={Styles.dateShow}>{this.state.rangeToSelect[1]}</Text>
@@ -375,8 +355,6 @@ export default class Weekly_shift_arrangement extends Component {
                                             onChange={this._updateSections}/>
                                       </View>))}
                 </View>
-
-
             </ScrollView>
         
         );
@@ -393,7 +371,6 @@ const Styles = StyleSheet.create({
     content:
     {
       backgroundColor:'#36485f',
-
     },
     dateShow:
     {
@@ -402,7 +379,6 @@ const Styles = StyleSheet.create({
       fontSize:18,
       fontWeight: 'bold',
       color:'#ffff',
-
     },
     AccordionHeader:
     {
@@ -421,14 +397,12 @@ const Styles = StyleSheet.create({
         borderColor: '#5fe39d',
         borderWidth: 4,
         borderRadius: 10,
-
     },
     line:
     {
         width: 60,
         flexDirection : 'row',
         alignItems: 'stretch',
-        
     },
 });
 

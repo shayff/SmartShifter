@@ -1,5 +1,5 @@
-import React, {useState, Component} from 'react';
-import { AsyncStorage,StyleSheet, Text, View,  TouchableOpacity, Alert} from 'react-native';
+import React, {Component} from 'react';
+import { AsyncStorage, StyleSheet, Text, View,  TouchableOpacity, Alert} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import meneger_server from '../../networking/shiftManager_server';
 
@@ -92,12 +92,7 @@ return (
     </View>
     
 
-);
-
-}
-
-
-}
+);}}
 
 const Styles = StyleSheet.create({
     titleLine:
@@ -107,7 +102,6 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         textDecorationLine: 'underline',
         paddingBottom: 16,
-
     },
     nameEMP:
     {
@@ -167,5 +161,4 @@ const Styles = StyleSheet.create({
         alignSelf: "center",
         textTransform: "uppercase"
       }
-
-})
+});

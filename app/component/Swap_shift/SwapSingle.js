@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import {AsyncStorage ,StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '../../node_modules/@expo/vector-icons';
 import shiftManager_server from '../../networking/shiftManager_server';
@@ -11,11 +11,9 @@ export default class SwapSingle extends Component {
         super(inside);
         this.state = {
         status_type:false,
-        color:'#faf0e6',
+        color:'',
         status_title:this.props.item.status,
-
       }
-      
     }
 
     componentDidMount =  () => {
@@ -37,8 +35,6 @@ export default class SwapSingle extends Component {
         }
     }
 
-
-
     ifWaitToSwap = async() =>
     {
         this.setState({status_title:"wait for confirm"});
@@ -53,8 +49,8 @@ export default class SwapSingle extends Component {
       }).then(response => {
         return  response.data;
       }).catch(err => {
-        console.log("EROR "+err.response.data);
-
+        Alert.alert("something get wrong, please try again");
+        this.props.navigation.goBack(null);
       });
 
     } 
@@ -100,12 +96,10 @@ return (
         height:45,   
         position: 'absolute', top: 15, left: 160, right: 10, justifyContent: 'center', alignItems: 'center',flexDirection : 'row',backgroundColor:this.state.color }}  >
             <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.ifWaitToSwap} >
-        
                 <MaterialIcons name="autorenew" size={30} color="black" />
                 <Text style={Styles.textStyle}>
                         Swap
                 </Text>           
-    
             </TouchableOpacity>
         </View>
         

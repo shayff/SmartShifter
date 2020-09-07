@@ -1,11 +1,9 @@
-import React, {useState, Component} from 'react';
-import { ActivityIndicator,AsyncStorage ,StyleSheet, Alert, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native';
+import React, {Component} from 'react';
+import { ActivityIndicator,AsyncStorage ,StyleSheet, Alert, Text, View, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import member_server from '../../networking/member_server';
 
 
 export default class LoginForm extends Component {
-
-    
   constructor(inside){
     super(inside);
     this.state = {
@@ -17,11 +15,11 @@ export default class LoginForm extends Component {
   
   check_password= () =>
   {
-    if (this.state.password.length >= 5) // correct email
+    if (this.state.password.length >= 5)
     {
       return true;
     }
-    else {return false;}
+    else return false;
   }
 
   confirm_input_data_user = () =>
@@ -29,15 +27,12 @@ export default class LoginForm extends Component {
     
     if (this.check_password())
     {
-      console.log('password in good go to check data');
-      let data_send = {
+        let data_send = {
         email: this.state.userName,
         password: this.state.password
       };
       this.setState({isCheckData:true});
-      let res = this.get_from_server(data_send);
-
-
+      this.get_from_server(data_send);
     }
     else
     {
@@ -65,36 +60,26 @@ get_from_server = async (data_send) =>
     });
 
 
-    //await AsyncStorage.setItem('dataUser',JSON.stringify(response.data.data));
-    //await AsyncStorage.setItem('name',response.data.data[first name]);
     this.setState({isCheckData:false});
 
     this.props.fatherProps.navigation.navigate('Cross_screen');
   }catch(err){
       Alert.alert(err.response.data.msg);
       this.setState({isCheckData:false});
-      //console.log(err.response.status); // 400 401 // לטפל בבעיות
   }
 }
 
+save_input_user_name = (val) =>
+{
+  this.state.userName = val;
+}
 
-
-
-
-  save_input_user_name = (val) =>
-  {
-    this.state.userName = val;
-  }
-
-  save_input_password = (val) =>
-  {
-    this.state.password = val;
-  }
-
-
+save_input_password = (val) =>
+{
+  this.state.password = val;
+}
     render() {  
         return(
-            
             <View  style={Styles.container}>
                 <StatusBar barStyle="light-content"/>
 
@@ -124,15 +109,12 @@ get_from_server = async (data_send) =>
 
     
     const Styles = StyleSheet.create({
-
     container:
     {
      padding: 20,
-     
     },
     SIGNUPContainer:
     {
-     
         paddingVertical: 10,
     },
     LOGINContainer: 
@@ -146,8 +128,6 @@ get_from_server = async (data_send) =>
         color: '#FFF',
         fontWeight:'700',
         opacity:0.6,
-        
-        
     },
     textLogin:
     {
@@ -163,6 +143,6 @@ get_from_server = async (data_send) =>
         color: '#fff',
         paddingHorizontal: 10,
     },
-    });
+});
 
 

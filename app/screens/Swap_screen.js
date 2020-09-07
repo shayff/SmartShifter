@@ -1,11 +1,9 @@
-import React, {useState, Component} from 'react';
-import { ActivityIndicator,AsyncStorage,SafeAreaView, View, FlatList, StyleSheet, Text,TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+import { ActivityIndicator,AsyncStorage,View, FlatList, StyleSheet, Text} from 'react-native';
 import SwapSingle from '../component/Swap_shift/SwapSingle';
 import shiftManager_server from '../networking/shiftManager_server';
 
 export default class Switching_shifts extends Component {
-
-//new
     constructor(inside){
         super(inside);
         this.state = {
@@ -16,7 +14,7 @@ export default class Switching_shifts extends Component {
             },
             listMasseges : [], 
             thereIsDataFromServer : false,
-            frontText: "loding...",
+            frontText: "",
             thereIsShiftsSwap: false,
             MSGtoEMP: "",
         }                              
@@ -33,7 +31,7 @@ export default class Switching_shifts extends Component {
           }
       }).then(response => {
 
-        if (response.data.data.length == 0) // there is no swap
+        if (response.data.data.length == 0) // there is no swaps
         {
             this.setState({thereIsShiftsSwap:false});
             this.setState({MSGtoEMP:response.data.msg});
@@ -43,8 +41,8 @@ export default class Switching_shifts extends Component {
         }
         return  response.data;
       }).catch(err => {
-        console.log("EROR "+err.response.data);
-
+        Alert.alert("something get wrong, please try again");
+        this.props.navigation.goBack(null);
       });
 
       this.setState({massegesData:response});
@@ -74,8 +72,6 @@ export default class Switching_shifts extends Component {
             {
                 statusFormat= 'confirmed'
             }
-            console.log(statusFormat);
-           
 
             let temp = {date: this.state.massegesData.data[i].shift_details.date,
                         start_time:this.state.massegesData.data[i].shift_details['start time'],
@@ -88,18 +84,8 @@ export default class Switching_shifts extends Component {
         }
 
         this.setState({listMasseges:updatList});
-
         this.setState({thereIsDataFromServer:true});
-       
-
     }
-
-
-        save_and_exit = () =>
-        {
-        this.props.navigation.goBack(null);
-        }
-
 
         render() { 
             
@@ -135,7 +121,6 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     center: {
-
         justifyContent: 'center',
         alignItems: 'stretch',
     },

@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { AsyncStorage,StyleSheet, Text, View } from 'react-native';
 import SubjectButton from '../component/crossScreen/sbjectSquare';
 
@@ -13,11 +13,7 @@ export default class Cross_screen extends Component {
       }
     }
 
-  componentDidMount(){
-    this.get();
-  }
-
-  get = async (data_send) =>
+  componentDidMount = async () =>
   {
     let firstName = await AsyncStorage.getItem('name');
     let name = "Welcome "+ firstName;
@@ -33,8 +29,8 @@ export default class Cross_screen extends Component {
       }
     
     this.setState({Name:name});
-
   }
+
 
 
   render() {  
@@ -109,7 +105,6 @@ const Styles = StyleSheet.create({
     backgroundColor:'#36485f',
   },
   firstLine:{
-    
     flexDirection : 'row',
     alignItems: 'stretch',
     paddingTop: 20,
@@ -120,7 +115,5 @@ const Styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
     paddingTop: 30,
-
   }
-
 });

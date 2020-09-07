@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { StyleSheet, Text, View, Image} from 'react-native';
 import LoginForm from '../component/login/loginForm';
 
@@ -9,23 +9,21 @@ export default class Login extends Component {
         return(
             
             <View style={Styles.container}>
-
                 <View style={Styles.logo_container}>
                 <Image style={Styles.image} source={require('../component/login/images/Logo_w.png')}/>
                 <Text style={Styles.smallTitle}>Make It Simple</Text>
                 </View>
+
                 <View>
                     <LoginForm fatherProps={this.props}/>
                 </View>
             </View>
-        
         );
     }
     }
 
     
     const Styles = StyleSheet.create({
-
     container:
     {
         flex:1,
@@ -37,7 +35,6 @@ export default class Login extends Component {
         opacity: 0.7,
         paddingTop:1,
         paddingBottom:10
-
     },
     bigTitle:
     {
@@ -57,7 +54,6 @@ export default class Login extends Component {
         width: 200,
         height: 110,
     }
-    
-    });
+});
 
 

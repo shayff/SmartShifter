@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, ActivityIndicator, TouchableOpacity,ScrollView, Alert } from 'react-native';
 import member_server from '../networking/member_server';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,17 +8,17 @@ export default class Private_profile extends Component {
     constructor(inside){
         super(inside);
         this.state = {
-            profileDataUser:{"id number": "loding...",
-            "phone": "loding...",
-            "first name": "loding...",
-            "last name": "loding...",
-            "date of birth": "loding...",
-            "address": "loding...",
-            "gender": "loding...",
-            "company": 'loding...',
-            "email": "loding...",
+            profileDataUser:{"id number": "",
+            "phone": "",
+            "first name": "",
+            "last name": "",
+            "date of birth": "",
+            "address": "",
+            "gender": "",
+            "company": "",
+            "email": "",
             "password": "",
-            "password to confirm":"******"},
+            "password to confirm":""},
 
             titleBTpasseord : "Confirm first",
             isWriteToConfirmPassword : true,
@@ -32,9 +32,6 @@ export default class Private_profile extends Component {
     }
 
     componentDidMount = async () => {
-        //let data = this.Get_masseges_server_data();
-        //this.setState({massegesData:data});
-
         let token = await AsyncStorage.getItem('token');
         const response = await member_server.get('/profile', {
           headers: {
@@ -43,8 +40,8 @@ export default class Private_profile extends Component {
       }).then(response => {
         return  response.data;
       }).catch(err => {
-        console.log("EROR "+err.response.data);
-
+        Alert.alert("something get wrong, please try again");
+        this.props.navigation.goBack(null);
       });
 
       let resData = response.data;
@@ -85,29 +82,23 @@ export default class Private_profile extends Component {
 
             if(hisPassword == this.state.profileDataUser["password to confirm"])
             {
-                console
                 this.setState({titleBTpasseord:"Edit"});
                 this.setState({currectAnswer:false});
-                
             }
             else
             {
                 Alert.alert("worng password");
                 this.refs.oldPassword.focus();
-
             }
-
         }
 
       }
-
-
       
       save_user_change = async () =>
       {
         let ps="null";
         console.log(this.state.profileDataUser["password"]);
-        if(this.state.profileDataUser["password"] != "") // so he is update password
+        if(this.state.profileDataUser["password"] != "") // he is update password
         {
             ps = this.state.profileDataUser["password"];
             await AsyncStorage.setItem("password",this.state.profileDataUser["password"]);
@@ -116,9 +107,7 @@ export default class Private_profile extends Component {
         }
         else
         {
-
             ps = await AsyncStorage.getItem('password');
-
         }
 
         await AsyncStorage.setItem("name",this.state.profileDataUser["first name"]);
@@ -252,7 +241,6 @@ export default class Private_profile extends Component {
                         <Text style={Styles.titel}>Company: </Text>
                         <TextInput style={Styles.TextInput} ref='company' onChangeText={(data) => {this.state.profileDataUser["company"]=data}} editable =  {false}>{this.state.profileDataUser["company"]}</TextInput>
                         <Icon.Button
-                            //     name="edit"
                                 backgroundColor="#36485f"
                                 disabled
                                 onPress={(data)=>{this.refs.company.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.company.focus();}}>  
@@ -297,7 +285,6 @@ const Styles = StyleSheet.create({
         color: '#ffff',
         fontSize: 16,
         opacity:0.7,
-
     },
     container:
     {
@@ -307,7 +294,6 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 10,
         padding: 4, 
-
     },
     line:
     {
@@ -316,7 +302,6 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 20,
         justifyContent:"space-between",
-     
     },
     passwordLine:
     {
@@ -343,13 +328,11 @@ const Styles = StyleSheet.create({
           color: '#ffff',    
           paddingLeft:120,
           fontSize:20,
-         
       },
       all:{
       backgroundColor: '#2980b9',
        width:412,
        height:610,
-       
       },
 });
 
