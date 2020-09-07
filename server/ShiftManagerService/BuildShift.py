@@ -105,9 +105,9 @@ def add_is_shift_full_field(shift):
     This method add check if shift is full and add this field
     '''
     if shift['amount'] == len(shift['employees']):
-        shift['Is_shift_full'] = 'full'
+        shift['is_shift_full'] = 'full'
     else:
-        shift['Is_shift_full'] = 'not_full'
+        shift['is_shift_full'] = 'not_full'
 
 
 def get_list_of_shifts(company_id, dates):

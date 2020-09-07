@@ -98,7 +98,7 @@ def UpdateShift():
 def AddShifts():
     return create_shift(request.get_json())
 
-@app.route("/api/v1/shift/<shift_id>", methods=['DELETE'])
+@app.route("/api/v1/shift", methods=['DELETE'])
 @jwt_required
 def DeleteShift():
     #return doDeleteShift(shift_id)

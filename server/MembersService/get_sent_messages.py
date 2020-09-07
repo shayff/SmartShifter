@@ -7,16 +7,15 @@ import time
 def doGetSentMessages():
     list_messages = []
     logged_in_user = get_jwt_identity()
-    user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+    user_from_db = db.get_user(logged_in_user['_id'])
     messages = db.messages_collection.find({'from': user_from_db['_id']})
 
     for item in messages:
+        print(item["id"])
         list_messages.append(item)
 
     #sort the messages
     list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"], "%a %b %d %H:%M:%S %Y"), reverse=True)
-
-
     print(list_messages)
 
     #check if List is empty
