@@ -11,7 +11,18 @@ def doGetSentMessages():
     messages = db.messages_collection.find({'from': user_from_db['_id']})
 
     for item in messages:
-        print(item["id"])
+        #messages
+        employees_read = []
+        for user_id in item["to"]:
+
+            # check for each user he read the message and if do add his name
+            doc = db.users_collection.find_one({'_id': user_id},{"messages": {"$elemMatch": {"id": item["_id"]}}, "first_name": 1, "last_name": 1})
+            status = doc["messages"][0]["status"]
+            if(status == "read"):
+                user_full_name = doc["first_name"] + " " + doc["last_name"]
+                employees_read.append(user_full_name)
+
+        item["employees_read"] = employees_read
         list_messages.append(item)
 
     #sort the messages
