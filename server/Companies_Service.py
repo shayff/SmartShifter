@@ -4,10 +4,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
-from server.CompaniesService.create_company import doCreate
+from server.CompaniesService.create_company import create_company
 from server.CompaniesService.add_employees import add_employees
 from server.CompaniesService.RemoveEmployees import doRemoveEmployees
-from server.CompaniesService.ListOfEmployees import doListOfEmployees
+from server.CompaniesService.get_list_of_employees import get_list_of_employees
 from server.CompaniesService.Update import doUpdate
 from server.CompaniesService.Profile import doProfile
 from server.CompaniesService.get_preferences import doGetPreferences
@@ -60,7 +60,7 @@ def check_if_token_in_blacklist(decrypted_token):
 @app.route("/companies/create", methods=['POST'])
 @jwt_required
 def Create():
-    return doCreate(request.get_json())
+    return create_company(request.get_json())
 
 @app.route("/api/v1/company/employee", methods=['POST'])
 @app.route("/companies/addemployees", methods=['POST'])
@@ -84,7 +84,7 @@ def Update():
 @app.route("/companies/listofemployees", methods=['GET'])
 @jwt_required
 def ListOfEmployees():
-    return doListOfEmployees()
+    return get_list_of_employees()
 
 @app.route("/api/v1/company", methods=['GET'])
 @app.route("/companies/profile", methods=['GET'])

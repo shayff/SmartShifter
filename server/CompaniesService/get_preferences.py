@@ -10,6 +10,7 @@ def doGetPreferences():
     if 'company' in user_from_db:
         company_id = user_from_db['company']
         company_from_db = db.companies_collection.find_one({'_id': company_id})
+
         preferences = company_from_db['prefence_from_manager']
         print(preferences)
         if preferences:

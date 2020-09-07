@@ -5,7 +5,7 @@ from datetime import datetime
 from flask_jwt_extended import get_jwt_identity
 from .schemas.create import validate_create
 
-def doCreate(user_input):
+def create_company(user_input):
    data = validate_create(user_input)
    if data["ok"]:
       new_company = data["data"]
@@ -14,16 +14,16 @@ def doCreate(user_input):
       if "company" not in user_from_db:
 
          # update counter Companies
-         id_counter = db.inc_company_counter()
-         new_company.update({"_id": id_counter})
+         new_company_id = db.inc_company_counter()
+         new_company.update({"_id": new_company_id})
 
          prepare_new_company(logged_in_user, new_company)
 
          # insert to db
-         db.companies_collection.insert_one(new_company)
+         db.insert_company(new_company)
 
          # update user company
-         db.users_collection.find_one_and_update({'_id': logged_in_user['_id']}, { "$set": {'company':id_counter}})
+         db.update_user_company(logged_in_user['_id'], new_company_id)
 
          print(new_company)
          return jsonify({'ok': True, 'msg': 'company created successfully', 'data': new_company}), 200
@@ -55,6 +55,7 @@ def prepare_new_company(logged_in_user, new_company):
 
    # add empty prefence_from_manager
    new_company.update({"prefence_from_manager": {}})
+
    # add roles array
    if "roles" not in new_company:
       new_company.update({"roles": []})

@@ -6,11 +6,11 @@ from datetime import datetime
 
 def doPrefenceFromManager(data):
         logged_in_user = get_jwt_identity()
-        user_from_db = db.users_collection.find_one({'_id': logged_in_user['_id']})
+        user_from_db = db.get_user(logged_in_user['_id'])
         if "company" in user_from_db:
             # update data of relevante company
             company_id = user_from_db["company"]
-            company = db.companies_collection.find_one_and_update({'_id': company_id},{'$set': {"prefence_from_manager" : data}})
+            db.update_pprefence_of_company(company_id, data)
             return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
 
         else:

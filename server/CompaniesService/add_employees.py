@@ -24,8 +24,8 @@ def add_employees(user_input):
 
                 # update employees company field and add to company employees
                 db.update_user_company(employee_to_add["id"], company_id)
-                doc = db.companies_collection.find_one_and_update({'_id': company_id},
-                                                               {'$addToSet': {"employees": employee_to_add}})
+                doc = db.add_employee_to_company(company_id, employee_to_add)
+
                 if doc:
                     return jsonify({'ok': True, 'msg': 'Employee has been added'}), 200
             else:
