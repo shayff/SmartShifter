@@ -28,4 +28,4 @@ def get_messages():
 
 def add_full_data_to_message(msg, msg_id, user_from_db):
     msg["status"] = msg_id["status"]
-    msg["sender_name"] = user_from_db["first name"] + " " + user_from_db["last name"]
+    msg["sender_name"] = user_from_db["first_name"] + " " + user_from_db["last_name"]

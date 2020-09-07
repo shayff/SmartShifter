@@ -68,5 +68,5 @@ def update_full_name_of_employee(swap, field):
     '''
     add full name of employee_can or employee_ask
     '''
-    employee_from_db = db.users_collection.find_one({'_id': swap["id_"+field]}, {"first name", "last name"})
-    swap["name_"+field] = employee_from_db["first name"] + " " + employee_from_db["last name"]
+    employee_from_db = db.users_collection.find_one({'_id': swap["id_"+field]}, {"first_name", "last_name"})
+    swap["name_"+field] = employee_from_db["first_name"] + " " + employee_from_db["last_name"]

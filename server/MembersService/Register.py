@@ -11,7 +11,7 @@ def doRegister(user_input):
 
       result_email = db.users_collection.find_one({'email': new_user['email']})
       # [check] look like id not really work
-      result_id_number = db.users_collection.find_one({'id number': new_user['id number']})
+      result_id_number = db.users_collection.find_one({"id_number": new_user["id_number"]})
       if not result_email:
          count_id = prepare_new_user(new_user)
 

@@ -8,12 +8,12 @@ def test_do_register():
         '/register',
         data=json.dumps({"email":fake.email(),
 	"password":"00000",
-	"id number":'123456789',
+	"id_number":'123456789',
 	"phone":fake.phone_number(),
-	"first name": fake.first_name(),
-	"last name":fake.last_name(),
+	"first_name": fake.first_name(),
+	"last_name":fake.last_name(),
 	"address":fake.address(),
-	"date of birth": fake.profile()["birthdate"]
+	"date_of_birth": fake.profile()["birthdate"]
 }),
         content_type='application/json',
     )

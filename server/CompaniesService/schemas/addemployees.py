@@ -14,7 +14,7 @@ addemployees_schema = {
             "job_type": {
                 "type": "array"
             },
-            "time of joining": {
+            "time_of_joining": {
                 "type": "string"
             },
             "preference" : {

@@ -13,23 +13,23 @@ updateProfile_schema = {
             "type": "string",
             "minLength": 5
         },
-        "id number": {
+        "id_number": {
             "type": "string",
             "minLength": 8
         },
         "phone": {
             "type": "string"
         },
-        "first name": {
+        "first_name": {
             "type": "string"
         },
-        "last name": {
+        "last_name": {
             "type": "string"
         },
         "address": {
             "type": "string"
         },
-        "date of birth": {
+        "date_of_birth": {
             "type": "string"
         },
         "gender": {

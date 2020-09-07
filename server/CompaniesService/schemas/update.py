@@ -6,7 +6,7 @@ from jsonschema.exceptions import SchemaError
 update_schema = {
     "type": "object",
     "properties": {
-        "company name": {
+        "company_name": {
             "type": "string"
         },
         "day parts":

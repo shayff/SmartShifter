@@ -5,7 +5,7 @@ from jsonschema.exceptions import SchemaError
 create_schema = {
     "type": "object",
     "properties": {
-        "company name": {
+        "company_name": {
             "type": "string"
         },
         "settings":
@@ -18,7 +18,7 @@ create_schema = {
             }
     },
     "required": [
-        "company name"
+        "company_name"
     ],
     "additionalProperties": False
 }
