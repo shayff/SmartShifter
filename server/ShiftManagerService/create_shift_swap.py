@@ -44,8 +44,8 @@ def doAskShiftSwap(user_input):
                     print(x)
 
             data.update({'date_shift':shift['date']})
-            data.update({'start time':shift['start time']})
-            data.update({'end time':shift['end time']})
+            data.update({"start_time":shift["start_time"]})
+            data.update({"end_time":shift["end_time"]})
 
 
 def prepare_shift_swap(data, doc, logged_in_user):

@@ -16,7 +16,7 @@ def get_list_of_employees():
         # iterate through each employee and get full details
         for employee in employees:
             employee_from_db = db.get_user(employee['id'])
-            employee_from_db['job type'] = employee['job type']
+            employee_from_db["job_type"] = employee["job_type"]
             employee_from_db['rank'] = employee['rank']
 
             # remove data we dont need

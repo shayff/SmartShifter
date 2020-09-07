@@ -39,10 +39,10 @@ def doGetShiftsSwaps(user_input):
                     # find job
                     employees = company['employees']
                     obj_emp = next((x for x in company['employees'] if x['id'] == logged_in_user['_id']), None)
-                    job_type = obj_emp['job type']
+                    job_type = obj_emp["job_type"]
 
                     #filter by job, create arr to remove
-                    if  doc['job type'] in job_type:
+                    if  doc["job_type"] in job_type:
                         swap.update({"shift_details": doc})
                     else:
                         arr_to_del.append(swap)

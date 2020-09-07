@@ -128,7 +128,7 @@ class buildshiftclass:
 
                     #Check if employee has prefence for all prefence needed for the shift
                     big  = prefence_of_employee_to_shift['prefer'] + prefence_of_employee_to_shift['available']
-                    small = listOfShifts[x]['day part']
+                    small = listOfShifts[x]["day_part"]
                     result = all(elem in big for elem in small)
 
                     #debug
@@ -141,7 +141,7 @@ class buildshiftclass:
                     if result:
 
                         #for each part of the shift we check employee prefence and set the rank
-                        for prefer in listOfShifts[x]['day part']:
+                        for prefer in listOfShifts[x]["day_part"]:
                             if(prefer in prefence_of_employee_to_shift['prefer']):
                                 rank_to_add += rank_of_prefer
                             elif(prefer in prefence_of_employee_to_shift['available']):
@@ -156,11 +156,11 @@ class buildshiftclass:
     def getListOfJobs(self, listOfShifts):
         jobs = set()
         for shift in listOfShifts:
-            jobs.add(shift["job type"])
+            jobs.add(shift["job_type"])
         return list(jobs)
 
     def filterShiftsByJob(self, listOfShifts, job):
-        return [x for x in listOfShifts if x["job type"] == job]
+        return [x for x in listOfShifts if x["job_type"] == job]
 
     def filterEmployeesByJob(self, listOfEmployees, job):
-        return [x for x in listOfEmployees if job in x["job type"]]
+        return [x for x in listOfEmployees if job in x["job_type"]]

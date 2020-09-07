@@ -91,13 +91,13 @@ def create_shifts(fake, users, week):
                 headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
                 data=json.dumps({
                     "name": fake.color() + "shift",
-                    "start time": start,
-                    "end time": end,
-                    "job type": "waiter",
+                    "start_time": start,
+                    "end_time": end,
+                    "job_type": "waiter",
                     "difficulty": random.randint(1, 5),
                     "date": week[day],
                     "amount": random.randint(1, 2),
-                    "day part": daypart,
+                    "day_part": daypart,
                     "employees": [],
                     "note": ""
                 }),
@@ -175,7 +175,7 @@ def add_employees_to_company(num_of_users, users):
             data=json.dumps({
                         "email": users[i]["email"],
                         "rank": random.randint(1, 5),
-                        "job type": ["waiter"]
+                        "job_type": ["waiter"]
                                 }),
             content_type='application/json',
         )
@@ -377,4 +377,4 @@ def check_build_shift(buildshift, company_id):
             prefer_of_given_date = set(prefer_of_given_date["prefer"] + prefer_of_given_date["available"])
 
             # check if the employee scheduled ask to work that
-            assert (set(shift["day part"]).issubset(prefer_of_given_date))
+            assert (set(shift["day_part"]).issubset(prefer_of_given_date))

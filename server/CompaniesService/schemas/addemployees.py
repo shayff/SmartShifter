@@ -11,7 +11,7 @@ addemployees_schema = {
             "rank": {
                 "type": "integer"
             },
-            "job type": {
+            "job_type": {
                 "type": "array"
             },
             "time of joining": {

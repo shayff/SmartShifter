@@ -62,13 +62,13 @@ for day in range(7):
             headers={'Authorization': 'Bearer {}'.format(token)},
             data=json.dumps({
                 "name": fake.color() + "shift",
-                "start time": start,
-                "end time": end,
-                "job type": "waiter",
+                "start_time": start,
+                "end_time": end,
+                "job_type": "waiter",
                 "difficulty": random.randint(1, 5),
                 "date": week[day],
                 "amount": random.randint(1, 2),
-                "day part": daypart,
+                "day_part": daypart,
                 "employees": [],
                 "note": ""
             }),

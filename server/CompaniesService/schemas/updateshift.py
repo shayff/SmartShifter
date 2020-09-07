@@ -12,13 +12,13 @@ updateshift_schema = {
         "name": {
             "type": "string"
         },
-        "start time": {
+        "start_time": {
             "type": "string"
         },
-        "end time": {
+        "end_time": {
             "type": "string"
         },
-        "job type": {
+        "job_type": {
             "type": "string"
         },
         "difficulty": {
@@ -30,7 +30,7 @@ updateshift_schema = {
         "amount": {
             "type": "integer"
         },
-        "day part": {
+        "day_part": {
             "type": "array"
         },
         "employees": {
@@ -40,7 +40,7 @@ updateshift_schema = {
             "type": "string"
         }
     },
-    "required": ["id", "name", "start time", "end time", "job type","difficulty", "date", "amount", "day part"],
+    "required": ["id", "name", "start_time", "end_time", "job_type","difficulty", "date", "amount", "day_part"],
     "additionalProperties": False
 }
 

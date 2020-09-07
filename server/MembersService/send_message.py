@@ -28,7 +28,7 @@ def doSendMessage(user_input):
 
             if "job_type" in send_to_data:
                 #make a list of employees where any of employee job in any of job we want to send message
-                ids_by_jobs = [emp["id"] for emp in company["employees"] if(any(job in emp["job type"] for job in send_to_data["job_type"]))]
+                ids_by_jobs = [emp["id"] for emp in company["employees"] if(any(job in emp["job_type"] for job in send_to_data["job_type"]))]
                 set_ids.update(ids_by_jobs)
 
             if "employees" in send_to_data:

@@ -21,14 +21,14 @@ update_schema = {
                       "name": {
                         "type": "string"
                       },
-                        "start time": {
+                        "start_time": {
                         "type": "string"
                       },
-                        "end time": {
+                        "end_time": {
                         "type": "string"
                         }
                     },
-                    "required": ["id","name","start time", "end time"]
+                    "required": ["id","name","start_time", "end_time"]
                   }
                 },
         "shifts":
