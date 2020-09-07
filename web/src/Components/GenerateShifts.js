@@ -176,15 +176,15 @@ class GenerateShifts extends Component {
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Start Time Of The Shift</td>
-                                <td className="table-secondary">{shift["start time"]}</td>
+                                <td className="table-secondary">{shift["start_time"]}</td>
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">End Time Of The Shift</td>
-                                <td className="table-secondary">{shift["end time"]}</td>
+                                <td className="table-secondary">{shift["end_time"]}</td>
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Job Type For The Shift</td>
-                                <td className="table-secondary">{shift["job type"]}</td>
+                                <td className="table-secondary">{shift["job_type"]}</td>
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Difficulty Of The Shift</td>
@@ -192,7 +192,7 @@ class GenerateShifts extends Component {
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Day Part Of The Shift</td>
-                                <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
+                                <td className="table-secondary">{this.ParseDayParts(shift["day_part"])}</td>
                             </tr>
                             <tr className="text-center">
                                 <td className={shift.status === 'scheduled' ? (shift.is_shift_full === 'full' ? "table-primary" : "table-danger") : "table-primary"}>Amount Of Employees</td>

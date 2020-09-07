@@ -34,7 +34,7 @@ class ShowGeneratedShifts extends Component {
         const minDate = moment().day(7).format('YYYY-MM-DD');
         const maxDate = moment().day(13).format('YYYY-MM-DD');
         const buildedShifts = this.props.location.state.detail.full_data;
-        console.log(this.props.location.state.detail)
+        
         if(buildedShifts)
         {
             let parserShifts = [];
@@ -155,15 +155,15 @@ class ShowGeneratedShifts extends Component {
                            </tr>
                            <tr className="text-center">
                                <td className="table-primary">Start Time Of The Shift</td>
-                               <td className="table-secondary">{shift["start time"]}</td>
+                               <td className="table-secondary">{shift["start_time"]}</td>
                            </tr>
                            <tr className="text-center">
                                <td className="table-primary">End Time Of The Shift</td>
-                               <td className="table-secondary">{shift["end time"]}</td>
+                               <td className="table-secondary">{shift["end_time"]}</td>
                            </tr>
                            <tr className="text-center">
                                <td className="table-primary">Job Type For The Shift</td>
-                               <td className="table-secondary">{shift["job type"]}</td>
+                               <td className="table-secondary">{shift["job_type"]}</td>
                            </tr>
                            <tr className="text-center">
                                <td className="table-primary">Difficulty Of The Shift</td>
@@ -171,7 +171,7 @@ class ShowGeneratedShifts extends Component {
                            </tr>
                            <tr className="text-center">
                                <td className="table-primary">Day Part Of The Shift</td>
-                               <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
+                               <td className="table-secondary">{this.ParseDayParts(shift["day_part"])}</td>
                            </tr>
                            <tr className="text-center">
                                <td className={shift.is_shift_full === 'full' ? "table-primary" : "table-danger"}>Amount Of Employees</td>

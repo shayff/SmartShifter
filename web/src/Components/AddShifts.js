@@ -41,7 +41,7 @@ class AddShifts extends Component {
     }
 
     onSelectOrRemoveJobType(selectedList) {
-        this.setState({job_type: selectedList[0].value});
+        this.setState({job_type: selectedList.value});
     }
 
     onSelectOrRemoveEmployees(selectedList) {

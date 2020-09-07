@@ -296,7 +296,7 @@ class Messages extends Component {
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
-                <td className="text-center"></td>
+                <td className="text-center">{messages["employees_read"]}</td>
                 </tr>
          ));
         }

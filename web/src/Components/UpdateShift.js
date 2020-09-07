@@ -91,7 +91,6 @@ class UpdateShift extends Component {
         const dayParts = this.ParseDayParts(shift["day_part"]);
         const employeesForShift = this.ParseEmployeesForShift(shift.employees);
         
-        console.log(shift)
         if (this._isMounted)
         {
             this.setState({
@@ -193,7 +192,7 @@ class UpdateShift extends Component {
                     if((shifts[startDate][i])["id"] === newShift["id"])
                     {
                         full_data[startDate][i] = newShift;
-                        data[newShift["id"]] = newShift.employees_for_shift;
+                        data[newShift["id"]] = newShift.employees;
                     }                   
                 }
             }
@@ -205,11 +204,12 @@ class UpdateShift extends Component {
         newDetail = 
         {
             data: data,
-            full_data:full_data,
+            full_data: full_data,
             msg: this.state.oldDetail.msg,
             ok:this.state.oldDetail.ok,
             success_rate:this.state.oldDetail.success_rate
         }
+        console.log(newDetail)
         this.props.history.push(`/showGeneratedShifts`,{ detail: newDetail})
     }
 
@@ -228,7 +228,7 @@ class UpdateShift extends Component {
         }
 
         const newShift = {
-            is_shift_full: this.state.amount_of_employees === this.state.employees_for_shift.length ? 'full':'not_full',
+            is_shift_full: parseInt(this.state.amount_of_employees) === this.state.employees_for_shift.length ? 'full':'not_full',
             id: this.state.shift_id,
             name: this.state.shift_name,
             start_time: this.state.start_time,
