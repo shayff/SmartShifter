@@ -11,7 +11,7 @@ def doPrefenceFromManager(data):
             # update data of relevante company
             company_id = user_from_db["company"]
             db.update_pprefence_of_company(company_id, data)
-            return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
 
+            return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
         else:
             return jsonify({'ok': False, 'msg': 'User is not in company'}), 400

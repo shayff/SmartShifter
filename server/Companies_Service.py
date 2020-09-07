@@ -9,8 +9,8 @@ from server.CompaniesService.add_employees import add_employees
 from server.CompaniesService.RemoveEmployees import doRemoveEmployees
 from server.CompaniesService.get_list_of_employees import get_list_of_employees
 from server.CompaniesService.Update import doUpdate
-from server.CompaniesService.Profile import doProfile
-from server.CompaniesService.get_preferences import doGetPreferences
+from server.CompaniesService.get_company import get_company
+from server.CompaniesService.get_preferences import get_preferences
 from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
 from server.CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
@@ -90,7 +90,7 @@ def ListOfEmployees():
 @app.route("/companies/profile", methods=['GET'])
 @jwt_required
 def profile():
-    return doProfile()
+    return get_company()
 
 @app.route("/api/v1/company/employee", methods=['PUT'])
 @app.route("/companies/updateemployee", methods=['POST'])
@@ -102,7 +102,7 @@ def updateemployee():
 @app.route("/companies/GetPreferences", methods=['GET'])
 @jwt_required
 def GetPreferences():
-    return doGetPreferences()
+    return get_preferences()
 
 @app.route("/api/v1/company/preference/employee", methods=['POST'])
 @app.route("/companies/PrefenceFromWorker", methods=['POST'])

@@ -6,7 +6,7 @@ from flask_cors import CORS
 from server.MembersService.login import doLogin
 from server.MembersService.Register import doRegister
 from server.MembersService.send_message import doSendMessage
-from server.MembersService.get_message import doGetMessages
+from server.MembersService.get_message import get_messages
 from server.MembersService.get_sent_messages import doGetSentMessages
 from server.MembersService.get_profile import doProfile
 from server.MembersService.update_message_status import doUpdateMessage
@@ -103,7 +103,7 @@ def SendMessage():
 @app.route('/getmessage', methods=['GET'])
 @jwt_required
 def GetMessages():
-    return doGetMessages()
+    return get_messages()
 
 @app.route('/api/v1/message/status',methods=['PUT'])
 @app.route('/updatemessage',methods=['POST'])
