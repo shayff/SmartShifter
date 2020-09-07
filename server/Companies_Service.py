@@ -5,12 +5,12 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
 from server.CompaniesService.create_company import doCreate
-from server.CompaniesService.AddEmployees import doAddEmployees
+from server.CompaniesService.add_employees import add_employees
 from server.CompaniesService.RemoveEmployees import doRemoveEmployees
 from server.CompaniesService.ListOfEmployees import doListOfEmployees
 from server.CompaniesService.Update import doUpdate
 from server.CompaniesService.Profile import doProfile
-from server.CompaniesService.GetPreferences import doGetPreferences
+from server.CompaniesService.get_preferences import doGetPreferences
 from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
 from server.CompaniesService.UpdateEmployee import doUpdateEmployee
 from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
@@ -66,7 +66,7 @@ def Create():
 @app.route("/companies/addemployees", methods=['POST'])
 @jwt_required
 def AddEmployees():
-    return doAddEmployees(request.get_json())
+    return add_employees(request.get_json())
 
 @app.route("/api/v1/company/employee/<employee_id>", methods=['DELETE'])
 @app.route("/companies/removeemployees", methods=['POST'])

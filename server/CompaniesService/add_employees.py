@@ -3,25 +3,27 @@ from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from .schemas.addemployees import validate_addemployees
 
-def doAddEmployees(user_input):
+def add_employees(user_input):
     data = validate_addemployees(user_input)
     if data['ok']:
         employee_to_add = data['data']
         logged_in_user = get_jwt_identity()
         user_from_db = db.get_user(logged_in_user['_id'])
+
         if 'company' in user_from_db:
             company_id = user_from_db['company']
 
-            #look for the employee
-            employee_from_db = db.users_collection.find_one({'email': employee_to_add['email']})
+            # get employee from database
+            employee_from_db = db.get_user_by_email(employee_to_add['email'])
+
             if employee_from_db and 'company' not in employee_from_db:
+
                 # switch the email given from the user to the id
                 employee_to_add["id"] = employee_from_db["_id"]
                 del employee_to_add["email"]
 
-                # update employees in the company
-                db.users_collection.find_one_and_update({'_id': employee_to_add["id"]}, {'$set': {'company': company_id}})
-
+                # update employees company field and add to company employees
+                db.update_user_company(employee_to_add["id"], company_id)
                 doc = db.companies_collection.find_one_and_update({'_id': company_id},
                                                                {'$addToSet': {"employees": employee_to_add}})
                 if doc:

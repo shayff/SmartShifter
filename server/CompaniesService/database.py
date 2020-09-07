@@ -17,7 +17,13 @@ class Mongo_db:
     def get_user(self,user_id):
         return self.users_collection.find_one({'_id': user_id})
 
+    def get_user_by_email(self, user_email):
+        return self.users_collection.find_one({'email': user_email['email']})
+
     def inc_company_counter(self):
         doc = db.counters_collection.find_one_and_update({"_id": "companyid"}, {"$inc": {"value": 1}},
                                                          return_document=ReturnDocument.AFTER)
         return doc['value']
+
+    def update_user_company(self, user_id, company_id):
+        return self.users_collection.find_one_and_update({'_id': employee_to_add["id"]}, {'$set': {'company': company_id}})
