@@ -5,13 +5,6 @@ import './Scheduler.css'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 
-<<<<<<< HEAD
-=======
-
-import { Modal, Button, Form } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.css";
-
->>>>>>> 8d785dbb7d0304e0e61ecbc06249f33ec36d98fc
 class Shifts extends Component {
     _isMounted = false;
 
