@@ -6,14 +6,14 @@ export default class SignUp extends Component {
 
     render() {  
         return(
-           <View style={Styles.container}>           
+            <View style={Styles.container}>           
                 <View style={Styles.logo_container}>
                     <Image style={Styles.image} source={require('../component/login/images/Logo_w.png')}/>
                     <Text style={Styles.smallTitle, Styles.smallTitle}>Happy to see you joining</Text>
                 </View>
 
                 <ScrollView >
-                    <View style={Styles.reg}>
+                    <View style={Styles.registration}>
                         <Regform fatherProps={this.props}/>
                     </View>
                 </ScrollView>
@@ -27,12 +27,11 @@ const Styles = StyleSheet.create({
     {
         alignItems: 'center',
         justifyContent: 'center',
-       
     },
     smallTitle:
     {
         color: '#fff',
-        opacity: 0.7,
+        opacity: 0.9,
     },
     image:
     {
@@ -44,21 +43,12 @@ const Styles = StyleSheet.create({
         flex:1,
         backgroundColor:'#36485f',
     },
-    reg:
+    registration:
     {
         paddingTop : 20,
         backgroundColor: '#486180',
     },
-    smallTitle:
-    {
-        color: '#fff',
-        paddingBottom:10,
-    },
-    logo_container:
-    {
-        alignItems: 'center',
-        justifyContent: 'center',       
-    },
+
 });
 
 

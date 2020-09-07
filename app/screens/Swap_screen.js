@@ -16,7 +16,7 @@ export default class Switching_shifts extends Component {
             thereIsDataFromServer : false,
             frontText: "",
             thereIsShiftsSwap: false,
-            MSGtoEMP: "",
+            MessageDisplay: "",
         }                              
     }
 
@@ -29,7 +29,7 @@ export default class Switching_shifts extends Component {
           headers: {
               Authorization: "Bearer " + token
           }
-      }).then(response => {
+        }).then(response => {
 
         if (response.data.data.length == 0) // there is no swaps
         {
@@ -40,14 +40,12 @@ export default class Switching_shifts extends Component {
             this.setState({thereIsShiftsSwap:true});
         }
         return  response.data;
-      }).catch(err => {
+        }).catch(err => {
         Alert.alert("something get wrong, please try again");
         this.props.navigation.goBack(null);
-      });
+        });
 
-      this.setState({massegesData:response});
-
-      
+        this.setState({massegesData:response});
         if(this.state.massegesData.ok != true)
         {
             Alert.alert("There was a problem receiving the messages, please try again");
@@ -96,7 +94,7 @@ export default class Switching_shifts extends Component {
             return(
             <View  style={Styles.content}>
                { this.state.thereIsShiftsSwap ? (
-                    <View style={Styles.container} >
+                    <View style={Styles.messageFrame} >
                             <FlatList
                                 data={this.state.listMasseges}
                                 keyExtractor={(item, index) => {return item.id.toString();}}
@@ -104,7 +102,7 @@ export default class Switching_shifts extends Component {
                             />
                     </View>
                ):(
-                <View style={Styles.global} ><Text style={Styles.msgtext} >{this.state.MSGtoEMP}</Text></View> // need styles
+                <View style={Styles.messageDisplay} ><Text style={Styles.msgtext} >{this.state.MessageDisplay}</Text></View>
                )}
             </View>
             );
@@ -113,8 +111,7 @@ export default class Switching_shifts extends Component {
 }
 
 const Styles = StyleSheet.create({
-
-    container: {
+    messageFrame: {
         paddingTop:10,
         flex: 1,
         backgroundColor: "#36485f",
@@ -124,39 +121,10 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'stretch',
     },
-    text: {
-        fontSize: 40,
-        paddingTop: 50,
-        paddingBottom:30,
-        color:"#638cb0",
-    },
-    Text2: {
-        alignSelf:'center',
-        color: '#ffff',
-        fontWeight: 'bold',
-    },
     content: {
         padding:16,
         backgroundColor:'#36485f',
         flex:1,
-    },
-    touchArea: {
-        width: 300,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#1d9aad',
-    },
-    touchArea2: {
-        width: 200,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#1d9aad',
-    },
-    saveElement: {
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     msgtext: {
         color: "#f5fffa",
@@ -164,7 +132,7 @@ const Styles = StyleSheet.create({
         fontWeight: "bold",
         alignItems: 'center',
       },
-    global:{
+    messageDisplay:{
         alignSelf: 'center',
         paddingTop: 160,           
     },

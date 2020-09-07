@@ -61,92 +61,62 @@ export default class Regform extends Component {
     }
   }
 
-
-      render() {  
-          return(
-            <ScrollView  style={Styles.container}>
-            <ScrollView>
-                    <TextInput style={Styles.TextInputUser} placeholder="Last name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.lastName = val}/>
-                    <TextInput style={Styles.TextInputUser} placeholder="First name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.firstName = val} />
-                
-                    <TextInput  style={Styles.TextInputUser} placeholder="Date of birth (YYYY-MM-DD)"  underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.dateBirth = val} />
-                    <TextInput  style={Styles.TextInputUser} placeholder="Male/Female"  underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.gender = val} />
-
-                    <TextInput style={Styles.TextInputUser} placeholder="Full address" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.address = val} />
-                    <TextInput style={Styles.TextInputUser} placeholder="ID number"  underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.ID = val} />
-                
-                    <TextInput style={Styles.TextInputUser} placeholder="Phone number"  underlineColorAndroid={'transparent'}  onChangeText={(val) => this.state.phoneNumber = val} />
-                    <TextInput  style={Styles.TextInputUser} placeholder="Email"  keyboardType={'email-address'} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.email = val} />
-
-                    <TextInput style={Styles.TextInputUser} placeholder="password" secureTextEntry={true} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.password = val} />
-                    <TextInput style={Styles.TextInputUser} placeholder="Enter password to confirm" secureTextEntry={true} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.confirmePassword = val} />
-                  
-            </ScrollView>
-
-                <View>
-                  <TouchableOpacity style={Styles.touchUP}>
-                    <Text style={Styles.btnUP} onPress={this.check_input_user}>Sign Up</Text>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-          );
-      }
-      }
-  
+  render() {  
+    return(
+      <ScrollView  style={Styles.container}>
+        <ScrollView>
+          <TextInput style={Styles.TextInputUser} placeholder="Last name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.lastName = val}/>
+          <TextInput style={Styles.TextInputUser} placeholder="First name" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.firstName = val} />
       
-      const Styles = StyleSheet.create({
-  
-      container:
-      {
-        alignSelf: 'stretch',
-      },
-      line:
-      {
-        flexDirection : 'row',
-        alignItems: 'stretch',
-        justifyContent: 'space-between'
-      },
-      TextInputUser:
-      {
-        height: 30,
-        marginBottom:30,
-        color: '#fff',
-        borderBottomColor:'#f8f8f8',
-        borderBottomWidth:1,
-        textAlign: 'center',
-      },
-      header:
-      {
-        fontSize:24,
-        color: '#fff',
-        paddingBottom:10,
-        marginBottom:40,
-        borderBottomColor: '#199187',
-        borderBottomWidth:1,
-      },
-      textInput:
-      {
+          <TextInput  style={Styles.TextInputUser} placeholder="Date of birth (YYYY-MM-DD)"  underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.dateBirth = val} />
+          <TextInput  style={Styles.TextInputUser} placeholder="Male/Female"  underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.gender = val} />
 
-        alignSelf:'stretch',
-        height: 30,
-        marginBottom:30,
-        color: '#fff',
-        borderBottomColor:'#f8f8f8',
-        borderBottomWidth:1,
+          <TextInput style={Styles.TextInputUser} placeholder="Full address" underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.address = val} />
+          <TextInput style={Styles.TextInputUser} placeholder="ID number"  underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.ID = val} />
+      
+          <TextInput style={Styles.TextInputUser} placeholder="Phone number"  underlineColorAndroid={'transparent'}  onChangeText={(val) => this.state.phoneNumber = val} />
+          <TextInput  style={Styles.TextInputUser} placeholder="Email"  keyboardType={'email-address'} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.email = val} />
 
-      },
-      btnUP:
-      {
-        fontWeight: 'bold',
-        color: '#ffff',
-        alignSelf:'stretch',
-        alignSelf:'center',
-        padding:20,
+          <TextInput style={Styles.TextInputUser} placeholder="password" secureTextEntry={true} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.password = val} />
+          <TextInput style={Styles.TextInputUser} placeholder="Enter password to confirm" secureTextEntry={true} underlineColorAndroid={'transparent'} onChangeText={(val) => this.state.confirmePassword = val} />
+        </ScrollView>
 
-
-      },
-      touchUP:
-      {
-        backgroundColor:'#1d9aad',
+        <View>
+          <TouchableOpacity style={Styles.areaRegisterButton}>
+            <Text style={Styles.textRegisterButton} onPress={this.check_input_user}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+    </ScrollView>
+    );
+  }
       }
+  
+  
+const Styles = StyleSheet.create({
+  container:
+  {
+    alignSelf: 'stretch',
+  },
+  TextInputUser:
+  {
+    height: 30,
+    marginBottom:30,
+    color: '#fff',
+    borderBottomColor:'#f8f8f8',
+    borderBottomWidth:1,
+    textAlign: 'center',
+  },
+  textRegisterButton:
+  {
+    fontWeight: 'bold',
+    color: '#ffff',
+    alignSelf:'stretch',
+    alignSelf:'center',
+    fontSize:20,
+    padding:15,
+  },
+  areaRegisterButton:
+  {
+    backgroundColor:'#1d9aad',
+  }
 });

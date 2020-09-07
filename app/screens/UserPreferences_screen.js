@@ -18,13 +18,12 @@ export default class User_preferences extends Component {
             availability: -1,
             thereIsDataFromServer: false,
             menegerSendShift : false,
-            MSGtoEMP: "",
+            MessageDisplay: "",
             minimumShifts: "",
         }
-        
     }
 
-        componentDidMount = async () => {
+    componentDidMount = async () => {
 
         let token = await AsyncStorage.getItem('token');
         const response = await company_server.get('/companies/GetPreferences', {
@@ -32,7 +31,8 @@ export default class User_preferences extends Component {
                 Authorization: "Bearer " + token
             }
         }).then(response => {
-            let minShiftsMSG = " Please submit at least " + response.data["minimum shifts"].toString()+ " shifts"; // MSG to Minimum shifts are required
+            console.log("data= "+response.data.msg);
+            let minShiftsMSG = " Please submit at least " + response.data.minimum_shifts.toString()+ " shifts"; // MSG to Minimum shifts are required
             this.setState({minimumShifts:minShiftsMSG});
 
             if(response.data.msg != "Successfully")
@@ -45,15 +45,16 @@ export default class User_preferences extends Component {
                 this.setState({ShiftsFromManager:response.data.data}, () => this.daysShift());
                 this.setState({menegerSendShift:true});
             }
-                this.setState({thereIsDataFromServer:true});
 
+            this.setState({thereIsDataFromServer:true});
+
+            Alert.alert(this.state.minimumShifts);
             return  response.data;
+
         }).catch(err => {
             Alert.alert("something get wrong, please try again");
             this.props.navigation.goBack(null);
-        });
-        Alert.alert(this.state.minimumShifts);
-
+            });
     }
     
     daysShift = () =>
@@ -77,8 +78,8 @@ export default class User_preferences extends Component {
         return update;
     }
         
-  dayPreferencesManager = (dayPreferences) =>
-  {
+    dayPreferencesManager = (dayPreferences) =>
+    {
       let daySelectedShift = [false,false,false];
 
       for (let i =0; i<dayPreferences.length; i++)
@@ -86,7 +87,7 @@ export default class User_preferences extends Component {
           daySelectedShift[dayPreferences[i]] = true;
       }
       return daySelectedShift;
-  }
+    }
 
     update_select_prefers = (prefer) =>
     {
@@ -104,7 +105,6 @@ export default class User_preferences extends Component {
                 if (this.state.currentSelectShift[dayName].prefereces[0] == 2 || this.state.currentSelectShift[dayName].prefereces[1] == 2 || this.state.currentSelectShift[dayName].prefereces[2] == 2)
                 {
                     Alert.alert('You already have "prefer" shift in this day');
-    
                 }
                 else
                 {
@@ -116,13 +116,9 @@ export default class User_preferences extends Component {
             {
                 this.state.currentSelectShift[dayName].prefereces[prefer.typeOfShift] = this.state.availability;
             }
-
         }
-        
-        
     }
-
-   
+ 
     parse_to_data_server = () =>
     {
         for (let i =0; i < 6; i++) { // i = day of week
@@ -139,8 +135,7 @@ export default class User_preferences extends Component {
                         break;
                     default:
                         Alert.alert("NUMBER NOT FOUND");
-                    
-                    }
+                }
             }
         }
         this.state.shiftOfTheWeek[0].date = this.state.ShiftsFromManager.sunday.date;
@@ -150,15 +145,12 @@ export default class User_preferences extends Component {
         this.state.shiftOfTheWeek[4].date = this.state.ShiftsFromManager.thursday.date;
         this.state.shiftOfTheWeek[5].date = this.state.ShiftsFromManager.friday.date;
         this.state.shiftOfTheWeek[6].date = this.state.ShiftsFromManager.saturday.date;
-
     }
 
- 
 
     send_shift_weekly_data = async () =>
     {
         this.parse_to_data_server();
-
         let toSend = {
             "preference": this.state.shiftOfTheWeek
         }
@@ -166,32 +158,26 @@ export default class User_preferences extends Component {
 
         const response = await company_server.post('/companies/PrefenceFromWorker',
         toSend,
-         {
-              headers: {
-                  Authorization: "Bearer " + token
-              }
-          }).then(response => {
+        {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }).then(response => {
             return  response.data;
-          }).catch(err => {
-            Alert.alert("something get wrong, please try again");
-    
-          });
+        }).catch(err => {
+        Alert.alert("something get wrong, please try again");
+        });
 
         this.props.navigation.goBack(null);
-
-
     }
 
     updateColors = (data)=>
     {
         let up = [false,false,false];
         up[data.typeOfButton] = true;
-
         this.setState({availability: data.typeOfButton});   
-        
         this.setState({whichTypePrefer: up});   
     }
-
 
     render() {  
         if(this.state.thereIsDataFromServer == false)
@@ -253,73 +239,61 @@ export default class User_preferences extends Component {
                 </View>
 
                 ):(
-                <View style={Styles.global} ><Text style={Styles.text} >{this.state.MSGtoEMP}</Text></View> 
+                <View style={Styles.messageDisplay} ><Text style={Styles.text} >{this.state.MessageDisplay}</Text></View> 
                 )}
                 
             </ScrollView>
-        
         );
     }
 }
 
     
-    const Styles = StyleSheet.create({
-        text: {
-            color: "#f5fffa",
-            fontSize: 20,
-            fontWeight: "bold",
-            alignItems: 'center',
-          },
-        global:{
-            alignSelf: 'center',
-            paddingTop: 160,           
+const Styles = StyleSheet.create({
+    text: {
+        color: "#f5fffa",
+        fontSize: 20,
+        fontWeight: "bold",
+        alignItems: 'center',
         },
-        titleNameDate : {
-            alignSelf:'center',
-            fontSize:20,
-        },
-        center: {
-
-            justifyContent: 'center',
-            alignItems: 'stretch',
-        },
-        UnselectButton : {
-            borderColor: '#f5f5f5',
-            borderWidth: 1,
-            borderRadius: 2,
-        },
-        container:
-        {
-            flex:1,
-            backgroundColor:'#36485f',
-        },
-        selectButton : {
-            borderColor: '#5fe39d',
-        },
-        MorningTouchArea : {
-            paddingRight: 40,
-        },
-        LunchTouchArea : {
-            paddingRight: 40,
-        },
-        sendText: {
-            alignSelf:'center',
-            color: '#ffff',
-            fontWeight: 'bold',
-        },
-        sendArea:
-        {
-            backgroundColor: '#1d9aad',
-            paddingVertical: 10,
-            borderRadius: 2,
-        },
-        line:
-        {
-            justifyContent: 'center',
-            padding:4,
-            flexDirection : 'row',
-            alignItems: 'stretch',
-        },
-    });
+    messageDisplay:{
+        alignSelf: 'center',
+        paddingTop: 160,           
+    },
+    center: {
+        justifyContent: 'center',
+        alignItems: 'stretch',
+    },
+    UnselectButton : {
+        borderColor: '#f5f5f5',
+        borderWidth: 1,
+        borderRadius: 2,
+    },
+    container:
+    {
+        flex:1,
+        backgroundColor:'#36485f',
+    },
+    selectButton : {
+        borderColor: '#5fe39d',
+    },
+    sendText: {
+        alignSelf:'center',
+        color: '#ffff',
+        fontWeight: 'bold',
+    },
+    sendArea:
+    {
+        backgroundColor: '#1d9aad',
+        paddingVertical: 10,
+        borderRadius: 2,
+    },
+    line:
+    {
+        justifyContent: 'center',
+        padding:4,
+        flexDirection : 'row',
+        alignItems: 'stretch',
+    },
+});
 
 

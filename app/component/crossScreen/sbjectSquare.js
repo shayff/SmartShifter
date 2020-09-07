@@ -7,7 +7,7 @@ export default class sbjectSquare extends Component {
     render() {  
 return (
     <View style={Styles.container}>
-            <TouchableOpacity style={Styles.touchArea} onPress={()=>{this.props.fatherProps.navigation.navigate(this.props.nevTo)}}>
+            <TouchableOpacity style={Styles.buttonArea} onPress={()=>{this.props.fatherProps.navigation.navigate(this.props.nevTo)}}>
             <View style={Styles.line}>   
                     <View style={Styles.Center}>          
                         <MaterialIcons name={this.props.Icon} size={40} color="black" />
@@ -36,7 +36,7 @@ const Styles = StyleSheet.create({
         marginVertical: 1,
         padding: 6, 
     },
-    touchArea: {
+    buttonArea: {
         textAlign: 'center',
         width: 300,
         height: 50,

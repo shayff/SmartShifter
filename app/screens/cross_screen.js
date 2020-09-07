@@ -41,47 +41,49 @@ export default class Cross_screen extends Component {
             <Text style={Styles.text} >{this.state.Name}</Text>
           </View>
 
-          <View style={Styles.firstLine}>
-               <View>
-                   <SubjectButton fatherProps={this.props} Icon="person-outline" titelName= { 'Profile'}  nevTo = {'Private_profile'}/>   
-               </View>
-          </View>
+          <View style={Styles.separation}>
+                  <View style={Styles.line}>
+                      <View>
+                          <SubjectButton fatherProps={this.props} Icon="person-outline" titelName= { 'Profile'}  nevTo = {'Private_profile'}/>   
+                      </View>
+                  </View>
 
-                <View  style={Styles.line}>
+                  <View  style={Styles.line}>
+                    {this.state.isHaveCompany ?(
+                              <View>
+                              <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'}  nevTo = {'Weekly_shift_arrangement'}/>
+                            </View>
+                    ):(null)}
+
+                  </View>
+            
+                  <View  style={Styles.line}>
                   {this.state.isHaveCompany ?(
-                            <View>
-                            <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'}  nevTo = {'Weekly_shift_arrangement'}/>
-                          </View>
-                  ):(null)}
+                    <View>
+                    <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  nevTo = {'Switching_shifts'}/>
+                    </View>
+                    ):(null)}
 
-                </View>
-          
-                <View  style={Styles.line}>
-                {this.state.isHaveCompany ?(
-                  <View>
-                  <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  nevTo = {'Switching_shifts'}/>
                   </View>
-                  ):(null)}
 
-                </View>
+                  <View  style={Styles.line}>
+                  {this.state.isHaveCompany ?(
+                    <View>
+                    <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'}  nevTo = {'Messages'}/>
+                    </View>
+                    ):(null)}
 
-                <View  style={Styles.line}>
-                {this.state.isHaveCompany ?(
-                  <View>
-                  <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'}  nevTo = {'Messages'}/>
                   </View>
-                  ):(null)}
+            
 
+                  <View  style={Styles.line}>
+                  {this.state.isHaveCompany ?(
+                    <View>
+                    <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  nevTo = {'User_preferences'} />
+                    </View>
+                    ):(null)}
                 </View>
-          
-
-                <View  style={Styles.line}>
-                {this.state.isHaveCompany ?(
-                  <View>
-                  <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  nevTo = {'User_preferences'} />
-                  </View>
-                  ):(null)}
-               </View>
+          </View>
 
 
         </View>
@@ -101,14 +103,11 @@ const Styles = StyleSheet.create({
   {
     flexDirection : 'row',
     alignItems: 'stretch',
-    paddingTop: 5,
+    paddingTop: 3,
     backgroundColor:'#36485f',
   },
-  firstLine:{
-    flexDirection : 'row',
-    alignItems: 'stretch',
-    paddingTop: 20,
-    backgroundColor:'#36485f',
+  separation:{
+    paddingTop:25,
   },
   text: {
     color: "#f5fffa",

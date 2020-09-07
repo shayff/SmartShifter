@@ -24,12 +24,11 @@ export default class LoginForm extends Component {
 
   confirm_input_data_user = () =>
   {
-    
     if (this.check_password())
     {
-        let data_send = {
-        email: this.state.userName,
-        password: this.state.password
+      let data_send = {
+      email: this.state.userName,
+      password: this.state.password
       };
       this.setState({isCheckData:true});
       this.get_from_server(data_send);
@@ -38,7 +37,6 @@ export default class LoginForm extends Component {
     {
       Alert.alert('The password need to be at least 5 char');
     }
-
   }
 
 get_from_server = async (data_send) =>
@@ -56,12 +54,9 @@ get_from_server = async (data_send) =>
     }
     let keys = [['token', response.data.data.token],['company',company],['name', response.data.data["first name"]],['_id',response.data.data["_id"].toString()],['password',this.state.password.toString()]];
     await AsyncStorage.multiSet(keys, () => {
-
     });
 
-
     this.setState({isCheckData:false});
-
     this.props.fatherProps.navigation.navigate('Cross_screen');
   }catch(err){
       Alert.alert(err.response.data.msg);
@@ -86,11 +81,11 @@ save_input_password = (val) =>
                 <TextInput keyboardType="email-address" returnKeyType="next" placeholder="username (Email)" style={Styles.input} onChangeText={this.save_input_user_name} />
                 <TextInput  returnKeyType="go" secureTextEntry placeholder="password" style={Styles.input} onChangeText={this.save_input_password} />
 
-                <TouchableOpacity style={Styles.LOGINContainer}>
+                <TouchableOpacity style={Styles.loginContainer}>
                     <Text style={Styles.textLogin} onPress={this.confirm_input_data_user}>LOGIN</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={Styles.SIGNUPContainer}>
+                <TouchableOpacity style={Styles.singupContainer}>
                     <Text style={Styles.textSighUp} onPress={()=>{this.props.fatherProps.navigation.navigate('Registration');}}>Sign Up</Text>
                 </TouchableOpacity>
 
@@ -108,41 +103,41 @@ save_input_password = (val) =>
     }
 
     
-    const Styles = StyleSheet.create({
-    container:
-    {
-     padding: 20,
-    },
-    SIGNUPContainer:
-    {
-        paddingVertical: 10,
-    },
-    LOGINContainer: 
-    {
-        backgroundColor: '#2980b9',
-        paddingVertical: 10,
-    },
-    textSighUp:
-    {
-        textAlign: 'center',
-        color: '#FFF',
-        fontWeight:'700',
-        opacity:0.6,
-    },
-    textLogin:
-    {
-        textAlign: 'center',
-        color: '#FFF',
-        fontWeight:'700',
-    },
-    input:
-    {
-        height: 40,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        marginBottom: 10,
-        color: '#fff',
-        paddingHorizontal: 10,
-    },
+const Styles = StyleSheet.create({
+  container:
+  {
+    padding: 20,
+  },
+  singupContainer:
+  {
+    paddingVertical: 10,
+  },
+  loginContainer: 
+  {
+      backgroundColor: '#2980b9',
+      paddingVertical: 10,
+  },
+  textSighUp:
+  {
+      textAlign: 'center',
+      color: '#FFF',
+      fontWeight:'700',
+      opacity:0.6,
+  },
+  textLogin:
+  {
+      textAlign: 'center',
+      color: '#FFF',
+      fontWeight:'700',
+  },
+  input:
+  {
+      height: 40,
+      backgroundColor: 'rgba(255,255,255,0.2)',
+      marginBottom: 10,
+      color: '#fff',
+      paddingHorizontal: 10,
+  },
 });
 
 

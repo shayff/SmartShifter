@@ -35,7 +35,7 @@ export default class SwapSingle extends Component {
         }
     }
 
-    ifWaitToSwap = async() =>
+    if_wait_to_swap = async() =>
     {
         this.setState({status_title:"wait for confirm"});
         this.setState({color:'#f08080'});
@@ -56,62 +56,57 @@ export default class SwapSingle extends Component {
     } 
 
     render() { 
-return (
-    <View style={Styles.itemSet}>
-        <View>
-            <View style={Styles.line_Status}>
-                <Text style={Styles.title}>Status: </Text>
-                <Text style={Styles.secendTitle}>{this.state.status_title}</Text>
+        return (
+            <View style={Styles.itemSet}>
+                <View>
+                    <View style={Styles.line_Status}>
+                        <Text style={Styles.title}>Status: </Text>
+                        <Text style={Styles.secendTitle}>{this.state.status_title}</Text>
+                    </View>
+
+                    <View style={Styles.line}>
+                        <Text style={Styles.title}>Date: </Text>
+                        <Text style={Styles.secendTitle}>{this.props.item.date}</Text>
+                    </View>
+
+                    <View style={Styles.line}>
+                        <Text style={Styles.title}>start time: </Text>
+                        <Text style={Styles.secendTitle}>{this.props.item.start_time}</Text>
+            
+                    </View>
+
+                    <View style={Styles.line}>
+                        <Text style={Styles.title}>end time: </Text>
+                        <Text style={Styles.secendTitle}>{this.props.item.end_time}</Text>
+                    </View>
+
+                    <View style={Styles.line}>
+                        <Text style={Styles.title}>Who asks: </Text>
+                        <Text style={Styles.secendTitle}>{this.props.item.Who_asks}</Text>
+                    </View>
+                </View>
+
+                <View style={{
+                borderWidth:1,
+                backgroundColor: 'darkgray',
+                marginTop:15,
+                marginLeft:80,
+                borderRadius:10,
+                flexDirection : 'row',
+                height:45,   
+                position: 'absolute', top: 15, left: 160, right: 10, justifyContent: 'center', alignItems: 'center',flexDirection : 'row',backgroundColor:this.state.color }}  >
+                    <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.if_wait_to_swap} >
+                        <MaterialIcons name="autorenew" size={30} color="black" />
+                        <Text style={Styles.textStyle}>
+                                Swap
+                        </Text>           
+                    </TouchableOpacity>
+                </View>      
             </View>
-
-            <View style={Styles.line}>
-                <Text style={Styles.title}>Date: </Text>
-                <Text style={Styles.secendTitle}>{this.props.item.date}</Text>
-            </View>
-
-            <View style={Styles.line}>
-                <Text style={Styles.title}>start time: </Text>
-                <Text style={Styles.secendTitle}>{this.props.item.start_time}</Text>
-    
-            </View>
-
-            <View style={Styles.line}>
-                <Text style={Styles.title}>end time: </Text>
-                <Text style={Styles.secendTitle}>{this.props.item.end_time}</Text>
-            </View>
-
-            <View style={Styles.line}>
-                <Text style={Styles.title}>Who asks: </Text>
-                <Text style={Styles.secendTitle}>{this.props.item.Who_asks}</Text>
-            </View>
-        </View>
-
-        <View style={{
-        borderWidth:1,
-        backgroundColor: 'darkgray',
-        marginTop:15,
-        marginLeft:80,
-        borderRadius:10,
-        flexDirection : 'row',
-        height:45,   
-        position: 'absolute', top: 15, left: 160, right: 10, justifyContent: 'center', alignItems: 'center',flexDirection : 'row',backgroundColor:this.state.color }}  >
-            <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.ifWaitToSwap} >
-                <MaterialIcons name="autorenew" size={30} color="black" />
-                <Text style={Styles.textStyle}>
-                        Swap
-                </Text>           
-            </TouchableOpacity>
-        </View>
-        
-    </View>
-
- 
-);
-
+        );
     }
 }
 const Styles = StyleSheet.create({
-   
     line:
     {
         flexDirection : 'row',
@@ -152,16 +147,4 @@ const Styles = StyleSheet.create({
         padding: 1,
         fontSize:18,
     },
-    // buttonStyle:{
-    //     borderWidth:1,
-    //     backgroundColor: 'darkgray',
-    //     marginTop:15,
-    //     marginLeft:80,
-    //     borderRadius:10,
-    //     flexDirection : 'row',
-    //     height:45,   
-    //     position: 'absolute', top: 15, left: 160, right: 10, justifyContent: 'center', alignItems: 'center'     
-   // },
-
-
 })

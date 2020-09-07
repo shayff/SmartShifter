@@ -9,127 +9,122 @@ import SingleShift from '../component/shift_arrangement/singleShift';
 
 export default class Weekly_shift_arrangement extends Component {
 
-    constructor(inside){
-        super(inside);
-        this.state = {
-            dataArrangement:{},
-            allSections: [
+  constructor(inside){
+      super(inside);
+      this.state = {
+          dataArrangement:{},
+          allSections: [
+              {
+                  title: 'Morning',
+                  content: [],
+                },
                 {
-                    title: 'Morning',
-                    content: [],
-                  },
-                  {
-                    title: 'Noon',
-                    content: [],
-                  },
-                  {
-                    title: 'Evening',
-                    content:  [],
-                  },
-                ],
-            activeSections:[],
-            markedDates: {},
-            rangeToSelect: ['','select day',''],
-            isLodingDataMonth: true,
-      }
+                  title: 'Noon',
+                  content: [],
+                },
+                {
+                  title: 'Evening',
+                  content:  [],
+                },
+              ],
+          activeSections:[],
+          markedDates: {},
+          rangeToSelect: ['','select day',''],
+          isLodingDataMonth: true,
     }
+  }
 
-    getCurrentDate=()=>{
+getCurrentDate=()=>{
 
-      var date = new Date().getDate();
-      var month = new Date().getMonth() + 1;
-      var year = new Date().getFullYear();
+  var date = new Date().getDate();
+  var month = new Date().getMonth() + 1;
+  var year = new Date().getFullYear();
 
-      let res = {
-        'year': year,
-        'month': month,
-        'day': date,
-        'dateString':year+"-"+month+"-"+date
-      }
-      return res;
+  let res = {
+    'year': year,
+    'month': month,
+    'day': date,
+    'dateString':year+"-"+month+"-"+date
+  }
+  return res;
 }
     
-    componentDidMount(){
+componentDidMount(){
 
-      let today = this.getCurrentDate();
-      this.updateShiftInBorde(today);
-    }
+  let today = this.getCurrentDate();
+  this.updateShiftInBorde(today);
+}
 
-  _renderHeader = section => {
-    return (
-      <View>
-        <Text style={Styles.AccordionHeader}>{section.title}</Text>
-      </View>
-    );
-  };
+_renderHeader = section => {
+  return (
+    <View>
+      <Text style={Styles.AccordionHeader}>{section.title}</Text>
+    </View>
+  );
+};
  
-  _renderContent = section => {
-    return (
-      <View>
-        {section.content.map(item => (
-              <View key={item.id}>
-                <SingleShift item={item}/>
-              </View>
-        ))}
-
-
-      </View>
-    );
-  };
+_renderContent = section => {
+  return (
+    <View>
+      {section.content.map(item => (
+            <View key={item.id}>
+              <SingleShift item={item}/>
+            </View>
+      ))}
+    </View>
+  );
+};
  
-  _updateSections = activeSections => {
-    this.setState({ activeSections });
-  };
+_updateSections = activeSections => {
+  this.setState({ activeSections });
+};
 
-  _renderSectionTitle = section => {
-    return (
-      <View></View>
-    );
-  };
+_renderSectionTitle = section => {
+  return (
+    <View></View>
+  );
+};
 
-  formatDay = (date) =>
+formatDay = (date) =>
+{
+  let newMonth=0;
+  let newDay=0;
+
+  if (date.month<10)
   {
-    let newMonth=0;
-    let newDay=0;
-
-    if (date.month<10)
-    {
-      newMonth= '0'+date.month;
-    }
-    else
-    {
-      newMonth = date.month;
-    }
-
-    if(date.day < 10)
-    {
-      newDay = '0'+newDay.day;
-    }
-    else
-    {
-      newDay = date.day;
-    }
-
-    let res = {
-      'year': date.year,
-      'month': newMonth,
-      'day': newDay,
-      'dateString':date.year+"-"+newMonth+"-"+newDay
-    }
-
-    return res;
+    newMonth= '0'+date.month;
   }
+  else
+  {
+    newMonth = date.month;
+  }
+
+  if(date.day < 10)
+  {
+    newDay = '0'+newDay.day;
+  }
+  else
+  {
+    newDay = date.day;
+  }
+
+  let res = {
+    'year': date.year,
+    'month': newMonth,
+    'day': newDay,
+    'dateString':date.year+"-"+newMonth+"-"+newDay
+  }
+
+  return res;
+}
 
   updateShiftInBorde = async (dateSelect) =>
   {
     this.setState({isLodingDataMonth:true});
-
     let formatCurrentDay = this.formatDay(this.getCurrentDate());
-    
     let formatDateSelect = this.formatDay(dateSelect);
-
-
     let minDateShift = formatDateSelect.year+'-'+(formatDateSelect.month)+'-01';
+
     // get the lest day in this month
     var lestDay = new Date(formatDateSelect.year, formatDateSelect.month, 0);
     let maxDateShift = Moment(lestDay).format('YYYY-MM-DD');
@@ -140,7 +135,6 @@ export default class Weekly_shift_arrangement extends Component {
       "end_date": maxDateShift,
       "statuses": ["scheduled"]
     }
-
 
     let token = await AsyncStorage.getItem('token');
     let _id = await AsyncStorage.getItem('_id');
@@ -161,7 +155,7 @@ export default class Weekly_shift_arrangement extends Component {
 
     let tempMarksDays = {};
 
-     Object.keys(ShiftMonth.data).forEach(function (item) {
+    Object.keys(ShiftMonth.data).forEach(function (item) {
 
       tempMarksDays[item]= {startingDay: true,textColor:'black', color: '#50cebb', endingDay: true};
       let date = ShiftMonth.data[item];
@@ -169,89 +163,79 @@ export default class Weekly_shift_arrangement extends Component {
       for(let i=0; i<date.length; i++) // passing all the shift in this day
       {
         let EmployeesArray = date[i]["employees"];
-          for(let i=0; i<EmployeesArray.length;i++)
+        for(let i=0; i<EmployeesArray.length;i++)
+        {
+          if(EmployeesArray[i]["_id"] == _id)
           {
-            if(EmployeesArray[i]["_id"] == _id)
-            {
-              tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black', color: '#50cebb',dotColor: '#ffff', endingDay: true};
-            }
+            tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black', color: '#50cebb',dotColor: '#ffff', endingDay: true};
           }
+        }
       }
+    });
 
-      });
+    let currentDay = tempMarksDays[formatCurrentDay.dateString];
 
-      let currentDay = tempMarksDays[formatCurrentDay.dateString];
+    if(currentDay == null) // if there are no mark object in this day
+    {
+      currentDay= {textColor:'#7d2934'};
+    }
+    else
+    {
+      currentDay["textColor"]= '#7d2934';
+    }
 
-      if(currentDay == null) // if there are no mark object in this day
-      {
-        currentDay= {textColor:'#7d2934'};
-      }
-      else
-      {
-        currentDay["textColor"]= '#7d2934';
-      }
-      tempMarksDays[formatCurrentDay.dateString] = currentDay;
-
-      this.setState({markedDates:tempMarksDays});
-
-      this.setState({isLodingDataMonth:false});
-
+    tempMarksDays[formatCurrentDay.dateString] = currentDay;
+    this.setState({markedDates:tempMarksDays});
+    this.setState({isLodingDataMonth:false});
   }
 
   update_shift_for_this_day = (day) =>
   {
     this.setState({isLodingDataMonth:true});
-
     let demoToRender = ['',day.dateString,''];
-
     this.setState({rangeToSelect:demoToRender});
-
     let resSshiftToUpdate = [
       {
-          title: 'Morning',
-          content: [],
-        },
-        {
-          title: 'Noon',
-          content: [],
-        },
-        {
-          title: 'Evening',
-          content: [],
-        },
-      ];
-
-      
-      let shift = this.state.dataArrangement.data[day.dateString];
-      
-      if (shift != null)
+        title: 'Morning',
+        content: [],
+      },
       {
-        for(let i=0; i<shift.length; i++) // passing all the shift in this day
-        {
-          this.put_shift_in_borde({oneShift:shift[i],sections:resSshiftToUpdate});
-        }
+        title: 'Noon',
+        content: [],
+      },
+      {
+        title: 'Evening',
+        content: [],
+      },
+    ];
+
+    let shift = this.state.dataArrangement.data[day.dateString];
+    if (shift != null)
+    {
+      for(let i=0; i<shift.length; i++) // passing all the shift in this day
+      {
+        this.put_shift_in_borde({oneShift:shift[i],sections:resSshiftToUpdate});
       }
+    }
 
-      this.setState({allSections:resSshiftToUpdate});
-      this.setState({isLodingDataMonth:false});
-
+    this.setState({allSections:resSshiftToUpdate});
+    this.setState({isLodingDataMonth:false});
   }
 
   put_shift_in_borde = (data) =>
   {
-
-   if(data.oneShift["day part"].includes(0))
-   {
-    this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[0]});
-   }
-   else if(data.oneShift["day part"].includes(1))
-   {
-    this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[1]});
-   }
-   else
-   {
-    this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[2]});
-   }
+    if(data.oneShift["day part"].includes(0))
+    {
+        this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[0]});
+    }
+    else if(data.oneShift["day part"].includes(1))
+    {
+        this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[1]});
+    }
+    else
+    {
+        this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[2]});
+    }
   }
 
   write_shift_details = (shift) =>
@@ -281,11 +265,9 @@ export default class Weekly_shift_arrangement extends Component {
     shift.sections.content.push(temp);
   }
 
-    render() {  
+  render() {  
         return(
-            
             <ScrollView style={Styles.content}>
-
               <View>
               <Calendar
                         // Collection of dates that have to be marked. Default = {}
@@ -336,74 +318,54 @@ export default class Weekly_shift_arrangement extends Component {
                       />
               </View>
 
-            <Text style={Styles.dateShow}>{this.state.rangeToSelect[1]}</Text>
-            <View>
+              <Text style={Styles.dateShow}>{this.state.rangeToSelect[1]}</Text>
+              <View>
                 {this.state.rangeToSelect[1] == 'select day' ? ((this.state.isLodingDataMonth ?(
-                                    <View>
-                                      <ActivityIndicator  size="large" color="#0000ff" />
-                                    </View>):(null))):(this.state.isLodingDataMonth ?(
-                                    <View>
-                                      <ActivityIndicator  size="large" color="#0000ff" />
-                                    </View>):(
-                                    <View>
-                                        <Accordion
-                                            sections={this.state.allSections}
-                                            activeSections={this.state.activeSections}
-                                            renderSectionTitle={this._renderSectionTitle}
-                                            renderHeader={this._renderHeader}
-                                            renderContent={this._renderContent}
-                                            onChange={this._updateSections}/>
-                                      </View>))}
-                </View>
+                  <View>
+                    <ActivityIndicator  size="large" color="#0000ff" />
+                  </View>):(null))):(this.state.isLodingDataMonth ?(
+
+                  <View>
+                    <ActivityIndicator  size="large" color="#0000ff" />
+                  </View>):(
+
+                  <View>
+                      <Accordion
+                          sections={this.state.allSections}
+                          activeSections={this.state.activeSections}
+                          renderSectionTitle={this._renderSectionTitle}
+                          renderHeader={this._renderHeader}
+                          renderContent={this._renderContent}
+                          onChange={this._updateSections}/>
+                  </View>))}
+              </View>
             </ScrollView>
-        
         );
     }
 }
 
-    
+
 const Styles = StyleSheet.create({
-    UnselectButton : {
-        borderColor: '#f5f5f5',
-        borderWidth: 4,
-        borderRadius: 10,
-    },
-    content:
-    {
-      backgroundColor:'#36485f',
-    },
-    dateShow:
-    {
-      textAlign: 'center',
-      backgroundColor:'#1ac4b0',
-      fontSize:18,
-      fontWeight: 'bold',
-      color:'#ffff',
-    },
-    AccordionHeader:
-    {
-      textAlign: 'center',
-      color:'#ffff',
-      borderWidth: 1,
-      borderRadius: 10,
-      backgroundColor:'#2980b9',
-    },
-    container:
-    {
-        flex:1,
-        backgroundColor:'#36485f',
-    },
-    selectButton : {
-        borderColor: '#5fe39d',
-        borderWidth: 4,
-        borderRadius: 10,
-    },
-    line:
-    {
-        width: 60,
-        flexDirection : 'row',
-        alignItems: 'stretch',
-    },
+  content:
+  {
+    backgroundColor:'#36485f',
+  },
+  dateShow:
+  {
+    textAlign: 'center',
+    backgroundColor:'#1ac4b0',
+    fontSize:18,
+    fontWeight: 'bold',
+    color:'#ffff',
+  },
+  AccordionHeader:
+  {
+    textAlign: 'center',
+    color:'#ffff',
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor:'#2980b9',
+  },
 });
 
 

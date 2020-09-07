@@ -16,18 +16,17 @@ export default class Messages extends Component {
             },
             listMasseges : [],
             thereIsMSG: false,
-            MSGtoEMP: "",
-        }
-                                    
-      }
+            MessageDisplay: "",
+        }                           
+    }
 
-      componentDidMount = async () => {
+    componentDidMount = async () => {
         let token = await AsyncStorage.getItem('token');
         const response = await member_server.get('/getmessage', {
           headers: {
               Authorization: "Bearer " + token
           }
-      }).then(response => {
+        }).then(response => {
         console.log("GOOD " + response.data.data);
         if (response.data.data.length == 0) // there is no messages
         {
@@ -39,17 +38,18 @@ export default class Messages extends Component {
         }
 
         return  response.data;
-      }).catch(err => {
-        Alert.alert("something get wrong, please try again");
-        this.props.navigation.goBack(null);
-      });
-      this.setState({massegesData:response});
+        }).catch(err => {
+            Alert.alert("something get wrong, please try again");
+            this.props.navigation.goBack(null);
+           });
+
+        this.setState({massegesData:response});
       
-      if(this.state.massegesData.ok != true)
-      {
-          Alert.alert("There was a problem receiving the messages, please try again");
-          this.props.navigation.goBack(null);
-      }
+        if(this.state.massegesData.ok != true)
+        {
+            Alert.alert("There was a problem receiving the messages, please try again");
+            this.props.navigation.goBack(null);
+        }
         
         let updatList=[];
         console.log(this.state.massegesData.data.length);
@@ -68,9 +68,7 @@ export default class Messages extends Component {
 
         this.setState({listMasseges:updatList});
         this.setState({thereIsDataFromServer:true});
- 
-
-      }
+    }
 
 
     render() {  
@@ -88,49 +86,37 @@ export default class Messages extends Component {
                         keyExtractor={(item, index) => {return item.time_created;}}
                         renderItem={({item})=>(<SingleMessage item={item}/>)}
                     />
-                </View>
-                ) : (
-                    <View style={Styles.global} ><Text style={Styles.msgtext} >{this.state.MSGtoEMP}</Text></View> // need styles
+                </View>) :
+                (
+                    <View style={Styles.messageDisplay} ><Text style={Styles.msgtext} >{this.state.MessageDisplay}</Text></View> // need styles
                 )} 
-
             </View>
         );
     }
     }
 
     
-    const Styles = StyleSheet.create({
+const Styles = StyleSheet.create({
 
-        Text: {
-            alignSelf:'center',
-            color: '#ffff',
-            fontWeight: 'bold',
-        },
-        content: {
-            padding:16,
-            backgroundColor:'#36485f',
-            flex:1,
-        },
-        saveElement: {
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        touchArea: {
-            width: 200,
-            height: 30,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1d9aad',
-        },
-        msgtext: {
-            color: "#f5fffa",
-            fontSize: 20,
-            fontWeight: "bold",
-            alignItems: 'center',
-          },
-        global:{
-            alignSelf: 'center',
-            paddingTop: 160,           
-        },
-    });
+    Text: {
+        alignSelf:'center',
+        color: '#ffff',
+        fontWeight: 'bold',
+    },
+    content: {
+        padding:16,
+        backgroundColor:'#36485f',
+        flex:1,
+    },
+    msgtext: {
+        color: "#f5fffa",
+        fontSize: 20,
+        fontWeight: "bold",
+        alignItems: 'center',
+    },
+    messageDisplay:{
+        alignSelf: 'center',
+        paddingTop: 160,           
+    },
+});
 

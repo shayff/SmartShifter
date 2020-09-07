@@ -14,18 +14,17 @@ export default class SingleMessage extends Component {
       }
 
 
-      componentDidMount =  () => {
-    
+    componentDidMount =  () => {
         if (this.props.item.is_read == "read" )
         {
-         this.setState({isRead:true});
-         this.setState({textIsRead:"You already confirm reading:" });
+            this.setState({isRead:true});
+            this.setState({textIsRead:"You already confirm reading:" });
 
         }
         else
         {
-         this.setState({isRead:false});
-         this.setState({textIsRead:"Check to confirm reading:" });
+            this.setState({isRead:false});
+            this.setState({textIsRead:"Check to confirm reading:" });
 
         }
     }
@@ -39,7 +38,7 @@ export default class SingleMessage extends Component {
             "status": "read"
         }
         const response = await member_server.post('/updatemessage',
-    toSend,
+        toSend,
         {
             headers: {
                 Authorization: "Bearer " + token
@@ -54,38 +53,38 @@ export default class SingleMessage extends Component {
         });
     }
 
-      render() { 
-return (
+    render() { 
+        return (
+            <View style={Styles.itemSet}>
+                <View style={Styles.titleLine}>
+                    <Text style={Styles.messageField}>Title: </Text>
+                    <Text style={Styles.contentMessage}>{this.props.item.title}</Text>
+                </View>
 
-    <View style={Styles.itemSet}>
-        <View style={Styles.titleLine}>
-            <Text style={Styles.title}>Title: </Text>
-            <Text style={Styles.secendTitle}>{this.props.item.title}</Text>
-        </View>
+                <View style={Styles.line}>
+                    <Text style={Styles.messageField}>Date: </Text>
+                    <Text style={Styles.contentMessage}>{this.props.item.time_created}</Text>
+                </View>
 
-        <View style={Styles.line}>
-            <Text style={Styles.title}>Date: </Text>
-            <Text style={Styles.secendTitle}>{this.props.item.time_created}</Text>
-        </View>
+                <View style={Styles.line}>
+                    <Text style={Styles.messageField}>Sender Name: </Text>
+                    <Text style={Styles.contentMessage}>{this.props.item.name_sender}</Text>
+        
+                </View>
 
-        <View style={Styles.line}>
-            <Text style={Styles.title}>Sender Name: </Text>
-            <Text style={Styles.secendTitle}>{this.props.item.name_sender}</Text>
- 
-        </View>
+                <View style={Styles.line}>
+                    <Text style={Styles.messageField}>Content: </Text>
+                    <Text style={Styles.contentMessage}>{this.props.item.massege}</Text>
+                </View>
 
-        <View style={Styles.line}>
-            <Text style={Styles.title}>Content: </Text>
-            <Text style={Styles.secendTitle}>{this.props.item.massege}</Text>
-        </View>
-
-         <View style={Styles.verifyLine}>
-            <Text  style={this.state.isRead ? Styles.verifyTitle_read : Styles.verifyTitle_unRead}>{this.state.textIsRead}</Text>
-            <CheckBox disabled={this.state.isRead} value = {this.state.isRead} onValueChange = {this.click_to_verify} />
-        </View>
-    </View>
-);
- }}
+                <View style={Styles.verifyLine}>
+                    <Text  style={this.state.isRead ? Styles.verifyTitle_read : Styles.verifyTitle_unRead}>{this.state.textIsRead}</Text>
+                    <CheckBox disabled={this.state.isRead} value = {this.state.isRead} onValueChange = {this.click_to_verify} />
+                </View>
+            </View>
+        );
+    }
+}
 
 const Styles = StyleSheet.create({
     titleLine:
@@ -96,21 +95,21 @@ const Styles = StyleSheet.create({
         textDecorationLine: 'underline',
         paddingBottom: 16,
     },
-    secendTitle:
+    contentMessage:
     {
         color:'#ffff',
         opacity:0.7,
-        fontSize: 14,
+        fontSize: 16,
     },
     line:
     {
         flexDirection : 'row',
         alignItems: 'stretch',
     },
-    title:
+    messageField:
     {
         color: '#ffff',
-        fontSize:14,
+        fontSize:17,
         fontWeight: 'bold',
     },
     itemSet:
@@ -128,7 +127,7 @@ const Styles = StyleSheet.create({
         paddingTop:4,
     },
     verifyTitle_unRead:{
-        color: '#2e8b57',
+        color: '#7fffd4',
         fontSize:14,
         fontWeight: 'bold',
         paddingTop:4,

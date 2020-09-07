@@ -27,10 +27,8 @@ export default class daySquare extends Component {
             {
                 this.updateColor({typeOfShift: data.typeOfShift});
             }
-    
             this.props.clickSelectPreferce({typeOfShift : data.typeOfShift, dateName: this.props.dateName})
         }
-
       }
 
       updateColor = (data) =>
@@ -41,35 +39,34 @@ export default class daySquare extends Component {
       }
 
     render() {  
-return (
-    <View>
-            <Text style={Styles.Text}>{this.state.DayName}: {this.props.dateName}</Text>
-            <View style={Styles.line}>
-                <View style={ this.state.colorPrefer[0] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[0] == 1 ? Styles.AvailableButton :(this.props.whichShiftToShowe[0]? Styles.NotAvailableButton:Styles.nullButton)) }>
-                    {this.props.whichShiftToShowe[0] ? (
-                        <Button title= "morning" onPress={() => this.updateSelected({typeOfShift: 0})} />
-                    ): null}
-                    
-                </View>
-            
-                <View style={ this.state.colorPrefer[1] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[1] == 1 ? Styles.AvailableButton : (this.props.whichShiftToShowe[1] ? Styles.NotAvailableButton:Styles.nullButton)) }>
-                    {this.props.whichShiftToShowe[1] ? (
-                        <Button title= "noon" onPress={() => this.updateSelected({typeOfShift: 1})} />
-                    ):  null}
-                    
-                </View>
+        return (
+            <View>
+                <Text style={Styles.Text}>{this.state.DayName}: {this.props.dateName}</Text>
+                <View style={Styles.line}>
+                    <View style={ this.state.colorPrefer[0] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[0] == 1 ? Styles.AvailableButton :(this.props.whichShiftToShowe[0]? Styles.NotAvailableButton:Styles.nullButton)) }>
+                        {this.props.whichShiftToShowe[0] ? (
+                            <Button title= "morning" onPress={() => this.updateSelected({typeOfShift: 0})} />
+                        ): null}
+                        
+                    </View>
+                
+                    <View style={ this.state.colorPrefer[1] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[1] == 1 ? Styles.AvailableButton : (this.props.whichShiftToShowe[1] ? Styles.NotAvailableButton:Styles.nullButton)) }>
+                        {this.props.whichShiftToShowe[1] ? (
+                            <Button title= "noon" onPress={() => this.updateSelected({typeOfShift: 1})} />
+                        ):  null}
+                        
+                    </View>
 
-                <View style={ this.state.colorPrefer[2] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[2] == 1 ? Styles.AvailableButton :(this.props.whichShiftToShowe[2] ? Styles.NotAvailableButton: Styles.nullButton)) }>
-                    {this.props.whichShiftToShowe[2] ? (
-                        <Button title= "evening" onPress={() => this.updateSelected({typeOfShift: 2})} />
-                    ):  null}
-                    
+                    <View style={ this.state.colorPrefer[2] == 2 ? (Styles.PreferButton) : (this.state.colorPrefer[2] == 1 ? Styles.AvailableButton :(this.props.whichShiftToShowe[2] ? Styles.NotAvailableButton: Styles.nullButton)) }>
+                        {this.props.whichShiftToShowe[2] ? (
+                            <Button title= "evening" onPress={() => this.updateSelected({typeOfShift: 2})} />
+                        ):  null}
+                        
+                    </View>
                 </View>
             </View>
-    </View>
-);
-
-}
+        );
+    }
 }
 
 const Styles = StyleSheet.create({
@@ -77,10 +74,6 @@ line:
 {
     padding:2,
     flexDirection : 'row',
-},
-Text: {
-    alignSelf:'center',
-    color: '#ffff'
 },
 NotAvailableButton : {
     borderColor: '#b22222',

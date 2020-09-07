@@ -13,10 +13,9 @@ export default class SingleShift extends Component {
             _id : "",
             isSendSwap: false,
         }                      
-      }
+    }
 
-      componentDidMount = async () => {
-    
+    componentDidMount = async () => {
         let my_id = await AsyncStorage.getItem('_id');
         this.setState({isSendSwap:this.props.item["is asked swap"]});
         this.setState({_id:my_id});
@@ -31,68 +30,61 @@ export default class SingleShift extends Component {
 
         const response = await meneger_server.post('/AskShiftSwap',
         toSend,
-         {
-              headers: {
-                  Authorization: "Bearer " + token
-              }
-          }).then(response => {
-
+        {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        }).then(response => {
             this.setState({isSendSwap:true});
             return  response.data;
-          }).catch(err => {
+        }).catch(err => {
             Alert.alert("something get wrong, please try again");
-    
-          });
-
+        });
     }
 
-      render() { 
-return (
+    render() { 
+        return (
 
-    <View style={Styles.itemSet}>
-        <View style={Styles.titleLine}>
-            <Text style={Styles.title}>Type of job: </Text>
-            <Text style={Styles.secendTitle}>{this.props.item.title}</Text>
-        </View>
-
-        <View style={Styles.line}>
-            <Text style={Styles.title}>Start time: </Text>
-            <Text style={Styles.secendTitle}>{this.props.item["start time"]}</Text>
-        </View>
-
-        <View style={Styles.line}>
-            <Text style={Styles.title}>End time: </Text>
-            <Text style={Styles.secendTitle}>{this.props.item["end time"]}</Text>
- 
-        </View>
-         <View>
-             <Text style={Styles.title}>Employees:</Text>
-                <View>
-                    { this.state.employees.map( item => (
-                        <View key = {item._id} style={Styles.line}>
-                            <Text style={Styles.nameEMP}>{item["first name"]} {item["last name"]}</Text>
-
-                        <View>{this.state._id == item._id ? (
-
-                                <View style={Styles.screenContainer} >
-                                    <TouchableOpacity style={this.state.isSendSwap ? Styles.appButtonContainer_disable : Styles.appButtonContainer} disabled={this.state.isSendSwap} onPress={this.want_to_swap}>
-                                        <MaterialIcons name="swap-horiz" size={30} color="black" />
-                                        <Text style={Styles.appButtonText}>{'swap'}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            ):(null)}
-                        </View>
-
-                        </View>
-                        ))}
-
+            <View style={Styles.itemSet}>
+                <View style={Styles.titleLine}>
+                    <Text style={Styles.title}>Type of job: </Text>
+                    <Text style={Styles.secendTitle}>{this.props.item.title}</Text>
                 </View>
-        </View>
 
-    </View>
-    
+                <View style={Styles.line}>
+                    <Text style={Styles.title}>Start time: </Text>
+                    <Text style={Styles.secendTitle}>{this.props.item["start time"]}</Text>
+                </View>
 
-);}}
+                <View style={Styles.line}>
+                    <Text style={Styles.title}>End time: </Text>
+                    <Text style={Styles.secendTitle}>{this.props.item["end time"]}</Text>
+        
+                </View>
+                <View>
+                    <Text style={Styles.title}>Employees:</Text>
+                        <View>
+                            { this.state.employees.map( item => (
+                                <View key = {item._id} style={Styles.line}>
+                                    <Text style={Styles.username}>{item["first name"]} {item["last name"]}</Text>
+                                    <View>{this.state._id == item._id ? (
+                                            <View style={Styles.screenContainer} >
+                                                <TouchableOpacity style={this.state.isSendSwap ? Styles.appButtonContainer_disable : Styles.appButtonContainer} disabled={this.state.isSendSwap} onPress={this.want_to_swap}>
+                                                    <MaterialIcons name="swap-horiz" size={30} color="black" />
+                                                    <Text style={Styles.appButtonText}>{'swap'}</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        ):(null)}
+                                    </View>
+
+                                </View>
+                            ))}
+                        </View>
+                </View>
+            </View>
+        );
+    }
+}
 
 const Styles = StyleSheet.create({
     titleLine:
@@ -103,7 +95,7 @@ const Styles = StyleSheet.create({
         textDecorationLine: 'underline',
         paddingBottom: 16,
     },
-    nameEMP:
+    username:
     {
         color:'#ffff',
         opacity:0.7,

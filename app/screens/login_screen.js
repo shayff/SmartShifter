@@ -36,12 +36,7 @@ export default class Login extends Component {
         paddingTop:1,
         paddingBottom:10
     },
-    bigTitle:
-    {
-        color: '#fff',
-        fontSize:25,
-        opacity: 1,
-    },
+
     logo_container:
     {
         paddingTop:15,
