@@ -11,9 +11,6 @@ class UpdateProfile extends Component {
             first_name: '',
             last_name: '',
             email: '',
-            currPassword: '',
-            newPassword: '',
-            newPasswordTypedAgain: '',
             id_number: '',
             phone: '',
             address: '',
@@ -29,15 +26,11 @@ class UpdateProfile extends Component {
         const first_name = document.forms["myForm4"]["first_name"].value;
         const last_name = document.forms["myForm4"]["last_name"].value;
         const email = document.forms["myForm4"]["email"].value;
-        //const currPassword = document.forms["myForm4"]["currPassword"].value;
         const id_number = document.forms["myForm4"]["id_number"].value;
         const phone = document.forms["myForm4"]["phone"].value;
-        // const address = document.forms["myForm4"]["address"].value;
-        //const gedner = document.forms["myForm4"]["gender"].value;
         const date_of_birth = document.forms["myForm4"]["date_of_birth"].value;
         let validate = true;
 
-        //address === "" || gedner === "" || currPassword === "" 
         if (email === "" || first_name === ""|| id_number === ""|| last_name === ""|| phone === "" || date_of_birth === "")
         {
           alert("All Fields Must Be Filled");
@@ -100,13 +93,13 @@ class UpdateProfile extends Component {
                 if (this._isMounted)
                 {
                     this.setState({
-                    first_name:data["first name"],
-                    last_name: data["last name"],
+                    first_name:data["first_name"],
+                    last_name: data["last_name"],
                     email: data["email"],
-                    id_number: data["id number"],
+                    id_number: data["id_number"],
                     phone: data["phone"],
                     address: data["address"],
-                    date_of_birth: data["date of birth"],
+                    date_of_birth: data["date_of_birth"],
                     gender: data["gender"]});
                 }
             }

@@ -23,7 +23,7 @@ class Employees extends Component {
         employeesFilterd = employees.filter((employee) => { 
             for(let i=0 ; i<optionsFilter.length; i++)
             {
-                if(employee["job type"].indexOf(optionsFilter[i])>-1)
+                if(employee["job_type"].indexOf(optionsFilter[i])>-1)
                 {
                     return true;
                 }
@@ -44,14 +44,14 @@ class Employees extends Component {
          return employeesFilterd.map((employee,index) => (
             <tr key = {index} className="text-center">
             <th scope="row"> {index + 1}</th>
-            <td>{employee["first name"]}</td>
-            <td>{employee["last name"]}</td>
-            <td>{employee["id number"]}</td>
-            <td>{employee["job type"].join(', ')}</td>
+            <td>{employee["first_name"]}</td>
+            <td>{employee["last_name"]}</td>
+            <td>{employee["id_number"]}</td>
+            <td>{employee["job_type"].join(', ')}</td>
             <td>{employee["phone"]}</td>
             <td>{employee["email"]}</td>
             <td>{employee["address"]}</td>
-            <td>{employee["date of birth"]}</td>
+            <td>{employee["date_of_birth"]}</td>
             <td>{employee["time_created"]}</td>
             <td>{employee["rank"]}</td>
             <td>
@@ -63,15 +63,27 @@ class Employees extends Component {
             </button>
             </td>
             <td>
-            <button type="submit" className="btn-lg btn-primary btn-block" onClick={() => this.onRemoveEmployee(employee)}>
-                            {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-person-dash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5-.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
-                            </svg>}<br/>Remove Employee
-            </button>
+                <button type="submit" className="btn-lg btn-primary btn-block" onClick={() => this.onRemoveEmployee(employee)}>
+                                {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-person-dash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5-.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"/>
+                                </svg>}<br/>Remove Employee
+                </button>
+            </td>
+            <td>
+                <button type="submit" className="btn-lg btn-primary btn-block" onClick={() => this.onSendMessage('/messages',employee)}>
+                                {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-chat-text-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.5 5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+                                </svg>}<br/>Send Message
+                </button>
             </td>
             </tr>
          ));
         }
+    }
+
+    onSendMessage(path, employee)
+    {
+        this.props.history.push(path, { detail: employee, from: "Employees"})
     }
 
     onUpdateInfoEmployee(path, employee)
@@ -135,7 +147,7 @@ class Employees extends Component {
             {   
                 if (this._isMounted)
                 {
-                    this.setState({company_name: data["company name"],
+                    this.setState({company_name: data["company_name"],
                                    companyJobTypes: data["roles"],
                                    filter: data["roles"]});
                 }
@@ -146,7 +158,7 @@ class Employees extends Component {
     render () {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
-                <div className="jumbotron mt-5" style={{display: 'inline-block', marginLeft: '-10%'}}>
+                <div className="jumbotron mt-5" style={{display: 'inline-block', marginLeft: '-20%'}}>
                     <div className="col-sm-8 mx-auto">
                         <h1 className="text-center">
                              {<svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-person-lines-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -167,6 +179,7 @@ class Employees extends Component {
                             <th scope="col" className="text-center">Date Of Birth</th>
                             <th scope="col" className="text-center">Time Of Joining</th>
                             <th scope="col" className="text-center">Rank</th>
+                            <th scope="col" className="text-center"></th>
                             <th scope="col" className="text-center"></th>
                             <th scope="col" className="text-center"></th>
                             </tr>

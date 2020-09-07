@@ -1,4 +1,4 @@
 .scheduler-container {
-    height: 100vh;
+    height: 100vh; /* used to be 191.5*/
     width: 95vw;
-}
+} 

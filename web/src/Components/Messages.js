@@ -121,7 +121,7 @@ class Messages extends Component {
         {
             for(let i=0; i<this.state.daysOptions.length; i++)
             {
-                days.push(parseInt(this.state.daysOptions[i]))
+                days.push(this.state.daysOptions[i])
             }
 
             isAllChosen = true;
@@ -131,7 +131,7 @@ class Messages extends Component {
         {
             for(let i=0; i<selectedList.length; i++)
             {
-                days.push(parseInt(selectedList[i].value))
+                days.push(selectedList[i].value)
             }
 
             isAllChosen = false;
@@ -150,11 +150,26 @@ class Messages extends Component {
 
         if(this.isAllOptionInArray(selectedList))
         {
-            for(let i=0; i<this.state.shiftsOptions.length; i++)
+            const shiftsOptions = this.state.shiftsOptions;
+            const minDate = this.state.minDate;
+            const maxDate = this.state.maxDate;
+            let j = 0;
+            let startDate = minDate;
+    
+            while(startDate <= maxDate)
             {
-                shifts.push(parseInt(this.state.shiftsOptions[i]["_id"]))
+                if(shiftsOptions[startDate])
+                {
+                    for(let i=0; i<shiftsOptions[startDate].length; i++)
+                    {
+                        shifts.push(parseInt((shiftsOptions[startDate][i])["id"]))
+                    }
+                }
+                
+                j++;
+                startDate = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
             }
-
+            
             isAllChosen = true;
             showView = [{key:'All' ,value: 'All'}];
         }
@@ -214,7 +229,7 @@ class Messages extends Component {
         {
             for(let i=0; i<this.state.jobsOptions.length; i++)
             {
-                jobs.push(parseInt(this.state.jobsOptions[i]))
+                jobs.push(this.state.jobsOptions[i])
             }
 
             isAllChosen = true;
@@ -224,7 +239,7 @@ class Messages extends Component {
         {
             for(let i=0; i<selectedList.length; i++)
             {
-                jobs.push(parseInt(selectedList[i].value))
+                jobs.push(selectedList[i].value)
             }
 
             isAllChosen = false;
@@ -255,7 +270,7 @@ class Messages extends Component {
         });
 
         employeeFilterd.map((employee) => (
-            arrOfNames.push(employee["first name"] + ' ' + employee["last name"])));
+            arrOfNames.push(employee["first_name"] + ' ' + employee["last_name"])));
 
         return arrOfNames.join(', ');
     }
@@ -281,6 +296,7 @@ class Messages extends Component {
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
+                <td className="text-center"></td>
                 </tr>
          ));
         }
@@ -301,7 +317,7 @@ class Messages extends Component {
                 for(let i=0; i<shifts[startDate].length; i++)
                 {
                     shiftsOptions.push({key:(shifts[startDate][i])["id"] ,value: (shifts[startDate][i]).name + ' ' + 
-                        (shifts[startDate][i])["start time"] + '-' + (shifts[startDate][i])["end time"], cat: (shifts[startDate][i]).date})
+                        (shifts[startDate][i])["start_time"] + '-' + (shifts[startDate][i])["end_time"], cat: (shifts[startDate][i]).date})
                 }
             }
             
@@ -315,7 +331,7 @@ class Messages extends Component {
     initializeEmployeeOptions = () => { 
         let employeeOptions = [{key:'All' ,value: 'All'}]
         this.state.arrEmployees.map((employee) => (
-        employeeOptions.push({key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]})
+        employeeOptions.push({key:employee["_id"] ,value: employee["first_name"] + ' ' + employee["last_name"] ,cat: employee["job_type"]})
         ));
         return employeeOptions;
     }
@@ -325,9 +341,11 @@ class Messages extends Component {
         const message = document.forms["myForm7"]["textMessage"].value;
         const employeeToSend = this.state.employeeToSend.length;
         const shiftsToSend = this.state.shiftsToSend.length;
+        const daysToSend = this.state.daysToSend.length;
+        const jobsToSend = this.state.jobsToSend.length;
         let validate = true;
 
-        if (title === "" || message === "" || (employeeToSend === 0 && shiftsToSend === 0))
+        if (title === "" || message === "" || (employeeToSend === 0 && shiftsToSend === 0 && jobsToSend === 0 && daysToSend === 0))
          {
           alert("All Fields Must Be Filled");
           validate = false;
@@ -409,6 +427,24 @@ class Messages extends Component {
         this._isMounted = false;
     }
 
+    getDefualtData()
+    {
+        const detail = this.props.location.state.detail;
+        
+        if(this.props.location.state.from === "Employees")
+        {
+            this.setState({employeeToSend: [detail["_id"]],    
+                        employeeViewOptions: [{key:detail["_id"] ,value: detail["first_name"] + ' ' + detail["last_name"] ,cat: detail["job_type"]}],
+                        isEmployeeOptionAllChosen: false});
+        }
+        else
+        {
+            this.setState({shiftsToSend: [detail["id"]],    
+                           shiftsViewOptions: [{key:detail["id"] ,value: detail.name + ' ' + detail["start_time"] + '-' + detail["end_time"], cat: detail.date}],
+                           isShiftOptionAllChosen: false});
+        }
+    }
+
     componentDidMount ()
      {
         this._isMounted = true;
@@ -416,7 +452,11 @@ class Messages extends Component {
         this.getShiftsOptions();
         this.getDaysOptions();
         this.getJobsOptions();
-
+        if(this.props.location.state)
+        {
+            this.getDefualtData()
+        }
+        
         getSentMessages().then(userMessages => {
             if (userMessages && userMessages.length !== 0)
             {
@@ -450,13 +490,13 @@ class Messages extends Component {
             {
                 employees: this.state.employeeToSend,
                 shifts: this.state.shiftsToSend,
-                dates:[]
+                dates:this.state.daysToSend,
+                job_type:this.state.jobsToSend
             },
             title: this.state.title,
             textMessage: this.state.textMessage,
         }
-        
-        console.log(message)
+
         if(this.validateMessage()) {
             sendMessage(message).then(res => {
                 window.location.reload(false);
@@ -483,6 +523,7 @@ class Messages extends Component {
                             <th scope="col" className="text-center">Title</th>
                             <th scope="col" className="text-center">The Message</th>
                             <th scope="col" className="text-center">Time Created</th>
+                            <th scope="col" className="text-center">Who Read</th>
                             </tr>
                         </thead>
                         <tbody>

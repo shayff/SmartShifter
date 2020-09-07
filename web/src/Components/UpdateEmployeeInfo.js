@@ -87,7 +87,7 @@ class UpdateEmployeeInfo extends Component {
         if (this._isMounted)
         {
             this.setState({
-                employeeJobTypes:employee["job type"],
+                employeeJobTypes:employee["job_type"],
                 rank:employee["rank"],
                 id: employee["_id"],
             });

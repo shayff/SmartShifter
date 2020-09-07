@@ -63,6 +63,28 @@ class SwitchShifts extends Component {
        });  
    }
 
+   parseSatuts(status)
+   {
+        let parsedStatus;
+        switch(status)
+        {
+            case 'confirmed':
+            parsedStatus = 'Confirmed';
+            break;
+            case 'wait_for_swap':
+            parsedStatus = 'Wait For Swap';
+            break;
+            case 'wait_for_confirm':
+            parsedStatus = 'Wait For Confirmation';
+            break;
+            default:
+            parsedStatus = '';
+            break;
+        }
+
+        return parsedStatus;
+   }
+
     onClickDecision(shiftId,decision) 
     {
         const managerDecision={
@@ -80,10 +102,10 @@ class SwitchShifts extends Component {
          return data.map((switchData,index) => (
             <tr key = {index} >
             <th scope="row" className="text-center"> {index +1}</th>
-            <td className="text-center">{switchData.shift_details.date} {switchData.shift_details["start time"]}-{switchData.shift_details["end time"]}</td>
+            <td className="text-center">{switchData.shift_details.date} {switchData.shift_details["start_time"]}-{switchData.shift_details["end_time"]}</td>
             <td className="text-center">{switchData.name_employee_ask}</td>
             {this.getWhoToGetTheShift(switchData)}
-            <td className="text-center">{switchData.status}</td>
+            <td className="text-center">{this.parseSatuts(switchData.status)}</td>
             <td className="text-center">{switchData.time_created}</td>
             <td>{this.initializeTableApproveButton(switchData)}</td>
             <td>{this.initializeTableDontApproveButtons(switchData)}</td>

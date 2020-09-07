@@ -104,7 +104,7 @@ class AddShifts extends Component {
 
     initializeEmployeesOptions = () => { 
         return this.state.arrEmployees.map((employee) => (
-        {key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]}
+        {key:employee["_id"] ,value: employee["first_name"] + ' ' + employee["last_name"] ,cat: employee["job_type"]}
         ));
   }
 
@@ -254,6 +254,7 @@ class AddShifts extends Component {
                                 closeIcon="cancel"
                                 placeholder="Choose Employees"
                                 avoidHighlightFirstOption= {true}
+                                selectionLimit={this.state.amount_of_employees}
                                 style={{searchBox: {background: 'white'}}}
                                 groupBy="cat"
                                 closeOnSelect={false}
