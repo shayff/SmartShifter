@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {StyleSheet, Text,Button, View } from 'react-native';
 
 
-export default class daySquare extends Component {
+export default class 
+
+daySquare extends Component {
 
     constructor(inside){
         super(inside);
@@ -70,33 +72,43 @@ export default class daySquare extends Component {
 }
 
 const Styles = StyleSheet.create({
-line:
-{
-    padding:2,
-    flexDirection : 'row',
-},
-NotAvailableButton : {
-    borderColor: '#b22222',
-    borderWidth: 3,
-    borderRadius: 2,
-    width:110,
-},
-AvailableButton : {
-    borderColor: '#3cb371',
-    borderWidth: 3,
-    borderRadius: 2,
-    width:115,
-},
-PreferButton : {
-    borderColor: '#9370db',
-    borderWidth: 3,
-    borderRadius: 2,
-    width:115,
-},
-nullButton:{
-    borderColor: '#36485f',
-    borderWidth: 3,
-    borderRadius: 2,
-    width:110,
-}
+    Text:
+    {
+        fontWeight: 'bold',
+        fontSize:16,
+        color:'#ffff',
+        alignSelf:'center',
+    },
+    line:
+    {
+        padding:2,
+        flexDirection : 'row',
+    },
+    NotAvailableButton : {
+        borderColor: '#b22222',
+        borderWidth: 4,
+        borderRadius: 2,
+        width:130,
+        padding:0,
+    },
+    AvailableButton : {
+        borderColor: '#3cb371',
+        borderWidth: 4,
+        borderRadius: 2,
+        width:130,
+
+    },
+    PreferButton : {
+        borderColor: '#9370db',
+        borderWidth: 4,
+        borderRadius: 2,
+        width:130,
+    },
+    nullButton:{
+        borderColor: '#36485f',
+        borderWidth: 3,
+        borderRadius: 2,
+        width:130,
+
+    }
 });

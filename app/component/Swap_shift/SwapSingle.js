@@ -42,7 +42,7 @@ export default class SwapSingle extends Component {
 
         let toSend ={'swap_id':this.props.item.id}
         let token = await AsyncStorage.getItem('token');
-        const response = await shiftManager_server.post('/CanShiftSwap',toSend, {
+        const response = await shiftManager_server.post('/api/v1/shifts_swaps/can_swap',toSend, {
           headers: {
               Authorization: "Bearer " + token
           }

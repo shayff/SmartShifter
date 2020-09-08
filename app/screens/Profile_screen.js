@@ -47,21 +47,20 @@ export default class Private_profile extends Component {
       let password = await AsyncStorage.getItem('password');
 
       let details = {
-        "id number": resData["id number"],
+        "id number": resData["id_number"],
         "phone": resData["phone"],
-        "first name": resData["first name"],
-        "last name": resData["last name"],
-        "date of birth": resData["date of birth"],
+        "first name": resData["first_name"],
+        "last name": resData["last_name"],
+        "date of birth": resData["date_of_birth"],
         "gender": resData['gender'],
         "address": resData["address"],
-        "company": resData["company name"],
+        "company": resData["company_name"],
         "email": resData["email"],
         "password": "",
         "password to confirm": "*****"};
 
         this.setState({profileDataUser:details});
         this.setState({thereIsDataFromServer:true});
-
     }
     
     
@@ -110,13 +109,13 @@ export default class Private_profile extends Component {
           let newDataToSend = {
               "email":this.state.profileDataUser["email"],
               "password":let_password,
-              "id number":this.state.profileDataUser["id number"],
+              "id_number":this.state.profileDataUser["id number"],
               "phone":this.state.profileDataUser["phone"],
-              "first name":this.state.profileDataUser["first name"],
-              "last name":this.state.profileDataUser["last name"],
+              "first_name":this.state.profileDataUser["first name"],
+              "last_name":this.state.profileDataUser["last name"],
               "address":this.state.profileDataUser["address"],
               "gender":this.state.profileDataUser["gender"],
-              "date of birth":this.state.profileDataUser["date of birth"]
+              "date_of_birth":this.state.profileDataUser["date of birth"]
             }
 
             let token = await AsyncStorage.getItem('token');
@@ -127,9 +126,11 @@ export default class Private_profile extends Component {
                     Authorization: "Bearer " + token 
                 }
             }).then(response => {
-                    console.log("update " + response.data.data);
                     return  response.data;
-                }).catch(err => {console.log("EROR "+err.response.data); });
+                }).catch(err => {    
+                Alert.alert("something get wrong, please try again");
+                this.props.navigation.goBack(null); 
+                });
 
       this.props.navigation.goBack(null);
     }

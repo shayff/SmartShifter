@@ -52,7 +52,7 @@ get_from_server = async (data_send) =>
     {
       company= response.data.data["company"].toString();
     }
-    let keys = [['token', response.data.data.token],['company',company],['name', response.data.data["first name"]],['_id',response.data.data["_id"].toString()],['password',this.state.password.toString()]];
+    let keys = [['token', response.data.data.token],['company',company],['name', response.data.data["first_name"]],['_id',response.data.data["_id"].toString()],['password',this.state.password.toString()]];
     await AsyncStorage.multiSet(keys, () => {
     });
 
@@ -139,5 +139,3 @@ const Styles = StyleSheet.create({
       paddingHorizontal: 10,
   },
 });
-
-

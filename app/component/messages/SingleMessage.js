@@ -53,37 +53,37 @@ export default class SingleMessage extends Component {
         });
     }
 
-    render() { 
-        return (
-            <View style={Styles.itemSet}>
-                <View style={Styles.titleLine}>
-                    <Text style={Styles.messageField}>Title: </Text>
-                    <Text style={Styles.contentMessage}>{this.props.item.title}</Text>
-                </View>
-
-                <View style={Styles.line}>
-                    <Text style={Styles.messageField}>Date: </Text>
-                    <Text style={Styles.contentMessage}>{this.props.item.time_created}</Text>
-                </View>
-
-                <View style={Styles.line}>
-                    <Text style={Styles.messageField}>Sender Name: </Text>
-                    <Text style={Styles.contentMessage}>{this.props.item.name_sender}</Text>
-        
-                </View>
-
-                <View style={Styles.line}>
-                    <Text style={Styles.messageField}>Content: </Text>
-                    <Text style={Styles.contentMessage}>{this.props.item.massege}</Text>
-                </View>
-
-                <View style={Styles.verifyLine}>
-                    <Text  style={this.state.isRead ? Styles.verifyTitle_read : Styles.verifyTitle_unRead}>{this.state.textIsRead}</Text>
-                    <CheckBox disabled={this.state.isRead} value = {this.state.isRead} onValueChange = {this.click_to_verify} />
-                </View>
+render() { 
+    return (
+        <View style={Styles.itemSet}>
+            <View style={Styles.titleLine}>
+                <Text style={Styles.messageField}>Title: </Text>
+                <Text style={Styles.contentMessage}>{this.props.item.title}</Text>
             </View>
-        );
-    }
+
+            <View style={Styles.line}>
+                <Text style={Styles.messageField}>Date: </Text>
+                <Text style={Styles.contentMessage}>{this.props.item.time_created}</Text>
+            </View>
+
+            <View style={Styles.line}>
+                <Text style={Styles.messageField}>Sender Name: </Text>
+                <Text style={Styles.contentMessage}>{this.props.item.name_sender}</Text>
+    
+            </View>
+
+            <View style={Styles.line}>
+                <Text style={Styles.messageField}>Content: </Text>
+                <Text style={Styles.contentMessage}>{this.props.item.massege}</Text>
+            </View>
+
+            <View style={Styles.verifyLine}>
+                <Text  style={this.state.isRead ? Styles.verifyTitle_read : Styles.verifyTitle_unRead}>{this.state.textIsRead}</Text>
+                <CheckBox disabled={this.state.isRead} value = {this.state.isRead} onValueChange = {this.click_to_verify} />
+            </View>
+        </View>
+    );
+}
 }
 
 const Styles = StyleSheet.create({

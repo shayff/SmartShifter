@@ -37,7 +37,7 @@ export default class User_preferences extends Component {
 
             if(response.data.msg != "Successfully")
             {
-                this.setState({MSGtoEMP:response.data.msg});
+                this.setState({messageDisplay:response.data.msg});
                 this.setState({menegerSendShift:false});
             }
             else

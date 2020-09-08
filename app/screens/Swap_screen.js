@@ -34,7 +34,7 @@ export default class Switching_shifts extends Component {
         if (response.data.data.length == 0) // there is no swaps
         {
             this.setState({thereIsShiftsSwap:false});
-            this.setState({MSGtoEMP:response.data.msg});
+            this.setState({MessageDisplay:response.data.msg});
         }
         else{
             this.setState({thereIsShiftsSwap:true});
@@ -72,8 +72,8 @@ export default class Switching_shifts extends Component {
             }
 
             let temp = {date: this.state.massegesData.data[i].shift_details.date,
-                        start_time:this.state.massegesData.data[i].shift_details['start time'],
-                        end_time:this.state.massegesData.data[i].shift_details['end time'],
+                        start_time:this.state.massegesData.data[i].shift_details['start_time'],
+                        end_time:this.state.massegesData.data[i].shift_details['end_time'],
                         Who_asks:this.state.massegesData.data[i].name_employee_ask,
                         status:statusFormat,
                         id:this.state.massegesData.data[i].id

@@ -224,11 +224,11 @@ formatDay = (date) =>
 
   put_shift_in_borde = (data) =>
   {
-    if(data.oneShift["day part"].includes(0))
+    if(data.oneShift["day_part"].includes(0))
     {
         this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[0]});
     }
-    else if(data.oneShift["day part"].includes(1))
+    else if(data.oneShift["day_part"].includes(1))
     {
         this.write_shift_details({shiftDetails:data.oneShift, sections: data.sections[1]});
     }
@@ -246,17 +246,17 @@ formatDay = (date) =>
     for (let i=0; i<empArray.length;i++)
     {
       let tempEMP ={
-        "first name": empArray[i]["first name"],
-        "last name": empArray[i]["last name"],
+        "first name": empArray[i]["first_name"],
+        "last name": empArray[i]["last_name"],
         "_id": empArray[i]["_id"],
       } 
       arryEMP.push(tempEMP)
     }
     
     let temp = {
-      "title": shift.shiftDetails["job type"],
-      "start time": shift.shiftDetails["start time"],
-      "end time": shift.shiftDetails["end time"],
+      "title": shift.shiftDetails["job_type"],
+      "start time": shift.shiftDetails["start_time"],
+      "end time": shift.shiftDetails["end_time"],
       "employees": arryEMP,
       "id": shift.shiftDetails["id"],
       "is asked swap": shift.shiftDetails["is_asked_swap"]

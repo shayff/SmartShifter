@@ -27,11 +27,10 @@ export default class Messages extends Component {
               Authorization: "Bearer " + token
           }
         }).then(response => {
-        console.log("GOOD " + response.data.data);
         if (response.data.data.length == 0) // there is no messages
         {
             this.setState({thereIsMSG:false});
-            this.setState({MSGtoEMP:response.data.msg});
+            this.setState({MessageDisplay:response.data.msg});
         }
         else{
             this.setState({thereIsMSG:true});
@@ -52,7 +51,6 @@ export default class Messages extends Component {
         }
         
         let updatList=[];
-        console.log(this.state.massegesData.data.length);
         let numberOfMasseges = this.state.massegesData.data.length;
         
         for (let i =0; i<numberOfMasseges; i++)
@@ -113,7 +111,7 @@ const Styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         alignItems: 'center',
-    },
+        },
     messageDisplay:{
         alignSelf: 'center',
         paddingTop: 160,           
