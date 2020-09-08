@@ -12,13 +12,13 @@ def doSendMessage(user_input):
     if data["ok"]:
         data = data['data']
         logged_in_user = get_jwt_identity()
-
+        user_from_db = db.get_user(logged_in_user["_id"])
         # we get the id's of employees we want to send message by employee, shift or date
         send_to_data = data["to"]
         set_ids = set()
 
-        if "company" in logged_in_user:
-            company_id = logged_in_user["company"]
+        if "company" in user_from_db:
+            company_id = user_from_db["company"]
             company = db.get_company(company_id)
             send_shifts = []
             send_dates = []
@@ -44,17 +44,19 @@ def doSendMessage(user_input):
                 if shift["id"] in send_shifts or shift["date"] in send_dates:
                     set_ids.update(shift["employees"])
 
-        message = prepare_message(set_ids,logged_in_user["_id"],data["title"],data["message"])
+            message = prepare_message(set_ids,logged_in_user["_id"],data["title"],data["message"])
 
-        # insert message to message collection
-        db.add_message(message)
+            # insert message to message collection
+            db.add_message(message)
 
-        # insert the message to each employee
-        for user_id in set_ids:
-            db.update_message_to_user(user_id, message)
+            # insert the message to each employee
+            for user_id in set_ids:
+                db.update_message_to_user(user_id, message)
 
-        print(message)
-        return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
+            print(message)
+            return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
+        else:
+            return jsonify({'ok': False, 'msg': "User has no company"}), 400
     else:
         return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
 

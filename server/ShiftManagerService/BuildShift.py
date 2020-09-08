@@ -1,14 +1,13 @@
 from . import db
 from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
-from .schemas.buildshift import validate_buildShift
 import pandas as pd
 import numpy as np
 from datetime import datetime
 from .BL.BuildShiftLogic import buildshiftclass
 from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
 from .BL.ShiftData import ShiftData
-
+from .schemas.buildshift import validate_buildShift
 
 def doBuildShift(user_input):
     '''
