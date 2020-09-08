@@ -100,9 +100,12 @@ class Messages extends Component {
         messagesFilterd = messages.filter((message) => { 
             for(let i=0 ; i<optionsFilter.length; i++)
             {
-                if(message["to"].indexOf(optionsFilter[i])>-1)
+                for(let j=0 ; j<message["to"].length; j++)
                 {
-                    return true;
+                    if((message["to"][j])['_id'] === optionsFilter[i])
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -251,41 +254,17 @@ class Messages extends Component {
                        jobsViewOptions: showView});
     }
 
-    parseIdToName(arrOfID)
+    whoRead(recipients)
     {
-        let employeeFilterd = [];
-        let arrOfNames = [];
-        const listOfEmployees = this.state.arrEmployees;
-
-        employeeFilterd = listOfEmployees.filter((employee) => { 
-            for(let i=0 ; i<arrOfID.length; i++)
-            {
-                if(employee["_id"] === arrOfID[i])
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-
-        employeeFilterd.map((employee) => (
-            arrOfNames.push(employee["first_name"] + ' ' + employee["last_name"])));
-
-        return arrOfNames; //arrOfNames.join(', ')
-    }
-
-    whoRead(recipients, arrOfWhoRead)
-    {
-        return recipients.map((employee,index) =>
+        return recipients.map((recipient,index) =>
         {
-            if(arrOfWhoRead.indexOf(employee)>-1)
+            if(recipient.is_read)
             {
                 return( <div key={index}  style={{display: 'inline-flex'}}>
                     <div style={{color:'green',marginRight:'5px'}}>
                     <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-check-all" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" d="M8.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z"/>
-                    </svg></div> {employee+ ', '}</div>
+                    </svg></div> {recipient.full_name + ', '}</div>
                 )
             }
             else
@@ -294,7 +273,7 @@ class Messages extends Component {
                     <div style={{color:'red',marginRight:'2px'}}>
                     <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                    </svg></div> {employee + ', '} </div>
+                    </svg></div> {recipient.full_name + ', '} </div>
                 )
             }
         })        
@@ -317,7 +296,7 @@ class Messages extends Component {
             return userMessagesFilterd.map((messages,index) => (
                 <tr key = {index} >
                 <th scope="row" className="text-center"> {index + 1}</th>
-                <td className="text-center">{this.whoRead(this.parseIdToName(messages["to"]),messages["employees_read"])}</td>
+                <td className="text-center">{this.whoRead(messages["to"])}</td>
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
@@ -446,11 +425,6 @@ class Messages extends Component {
         }
     }
 
-    componentWillUnmount() 
-    {
-        this._isMounted = false;
-    }
-
     getDefualtData()
     {
         const detail = this.props.location.state.detail;
@@ -467,6 +441,11 @@ class Messages extends Component {
                            shiftsViewOptions: [{key:detail["id"] ,value: detail.name + ' ' + detail["start_time"] + '-' + detail["end_time"], cat: detail.date}],
                            isShiftOptionAllChosen: false});
         }
+    }
+
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
     }
 
     componentDidMount ()
