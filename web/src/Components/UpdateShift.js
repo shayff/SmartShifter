@@ -150,13 +150,13 @@ class UpdateShift extends Component {
         let validate = true;
         
         if (shift_name === "" || start_time === "" || end_time === ""|| job_type === 0||
-        difficulty === ""|| date === "" ||amount_of_employees === "" || day_part === 0)
-         {
+            difficulty === ""|| date === "" ||amount_of_employees === "" || day_part === 0 )
+        {
           alert("All Fields Must Be Filled");
           validate = false;
         }
 
-        if(amount_of_employees<this.state.employees_for_shift.length)
+        if(parseInt(amount_of_employees)<this.state.employees_for_shift.length)
         {
             alert("Amount Of Employees Must Be Equal Or Bigger Than The Amount Of Requested Employees");
             validate = false;
@@ -172,6 +172,30 @@ class UpdateShift extends Component {
         return options;
     }
 
+    parseIdToName(arrOfID)
+    {
+        let employeeFilterd = [];
+        let arrOfNames = [];
+        const listOfEmployees = this.state.arrEmployees;
+
+        employeeFilterd = listOfEmployees.filter((employee) => { 
+            for(let i=0 ; i<arrOfID.length; i++)
+            {
+                if(employee["_id"] === arrOfID[i])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        employeeFilterd.map((employee) => (
+            arrOfNames.push({first_name:employee['first_name'], last_name:employee['last_name'],_id:employee['_id']})));
+
+        return arrOfNames;
+    }
+
     updateBuildedShift(newShift)
     {
         const shifts = this.state.oldDetail.full_data;
@@ -182,6 +206,7 @@ class UpdateShift extends Component {
         let full_data = this.state.oldDetail.full_data;
         let data = this.state.oldDetail.data;
         let newDetail = {};
+        let copyNewShift = newShift;
 
         while(startDate <= maxDate)
         {
@@ -191,8 +216,9 @@ class UpdateShift extends Component {
                 {
                     if((shifts[startDate][i])["id"] === newShift["id"])
                     {
-                        full_data[startDate][i] = newShift;
                         data[newShift["id"]] = newShift.employees;
+                        copyNewShift.employees = this.parseIdToName(newShift.employees);
+                        full_data[startDate][i] = copyNewShift;
                     }                   
                 }
             }
@@ -209,8 +235,9 @@ class UpdateShift extends Component {
             ok:this.state.oldDetail.ok,
             success_rate:this.state.oldDetail.success_rate
         }
-        console.log(newDetail)
-        this.props.history.push(`/showGeneratedShifts`,{ detail: newDetail})
+        
+        updateShift(newShift).then(res => {
+        this.props.history.push(`/showGeneratedShifts`,{ detail: newDetail})})
     }
 
     onSubmit (e) {
@@ -242,16 +269,17 @@ class UpdateShift extends Component {
             note: this.state.shift_note,
         }
 
-        if(this.state.inBuild)
-        {
-            this.updateBuildedShift(newShift)
-        }
-        else
-        {
-            if(this.validateRegisterForm()) {
+        if(this.validateRegisterForm())
+         {
+            if(this.state.inBuild)
+            {
+                this.updateBuildedShift(newShift)
+            }
+            else
+            {
                 updateShift(newShift).then(res => {
-                this.props.history.push(`/generateShifts`)
-            })}
+                    this.props.history.push(`/generateShifts`)})
+            }
         }
     }
 

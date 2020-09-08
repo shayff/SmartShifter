@@ -272,7 +272,32 @@ class Messages extends Component {
         employeeFilterd.map((employee) => (
             arrOfNames.push(employee["first_name"] + ' ' + employee["last_name"])));
 
-        return arrOfNames.join(', ');
+        return arrOfNames; //arrOfNames.join(', ')
+    }
+
+    whoRead(recipients, arrOfWhoRead)
+    {
+        return recipients.map((employee,index) =>
+        {
+            if(arrOfWhoRead.indexOf(employee)>-1)
+            {
+                return( <div key={index}  style={{display: 'inline-flex'}}>
+                    <div style={{color:'green',marginRight:'5px'}}>
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-check-all" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M8.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z"/>
+                    </svg></div> {employee+ ', '}</div>
+                )
+            }
+            else
+            {
+                return( <div key={index} style={{display: 'inline-flex'}}>
+                    <div style={{color:'red',marginRight:'2px'}}>
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg></div> {employee + ', '} </div>
+                )
+            }
+        })        
     }
 
     initializeTable = (userMessages,optionsFilter) => {
@@ -292,11 +317,10 @@ class Messages extends Component {
             return userMessagesFilterd.map((messages,index) => (
                 <tr key = {index} >
                 <th scope="row" className="text-center"> {index + 1}</th>
-                <td className="text-center">{this.parseIdToName(messages["to"])}</td>
+                <td className="text-center">{this.whoRead(this.parseIdToName(messages["to"]),messages["employees_read"])}</td>
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
-                <td className="text-center">{messages["employees_read"]}</td>
                 </tr>
          ));
         }
@@ -523,7 +547,6 @@ class Messages extends Component {
                             <th scope="col" className="text-center">Title</th>
                             <th scope="col" className="text-center">The Message</th>
                             <th scope="col" className="text-center">Time Created</th>
-                            <th scope="col" className="text-center">Who Read</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -546,7 +569,19 @@ class Messages extends Component {
                             hidePlaceholder={true}
                             onSelect={this.onSelectOrRemoveFilter}
                             onRemove={this.onSelectOrRemoveFilter}/>
+                        </div><br/>
+                        <div style={{color:'red',float:'left'}}>
+                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
                         </div>
+                        <label style={{marginLeft:"10px"}}>An Employee Who Not Confirmed The Reading Of The Message </label><br/>
+                        <div style={{color:'green',float:'left'}}>
+                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-check-all" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" d="M8.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z"/>
+                            </svg>
+                        </div>
+                        <label style={{marginLeft:"10px"}}>An Employee Who Confirmed The Reading Of The Message </label><br/>
                     </div>
                 <form name="myForm7" onSubmit={this.onSubmit}>
                     <div className="input-group mb-3">

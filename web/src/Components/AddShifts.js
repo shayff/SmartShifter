@@ -41,7 +41,16 @@ class AddShifts extends Component {
     }
 
     onSelectOrRemoveJobType(selectedList) {
-        this.setState({job_type: selectedList.value});
+        if(this._isMounted)
+        {
+            let job_type=[];
+            for(let i=0; i<selectedList.length; i++)
+            {
+                job_type.push(selectedList[i].value)
+            }
+        
+            this.setState({job_type: job_type});
+        }
     }
 
     onSelectOrRemoveEmployees(selectedList) {
@@ -143,7 +152,7 @@ class AddShifts extends Component {
             shift_name: this.state.shift_name,
             start_time: this.state.start_time,
             end_time: this.state.end_time,
-            job_type: this.state.job_type,
+            job_type: this.state.job_type[0],
             difficulty: parseInt(this.state.difficulty),
             date: this.state.date,
             amount_of_employees: parseInt(this.state.amount_of_employees),
