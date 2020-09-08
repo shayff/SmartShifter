@@ -12,17 +12,13 @@ def doGetSentMessages():
 
     for item in messages:
         #messages
-        employees_read = []
+        user_full_data = []
         for user_id in item["to"]:
-
             # check for each user he read the message and if do add his name
-            doc = db.users_collection.find_one({'_id': user_id},{"messages": {"$elemMatch": {"id": item["_id"]}}, "first_name": 1, "last_name": 1})
-            status = doc["messages"][0]["status"]
-            if(status == "read"):
-                user_full_name = doc["first_name"] + " " + doc["last_name"]
-                employees_read.append(user_full_name)
+            user_data_message = create_user_data_for_msg(item, user_id)
+            user_full_data.append(user_data_message)
 
-        item["employees_read"] = employees_read
+        item["to"] = user_full_data
         list_messages.append(item)
 
     #sort the messages
@@ -34,3 +30,16 @@ def doGetSentMessages():
         return jsonify({'ok': True, 'msg': 'list of messages:', 'data': list_messages}), 200
     else:
         return jsonify({'ok': True, 'msg': 'The messages list is empty', 'data': list_messages}), 204
+
+
+def create_user_data_for_msg(message, user_id):
+    user_data_message = db.users_collection.find_one({'_id': user_id},
+                                                     {"messages": {"$elemMatch": {"id": message["_id"]}}, "first_name": 1,
+                                                      "last_name": 1})
+    status = user_data_message["messages"][0]["status"]
+    del user_data_message["messages"]
+    user_data_message["full_name"] = user_data_message["first_name"] + " " + user_data_message["last_name"]
+    del user_data_message["first_name"]
+    del user_data_message["last_name"]
+    user_data_message["is_read"] = status == "read"
+    return user_data_message
