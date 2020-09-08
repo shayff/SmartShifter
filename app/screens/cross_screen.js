@@ -44,32 +44,23 @@ export default class Cross_screen extends Component {
           <View style={Styles.separation}>
                   <View style={Styles.line}>
                       <View>
-                          <SubjectButton fatherProps={this.props} Icon="person-outline" titelName= { 'Profile'}  nevTo = {'Private_profile'}/>   
+                          <SubjectButton fatherProps={this.props} Icon="person-outline" titelName= { 'Profile'} isLogOut={false} nevTo = {'Private_profile'}/>   
                       </View>
                   </View>
 
                   <View  style={Styles.line}>
                     {this.state.isHaveCompany ?(
                               <View>
-                              <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'}  nevTo = {'Weekly_shift_arrangement'}/>
+                              <SubjectButton fatherProps={this.props} Icon="event-available" titelName= {' Shift arrangement'} isLogOut={false} nevTo = {'Weekly_shift_arrangement'}/>
                             </View>
                     ):(null)}
 
                   </View>
-            
-                  <View  style={Styles.line}>
-                  {this.state.isHaveCompany ?(
-                    <View>
-                    <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  nevTo = {'Switching_shifts'}/>
-                    </View>
-                    ):(null)}
-
-                  </View>
 
                   <View  style={Styles.line}>
                   {this.state.isHaveCompany ?(
                     <View>
-                    <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'}  nevTo = {'Messages'}/>
+                    <SubjectButton fatherProps={this.props} Icon="message" titelName= {' Messages'} isLogOut={false} nevTo = {'Messages'}/>
                     </View>
                     ):(null)}
 
@@ -79,9 +70,24 @@ export default class Cross_screen extends Component {
                   <View  style={Styles.line}>
                   {this.state.isHaveCompany ?(
                     <View>
-                    <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  nevTo = {'User_preferences'} />
+                    <SubjectButton fatherProps={this.props} Icon="today"  titelName= {' User preferences'}  isLogOut={false} nevTo = {'User_preferences'} />
                     </View>
                     ):(null)}
+                  </View>
+
+                  <View  style={Styles.line}>
+                  {this.state.isHaveCompany ?(
+                    <View>
+                    <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  isLogOut={false} nevTo = {'Switching_shifts'}/>
+                    </View>
+                    ):(null)}
+
+                  </View>
+
+                <View>
+                      <View style={Styles.LogOut}>
+                          <SubjectButton fatherProps={this.props} Icon="exit-to-app" titelName= { ' Log Out'} isLogOut={true}  nevTo = {'Enter_Screen'}/>   
+                      </View>
                 </View>
           </View>
 
@@ -114,5 +120,9 @@ const Styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
     paddingTop: 30,
-  }
+  },
+  LogOut:
+  {
+    paddingTop: 30,
+  },
 });
