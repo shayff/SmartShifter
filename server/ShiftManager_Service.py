@@ -11,6 +11,7 @@ from server.ShiftManagerService.confirm_swap import doConfirmShiftSwap
 from server.ShiftManagerService.get_shifts import doGetShifts
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
 from server.ShiftManagerService.get_shifts_swaps import doGetShiftsSwaps
+from server.ShiftManagerService.delete_shift_swap import delete_shift_swap
 
 from server.ShiftManagerService.update_shift import update_shift
 from server.ShiftManagerService.delete_shifts import delete_shifts
@@ -103,6 +104,11 @@ def AddShifts():
 def DeleteShift():
     #return doDeleteShift(shift_id)
     return delete_shifts(request.get_json())
+
+@app.route("/api/v1/shift_swap/<swap_id>", methods=['DELETE'])
+@jwt_required
+def DeleteShiftSwap(swap_id):
+    return delete_shift_swap(swap_id)
 
 #we need here parameters
 @app.route('/api/v1/shifts', methods= ['GET'])
