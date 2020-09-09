@@ -26,7 +26,7 @@ def doLogin(user_input):
                 
                 # add fields relevant for company of user
                 if "settings" in company and "can_employee_switch_shifts" in company["settings"]:
-                    user_from_db["can_employee_switch_shifts"] = company["settings"]
+                    user_from_db["can_employee_switch_shifts"] = company["settings"]["can_employee_switch_shifts"]
                 
                 if (company and user_from_db['_id'] in company['managers']):
                     user_from_db['isManagerOfCompany'] = "true"

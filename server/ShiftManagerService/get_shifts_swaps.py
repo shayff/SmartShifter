@@ -52,7 +52,6 @@ def doGetShiftsSwaps(user_input):
                         swaps_filtered.remove(to_del)
                 else:
                     swap.update({"shift_details": doc})
-                print(swaps_filtered)
 
             swaps_filtered = sorted(swaps_filtered,  key=lambda swap: swap["time_created"])
 
