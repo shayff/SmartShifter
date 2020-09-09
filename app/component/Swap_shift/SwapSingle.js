@@ -10,29 +10,45 @@ export default class SwapSingle extends Component {
     constructor(inside){
         super(inside);
         this.state = {
-        status_type:false,
-        color:'',
-        status_title:this.props.item.status,
-      }
+            status_type:false,
+            color:'',
+            status_title:this.props.item.status,
+            itMyShift:false,
+        }
     }
+    
+    componentDidMount =  async () => {
 
-    componentDidMount =  () => {
-
-        if(this.state.status_title == "wait for swap")
+        let _id = await AsyncStorage.getItem('_id');
+        console.log("_id: "+_id);
+        let strIDSwap= this.props.item.id_employee_ask.toString();
+        console.log(" strIDSwap: "+ strIDSwap);
+    
+        if(strIDSwap == _id)
         {
-            this.setState({color:'#8fbc8f'});
+            this.setState({itMyShift:true});
+            this.setState({color:'#deb887'});
         }
-        if(this.state.status_title == "wait for confirm")
-        {
-            this.setState({status_type:true});
-            this.setState({color:'#f08080'});
+        else{
+            if(this.state.status_title == "wait for swap")
+            {
+                this.setState({color:'#8fbc8f'});
+            }
+            if(this.state.status_title == "wait for confirm")
+            {
+                this.setState({status_type:true});
+                this.setState({color:'#f08080'});
+    
+            }        
+            if(this.state.status_title == "confirmed")
+            {
+                this.setState({status_type:true});
+                this.setState({color:'#8fbc8f'});
+            }
 
-        }        
-        if(this.state.status_title == "confirmed")
-        {
-            this.setState({status_type:true});
-            this.setState({color:'#8fbc8f'});
         }
+
+
     }
 
     if_wait_to_swap = async() =>
@@ -85,24 +101,36 @@ export default class SwapSingle extends Component {
                         <Text style={Styles.secendTitle}>{this.props.item.Who_asks}</Text>
                     </View>
                 </View>
-
+                
+               
+                    
                 <View style={{
                 borderWidth:1,
-                backgroundColor: 'darkgray',
                 marginTop:15,
                 marginLeft:80,
                 borderRadius:10,
                 flexDirection : 'row',
                 height:45,   
-                position: 'absolute', top: 15, left: 160, right: 10, justifyContent: 'center', alignItems: 'center',flexDirection : 'row',backgroundColor:this.state.color }}  >
+                position: 'absolute', top: 15, left: 160, right: 10, justifyContent: 'center', alignItems: 'center',flexDirection : 'row',backgroundColor:this.state.color }}>
+                    {this.state.itMyShift ? (
+                        <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.if_wait_to_swap} >
+                        <MaterialIcons name="autorenew" size={30} color="black" />
+                        <Text style={Styles.textStyle}>
+                                Cencel
+                        </Text>           
+                    </TouchableOpacity>
+                    ):(
                     <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.if_wait_to_swap} >
                         <MaterialIcons name="autorenew" size={30} color="black" />
                         <Text style={Styles.textStyle}>
                                 Swap
                         </Text>           
                     </TouchableOpacity>
-                </View>      
-            </View>
+                    )}
+
+                </View> 
+                 
+        </View>
         );
     }
 }

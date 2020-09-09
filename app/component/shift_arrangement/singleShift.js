@@ -12,11 +12,15 @@ export default class SingleShift extends Component {
             employees : this.props.item.employees,
             _id : "",
             isSendSwap: false,
+            canSwitch:false,
         }                      
     }
 
     componentDidMount = async () => {
         let my_id = await AsyncStorage.getItem('_id');
+        let isTrueSet = ('true' == await AsyncStorage.getItem('can_employee_switch_shifts'));
+
+        this.setState({canSwitch:isTrueSet});
         this.setState({isSendSwap:this.props.item["is asked swap"]});
         this.setState({_id:my_id});
     }
@@ -67,14 +71,15 @@ export default class SingleShift extends Component {
                             { this.state.employees.map( item => (
                                 <View key = {item._id} style={Styles.line}>
                                     <Text style={Styles.username}>{item["first name"]} {item["last name"]}</Text>
-                                    <View>{this.state._id == item._id ? (
+
+                                    <View>{ this.state.canSwitch ? (this.state._id == item._id ?
                                             <View style={Styles.screenContainer} >
                                                 <TouchableOpacity style={this.state.isSendSwap ? Styles.appButtonContainer_disable : Styles.appButtonContainer} disabled={this.state.isSendSwap} onPress={this.want_to_swap}>
                                                     <MaterialIcons name="swap-horiz" size={30} color="black" />
                                                     <Text style={Styles.appButtonText}>{'swap'}</Text>
                                                 </TouchableOpacity>
                                             </View>
-                                        ):(null)}
+                                            :null):null}
                                     </View>
 
                                 </View>

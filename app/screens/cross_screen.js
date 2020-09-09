@@ -9,6 +9,7 @@ export default class Cross_screen extends Component {
       this.state = {
           Name:'',
           isHaveCompany: false,
+          can_employee_switch: false,
 
       }
     }
@@ -18,6 +19,13 @@ export default class Cross_screen extends Component {
     let firstName = await AsyncStorage.getItem('name');
     let name = "Welcome "+ firstName;
     let company = await AsyncStorage.getItem('company');
+    let isTrueSet = ('true' == await AsyncStorage.getItem('can_employee_switch_shifts'));
+    if(isTrueSet)
+    {
+      console.log("in= "+isTrueSet);
+
+    }
+    this.setState({can_employee_switch:isTrueSet});
     
     if(company != "null")
       {
@@ -75,12 +83,14 @@ export default class Cross_screen extends Component {
                     ):(null)}
                   </View>
 
+
+
                   <View  style={Styles.line}>
-                  {this.state.isHaveCompany ?(
+                  {this.state.isHaveCompany ?(this.state.can_employee_switch ?
                     <View>
                     <SubjectButton fatherProps={this.props} Icon="swap-horiz" titelName= {' Switching shifts'}  isLogOut={false} nevTo = {'Switching_shifts'}/>
                     </View>
-                    ):(null)}
+                    :null):null}
 
                   </View>
 

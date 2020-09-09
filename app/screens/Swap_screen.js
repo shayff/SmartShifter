@@ -76,7 +76,8 @@ export default class Switching_shifts extends Component {
                         end_time:this.state.massegesData.data[i].shift_details['end_time'],
                         Who_asks:this.state.massegesData.data[i].name_employee_ask,
                         status:statusFormat,
-                        id:this.state.massegesData.data[i].id
+                        id:this.state.massegesData.data[i].id,
+                        id_employee_ask:this.state.massegesData.data[i].id_employee_ask
                         };
             updatList.push(temp);
         }
