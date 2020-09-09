@@ -23,6 +23,11 @@ def doLogin(user_input):
             if('company' in user_from_db):
                 company_id = user_from_db['company']
                 company = db.get_company(company_id)
+                
+                # add fields relevant for company of user
+                if "settings" in company and "can_employee_switch_shifts" in company["settings"]:
+                    user_from_db["can_employee_switch_shifts"] = company["settings"]
+                
                 if (company and user_from_db['_id'] in company['managers']):
                     user_from_db['isManagerOfCompany'] = "true"
                 else:
