@@ -5,7 +5,7 @@ from .schemas.getshiftsswaps import validate_GetShiftsSwaps
 
 def doGetShiftsSwaps(user_input):
     data = validate_GetShiftsSwaps(user_input)
-    if data['ok']:
+    if data["ok"]:
         data = data['data']
         logged_in_user = get_jwt_identity()
         user_from_db = db.users_collection.find_one({"_id": logged_in_user["_id"]})
@@ -14,7 +14,7 @@ def doGetShiftsSwaps(user_input):
         # check if user has company
         if "company" in user_from_db:
             company_id = user_from_db["company"]
-            company = db.companies_collection.find_one({'_id': company_id})
+            company = db.companies_collection.find_one({"_id": company_id})
 
             #filter
             shifts_swaps = company["shifts_swaps"]
@@ -31,14 +31,14 @@ def doGetShiftsSwaps(user_input):
                     update_full_name_of_employee(swap, "employee_can")
 
                 #update the shift details
-                doc = db.companies_collection.find_one({'_id': company_id}, {"shifts": {"$elemMatch" : {"id":swap["shift_id"]}}})
+                doc = db.companies_collection.find_one({"_id": company_id}, {"shifts": {"$elemMatch" : {"id":swap["shift_id"]}}})
                 doc = doc["shifts"][0]
 
                 #if its employee or manager
                 if (logged_in_user["_id"] not in company['managers']):
                     # find job
                     employees = company['employees']
-                    obj_emp = next((x for x in company['employees'] if x['id'] == logged_in_user['_id']), None)
+                    obj_emp = next((x for x in company['employees'] if x["id"] == logged_in_user["_id"]), None)
                     job_type = obj_emp["job_type"]
 
                     #filter by job, create arr to remove
@@ -67,5 +67,5 @@ def update_full_name_of_employee(swap, field):
     '''
     add full name of employee_can or employee_ask
     '''
-    employee_from_db = db.users_collection.find_one({'_id': swap["id_"+field]}, {"first_name", "last_name"})
+    employee_from_db = db.users_collection.find_one({"_id": swap["id_"+field]}, {"first_name", "last_name"})
     swap["name_"+field] = employee_from_db["first_name"] + " " + employee_from_db["last_name"]

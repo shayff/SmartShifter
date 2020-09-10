@@ -76,5 +76,5 @@ for day in range(7):
         )
         data = json.loads(response.get_data(as_text=True))
         assert response.status_code == 200
-        assert data['ok']
+        assert data["ok"]
 

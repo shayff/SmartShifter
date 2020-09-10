@@ -44,8 +44,8 @@ blacklist = set()
 @jwt.unauthorized_loader
 def unauthorized_response(callback):
     return jsonify({
-        'ok': False,
-        'msg': 'Missing Authorization Header'
+        "ok": False,
+        "msg": 'Missing Authorization Header'
     }), 401
 
 @jwt.token_in_blacklist_loader

@@ -8,10 +8,10 @@ def add_employees(user_input):
     This method add new employee to a company
     '''
     data = validate_addemployees(user_input)
-    if data['ok']:
+    if data["ok"]:
         employee_to_add = data['data']
         logged_in_user = get_jwt_identity()
-        user_from_db = db.get_user(logged_in_user['_id'])
+        user_from_db = db.get_user(logged_in_user["_id"])
 
         # get the company of the current logged in user
         if 'company' in user_from_db:
@@ -31,10 +31,10 @@ def add_employees(user_input):
                 doc = db.add_employee_to_company(company_id, employee_to_add)
 
                 if doc:
-                    return jsonify({'ok': True, 'msg': 'Employee has been added'}), 200
+                    return jsonify({"ok": True, "msg": 'Employee has been added'}), 200
             else:
-                return jsonify({'ok': False, 'msg': 'User already have company'}), 409
+                return jsonify({"ok": False, "msg": 'User already have company'}), 409
         else:
-            return jsonify({'ok': False, 'msg': 'Manager has no company'}), 401
+            return jsonify({"ok": False, "msg": 'Manager has no company'}), 401
     else:
-        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400

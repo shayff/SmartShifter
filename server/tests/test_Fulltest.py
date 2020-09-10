@@ -73,7 +73,7 @@ def test_Fulltest():
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
-    assert data['ok']
+    assert data["ok"]
     check_build_shift(data["data"],company_id)
 
 def get_next_sunday():
@@ -105,7 +105,7 @@ def create_shifts(fake, users, week):
             )
             data = json.loads(response.get_data(as_text=True))
             assert response.status_code == 200
-            assert data['ok']
+            assert data["ok"]
 
 
 def create_users(fake,he_fake, num_of_users, users):
@@ -126,9 +126,9 @@ def create_users(fake,he_fake, num_of_users, users):
         )
 
         data = json.loads(response.get_data(as_text=True))
-        users.append({"id": data['id'], "email": user_email, "token": ""})
+        users.append({"id": data["id"], "email": user_email, "token": ""})
         assert response.status_code == 200
-        assert data['ok']
+        assert data["ok"]
 
 
 def login_users(num_of_users, users):
@@ -143,7 +143,7 @@ def login_users(num_of_users, users):
         data = json.loads(response.get_data(as_text=True))
         users[i]["token"] = data["data"]["token"]
         assert response.status_code == 200
-        assert data['ok']
+        assert data["ok"]
 
 
 def create_company(fake, users):
@@ -163,7 +163,7 @@ def create_company(fake, users):
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
-    assert data['ok']
+    assert data["ok"]
     return data["data"]["_id"]
 
 
@@ -181,7 +181,7 @@ def add_employees_to_company(num_of_users, users):
         )
         data = json.loads(response.get_data(as_text=True))
         assert response.status_code == 200
-        assert data['ok']
+        assert data["ok"]
 
 
 
@@ -201,7 +201,7 @@ def send_messages_to_employee(users):
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
-    assert data['ok']
+    assert data["ok"]
 
 
 def set_prefence_from_manager(users, week):
@@ -243,7 +243,7 @@ def set_prefence_from_manager(users, week):
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
-    assert data['ok']
+    assert data["ok"]
 
 
 def set_prefernce_from_workers(num_of_users, users, week):
@@ -263,7 +263,7 @@ def set_prefernce_from_workers(num_of_users, users, week):
         )
         data = json.loads(response.get_data(as_text=True))
         assert response.status_code == 200
-        assert data['ok']
+        assert data["ok"]
 
 
 def get_rand_prefers():
@@ -355,7 +355,7 @@ def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelt
 
 def check_build_shift(buildshift, company_id):
 
-    company = companies_collection.find_one({'_id': company_id})
+    company = companies_collection.find_one({"_id": company_id})
     employees_dict = dict()
     for emp in company["employees"]:
         employees_dict[emp["id"]] = emp

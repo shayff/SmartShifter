@@ -18,11 +18,11 @@ def doRegister(user_input):
          # insert user to db
          db.users_collection.insert_one(new_user)
          print(new_user)
-         return jsonify({'ok': True, 'msg': "user registered successfully", "id": count_id}), 200
+         return jsonify({"ok": True, "msg": "user registered successfully", "id": count_id}), 200
       else:
-         return jsonify({'ok': False, 'msg': 'User with email address or id number already exists'}), 409
+         return jsonify({"ok": False, "msg": 'User with email address or id number already exists'}), 409
    else:
-      return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(new_user['msg'])}), 400
+      return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(new_user["msg"])}), 400
 
 
 def prepare_new_user(new_user):
@@ -31,7 +31,7 @@ def prepare_new_user(new_user):
    '''
    # update counter Users
    new_user_id = db.inc_users_counter()
-   new_user.update({'_id': new_user_id})
+   new_user.update({"_id": new_user_id})
 
    # update time created and messages
    date = datetime.now()

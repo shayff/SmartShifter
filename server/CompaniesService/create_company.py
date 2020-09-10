@@ -12,7 +12,7 @@ def create_company(user_input):
    if data["ok"]:
       new_company = data["data"]
       logged_in_user = get_jwt_identity()
-      user_from_db = db.get_user(logged_in_user['_id'])
+      user_from_db = db.get_user(logged_in_user["_id"])
 
       if "company" not in user_from_db:
 
@@ -26,14 +26,14 @@ def create_company(user_input):
          db.insert_company(new_company)
 
          # update user company field
-         db.update_user_company(new_company_id, logged_in_user['_id'])
+         db.update_user_company(new_company_id, logged_in_user["_id"])
 
          print(new_company)
-         return jsonify({'ok': True, 'msg': 'company created successfully', 'data': new_company}), 200
+         return jsonify({"ok": True, "msg": 'company created successfully', 'data': new_company}), 200
       else:
-         return jsonify({'ok': False, 'msg': 'User has already company'}), 401
+         return jsonify({"ok": False, "msg": 'User has already company'}), 401
    else:
-      return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+      return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400
 
 
 def prepare_new_company(logged_in_user, new_company):
@@ -42,7 +42,7 @@ def prepare_new_company(logged_in_user, new_company):
    new_company.update({"time_created": date.ctime()})
 
    # add the current manager and employees:
-   new_company.update({"managers": [logged_in_user['_id']], "employees": []})
+   new_company.update({"managers": [logged_in_user["_id"]], "employees": []})
 
    # add shifts_counter
    new_company.update({'shifts_counter': 0})

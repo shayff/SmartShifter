@@ -5,7 +5,7 @@ from .schemas.login import validate_login
 
 def doLogin(user_input):
     data = validate_login(user_input)
-    if data['ok']:
+    if data["ok"]:
         data = data['data']
 
         # search for user in database
@@ -28,7 +28,7 @@ def doLogin(user_input):
                 if "settings" in company and "can_employee_switch_shifts" in company["settings"]:
                     user_from_db["can_employee_switch_shifts"] = company["settings"]["can_employee_switch_shifts"]
                 
-                if (company and user_from_db['_id'] in company['managers']):
+                if (company and user_from_db["_id"] in company['managers']):
                     user_from_db['isManagerOfCompany'] = "true"
                 else:
                     user_from_db['isManagerOfCompany'] = "false"
@@ -36,17 +36,17 @@ def doLogin(user_input):
                 user_from_db['isManagerOfCompany'] = "false"
 
             print(user_from_db)
-            return jsonify({'ok': True, 'data': user_from_db}), 200
+            return jsonify({"ok": True, 'data': user_from_db}), 200
         else:
-            return jsonify({'ok': False, 'msg': 'invalid username or password'}), 401
+            return jsonify({"ok": False, "msg": 'invalid username or password'}), 401
     else:
-        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400
 
 
 
 
 def create_and_add_token(user_from_db):
-    token = {"_id": user_from_db['_id'], 'email': user_from_db['email']}
+    token = {"_id": user_from_db["_id"], 'email': user_from_db['email']}
     access_token = create_access_token(identity=user_from_db)
     refresh_token = create_refresh_token(identity=user_from_db)
     user_from_db["token"] = access_token

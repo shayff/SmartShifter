@@ -12,17 +12,16 @@ def set_prefence_from_employee(data):
     if data["ok"]:
         data = data["data"]
         logged_in_user = get_jwt_identity()
-        user_from_db = db.get_user(logged_in_user['_id'])
+        user_from_db = db.get_user(logged_in_user["_id"])
 
         if user_from_db:
             if 'company' in user_from_db:
-                doc = db.companies_collection.find_one_and_update({'_id': user_from_db['company'], 'employees.id':logged_in_user['_id']},
-                                            {'$set': {'employees.$.preference': data["preference"]}})
+                db.set_prefence_from_employee(user_from_db['company'], logged_in_user["_id"], data["preference"])
 
-                return jsonify({'ok': True, 'msg': 'Update prefence successfully'}), 200
+                return jsonify({"ok": True, "msg": 'Update prefence successfully'}), 200
             else:
-                return jsonify({'ok': False, 'msg': 'User has no company'}), 401
+                return jsonify({"ok": False, "msg": 'User has no company'}), 401
         else:
-            return jsonify({'ok': False, 'msg': 'User not exist'}), 401
+            return jsonify({"ok": False, "msg": 'User not exist'}), 401
     else:
-        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400

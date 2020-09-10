@@ -8,7 +8,7 @@ def create_shift(user_input):
     if data["ok"]:
         new_shift = data["data"]
         logged_in_user = get_jwt_identity()
-        user_from_db = db.get_user(logged_in_user['_id'])
+        user_from_db = db.get_user(logged_in_user["_id"])
 
         #check if user has company
         if "company" in user_from_db:
@@ -16,7 +16,7 @@ def create_shift(user_input):
 
             # update id shift
             shift_id = db.inc_shifts_counter(company_id)
-            new_shift.update({'id': shift_id})
+            new_shift.update({"id": shift_id})
 
             # add shift status
             new_shift.update({"status": "not_scheduled"})
@@ -25,8 +25,8 @@ def create_shift(user_input):
             db.insert_shift(company_id, new_shift)
 
             print(new_shift)
-            return jsonify({'ok': True, 'msg': 'Update Company successfully'}), 200
+            return jsonify({"ok": True, "msg": 'Update Company successfully'}), 200
         else:
-            return jsonify({'ok': False, 'msg': 'User has no company'}), 401
+            return jsonify({"ok": False, "msg": 'User has no company'}), 401
     else:
-        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400

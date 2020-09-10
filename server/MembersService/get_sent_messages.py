@@ -7,8 +7,8 @@ import time
 def doGetSentMessages():
     list_messages = []
     logged_in_user = get_jwt_identity()
-    user_from_db = db.get_user(logged_in_user['_id'])
-    messages = db.messages_collection.find({'from': user_from_db['_id']})
+    user_from_db = db.get_user(logged_in_user["_id"])
+    messages = db.messages_collection.find({'from': user_from_db["_id"]})
 
     for item in messages:
         #messages
@@ -27,13 +27,13 @@ def doGetSentMessages():
 
     #check if List is empty
     if list_messages:
-        return jsonify({'ok': True, 'msg': 'list of messages:', 'data': list_messages}), 200
+        return jsonify({"ok": True, "msg": 'list of messages:', 'data': list_messages}), 200
     else:
-        return jsonify({'ok': True, 'msg': 'The messages list is empty', 'data': list_messages}), 204
+        return jsonify({"ok": True, "msg": 'The messages list is empty', 'data': list_messages}), 204
 
 
 def create_user_data_for_msg(message, user_id):
-    user_data_message = db.users_collection.find_one({'_id': user_id},
+    user_data_message = db.users_collection.find_one({"_id": user_id},
                                                      {"messages": {"$elemMatch": {"id": message["_id"]}}, "first_name": 1,
                                                       "last_name": 1})
     status = user_data_message["messages"][0]["status"]

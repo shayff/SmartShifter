@@ -17,12 +17,12 @@ class ShiftData:
         To save server request we bring data of all employees
         '''
         self.employees_full_data = {}
-        company = companies_collection.find_one({'_id': company_id})
+        company = companies_collection.find_one({"_id": company_id})
         employees = company['employees']
         for employee in employees:
-            employee_from_db = users_collection.find_one({'_id': employee['id']}, {"first_name", "last_name"})
+            employee_from_db = users_collection.find_one({"_id": employee["id"]}, {"first_name", "last_name"})
 
-            self.employees_full_data[employee['id']] = employee_from_db
+            self.employees_full_data[employee["id"]] = employee_from_db
 
     def get_employee_data(self, id):
         '''
@@ -32,4 +32,4 @@ class ShiftData:
             return self.employees_full_data[id]
         else:
             #if in some case the employee needed not in the employee fulldata
-            return users_collection.find_one({'_id': id}, {"first_name", "last_name"})
+            return users_collection.find_one({"_id": id}, {"first_name", "last_name"})

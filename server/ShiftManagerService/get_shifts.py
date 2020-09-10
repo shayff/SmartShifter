@@ -7,10 +7,10 @@ from .schemas.getshifts import validate_GetShifts
 
 def doGetShifts(user_input):
     data = validate_GetShifts(user_input)
-    if data['ok']:
+    if data["ok"]:
         data = data['data']
         logged_in_user = get_jwt_identity()
-        user_from_db = db.get_user(logged_in_user['_id'])
+        user_from_db = db.get_user(logged_in_user["_id"])
         shiftScheduled = dict()
     
         # check if user has company
@@ -25,14 +25,14 @@ def doGetShifts(user_input):
             list_of_shifts = filter_by_status(data, list_of_shifts)
 
             # filter by dates and add full data
-            get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, logged_in_user['_id'])
+            get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, logged_in_user["_id"])
 
             # sort the shifts by start date
             sort_shifts_by_start_time(shiftScheduled)
 
-            return jsonify({'ok': True, 'data': shiftScheduled}), 200
+            return jsonify({"ok": True, 'data': shiftScheduled}), 200
         else:
-            return jsonify({'ok': True, 'msg': 'User don\'t have company'}), 401
+            return jsonify({"ok": True, "msg": 'User don\'t have company'}), 401
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 
@@ -78,7 +78,7 @@ def add_is_shift_full_field(shift):
 
 def add_is_asked_swap_field(shift,company_id, user_id):
     if user_id in shift["employees"]:
-        doc = db.companies_collection.find_one({'_id': company_id},{"shifts_swaps": {"$elemMatch": {"id_employee_ask": user_id, "shift_id": shift["id"]}}})
+        doc = db.companies_collection.find_one({"_id": company_id},{"shifts_swaps": {"$elemMatch": {"id_employee_ask": user_id, "shift_id": shift["id"]}}})
         print(doc)
         if doc is not None and "shifts_swaps" in doc:
             shift["is_asked_swap"] = True

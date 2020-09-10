@@ -22,5 +22,5 @@ def test_do_register():
     data = json.loads(response.get_data(as_text=True))
     print(data)
     assert response.status_code == 200
-    assert data['ok']
+    assert data["ok"]
 

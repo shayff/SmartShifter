@@ -23,7 +23,7 @@ def doSendMessage(user_input):
             send_shifts = []
             send_dates = []
 
-            shifts = db.companies_collection.find_one({'_id': company_id},
+            shifts = db.companies_collection.find_one({"_id": company_id},
                                                       {"shifts.id": 1, "shifts.employees": 1, "shifts.date": 1})["shifts"]
 
             if "job_type" in send_to_data:
@@ -54,11 +54,11 @@ def doSendMessage(user_input):
                 db.update_message_to_user(user_id, message)
 
             print(message)
-            return jsonify({'ok': True, 'msg': 'The message sent successfully'}), 200
+            return jsonify({"ok": True, "msg": 'The message sent successfully'}), 200
         else:
-            return jsonify({'ok': False, 'msg': "User has no company"}), 400
+            return jsonify({"ok": False, "msg": "User has no company"}), 400
     else:
-        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400
 
 def prepare_message(send_to,send_from, title, message):
 

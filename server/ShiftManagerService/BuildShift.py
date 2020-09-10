@@ -15,7 +15,7 @@ def doBuildShift(user_input):
     '''
 
     data = validate_buildShift(user_input)
-    if data['ok']:
+    if data["ok"]:
         data = data['data']
 
         count = 0
@@ -25,9 +25,9 @@ def doBuildShift(user_input):
         dates = pd.Series(dates.format())
 
         current_user = get_jwt_identity()
-        result = db.get_user(current_user['_id'])
+        result = db.get_user(current_user["_id"])
         if 'company' not in result:
-            return jsonify({'ok': False, 'msg': 'User don\'t have company'}), 401
+            return jsonify({"ok": False, "msg": 'User don\'t have company'}), 401
         else:
             company_id = result['company']
 
@@ -50,7 +50,7 @@ def doBuildShift(user_input):
             #Add Full_data information about shifts and employees
             shift_Scheduled_to_display = dict()
             print(scheduled_shifts)
-            company = db.companies_collection.find_one({'_id': company_id})
+            company = db.companies_collection.find_one({"_id": company_id})
             if(scheduled_shifts):
                 for shift_id in scheduled_shifts:
                     employees_id = scheduled_shifts[shift_id]
@@ -59,7 +59,7 @@ def doBuildShift(user_input):
                     count += len(employees_id)
 
                     #find the shift details in the list_of_shifts
-                    shift = next(x for x in list_of_shifts if x['id'] == shift_id)
+                    shift = next(x for x in list_of_shifts if x["id"] == shift_id)
 
                     add_full_data_of_employees_to_shifts(employees_id, shift, shift_data)
                     add_is_shift_full_field(shift)
@@ -70,9 +70,9 @@ def doBuildShift(user_input):
 
         #compute the success rate
         success_rate = get_success_rate(count, total)
-        return jsonify({'ok': True, 'msg': 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'full_data': shift_Scheduled_to_display}), 200
+        return jsonify({"ok": True, "msg": 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'full_data': shift_Scheduled_to_display}), 200
     else:
-        return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(data['msg'])}), 400
+        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400
 
 
 def get_success_rate(count, total):

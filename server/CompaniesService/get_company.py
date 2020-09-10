@@ -20,6 +20,6 @@ def get_company():
         del company_from_db["shifts"]
         del company_from_db["shifts_swaps"]
 
-        return jsonify({'ok': True, "data": company_from_db}), 200
+        return jsonify({"ok": True, "data": company_from_db}), 200
     else:
-        return jsonify({'ok': False, "msg": "User has no company", 'data': data}), 401
+        return jsonify({"ok": False, "msg": "User has no company", 'data': data}), 401

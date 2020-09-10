@@ -39,8 +39,8 @@ class buildshiftclass:
                         hungarian.calculate()
 
                         for employee, shift in hungarian.get_results():
-                            shift_id = listOfShifts[shift]['id']
-                            employee_id = listOfEmployees[employee]['id']
+                            shift_id = listOfShifts[shift]["id"]
+                            employee_id = listOfEmployees[employee]["id"]
                             print("worker:", employee_id, "scheduled for shift: ", shift_id)
 
                             # add the employe shifted to the scheduled_shifts dict
@@ -133,8 +133,8 @@ class buildshiftclass:
 
                     #debug
                     '''
-                    print("shift: ", listOfShifts[x]['id'])
-                    print("employee: ", listOfEmployees[y]['id'])
+                    print("shift: ", listOfShifts[x]["id"])
+                    print("employee: ", listOfEmployees[y]["id"])
                     print(result)
                     print("#####")
                     '''

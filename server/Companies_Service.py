@@ -6,13 +6,13 @@ from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
 from server.CompaniesService.create_company import create_company
 from server.CompaniesService.add_employees import add_employees
-from server.CompaniesService.RemoveEmployees import doRemoveEmployees
+from server.CompaniesService.remove_employees_from_company import remove_employees_from_company
 from server.CompaniesService.get_list_of_employees import get_list_of_employees
-from server.CompaniesService.Update import doUpdate
+from server.CompaniesService.update_company import update_company
 from server.CompaniesService.get_company import get_company
 from server.CompaniesService.get_preferences import get_preferences
 from server.CompaniesService.set_prefence_from_manager import set_prefence_from_manager
-from server.CompaniesService.UpdateEmployee import doUpdateEmployee
+from server.CompaniesService.update_employee import update_employee
 from server.CompaniesService.set_prefence_from_employee import set_prefence_from_employee
 
 from server.ShiftManagerService.update_shift import update_shift
@@ -47,8 +47,8 @@ blacklist = set()
 @jwt.unauthorized_loader
 def unauthorized_response(callback):
     return jsonify({
-        'ok': False,
-        'msg': 'Missing Authorization Header'
+        "ok": False,
+        "msg": 'Missing Authorization Header'
     }), 401
 
 @jwt.token_in_blacklist_loader
@@ -72,13 +72,13 @@ def AddEmployees():
 @app.route("/companies/removeemployees", methods=['POST'])
 @jwt_required
 def RemoveEmployees():
-    return doRemoveEmployees(request.get_json())
+    return remove_employees_from_company(request.get_json())
 
 @app.route("/api/v1/company", methods=['PUT'])
 @app.route("/companies/update", methods=['POST'])
 @jwt_required
 def Update():
-    return doUpdate(request.get_json())
+    return update_company(request.get_json())
 
 @app.route("/api/v1/company/employees", methods=['GET'])
 @app.route("/companies/listofemployees", methods=['GET'])
@@ -96,7 +96,7 @@ def profile():
 @app.route("/companies/updateemployee", methods=['POST'])
 @jwt_required
 def updateemployee():
-    return doUpdateEmployee(request.get_json())
+    return update_employee(request.get_json())
 
 @app.route("/api/v1/company/preferences", methods=['GET'])
 @app.route("/companies/GetPreferences", methods=['GET'])
