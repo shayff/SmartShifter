@@ -2,12 +2,17 @@ from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 
-def doProfile():
+def get_profile():
+    '''
+    This method return the profile of the logged in user
+    '''
     logged_in_user = get_jwt_identity()
 
     # search for user profie in database
-    user_from_db = db.users_collection.find_one({"_id": logged_in_user["_id"]})
-    del user_from_db['password']
+    user_from_db = db.get_user(logged_in_user["_id"])
+
+    # remove unnecessary fields
+    del user_from_db["password"]
 
     update_company_field(user_from_db)
 

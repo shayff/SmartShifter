@@ -3,7 +3,7 @@ from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from datetime import datetime
 from .schemas.confirmshiftswap import validate_confirmShiftSwap
-from server.MembersService.send_message import doSendMessage
+from server.MembersService.send_message import send_message
 
 def doConfirmShiftSwap(user_input):
     data = validate_confirmShiftSwap(user_input)
@@ -56,7 +56,7 @@ def doConfirmShiftSwap(user_input):
                     #notice the employees
                     print("message:")
                     print(message)
-                    doSendMessage(message)
+                    send_message(message)
 
                     return jsonify({"ok": True, "msg": 'Update swap request successfully'}), 200
                 else:

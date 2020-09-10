@@ -1,22 +1,25 @@
+from datetime import datetime
 from . import db
 from flask import jsonify
 from .schemas.register import validate_register
-from datetime import datetime
 
 def doRegister(user_input):
+   '''
+   This method register new user
+   '''
    data = validate_register(user_input)
    if data["ok"]:
       new_user = data["data"]
       new_user['email'] = new_user['email'].lower()
 
-      result_email = db.users_collection.find_one({'email': new_user['email']})
-      # [check] look like id not really work
-      result_id_number = db.users_collection.find_one({"id_number": new_user["id_number"]})
+      result_email = db.get_user_by_email(new_user['email'])
+      result_id_number = db.get_user_by_id_number(new_user["id_number"])
+
       if not result_email:
          count_id = prepare_new_user(new_user)
 
          # insert user to db
-         db.users_collection.insert_one(new_user)
+         db.insert_user(new_user)
          print(new_user)
          return jsonify({"ok": True, "msg": "user registered successfully", "id": count_id}), 200
       else:

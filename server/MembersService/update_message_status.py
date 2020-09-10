@@ -3,13 +3,16 @@ from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from .schemas.updateMessage import validate_updatemessage
 
-def doUpdateMessage(user_input):
+def update_message_status(user_input):
+    '''
+    This method update the status of the message
+    '''
     data = validate_updatemessage(user_input)
     logged_in_user = get_jwt_identity()
     if data["ok"]:
         data = data['data']
-        message = db.users_collection.find_one_and_update({"_id": logged_in_user["_id"], 'messages.id': data["id"]},
-                                                           {'$set': {'messages.$.status': data['status']}})
+
+        message = db.update_message_status(logged_in_user["_id"], data["id"], data['status'])
 
         if (message == None):
             return jsonify({"ok": False, "msg": 'invalid message not exist'}), 401

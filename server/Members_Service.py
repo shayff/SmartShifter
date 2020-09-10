@@ -5,13 +5,13 @@ from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt
 from flask_cors import CORS
 from server.MembersService.login import doLogin
 from server.MembersService.Register import doRegister
-from server.MembersService.send_message import doSendMessage
+from server.MembersService.send_message import send_message
 from server.MembersService.get_message import get_messages
-from server.MembersService.get_sent_messages import doGetSentMessages
-from server.MembersService.get_profile import doProfile
-from server.MembersService.update_message_status import doUpdateMessage
-from server.MembersService.update_profile import doUpdateProfile
-from server.MembersService.change_password import doChangePassword
+from server.MembersService.get_sent_messages import get_sent_messages
+from server.MembersService.get_profile import get_profile
+from server.MembersService.update_message_status import update_message_status
+from server.MembersService.update_user import update_user
+from server.MembersService.change_password import change_password
 
 from bson.objectid import ObjectId
 
@@ -74,7 +74,7 @@ def Logout():
 @app.route("/profile", methods=['GET'])
 @jwt_required
 def profile():
-    return doProfile()
+    return get_profile()
 
 @app.route('/api/v1/user', methods=['POST'])
 @app.route('/register', methods=['POST'])
@@ -85,19 +85,19 @@ def Register():
 @app.route('/changepassword', methods=['POST'])
 @jwt_required
 def ChangePassword():
-    return doChangePassword(request.get_json())
+    return change_password(request.get_json())
 
 @app.route('/api/v1/user', methods=['PUT'])
 @app.route('/updateprofile', methods=['POST'])
 @jwt_required
 def profileUpdate():
-    return doUpdateProfile(request.get_json())
+    return update_user(request.get_json())
 
 @app.route('/api/v1/message', methods=['POST'])
 @app.route('/sendmessage', methods=['POST'])
 @jwt_required
 def SendMessage():
-    return doSendMessage(request.get_json())
+    return send_message(request.get_json())
 
 @app.route('/api/v1/messages', methods=['GET'])
 @app.route('/getmessage', methods=['GET'])
@@ -109,12 +109,12 @@ def GetMessages():
 @app.route('/updatemessage',methods=['POST'])
 @jwt_required
 def UpdateMessage():
-    return doUpdateMessage(request.get_json())
+    return update_message_status(request.get_json())
 
 @app.route('/api/v1/messages/sent',methods=['GET'])
 @jwt_required
 def get_sent_message():
-    return doGetSentMessages()
+    return get_sent_messages()
 
 #for debug
 if __name__== '__main__':

@@ -1,28 +1,34 @@
+import datetime, time
 from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-import datetime
-import time
 
-def doGetSentMessages():
+def get_sent_messages():
+    '''
+    This method return the messages sent by logged in user
+    '''
     list_messages = []
     logged_in_user = get_jwt_identity()
     user_from_db = db.get_user(logged_in_user["_id"])
-    messages = db.messages_collection.find({'from': user_from_db["_id"]})
+    messages = db.get_messages_from_user(user_from_db["_id"])
 
-    for item in messages:
-        #messages
-        user_full_data = []
-        for user_id in item["to"]:
-            # check for each user he read the message and if do add his name
-            user_data_message = create_user_data_for_msg(item, user_id)
-            user_full_data.append(user_data_message)
+    for msg in messages:
+        # for each message we add full user details
 
-        item["to"] = user_full_data
-        list_messages.append(item)
+        users_full_data = []
+        for user_id in msg["to"]:
+
+            # for each uesr id we add his full data
+            user_data_message = create_user_data_for_msg(msg, user_id)
+            users_full_data.append(user_data_message)
+
+        msg["to"] = users_full_data
+        list_messages.append(msg)
 
     #sort the messages
-    list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"], "%a %b %d %H:%M:%S %Y"), reverse=True)
+    list_messages = sorted(list_messages, key=lambda message: datetime.datetime.strptime(message["time_created"],
+                                                                                         "%a %b %d %H:%M:%S %Y"),
+                                                                                                        reverse=True)
     print(list_messages)
 
     #check if List is empty
@@ -33,9 +39,7 @@ def doGetSentMessages():
 
 
 def create_user_data_for_msg(message, user_id):
-    user_data_message = db.users_collection.find_one({"_id": user_id},
-                                                     {"messages": {"$elemMatch": {"id": message["_id"]}}, "first_name": 1,
-                                                      "last_name": 1})
+    user_data_message = db.get_user_details_of_message(user_id, message["_id"])
     status = user_data_message["messages"][0]["status"]
     del user_data_message["messages"]
     user_data_message["full_name"] = user_data_message["first_name"] + " " + user_data_message["last_name"]
