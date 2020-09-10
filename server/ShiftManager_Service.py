@@ -112,11 +112,21 @@ def DeleteShiftSwap(swap_id):
     return delete_shift_swap(swap_id)
 
 #we need here parameters
-@app.route('/api/v1/shifts', methods= ['GET'])
 @app.route('/GetShifts', methods= ["POST"])
 @jwt_required
-def GetShifts():
+def GetShifts2():
     return doGetShifts(request.get_json())
+
+@app.route('/api/v1/shifts', methods= ['GET'])
+@jwt_required
+def GetShifts():
+    data = {
+        "start_date" : request.args.get("start_date"),
+        "end_date" : request.args.get("end_date"),
+        "statuses" : request.args.getlist("status")
+    }
+    return doGetShifts(data)
+
 
 #for dubg
 if __name__== '__main__':

@@ -61,7 +61,7 @@ def add_shift_to_shiftScheduled(shift, shiftScheduled):
 
 
 def filter_by_status(data, list_of_shifts):
-    if "statuses" in data:
+    if "statuses" in data and data["statuses"]:
         statuses = data["statuses"]
         list_of_shifts = [x for x in list_of_shifts if x["status"] in statuses]
     return list_of_shifts
