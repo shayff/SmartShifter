@@ -57,8 +57,8 @@ def check_if_token_in_blacklist(decrypted_token):
 def index():
     return app.send_static_file('index.html')
 
-@app.route("/api/v1/login", methods=['POST'])
-@app.route("/login", methods=['POST'])
+@app.route("/api/v1/login", methods=["POST"])
+@app.route("/login", methods=["POST"])
 def Login():
     return doLogin(request.get_json())
 
@@ -76,25 +76,25 @@ def Logout():
 def profile():
     return get_profile()
 
-@app.route('/api/v1/user', methods=['POST'])
-@app.route('/register', methods=['POST'])
+@app.route('/api/v1/user', methods=["POST"])
+@app.route('/register', methods=["POST"])
 def Register():
     return doRegister(request.get_json())
 
 @app.route('/api/v1/user/password', methods=['PUT'])
-@app.route('/changepassword', methods=['POST'])
+@app.route('/changepassword', methods=["POST"])
 @jwt_required
 def ChangePassword():
     return change_password(request.get_json())
 
 @app.route('/api/v1/user', methods=['PUT'])
-@app.route('/updateprofile', methods=['POST'])
+@app.route('/updateprofile', methods=["POST"])
 @jwt_required
 def profileUpdate():
     return update_user(request.get_json())
 
-@app.route('/api/v1/message', methods=['POST'])
-@app.route('/sendmessage', methods=['POST'])
+@app.route('/api/v1/message', methods=["POST"])
+@app.route('/sendmessage', methods=["POST"])
 @jwt_required
 def SendMessage():
     return send_message(request.get_json())
@@ -106,7 +106,7 @@ def GetMessages():
     return get_messages()
 
 @app.route('/api/v1/message/status',methods=['PUT'])
-@app.route('/updatemessage',methods=['POST'])
+@app.route('/updatemessage',methods=["POST"])
 @jwt_required
 def UpdateMessage():
     return update_message_status(request.get_json())

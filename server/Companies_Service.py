@@ -48,7 +48,7 @@ blacklist = set()
 def unauthorized_response(callback):
     return jsonify({
         "ok": False,
-        "msg": 'Missing Authorization Header'
+        "msg": "Missing Authorization Header"
     }), 401
 
 @jwt.token_in_blacklist_loader
@@ -56,44 +56,43 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route("/api/v1/company", methods=['POST'])
-@app.route("/companies/create", methods=['POST'])
+@app.route("/api/v1/company", methods=["POST"])
+@app.route("/companies/create", methods=["POST"])
 @jwt_required
 def Create():
     return create_company(request.get_json())
 
-@app.route("/api/v1/company/employee", methods=['POST'])
-@app.route("/companies/addemployees", methods=['POST'])
+@app.route("/api/v1/company/employee", methods=["POST"])
+@app.route("/companies/addemployees", methods=["POST"])
 @jwt_required
 def AddEmployees():
     return add_employees(request.get_json())
 
-@app.route("/api/v1/company/employee/<employee_id>", methods=['DELETE'])
-@app.route("/companies/removeemployees", methods=['POST'])
+@app.route("/api/v1/company/employee", methods=["DELETE"])
 @jwt_required
 def RemoveEmployees():
     return remove_employees_from_company(request.get_json())
 
-@app.route("/api/v1/company", methods=['PUT'])
-@app.route("/companies/update", methods=['POST'])
+@app.route("/api/v1/company", methods=["PUT"])
+@app.route("/companies/update", methods=["POST"])
 @jwt_required
 def Update():
     return update_company(request.get_json())
 
-@app.route("/api/v1/company/employees", methods=['GET'])
-@app.route("/companies/listofemployees", methods=['GET'])
+@app.route("/api/v1/company/employees", methods=["GET"])
+@app.route("/companies/listofemployees", methods=["GET"])
 @jwt_required
 def ListOfEmployees():
     return get_list_of_employees()
 
-@app.route("/api/v1/company", methods=['GET'])
-@app.route("/companies/profile", methods=['GET'])
+@app.route("/api/v1/company", methods=["GET"])
+@app.route("/companies/profile", methods=["GET"])
 @jwt_required
 def profile():
     return get_company()
 
-@app.route("/api/v1/company/employee", methods=['PUT'])
-@app.route("/companies/updateemployee", methods=['POST'])
+@app.route("/api/v1/company/employee", methods=["PUT"])
+@app.route("/companies/updateemployee", methods=["POST"])
 @jwt_required
 def updateemployee():
     return update_employee(request.get_json())
@@ -104,14 +103,14 @@ def updateemployee():
 def GetPreferences():
     return get_preferences()
 
-@app.route("/api/v1/company/preference/employee", methods=['POST'])
-@app.route("/companies/PrefenceFromWorker", methods=['POST'])
+@app.route("/api/v1/company/preference/employee", methods=["POST"])
+@app.route("/companies/PrefenceFromWorker", methods=["POST"])
 @jwt_required
 def PrefenceFromWorker():
     return set_prefence_from_employee(request.get_json())
 
-@app.route("/api/v1/company/preference/manager", methods=['POST'])
-@app.route("/companies/PrefenceFromManager", methods=['POST'])
+@app.route("/api/v1/company/preference/manager", methods=["POST"])
+@app.route("/companies/PrefenceFromManager", methods=["POST"])
 @jwt_required
 def PrefenceFromManager():
     return set_prefence_from_manager(request.get_json())
@@ -119,17 +118,17 @@ def PrefenceFromManager():
 
 #delete after we will change urls
 
-@app.route("/companies/updateshift", methods=['POST'])
+@app.route("/companies/updateshift", methods=["POST"])
 @jwt_required
 def UpdateShift():
     return update_shift(request.get_json())
 
-@app.route("/companies/addshift", methods=['POST'])
+@app.route("/companies/addshift", methods=["POST"])
 @jwt_required
 def AddShifts():
     return create_shift(request.get_json())
 
-@app.route("/companies/deleteshift", methods=['POST'])
+@app.route("/companies/deleteshift", methods=["POST"])
 @jwt_required
 def DeleteShift():
     return delete_shifts(request.get_json())

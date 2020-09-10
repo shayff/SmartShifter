@@ -53,38 +53,38 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route('/api/v1/shifts/build', methods=['POST'])
-@app.route('/buildshift', methods=['POST'])
+@app.route('/api/v1/shifts/build', methods=["POST"])
+@app.route('/buildshift', methods=["POST"])
 @jwt_required
 def buildShift():
     return doBuildShift(request.get_json())
 
-@app.route('/api/v1/shifts/set', methods=['POST'])
-@app.route('/SetShiftsSchedule', methods= ['POST'])
+@app.route('/api/v1/shifts/set', methods=["POST"])
+@app.route('/SetShiftsSchedule', methods= ["POST"])
 @jwt_required
 def SetShiftsSchedule():
     return doSetShiftsSchedule(request.get_json())
 
-@app.route('/api/v1/shifts_swaps', methods=['POST'])
-@app.route('/AskShiftSwap', methods=['POST'])
+@app.route('/api/v1/shifts_swaps', methods=["POST"])
+@app.route('/AskShiftSwap', methods=["POST"])
 @jwt_required
 def AskShiftSwap():
     return doAskShiftSwap(request.get_json())
 
-@app.route('/api/v1/shifts_swaps/can_swap', methods= ['POST'])
-@app.route('/CanShiftSwap', methods=['POST'])
+@app.route('/api/v1/shifts_swaps/can_swap', methods= ["POST"])
+@app.route('/CanShiftSwap', methods=["POST"])
 @jwt_required
 def CanShiftSwap():
     return doCanShiftSwap(request.get_json())
 
-@app.route('/api/v1/shifts_swaps/confirm', methods= ['POST'])
-@app.route('/ConfirmShiftSwap', methods=['POST'])
+@app.route('/api/v1/shifts_swaps/confirm', methods= ["POST"])
+@app.route('/ConfirmShiftSwap', methods=["POST"])
 @jwt_required
 def ConfirmShiftSwap():
     return doConfirmShiftSwap(request.get_json())
 
 @app.route('/api/v1/shifts_swaps', methods= ['GET'])
-@app.route('/GetShiftsSwaps', methods=['POST'])
+@app.route('/GetShiftsSwaps', methods=["POST"])
 @jwt_required
 def GetShiftsSwaps():
     return doGetShiftsSwaps(request.get_json())
@@ -94,7 +94,7 @@ def GetShiftsSwaps():
 def UpdateShift():
     return update_shift(request.get_json())
 
-@app.route("/api/v1/shift", methods=['POST'])
+@app.route("/api/v1/shift", methods=["POST"])
 @jwt_required
 def AddShifts():
     return create_shift(request.get_json())
@@ -112,7 +112,7 @@ def DeleteShiftSwap(swap_id):
 
 #we need here parameters
 @app.route('/api/v1/shifts', methods= ['GET'])
-@app.route('/GetShifts', methods= ['POST'])
+@app.route('/GetShifts', methods= ["POST"])
 @jwt_required
 def GetShifts():
     return doGetShifts(request.get_json())

@@ -28,11 +28,10 @@ def update_shift(user_input):
 
             # update in database
             doc = db.update_shift(company_id, shift_id, shift)
-            #doc = db.companies_collection.update_one({"_id": company_id, 'shifts.id': shift_id}, {'$set':{'shifts.$': shift}})
             print(doc)
-            return jsonify({"ok": True, "msg": 'Update Shift successfully'}), 200
+            return jsonify({"ok": True, "msg": "Update Shift successfully"}), 200
         else:
-            return jsonify({"ok": False, "msg": 'User has no company'}), 401
+            return jsonify({"ok": False, "msg": "User has no company"}), 401
     else:
-        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400
+        return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 

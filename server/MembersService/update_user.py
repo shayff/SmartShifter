@@ -9,6 +9,7 @@ def update_user(user_input):
     '''
     data = validate_updateProfile(user_input)
     logged_in_user = get_jwt_identity()
+
     if data["ok"]:
         data = data["data"]
         data['email'] = data['email'].lower()
@@ -16,7 +17,7 @@ def update_user(user_input):
 
         if result == None or result["_id"] == logged_in_user["_id"]:
             db.update_user(logged_in_user["_id"], data)
-            return jsonify({"ok": True, "msg": ' Update Profile successfully'}), 200
+            return jsonify({"ok": True, "msg": 'Update Profile successfully'}), 200
         else:
             return jsonify({"ok": False, "msg": 'User with email address already exists'}), 401
     else:
