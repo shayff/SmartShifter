@@ -59,26 +59,6 @@ class UpdateProfile extends Component {
         this.props.history.push(`/updatePassword`)
     }
 
-    onSubmit (e) {
-        e.preventDefault()
-        
-        const user = {
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            email: this.state.email,
-            id_number: this.state.id_number,
-            phone: this.state.phone,
-            address: this.state.address,
-            date_of_birth: this.state.date_of_birth,
-            gender: this.state.gender
-        }
-
-        if(this.validateRegisterForm()) {
-        updateProfile(user).then(res => {
-            this.props.history.push(`/profile`)
-        })}
-    }
-
     componentWillUnmount() 
     {
         this._isMounted = false;
@@ -104,6 +84,26 @@ class UpdateProfile extends Component {
                 }
             }
         })
+    }
+
+    onSubmit (e) {
+        e.preventDefault()
+        
+        const user = {
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
+            email: this.state.email,
+            id_number: this.state.id_number,
+            phone: this.state.phone,
+            address: this.state.address,
+            date_of_birth: this.state.date_of_birth,
+            gender: this.state.gender
+        }
+
+        if(this.validateRegisterForm()) {
+        updateProfile(user).then(res => {
+            this.props.history.push(`/profile`)
+        })}
     }
     
     render () {

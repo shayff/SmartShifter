@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getSwitches,approveSwitches } from './UserFunctions'
+import { getSwitches,approveSwitches,deleteSwitch } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 
 class SwitchShifts extends Component {
@@ -85,10 +85,16 @@ class SwitchShifts extends Component {
         return parsedStatus;
    }
 
-    onClickDecision(shiftId,decision) 
+   onClickDelete(swapId)
+   {
+        deleteSwitch(swapId).then(res => {
+            window.location.reload()});
+   }
+
+    onClickDecision(swapId,decision) 
     {
         const managerDecision={
-            swapId:shiftId,
+            swapId:swapId,
             status:decision
         }
         
@@ -109,8 +115,20 @@ class SwitchShifts extends Component {
             <td className="text-center">{switchData.time_created}</td>
             <td>{this.initializeTableApproveButton(switchData)}</td>
             <td>{this.initializeTableDontApproveButtons(switchData)}</td>
+            <td>{this.initializeTableDeleteButton(switchData)}</td>
             </tr>
          ));
+        }
+    }
+
+    initializeTableDeleteButton(switchData)
+    {
+        if(switchData.status !== 'confirm')
+        {
+            return( 
+            <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDelete(switchData.id)}>
+                        Delete Switch
+            </button>)
         }
     }
 
@@ -173,6 +191,7 @@ class SwitchShifts extends Component {
                             {this.isWhoWantToGetTheShiftColumVisible()}
                             <th scope="col" className="text-center">Status Of The Request</th>
                             <th scope="col" className="text-center">Time Of The Request</th>
+                            <th scope="col" className="text-center"></th>
                             <th scope="col" className="text-center"></th>
                             <th scope="col" className="text-center"></th>
                             </tr>
