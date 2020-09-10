@@ -139,7 +139,7 @@ formatDay = (date) =>
     let token = await AsyncStorage.getItem('token');
     let _id = await AsyncStorage.getItem('_id');
     
-    let ShiftMonth = await meneger_server.post('/GetShifts',
+    let ShiftMonth = await meneger_server.post('/GetShifts',//get('/api/v1/shifts', //post('/GetShifts',
     toSent,
      {
           headers: {

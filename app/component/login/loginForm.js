@@ -42,7 +42,7 @@ export default class LoginForm extends Component {
 get_from_server = async (data_send) =>
 {
   try{
-    const response = await member_server.post('/api/v1/login',data_send);///login
+    const response = await member_server.post('/api/v1/login',data_send);
     let company='';
     if(response.data.data["company"] == null)
     {

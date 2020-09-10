@@ -37,7 +37,7 @@ export default class SingleMessage extends Component {
             "id" : this.props.item.id,
             "status": "read"
         }
-        const response = await member_server.post('/updatemessage',
+        const response = await member_server.put('/api/v1/message/status',///updatemessage - post
         toSend,
         {
             headers: {
