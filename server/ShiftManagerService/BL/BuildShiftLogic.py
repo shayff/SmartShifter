@@ -26,8 +26,8 @@ class buildshiftclass:
             if list_of_shifts_by_date and listOfEmployeesByDate:
 
                 # run alogrithem for each job
-                jobslist = self.get_list_of_jobs(list_of_shifts_by_date)
-                for job in jobslist:
+                jobs_list = self.get_list_of_jobs(list_of_shifts_by_date)
+                for job in jobs_list:
                     listOfShifts = self.filterShiftsByJob(list_of_shifts_by_date, job)
                     listOfEmployees = self.filterEmployeesByJob(listOfEmployeesByDate, job)
                     if listOfShifts and listOfEmployees:
@@ -56,9 +56,11 @@ class buildshiftclass:
                     if shift["id"] not in scheduled_shifts:
                         scheduled_shifts[shift["id"]] = []
 
-                print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
-                print("-" * 60)
+                hungarian_potential = get_hungarian_potential(hungarian)
 
+                print("Build shift for date:", date, "With the total rank:", hungarian_potential)
+                print("-" * 60)
+                hungarian = None
         return scheduled_shifts
 
     # get list of shifts
@@ -132,13 +134,6 @@ class buildshiftclass:
                     small = listOfShifts[x]["day_part"]
                     result = all(elem in big for elem in small)
 
-                    #debug
-                    '''
-                    print("shift: ", listOfShifts[x]["id"])
-                    print("employee: ", listOfEmployees[y]["id"])
-                    print(result)
-                    print("#####")
-                    '''
                     if result:
 
                         #for each part of the shift we check employee prefence and set the rank
@@ -165,3 +160,9 @@ class buildshiftclass:
 
     def filterEmployeesByJob(self, listOfEmployees, job):
         return [x for x in listOfEmployees if job in x["job_type"]]
+
+    def get_hungarian_potential(self, hungarian):
+        if hungarian:
+            return hungarian.get_total_potential()
+        else:
+            return -1
