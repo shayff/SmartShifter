@@ -28,12 +28,12 @@ export default class Regform extends Component {
            let dataSend = {
              "email" : this.state.email,
              "password":this.state.password,
-             "id number":this.state.ID,
+             "id_number":this.state.ID,
              "phone":this.state.phoneNumber,
-             "first name":this.state.firstName,
-             "last name":this.state.lastName,
+             "first_name":this.state.firstName,
+             "last_name":this.state.lastName,
              "address":this.state.address,
-             "date of birth":this.state.dateBirth,
+             "date_of_birth":this.state.dateBirth,
              "gender":this.state.gender,
            };
 
@@ -53,11 +53,13 @@ export default class Regform extends Component {
     send_to_server = async (data_send) =>
   {
     try{
-      const response = await member_server.post('/register',data_send);
+      const response = await member_server.post('/api/v1/user',data_send);///register///api/v1/user
       Alert.alert("you have successfully registered");
       this.props.fatherProps.navigation.navigate('Enter_Screen');
+ 
+
     }catch(err){
-        Alert.alert(err.response.data.msg);
+      Alert.alert(response.data.msg);//fix
     }
   }
 

@@ -26,7 +26,7 @@ export default class User_preferences extends Component {
     componentDidMount = async () => {
 
         let token = await AsyncStorage.getItem('token');
-        const response = await company_server.get('/companies/GetPreferences', {
+        const response = await company_server.get('/api/v1/company/preferences', {//companies/GetPreferences
             headers: {
                 Authorization: "Bearer " + token
             }

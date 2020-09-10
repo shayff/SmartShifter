@@ -42,7 +42,7 @@ export default class LoginForm extends Component {
 get_from_server = async (data_send) =>
 {
   try{
-    const response = await member_server.post('/login',data_send);
+    const response = await member_server.post('/api/v1/login',data_send);///login
     let company='';
     if(response.data.data["company"] == null)
     {
@@ -52,7 +52,6 @@ get_from_server = async (data_send) =>
     {
       company= response.data.data["company"].toString();
     }
-    console.log("ccan- "+response.data.data["can_employee_switch_shifts"].toString());
     let keys = [['token', response.data.data.token],['company',company],['name', response.data.data["first_name"]],['can_employee_switch_shifts',response.data.data["can_employee_switch_shifts"].toString()],['_id',response.data.data["_id"].toString()],['password',this.state.password.toString()]];
     await AsyncStorage.multiSet(keys, () => {
     });

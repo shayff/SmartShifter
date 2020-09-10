@@ -133,7 +133,7 @@ export default class SwapSingle extends Component {
                         <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.Delete_shift_swap} >
                         <MaterialIcons name="autorenew" size={30} color="black" />
                         <Text style={Styles.textStyle}>
-                                Cencel
+                                Cancel
                         </Text>           
                     </TouchableOpacity>
                     ):(

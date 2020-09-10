@@ -32,7 +32,7 @@ export default class SingleShift extends Component {
         }
         let token = await AsyncStorage.getItem('token');
 
-        const response = await meneger_server.post('/AskShiftSwap',
+        const response = await meneger_server.post('/api/v1/shifts_swaps',///AskShiftSwap'
         toSend,
         {
             headers: {

@@ -22,7 +22,7 @@ export default class Messages extends Component {
 
     componentDidMount = async () => {
         let token = await AsyncStorage.getItem('token');
-        const response = await member_server.get('/getmessage', {
+        const response = await member_server.get('/api/v1/messages', {///getmessage
           headers: {
               Authorization: "Bearer " + token
           }

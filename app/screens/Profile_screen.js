@@ -32,7 +32,7 @@ export default class Private_profile extends Component {
     componentDidMount = async () =>
     {
         let token = await AsyncStorage.getItem('token');
-        const response = await member_server.get('/profile', {
+        const response = await member_server.get('/api/v1/user/profile', {///profile
           headers: {
               Authorization: "Bearer " + token
           }
