@@ -16,7 +16,7 @@ def get_preferences():
         preferences = company_from_db["prefence_from_manager"]
 
         # get the minmum shift manager asked for
-        if("settings" in company_from_db and "shifts_required_from_emp" in company_from_db["settings"]:
+        if("settings" in company_from_db and "shifts_required_from_emp" in company_from_db["settings"]):
             minimum_shifts_required = company_from_db["settings"]["shifts_required_from_emp"]
         else:
             minimum_shifts_required = None
