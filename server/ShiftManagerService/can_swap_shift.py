@@ -4,7 +4,7 @@ from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from .schemas.canshiftswap import validate_CanShiftSwap
 
-def doCanShiftSwap(userInput):
+def can_swap_shift(userInput):
     data = validate_CanShiftSwap(userInput)
     if data["ok"]:
         data = data['data']
@@ -14,8 +14,7 @@ def doCanShiftSwap(userInput):
         #check if user has company
         if 'company' in user_from_db:
             company_id = user_from_db['company']
-            shift_swap = db.companies_collection.find_one({"_id": company_id},
-                                                           {"shifts_swaps": {"$elemMatch": {"id": data['swap_id']}}})
+            shift_swap = db.get_shift_swap(company_id, data["swap_id"])
             status = shift_swap["shifts_swaps"][0]["status"]
             shift_id = shift_swap["shifts_swaps"][0]["shift_id"]
 

@@ -21,8 +21,8 @@ class Mongo_db:
         return self.companies_collection.find_one({"_id": company_id})
 
     def update_shift(self, company_id, shift_id, shift_data):
-        return self.companies_collection.update_one({"_id": company_id, 'shifts.id': shift_id}, {'$set':
-                                                                                                   {'shifts.$': shift_data}})
+        return self.companies_collection.update_one({"_id": company_id, 'shifts.id': shift_id},
+                                                    {'$set': {'shifts.$': shift_data}})
 
     def inc_shifts_counter(self, company_id):
         doc = self.companies_collection.find_one_and_update({"_id": company_id}, {'$inc': {'shifts_counter': 1}},
@@ -30,4 +30,7 @@ class Mongo_db:
         return doc['shifts_counter']
 
     def insert_shift(self, company_id, new_shift):
-        self.companies_collection.find_one_and_update({"_id": company_id}, {'$push': {'shifts': new_shift}})
+        return self.companies_collection.find_one_and_update({"_id": company_id}, {'$push': {'shifts': new_shift}})
+
+    def get_shift_swap(self, company_id, swap_id):
+        return self.companies_collection.find_one({"_id": company_id},{"shifts_swaps": {"$elemMatch": {"id": swap_id}}})

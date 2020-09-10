@@ -6,7 +6,7 @@ import datetime, json
 from bson.objectid import ObjectId
 from server.ShiftManagerService.BuildShift import doBuildShift
 from server.ShiftManagerService.create_shift_swap import doAskShiftSwap
-from server.ShiftManagerService.can_swap import doCanShiftSwap
+from server.ShiftManagerService.can_swap_shift import can_swap_shift
 from server.ShiftManagerService.confirm_swap import doConfirmShiftSwap
 from server.ShiftManagerService.get_shifts import doGetShifts
 from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
@@ -75,7 +75,7 @@ def AskShiftSwap():
 @app.route('/CanShiftSwap', methods=["POST"])
 @jwt_required
 def CanShiftSwap():
-    return doCanShiftSwap(request.get_json())
+    return can_swap_shift(request.get_json())
 
 @app.route('/api/v1/shifts_swaps/confirm', methods= ["POST"])
 @app.route('/ConfirmShiftSwap', methods=["POST"])
@@ -87,7 +87,8 @@ def ConfirmShiftSwap():
 @app.route('/GetShiftsSwaps', methods=["POST"])
 @jwt_required
 def GetShiftsSwaps():
-    return doGetShiftsSwaps(request.get_json())
+    statuses = request.args.getlist("status")
+    return doGetShiftsSwaps(statuses)
 
 @app.route("/api/v1/shift", methods=['PUT'])
 @jwt_required

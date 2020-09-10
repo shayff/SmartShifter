@@ -30,7 +30,6 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = FlaskConfig["SECRET_KEY"]
@@ -57,13 +56,21 @@ def check_if_token_in_blacklist(decrypted_token):
     return jti in blacklist
 
 @app.route("/api/v1/company", methods=["POST"])
-@app.route("/companies/create", methods=["POST"])
 @jwt_required
 def Create():
     return create_company(request.get_json())
 
+@app.route("/api/v1/company", methods=["GET"])
+@jwt_required
+def profile():
+    return get_company()
+
+@app.route("/api/v1/company", methods=["PUT"])
+@jwt_required
+def Update():
+    return update_company(request.get_json())
+
 @app.route("/api/v1/company/employee", methods=["POST"])
-@app.route("/companies/addemployees", methods=["POST"])
 @jwt_required
 def AddEmployees():
     return add_employees(request.get_json())
@@ -73,26 +80,12 @@ def AddEmployees():
 def RemoveEmployees():
     return remove_employees_from_company(request.get_json())
 
-@app.route("/api/v1/company", methods=["PUT"])
-@app.route("/companies/update", methods=["POST"])
-@jwt_required
-def Update():
-    return update_company(request.get_json())
-
 @app.route("/api/v1/company/employees", methods=["GET"])
-@app.route("/companies/listofemployees", methods=["GET"])
 @jwt_required
 def ListOfEmployees():
     return get_list_of_employees()
 
-@app.route("/api/v1/company", methods=["GET"])
-@app.route("/companies/profile", methods=["GET"])
-@jwt_required
-def profile():
-    return get_company()
-
 @app.route("/api/v1/company/employee", methods=["PUT"])
-@app.route("/companies/updateemployee", methods=["POST"])
 @jwt_required
 def updateemployee():
     return update_employee(request.get_json())
@@ -114,26 +107,6 @@ def PrefenceFromWorker():
 @jwt_required
 def PrefenceFromManager():
     return set_prefence_from_manager(request.get_json())
-
-
-#delete after we will change urls
-
-@app.route("/companies/updateshift", methods=["POST"])
-@jwt_required
-def UpdateShift():
-    return update_shift(request.get_json())
-
-@app.route("/companies/addshift", methods=["POST"])
-@jwt_required
-def AddShifts():
-    return create_shift(request.get_json())
-
-@app.route("/companies/deleteshift", methods=["POST"])
-@jwt_required
-def DeleteShift():
-    return delete_shifts(request.get_json())
-
-
 
 #for dubg
 if __name__== '__main__':
