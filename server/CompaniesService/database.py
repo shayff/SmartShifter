@@ -38,8 +38,12 @@ class Mongo_db:
     def insert_company(self, new_company):
         return self.companies_collection.insert_one(new_company)
 
-    def update_user_company(self, user_id, company_id):
+    def update_user_company(self, company_id, user_id):
         return self.users_collection.find_one_and_update({'_id': user_id}, { "$set": {'company': company_id}})
 
-    def update_pprefence_of_company(self, company_id, data):
+    def update_prefence_of_company(self, company_id, data):
         return self.companies_collection.find_one_and_update({'_id': company_id}, {'$set': {"prefence_from_manager": data}})
+
+    def set_prefence_from_employee(self, company_id, user_id, preference):
+        return self.companies_collection.find_one_and_update({'_id': company_id, 'employees.id': user_id},
+                                                             {'$set': {'employees.$.preference': preference}})

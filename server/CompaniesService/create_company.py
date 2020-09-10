@@ -1,16 +1,19 @@
+from datetime import datetime
 from . import db
 from flask import jsonify
-from pymongo import ReturnDocument
-from datetime import datetime
 from flask_jwt_extended import get_jwt_identity
 from .schemas.create import validate_create
 
 def create_company(user_input):
+   '''
+   This method let you create a new company
+   '''
    data = validate_create(user_input)
    if data["ok"]:
       new_company = data["data"]
       logged_in_user = get_jwt_identity()
       user_from_db = db.get_user(logged_in_user['_id'])
+
       if "company" not in user_from_db:
 
          # update counter Companies
@@ -19,11 +22,11 @@ def create_company(user_input):
 
          prepare_new_company(logged_in_user, new_company)
 
-         # insert to db
+         # insert company to db
          db.insert_company(new_company)
 
-         # update user company
-         db.update_user_company(logged_in_user['_id'], new_company_id)
+         # update user company field
+         db.update_user_company(new_company_id, logged_in_user['_id'])
 
          print(new_company)
          return jsonify({'ok': True, 'msg': 'company created successfully', 'data': new_company}), 200

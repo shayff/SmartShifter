@@ -11,9 +11,9 @@ from server.CompaniesService.get_list_of_employees import get_list_of_employees
 from server.CompaniesService.Update import doUpdate
 from server.CompaniesService.get_company import get_company
 from server.CompaniesService.get_preferences import get_preferences
-from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
+from server.CompaniesService.set_prefence_from_manager import set_prefence_from_manager
 from server.CompaniesService.UpdateEmployee import doUpdateEmployee
-from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
+from server.CompaniesService.set_prefence_from_employee import set_prefence_from_employee
 
 from server.ShiftManagerService.update_shift import update_shift
 from server.ShiftManagerService.delete_shifts import delete_shifts
@@ -108,13 +108,13 @@ def GetPreferences():
 @app.route("/companies/PrefenceFromWorker", methods=['POST'])
 @jwt_required
 def PrefenceFromWorker():
-    return doPrefenceFromWorker(request.get_json())
+    return set_prefence_from_employee(request.get_json())
 
 @app.route("/api/v1/company/preference/manager", methods=['POST'])
 @app.route("/companies/PrefenceFromManager", methods=['POST'])
 @jwt_required
 def PrefenceFromManager():
-    return doPrefenceFromManager(request.get_json())
+    return set_prefence_from_manager(request.get_json())
 
 
 #delete after we will change urls
