@@ -17,7 +17,7 @@ export default class User_preferences extends Component {
             whichTypePrefer: [false,false,false],
             availability: -1,
             thereIsDataFromServer: false,
-            menegerSendShift : false,
+            menegerSendShift : true,
             MessageDisplay: "",
             minimumShifts: "",
         }
@@ -31,24 +31,23 @@ export default class User_preferences extends Component {
                 Authorization: "Bearer " + token
             }
         }).then(response => {
-            console.log("data= "+response.data.msg);
             let minShiftsMSG = " Please submit at least " + response.data.minimum_shifts.toString()+ " shifts"; // MSG to Minimum shifts are required
             this.setState({minimumShifts:minShiftsMSG});
-
+      
             if(response.data.msg != "Successfully")
             {
-                this.setState({messageDisplay:response.data.msg});
+                this.setState({MessageDisplay:response.data.msg});
                 this.setState({menegerSendShift:false});
             }
             else
             {
                 this.setState({ShiftsFromManager:response.data.data}, () => this.daysShift());
                 this.setState({menegerSendShift:true});
+                Alert.alert(this.state.minimumShifts);
             }
 
             this.setState({thereIsDataFromServer:true});
 
-            Alert.alert(this.state.minimumShifts);
             return  response.data;
 
         }).catch(err => {
@@ -239,7 +238,9 @@ export default class User_preferences extends Component {
                 </View>
 
                 ):(
-                <View style={Styles.messageDisplay} ><Text style={Styles.text} >{this.state.MessageDisplay}</Text></View> 
+                    <View style={Styles.messageDisplay} >
+                         <Text style={Styles.text}> {this.state.MessageDisplay} </Text>
+                    </View> 
                 )}
                 
             </ScrollView>

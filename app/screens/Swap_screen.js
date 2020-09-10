@@ -99,7 +99,7 @@ export default class Switching_shifts extends Component {
                             <FlatList
                                 data={this.state.listMasseges}
                                 keyExtractor={(item, index) => {return item.id.toString();}}
-                                renderItem={({item})=>(<SwapSingle item={item}/>)}
+                                renderItem={({item})=>(<SwapSingle item={item} render_screen = {this.componentDidMount}/>)}
                             />
                     </View>
                ):(

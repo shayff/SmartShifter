@@ -50,7 +50,24 @@ export default class SwapSingle extends Component {
 
 
     }
+    Delete_shift_swap= async() =>
+    {
+        let token = await AsyncStorage.getItem('token');
+        let root='/api/v1/shift_swap/'+this.props.item.id;
+        const response = await shiftManager_server.delete(root, {
+          headers: {
+              Authorization: "Bearer " + token
+          }
+      }).then(response => {
+        return  response.data;
+      }).catch(err => {
+        Alert.alert("something get wrong, please try again");
+        this.props.navigation.goBack(null);
+      });
 
+      this.props.render_screen();
+
+    }
     if_wait_to_swap = async() =>
     {
         this.setState({status_title:"wait for confirm"});
@@ -113,7 +130,7 @@ export default class SwapSingle extends Component {
                 height:45,   
                 position: 'absolute', top: 15, left: 160, right: 10, justifyContent: 'center', alignItems: 'center',flexDirection : 'row',backgroundColor:this.state.color }}>
                     {this.state.itMyShift ? (
-                        <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.if_wait_to_swap} >
+                        <TouchableOpacity ref="tach" disabled= {this.state.status_type} style={Styles.line} onPress={this.Delete_shift_swap} >
                         <MaterialIcons name="autorenew" size={30} color="black" />
                         <Text style={Styles.textStyle}>
                                 Cencel

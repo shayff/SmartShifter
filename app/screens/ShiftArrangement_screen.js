@@ -157,7 +157,7 @@ formatDay = (date) =>
 
     Object.keys(ShiftMonth.data).forEach(function (item) {
 
-      tempMarksDays[item]= {startingDay: true,textColor:'black', color: '#50cebb', endingDay: true};
+      tempMarksDays[item]= {startingDay: true,textColor:'black', color: '#e0ffff', endingDay: true};// color: '#50cebb'
       let date = ShiftMonth.data[item];
 
       for(let i=0; i<date.length; i++) // passing all the shift in this day
@@ -167,7 +167,7 @@ formatDay = (date) =>
         {
           if(EmployeesArray[i]["_id"] == _id)
           {
-            tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black', color: '#50cebb',dotColor: '#ffff', endingDay: true};
+            tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black',dotColor:'#50cebb', color: '#50cebb', endingDay: true};//dotColor: '#ffff',
           }
         }
       }
