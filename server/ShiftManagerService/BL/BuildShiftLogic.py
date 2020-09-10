@@ -18,17 +18,17 @@ class buildshiftclass:
         for date in self.dates:
             # get the employess and shift that relevant for current date
             # Possible to improve by get the list all shift once and filter it each time
-            listOfShiftsByDate = self.get_list_of_shifts(date)
+            list_of_shifts_by_date = self.get_list_of_shifts(date)
             listOfEmployeesByDate = self.get_list_of_employees(date)
 
 
             # check if there is atleast 1 employe and 1 shift
-            if listOfShiftsByDate and listOfEmployeesByDate:
+            if list_of_shifts_by_date and listOfEmployeesByDate:
 
-                # run for each job
-                jobslist = self.getListOfJobs(listOfShiftsByDate)
+                # run alogrithem for each job
+                jobslist = self.get_list_of_jobs(list_of_shifts_by_date)
                 for job in jobslist:
-                    listOfShifts = self.filterShiftsByJob(listOfShiftsByDate, job)
+                    listOfShifts = self.filterShiftsByJob(list_of_shifts_by_date, job)
                     listOfEmployees = self.filterEmployeesByJob(listOfEmployeesByDate, job)
                     if listOfShifts and listOfEmployees:
                         # build rank matrix
@@ -51,12 +51,13 @@ class buildshiftclass:
 
                     # add the other shifts (still need to emlpoyees who didn't scheduled
 
-                for shift in listOfShiftsByDate:
+                # add shifts that didn't was in algorithem
+                for shift in list_of_shifts_by_date:
                     if shift["id"] not in scheduled_shifts:
                         scheduled_shifts[shift["id"]] = []
 
-                        print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
-                        print("-" * 60)
+                print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
+                print("-" * 60)
 
         return scheduled_shifts
 
@@ -153,7 +154,7 @@ class buildshiftclass:
                 rank_matrix[y, x] += rank_to_add
         return rank_matrix
 
-    def getListOfJobs(self, listOfShifts):
+    def get_list_of_jobs(self, listOfShifts):
         jobs = set()
         for shift in listOfShifts:
             jobs.add(shift["job_type"])
