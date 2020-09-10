@@ -63,7 +63,7 @@ def test_Fulltest():
     #9. Run and check builld shift
 
     response = shift_app.test_client().post(
-        '/buildshift',
+        '/api/v1/shifts/build',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
             "start_date" : week[0],
@@ -74,7 +74,7 @@ def test_Fulltest():
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
     assert data["ok"]
-    check_build_shift(data["data"],company_id)
+    check_build_shift(data["data"], company_id)
 
 def get_next_sunday():
     date = datetime.date.today()
@@ -86,8 +86,8 @@ def create_shifts(fake, users, week):
     for day in range(7):
         for shift in range(random.randint(2, 4)):
             start, end, daypart = rand_hours_for_shift()
-            response = comp_app.test_client().post(
-                '/companies/addshift',
+            response = shift_app.test_client().post(
+                '/api/v1/shift',
                 headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
                 data=json.dumps({
                     "name": fake.color() + "shift",
@@ -134,7 +134,7 @@ def create_users(fake,he_fake, num_of_users, users):
 def login_users(num_of_users, users):
     for i in range(num_of_users):
         response = memb_app.test_client().post(
-            '/login',
+            '/api/v1/login',
             data=json.dumps({"email": users[i]["email"],
                              "password": "00000"
                              }),
@@ -170,7 +170,7 @@ def create_company(fake, users):
 def add_employees_to_company(num_of_users, users):
     for i in range(1, num_of_users):
         response = comp_app.test_client().post(
-            '/companies/addemployees',
+            '/api/v1/company/employee',
             headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
             data=json.dumps({
                         "email": users[i]["email"],
@@ -190,7 +190,7 @@ def send_messages_to_employee(users):
     users_id.pop(0)
 
     response = memb_app.test_client().post(
-        '/sendmessage',
+        '/api/v1/message',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
             "to" : {"employees": users_id},
@@ -206,7 +206,7 @@ def send_messages_to_employee(users):
 
 def set_prefence_from_manager(users, week):
     response = comp_app.test_client().post(
-        '/companies/PrefenceFromManager',
+        '/api/v1/company/preference/manager',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
             "sunday":
@@ -256,7 +256,7 @@ def set_prefernce_from_workers(num_of_users, users, week):
                          "available": prefer[day]})
 
         response = comp_app.test_client().post(
-            '/companies/PrefenceFromWorker',
+            '/api/v1/company/preference/employee',
             headers={'Authorization': 'Bearer {}'.format(users[i]["token"])},
             data=json.dumps({"preference": data}),
             content_type='application/json',

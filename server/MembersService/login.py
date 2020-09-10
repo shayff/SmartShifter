@@ -1,4 +1,4 @@
-from . import db
+from server.MembersService import db
 from flask import jsonify
 from flask_jwt_extended import JWTManager, create_refresh_token, create_access_token
 from .schemas.login import validate_login

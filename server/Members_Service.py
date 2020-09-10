@@ -77,7 +77,6 @@ def profile():
     return get_profile()
 
 @app.route('/api/v1/user', methods=["POST"])
-@app.route('/register', methods=["POST"])
 def Register():
     return doRegister(request.get_json())
 
@@ -95,6 +94,7 @@ def profileUpdate():
 
 @app.route('/api/v1/message', methods=["POST"])
 @app.route('/sendmessage', methods=["POST"])
+@jwt_required
 @jwt_required
 def SendMessage():
     return send_message(request.get_json())
@@ -119,4 +119,3 @@ def get_sent_message():
 #for debug
 if __name__== '__main__':
     app.run(debug=True, port=5000)
-

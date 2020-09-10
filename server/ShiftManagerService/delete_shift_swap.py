@@ -10,12 +10,13 @@ def delete_shift_swap(swap_id):
     if "company" in user_from_db:
         company_id = user_from_db["company"]
         swap_id = int(swap_id) #it's came as char from url
+        company = db.get_company(company_id)
         doc = db.companies_collection.find_one({"_id": company_id},
                                                       {"shifts_swaps": {"$elemMatch": {"id": swap_id}}})
         if "shifts_swaps" in doc:
             shift_swap = doc["shifts_swaps"][0]
 
-            if(shift_swap["id_employee_ask"] == logged_in_user["_id"]):
+            if(shift_swap["id_employee_ask"] == logged_in_user["_id"]) or logged_in_user["_id"] in company["managers"]:
                 db.companies_collection.update_one({"_id": company_id},{'$pull': {'shifts_swaps': {"id": swap_id}}})
                 return jsonify({"ok": True, "msg": 'delete shift swap successfully'}), 200
             else:
