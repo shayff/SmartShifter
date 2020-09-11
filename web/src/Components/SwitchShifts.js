@@ -123,7 +123,7 @@ class SwitchShifts extends Component {
 
     initializeTableDeleteButton(switchData)
     {
-        if(switchData.status !== 'confirm')
+        if(switchData.status !== 'confirmed')
         {
             return( 
             <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDelete(switchData.id)}>
