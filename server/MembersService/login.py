@@ -23,6 +23,7 @@ def doLogin(user_input):
             user_from_db["is_has_company"] = "company" in user_from_db
 
             # check if user is manager of company
+            print(user_from_db)
             add_company_fields(user_from_db)
 
             print(user_from_db)
@@ -34,21 +35,23 @@ def doLogin(user_input):
 
 
 def add_company_fields(user_from_db):
-    if ('company' in user_from_db):
+    if 'company' in user_from_db:
         company_id = user_from_db['company']
         company = db.get_company(company_id)
+        print(company_id)
+        if company:
+            # add fields relevant for company of user
+            if "settings" in company and "can_employee_switch_shifts" in company["settings"]:
+                user_from_db["can_employee_switch_shifts"] = company["settings"]["can_employee_switch_shifts"]
 
-        # add fields relevant for company of user
-        if "settings" in company and "can_employee_switch_shifts" in company["settings"]:
-            user_from_db["can_employee_switch_shifts"] = company["settings"]["can_employee_switch_shifts"]
-
-        if (company and user_from_db["_id"] in company['managers']):
-            user_from_db['isManagerOfCompany'] = "true"
+            if (company and user_from_db["_id"] in company['managers']):
+                user_from_db['isManagerOfCompany'] = "true"
+            else:
+                user_from_db['isManagerOfCompany'] = "false"
         else:
             user_from_db['isManagerOfCompany'] = "false"
     else:
         user_from_db['isManagerOfCompany'] = "false"
-
 
 def create_and_add_token(user_from_db):
     token = {"_id": user_from_db["_id"], 'email': user_from_db['email']}

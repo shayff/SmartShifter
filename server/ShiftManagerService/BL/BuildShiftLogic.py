@@ -2,7 +2,7 @@ import numpy as np
 from .Hungarian import Hungarian
 
 #rank of availble/prefer
-rank_of_prefer = 13
+rank_of_prefer = 14
 rank_of_available = 11
 rank_of_not = 0
 
@@ -19,17 +19,17 @@ class buildshiftclass:
             # get the employess and shift that relevant for current date
             # Possible to improve by get the list all shift once and filter it each time
             list_of_shifts_by_date = self.get_list_of_shifts(date)
-            listOfEmployeesByDate = self.get_list_of_employees(date)
+            list_of_employees_by_date = self.get_list_of_employees(date)
 
 
             # check if there is atleast 1 employe and 1 shift
-            if list_of_shifts_by_date and listOfEmployeesByDate:
+            if list_of_shifts_by_date and list_of_employees_by_date:
 
                 # run alogrithem for each job
                 jobs_list = self.get_list_of_jobs(list_of_shifts_by_date)
                 for job in jobs_list:
                     listOfShifts = self.filterShiftsByJob(list_of_shifts_by_date, job)
-                    listOfEmployees = self.filterEmployeesByJob(listOfEmployeesByDate, job)
+                    listOfEmployees = self.filterEmployeesByJob(list_of_employees_by_date, job)
                     if listOfShifts and listOfEmployees:
                         # build rank matrix
                         rank_matrix = self.build_rank_matrix(date, listOfShifts, listOfEmployees)
@@ -55,12 +55,14 @@ class buildshiftclass:
                 for shift in list_of_shifts_by_date:
                     if shift["id"] not in scheduled_shifts:
                         scheduled_shifts[shift["id"]] = []
+                #print("$")
+                #hungarian_potential = get_hungarian_potential(hungarian)
 
-                hungarian_potential = get_hungarian_potential(hungarian)
-
-                print("Build shift for date:", date, "With the total rank:", hungarian_potential)
-                print("-" * 60)
-                hungarian = None
+                #print("$")
+                if hungarian:
+                    print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
+                    print("-" * 60)
+                #hungarian = None
         return scheduled_shifts
 
     # get list of shifts
@@ -162,6 +164,7 @@ class buildshiftclass:
         return [x for x in listOfEmployees if job in x["job_type"]]
 
     def get_hungarian_potential(self, hungarian):
+        print(hungarian)
         if hungarian:
             return hungarian.get_total_potential()
         else:
