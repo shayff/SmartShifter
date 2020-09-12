@@ -20,16 +20,13 @@ def doBuildShift(user_input):
 
         count = 0
 
-        #create list of dates we want to work with
-        dates = pd.date_range(start=data['start_date'], end=data['end_date'])
-        dates = pd.Series(dates.format())
+        # create list of dates we want to work with
+        dates = create_list_of_dates(data)
 
-        current_user = get_jwt_identity()
-        result = db.get_user(current_user["_id"])
-        if 'company' not in result:
-            return jsonify({"ok": False, "msg": 'User don\'t have company'}), 401
-        else:
-            company_id = result['company']
+        logged_in_user = get_jwt_identity()
+        user_from_db = db.get_user(logged_in_user["_id"])
+        if "company" in user_from_db:
+            company_id = user_from_db["company"]
 
             #init data
             shift_data = ShiftData(company_id)
@@ -65,14 +62,23 @@ def doBuildShift(user_input):
                     add_is_shift_full_field(shift)
                     add_empty_shifts_by_date(shift, shift_Scheduled_to_display)
 
-        #sort the shifts
-        sort_shifts_by_start_time(shift_Scheduled_to_display)
+            #sort the shifts
+            sort_shifts_by_start_time(shift_Scheduled_to_display)
 
-        #compute the success rate
-        success_rate = get_success_rate(count, total)
-        return jsonify({"ok": True, "msg": 'build shift',"success_rate": success_rate, 'data': scheduled_shifts,'full_data': shift_Scheduled_to_display}), 200
+            #compute the success rate
+            success_rate = get_success_rate(count, total)
+            return jsonify({"ok": True, "msg": 'build shift', "success_rate": success_rate, 'data': scheduled_shifts,
+                            'full_data': shift_Scheduled_to_display}), 200
+        else:
+            return jsonify({"ok": False, "msg": 'User don\'t have company'}), 401
     else:
         return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400
+
+
+def create_list_of_dates(data):
+    dates = pd.date_range(start=data["start_date"], end=data["end_date"])
+    dates = pd.Series(dates.format())
+    return dates
 
 
 def get_success_rate(count, total):

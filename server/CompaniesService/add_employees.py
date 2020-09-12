@@ -14,13 +14,13 @@ def add_employees(user_input):
         user_from_db = db.get_user(logged_in_user["_id"])
 
         # get the company of the current logged in user
-        if 'company' in user_from_db:
-            company_id = user_from_db['company']
+        if "company" in user_from_db:
+            company_id = user_from_db["company"]
 
             # get employee we want to add from database
             employee_from_db = db.get_user_by_email(employee_to_add['email'])
 
-            if employee_from_db and 'company' not in employee_from_db:
+            if employee_from_db and "company" not in employee_from_db:
 
                 # switch the email given from the user to the id
                 employee_to_add["id"] = employee_from_db["_id"]

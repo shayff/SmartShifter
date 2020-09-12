@@ -9,9 +9,9 @@ def get_list_of_employees():
     logged_in_user = get_jwt_identity()
     user_from_db = db.get_user(logged_in_user["_id"])
 
-    if 'company' in user_from_db:
+    if "company" in user_from_db:
         list_of_employees = []
-        company_id = user_from_db['company']
+        company_id = user_from_db["company"]
         company_from_db = db.get_company(company_id)
 
         # get all the employees ids from the company
@@ -43,6 +43,6 @@ def update_user_full_data(employee):
 
 def delete_unnecessary_data(employee_from_db):
     del employee_from_db['password']
-    if 'company' in employee_from_db:
-        del employee_from_db['company']
+    if "company" in employee_from_db:
+        del employee_from_db["company"]
 

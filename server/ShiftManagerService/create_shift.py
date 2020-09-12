@@ -19,7 +19,8 @@ def create_shift(user_input):
             new_shift.update({"id": shift_id})
 
             # add shift status
-            new_shift.update({"status": "not_scheduled"})
+            if "status" not in new_shift:
+                new_shift.update({"status": "not_scheduled"})
 
             # insert to db
             db.insert_shift(company_id, new_shift)

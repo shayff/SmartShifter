@@ -34,3 +34,6 @@ class Mongo_db:
 
     def get_shift_swap(self, company_id, swap_id):
         return self.companies_collection.find_one({"_id": company_id},{"shifts_swaps": {"$elemMatch": {"id": swap_id}}})
+
+    def delete_prefence_of_company(self, company_id):
+        return self.companies_collection.find_one_and_update({"_id": company_id},{'$set': {"prefence_from_manager" : []}})

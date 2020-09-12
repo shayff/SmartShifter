@@ -17,11 +17,11 @@ def delete_shift_swap(swap_id):
             shift_swap = doc["shifts_swaps"][0]
 
             if(shift_swap["id_employee_ask"] == logged_in_user["_id"]) or logged_in_user["_id"] in company["managers"]:
-                db.companies_collection.update_one({"_id": company_id},{'$pull': {'shifts_swaps': {"id": swap_id}}})
-                return jsonify({"ok": True, "msg": 'delete shift swap successfully'}), 200
+                db.companies_collection.update_one({"_id": company_id},{"$pull": {"shifts_swaps": {"id": swap_id}}})
+                return jsonify({"ok": True, "msg": "delete shift swap successfully"}), 200
             else:
-                return jsonify({"ok": False, "msg": 'you are not the owner of shift swap'}), 401
+                return jsonify({"ok": False, "msg": "you are not the owner of shift swap"}), 401
         else:
-            return jsonify({"ok": False, "msg": 'shift_swap not exist'}), 401
+            return jsonify({"ok": False, "msg": "shift_swap not exist"}), 401
     else:
-        return jsonify({"ok": False, "msg": 'the company not exist'}), 401
+        return jsonify({"ok": False, "msg": "the company not exist"}), 401

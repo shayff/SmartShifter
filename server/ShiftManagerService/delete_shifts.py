@@ -23,19 +23,18 @@ def delete_shifts(user_input):
                 if is_shift_exist(company_id, shift_id):
                     delete_shift(company_id, shift_id)
 
-            return jsonify({"ok": True, "msg": 'delete shift successfully'}), 200
+            return jsonify({"ok": True, "msg": "delete shift successfully"}), 200
         else:
-            return jsonify({"ok": False, "msg": 'the company not exist'}), 401
+            return jsonify({"ok": False, "msg": "the company not exist"}), 401
     else:
-        return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(data["msg"])}), 400
+        return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 
 
 def delete_shift(company_id, shift_id):
     # delete relevant swaps
-    db.companies_collection.update_one({"_id": company_id}, {'$pull': {'shifts_swaps': {'shift_id': shift_id}}})
+    db.companies_collection.update_one({"_id": company_id}, {"$pull": {"shifts_swaps": {"shift_id": shift_id}}})
     # delete the shift
-    db.companies_collection.update_one({"_id": company_id}, {'$pull': {'shifts': {"id": shift_id}}})
-
+    db.companies_collection.update_one({"_id": company_id}, {"$pull": {"shifts": {"id": shift_id}}})
 
 def is_shift_exist(company_id, shift_id):
     doc = db.companies_collection.find_one({"_id": company_id},

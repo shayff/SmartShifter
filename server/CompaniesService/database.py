@@ -29,7 +29,7 @@ class Mongo_db:
         return doc['value']
 
     def update_user_company(self, user_id, company_id):
-        return self.users_collection.find_one_and_update({"_id": user_id}, {'$set': {'company': company_id}})
+        return self.users_collection.find_one_and_update({"_id": user_id}, {'$set': {"company": company_id}})
 
     def add_employee_to_company(self, company_id, employee_id):
         return self.companies_collection.find_one_and_update({"_id": company_id},
@@ -39,7 +39,7 @@ class Mongo_db:
         return self.companies_collection.insert_one(new_company)
 
     def update_user_company(self, company_id, user_id):
-        return self.users_collection.find_one_and_update({"_id": user_id}, { "$set": {'company': company_id}})
+        return self.users_collection.find_one_and_update({"_id": user_id}, { "$set": {"company": company_id}})
 
     def update_prefence_of_company(self, company_id, data):
         return self.companies_collection.find_one_and_update({"_id": company_id},

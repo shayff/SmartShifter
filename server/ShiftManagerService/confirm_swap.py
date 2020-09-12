@@ -13,8 +13,8 @@ def doConfirmShiftSwap(user_input):
         user_from_db = db.users_collection.find_one({"_id": logged_in_user["_id"]})
 
         #check if user has company
-        if 'company' in user_from_db:
-            company_id = user_from_db['company']
+        if "company" in user_from_db:
+            company_id = user_from_db["company"]
             user_id = user_from_db["_id"]
             shift_swap = db.companies_collection.find_one({"_id": company_id , 'shifts_swaps.id': data['swap_id']}, {'shifts_swaps.$': data['swap_id']})
 

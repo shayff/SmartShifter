@@ -13,13 +13,13 @@ def doGetShiftsSwaps(statuses):
     # check if user has company
     if "company" in user_from_db:
         company_id = user_from_db["company"]
-        company = db.companies_collection.find_one({"_id": company_id})
+        company = db.get_company(company_id)
 
         #filter
         shifts_swaps = company["shifts_swaps"]
         swaps_filtered = [x for x in shifts_swaps if x["status"] in statuses]
 
-        #updates the names and the shift detailes for each swap
+        # updates the names and the shift detailes for each swap
         arr_to_del = []
         for swap in swaps_filtered:
 

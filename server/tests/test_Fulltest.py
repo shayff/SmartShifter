@@ -16,7 +16,7 @@ companies_collection = db["companies"]
 
 def test_Fulltest():
     #Settings
-    num_of_users = 30
+    num_of_users = 10
 
     #start_date = datetime.datetime(get_next_sunay())
     start_date = get_next_sunday()

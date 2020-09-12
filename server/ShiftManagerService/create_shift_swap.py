@@ -13,8 +13,8 @@ def doAskShiftSwap(user_input):
         result = db.users_collection.find_one({"_id": logged_in_user["_id"]})
 
         #check if user has company
-        if 'company' in result:
-            company_id = result['company']
+        if "company" in result:
+            company_id = result["company"]
 
             # update shifts_swaps id
             doc = db.companies_collection.find_one_and_update({"_id": company_id}, {'$inc': {'shifts_swaps_counter': 1}},

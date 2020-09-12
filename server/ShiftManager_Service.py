@@ -9,10 +9,9 @@ from server.ShiftManagerService.create_shift_swap import doAskShiftSwap
 from server.ShiftManagerService.can_swap_shift import can_swap_shift
 from server.ShiftManagerService.confirm_swap import doConfirmShiftSwap
 from server.ShiftManagerService.get_shifts import doGetShifts
-from server.ShiftManagerService.SetShiftsSchedule import doSetShiftsSchedule
+from server.ShiftManagerService.set_shifts_schedule import set_shifts_schedule
 from server.ShiftManagerService.get_shifts_swaps import doGetShiftsSwaps
 from server.ShiftManagerService.delete_shift_swap import delete_shift_swap
-
 from server.ShiftManagerService.update_shift import update_shift
 from server.ShiftManagerService.delete_shifts import delete_shifts
 from server.ShiftManagerService.create_shift import create_shift
@@ -30,6 +29,7 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
+
 cors = CORS(app)
 app.config['SECRET_KEY'] = FlaskConfig["SECRET_KEY"]
 app.config['JWT_SECRET_KEY'] = FlaskConfig["JWT_SECRET_KEY"]
@@ -54,7 +54,6 @@ def check_if_token_in_blacklist(decrypted_token):
     return jti in blacklist
 
 @app.route('/api/v1/shifts/build', methods=["POST"])
-@app.route('/buildshift', methods=["POST"])
 @jwt_required
 def buildShift():
     return doBuildShift(request.get_json())
@@ -62,22 +61,19 @@ def buildShift():
 @app.route('/api/v1/shifts/set', methods=["POST"])
 @jwt_required
 def SetShiftsSchedule():
-    return doSetShiftsSchedule(request.get_json())
+    return set_shifts_schedule(request.get_json())
 
 @app.route('/api/v1/shifts_swaps', methods=["POST"])
-@app.route('/AskShiftSwap', methods=["POST"])
 @jwt_required
 def AskShiftSwap():
     return doAskShiftSwap(request.get_json())
 
 @app.route('/api/v1/shifts_swaps/can_swap', methods= ["POST"])
-@app.route('/CanShiftSwap', methods=["POST"])
 @jwt_required
 def CanShiftSwap():
     return can_swap_shift(request.get_json())
 
 @app.route('/api/v1/shifts_swaps/confirm', methods= ["POST"])
-@app.route('/ConfirmShiftSwap', methods=["POST"])
 @jwt_required
 def ConfirmShiftSwap():
     return doConfirmShiftSwap(request.get_json())
@@ -86,7 +82,7 @@ def ConfirmShiftSwap():
 @app.route('/GetShiftsSwaps', methods=["POST"])
 @jwt_required
 def GetShiftsSwaps():
-    statuses = request.args.getlist("status")
+    statuses = request.args.getlist("statuses")
     return doGetShiftsSwaps(statuses)
 
 @app.route("/api/v1/shift", methods=['PUT'])
@@ -124,7 +120,6 @@ def GetShifts():
         "statuses" : request.args.getlist("statuses")
     }
     return doGetShifts(data)
-
 
 #for dubg
 if __name__== '__main__':

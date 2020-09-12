@@ -12,8 +12,8 @@ def can_swap_shift(userInput):
         user_from_db = db.get_user(logged_in_user["_id"])
 
         #check if user has company
-        if 'company' in user_from_db:
-            company_id = user_from_db['company']
+        if "company" in user_from_db:
+            company_id = user_from_db["company"]
             shift_swap = db.get_shift_swap(company_id, data["swap_id"])
             status = shift_swap["shifts_swaps"][0]["status"]
             shift_id = shift_swap["shifts_swaps"][0]["shift_id"]

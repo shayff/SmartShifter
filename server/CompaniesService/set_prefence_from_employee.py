@@ -15,8 +15,8 @@ def set_prefence_from_employee(data):
         user_from_db = db.get_user(logged_in_user["_id"])
 
         if user_from_db:
-            if 'company' in user_from_db:
-                db.set_prefence_from_employee(user_from_db['company'], logged_in_user["_id"], data["preference"])
+            if "company" in user_from_db:
+                db.set_prefence_from_employee(user_from_db["company"], logged_in_user["_id"], data["preference"])
 
                 return jsonify({"ok": True, "msg": 'Update prefence successfully'}), 200
             else:

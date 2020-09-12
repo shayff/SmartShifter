@@ -35,8 +35,8 @@ def doLogin(user_input):
 
 
 def add_company_fields(user_from_db):
-    if 'company' in user_from_db:
-        company_id = user_from_db['company']
+    if "company" in user_from_db:
+        company_id = user_from_db["company"]
         company = db.get_company(company_id)
         print(company_id)
         if company:
