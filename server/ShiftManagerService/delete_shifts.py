@@ -32,11 +32,11 @@ def delete_shifts(user_input):
 
 def delete_shift(company_id, shift_id):
     # delete relevant swaps
-    db.companies_collection.update_one({"_id": company_id}, {"$pull": {"shifts_swaps": {"shift_id": shift_id}}})
+    db.delete_shift_swap_by_shift_id(company_id, shift_id)
+
     # delete the shift
-    db.companies_collection.update_one({"_id": company_id}, {"$pull": {"shifts": {"id": shift_id}}})
+    db.delete_shift(company_id, shift_id)
 
 def is_shift_exist(company_id, shift_id):
-    doc = db.companies_collection.find_one({"_id": company_id},
-                                        {"shifts": {"$elemMatch": {"id": shift_id}}, "shifts.employees": 1})
+    doc = db.get_shift_employee(company_id, shift_id)
     return "shifts" in doc

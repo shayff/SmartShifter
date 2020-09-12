@@ -1,7 +1,6 @@
 from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from pymongo import MongoClient, ReturnDocument
 from .schemas.askshiftswap import validate_askShiftSwap
 from datetime import datetime
 
@@ -10,34 +9,31 @@ def doAskShiftSwap(user_input):
     if data["ok"]:
         data = data['data']
         logged_in_user = get_jwt_identity()
-        result = db.users_collection.find_one({"_id": logged_in_user["_id"]})
+        user_from_db = db.get_user(logged_in_user["_id"])
 
         #check if user has company
-        if "company" in result:
-            company_id = result["company"]
+        if "company" in user_from_db:
+            company_id = user_from_db["company"]
 
             # update shifts_swaps id
-            doc = db.companies_collection.find_one_and_update({"_id": company_id}, {'$inc': {'shifts_swaps_counter': 1}},
-                                                           return_document=ReturnDocument.AFTER)
+            doc = db.inc_shifts_swaps_counter(company_id)
 
             #Check if the user is assigned to this shift
-            shifts = doc['shifts']
-            shift = [x for x in shifts if x["id"]==data['shift_id']]
-            if logged_in_user["_id"] not in shift[0]['employees']:
+            shifts = doc["shifts"]
+            shift = [x for x in shifts if x["id"] == data["shift_id"]]
+            if logged_in_user["_id"] not in shift[0]["employees"]:
                 return jsonify({"ok": False, "msg": "wrong shift id, You're not in this shift"}), 401
 
             prepare_shift_swap(data, doc, logged_in_user)
 
             # insert to db
-            db.companies_collection.find_one_and_update({"_id": company_id}, {'$push': {'shifts_swaps': data}})
+            db.insert_shift_swap(company_id, data)
             return jsonify({"ok": True, "msg": 'Created shift swap request successfully'}), 200
         else:
             return jsonify({"ok": False, "msg": 'User don\'t have company'}), 401
 
             #update shift
-            print(data['shift_id'])
-
-            company = db.companies_collection.find_one({"_id": company_id},{'shifts':1})
+            company = db.get_company_shift()
 
             for x in company['shifts']:
                 if data['shift_id'] == x["id"]:

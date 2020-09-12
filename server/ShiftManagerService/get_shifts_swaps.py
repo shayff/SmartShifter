@@ -3,13 +3,16 @@ from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 
 def get_shifts_swaps(statuses):
+    '''
+    This method return the shifts swaps of company
+    '''
 
     # if we didn't get statuses we fillter by all
     if not statuses:
         statuses = ["confirmed","wait_for_swap","wait_for_confirm"]
 
     logged_in_user = get_jwt_identity()
-    user_from_db = db.users_collection.find_one({"_id": logged_in_user["_id"]})
+    user_from_db = db.get_user(logged_in_user["_id"])
 
     # check if user has company
     if "company" in user_from_db:

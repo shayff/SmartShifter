@@ -4,11 +4,12 @@ from flask_jwt_extended import get_jwt_identity
 from server.ShiftManagerService.schemas.updateshift import validate_updateshift
 
 def update_shift(user_input):
+    '''
+    This method update relevant shift
+    '''
     data = validate_updateshift(user_input)
     if data["ok"]:
         shift_to_update = data["data"]
-
-        #check if user has company
         logged_in_user = get_jwt_identity()
         user_from_db = db.get_user(logged_in_user["_id"])
 
@@ -17,9 +18,7 @@ def update_shift(user_input):
 
             # find the relevant shift in db
             shift_id = shift_to_update["id"]
-            shift_from_db = db.companies_collection.find_one({"_id": company_id},
-                                                {"shifts": {"$elemMatch": {"id": shift_id}}})
-            shift = shift_from_db["shifts"][0]
+            shift = db.get_shift(copany_id, shift_id)
 
             # update only the field that we need to update
             for key, value in shift.items():
@@ -34,4 +33,3 @@ def update_shift(user_input):
             return jsonify({"ok": False, "msg": "User has no company"}), 401
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
-

@@ -6,6 +6,9 @@ from .BL.ShiftData import ShiftData
 from .schemas.getshifts import validate_GetShifts
 
 def get_shifts(user_input):
+    '''
+    This method return the shifts of company
+    '''
     data = validate_GetShifts(user_input)
     if data["ok"]:
         data = data["data"]
@@ -43,7 +46,7 @@ def get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, user_id
         if shift and shift["date"] >= data["start_date"] and shift["date"] <= data["end_date"]:
             add_is_asked_swap_field(shift,company_id,user_id)
 
-            # For each employee id we get from DB the name and appened to the employees array of the shift
+            # for each employee id we get from DB the name and appened to the employees array of the shift
             add_full_data_of_employees_to_shifts(shift["employees"], shift, shift_data)
 
             # add the shift to our dict

@@ -14,6 +14,8 @@ class Mongo_db:
         self.counters_collection = db["counters"]
         self.messages_collection = db["messages"]
 
+
+
     def get_user(self, user_id):
         return self.users_collection.find_one({"_id": user_id})
 
@@ -23,6 +25,9 @@ class Mongo_db:
     def get_company(self, company_id):
         return self.companies_collection.find_one({"_id": company_id})
 
+    def get_company_shift(self, company_id):
+        return self.companies_collection.find_one({"_id": company_id},{'shifts':1})
+
     def update_shift(self, company_id, shift_id, shift_data):
         return self.companies_collection.update_one({"_id": company_id, 'shifts.id': shift_id},
                                                     {'$set': {'shifts.$': shift_data}})
@@ -31,6 +36,10 @@ class Mongo_db:
         doc = self.companies_collection.find_one_and_update({"_id": company_id}, {'$inc': {'shifts_counter': 1}},
                                                            return_document=ReturnDocument.AFTER)
         return doc['shifts_counter']
+
+    def inc_shifts_swaps_counter(self, company_id):
+        return self.companies_collection.find_one_and_update({"_id": company_id}, {'$inc': {'shifts_swaps_counter': 1}},
+                                                           return_document=ReturnDocument.AFTER)
 
     def insert_shift(self, company_id, new_shift):
         return self.companies_collection.find_one_and_update({"_id": company_id}, {'$push': {'shifts': new_shift}})
@@ -65,9 +74,28 @@ class Mongo_db:
         return self.companies_collection.update({"_id": company_id, 'shifts_swaps.id': swap_id},
                                                 {'$set': {'shifts_swaps.$.status': new_status}})
 
-    def remove_shift_swap(self, company_id, swap_id):
-        return self.companies_collection.update_one({"_id": company_id},{"$pull": {"shifts_swaps": {"id": swap_id}}})
-
     def get_shift(self, company_id, shift_id):
         doc = self.companies_collection.find_one({"_id": company_id}, {"shifts": {"$elemMatch": {"id": shift_id}}})
         return doc["shifts"][0]
+
+    def update_employee_and_status_in_shift(self, company_id, shift_id, employees, status):
+        return self.companies_collection.update_one({"_id": company_id, "shifts.id": shift_id},
+                                                {"$set": {"shifts.$.employees": employees, "shifts.$.status": status}})
+
+    def delete_shift_swap_by_shift_id(self, company_id, shift_id):
+        return self.companies_collection.update_one({"_id": company_id},
+                                                    {"$pull": {"shifts_swaps": {"shift_id": shift_id}}})
+
+    def delete_shift_swap(self, company_id, swap_id):
+        return self.companies_collection.update_one({"_id": company_id},{"$pull": {"shifts_swaps": {"id": swap_id}}})
+
+
+    def delete_shift(self, company_id, shift_id):
+        return self.companies_collection.update_one({"_id": company_id}, {"$pull": {"shifts": {"id": shift_id}}})
+
+    def get_shift_employee(self, company_id, shift_id):
+        return self.companies_collection.find_one({"_id": company_id},
+                                        {"shifts": {"$elemMatch": {"id": shift_id}}, "shifts.employees": 1})
+
+    def insert_shift_swap(self, company_id, shift_swap):
+        return self.companies_collection.find_one_and_update({"_id": company_id}, {'$push': {'shifts_swaps': shift_swap}})
