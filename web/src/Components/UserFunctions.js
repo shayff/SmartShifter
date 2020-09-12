@@ -269,7 +269,7 @@ export const getShifts = date => {
                 "start_date": date.start_date, 
                 "end_date": date.end_date,
                 "statuses": date.statuses
-        },    
+        },  
         headers:
         {
             Authorization: "Bearer " + localStorage.usertoken
@@ -287,7 +287,7 @@ export const approveSwitches = data => {
     return axios
         .post("http://localhost:5002/api/v1/shifts_swaps/confirm",{
         "swap_id": data.swapId,
-        "status": data.status
+        "statuses": data.status
         },
         {
             headers: {

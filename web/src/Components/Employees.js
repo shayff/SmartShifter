@@ -10,20 +10,88 @@ class Employees extends Component {
         super()
         this.state = { empArry: [],
             company_name:'',
-            filter: [],
-            companyJobTypes:[]
+            jobTypeFilter: [],
+            companyJobTypes:[],
+            isEmployeeFilterAllChosen: true,
+            employeeFilterViewOptions: [{key:'All' ,value: 'All'}],
+            employeeFilter: [{key:'All' ,value: 'All'}]
         }
 
         this.onSelectOrRemoveJobTypes = this.onSelectOrRemoveJobTypes.bind(this)
+        this.onSelectOrRemoveEmployee = this.onSelectOrRemoveEmployee.bind(this)
     }
 
-    filterEmployees(employees,optionsFilter)
+    isAllOptionInArray(array)
+    {
+        for(let i = 0; i<array.length; i++)
+        {
+            if(array[i].key === 'All')
+            {
+                return true;
+            }
+        }
+
+        return false
+    }
+
+    initializeEmployeeOptions = () => { 
+        let employeeOptions = [{key:'All' ,value: 'All'}];
+        this.state.empArry.map((employee) => (
+        employeeOptions.push({key:employee["_id"] ,value: employee["first_name"] + ' ' + employee["last_name"] ,cat: employee["job_type"]})
+        ));
+        return employeeOptions;
+    }
+
+    onSelectOrRemoveEmployee(selectedList) 
+    {
+        let newFilter=[];
+        let isAllChosen;
+        let showView;
+
+        if(this.isAllOptionInArray(selectedList))
+        {
+            for(let i=0; i<this.state.empArry.length; i++)
+            {
+                newFilter.push(parseInt(this.state.empArry[i]["_id"]))
+            }
+
+            isAllChosen = true;
+            showView = [{key:'All' ,value: 'All'}];
+        }
+        else
+        {
+            for(let i=0; i<selectedList.length; i++)
+            {
+                newFilter.push(parseInt(selectedList[i].key))
+            }
+
+            isAllChosen = false;
+            showView = selectedList;
+        }
+        
+        this.setState({employeeFilter: newFilter,
+                       employeeFilterViewOptions: showView,
+                       isEmployeeFilterAllChosen: isAllChosen}, () => this.initializeTable(this.state.messages,this.state.jobTypeFilter,this.state.employeeFilter));
+    }
+
+    filterEmployees(employees,jobTypeFilter,employeeFilter)
     {
         let employeesFilterd = [];
         employeesFilterd = employees.filter((employee) => { 
-            for(let i=0 ; i<optionsFilter.length; i++)
+            if(this.isAllOptionInArray(employeeFilter))
             {
-                if(employee["job_type"].indexOf(optionsFilter[i])>-1)
+                return true;
+            }
+            for(let i=0 ; i<employeeFilter.length; i++)
+            {
+                if(employee['_id'] === employeeFilter[i])
+                {
+                    return true;
+                }
+            }
+            for(let i=0 ; i<jobTypeFilter.length; i++)
+            {
+                if(employee["job_type"].indexOf(jobTypeFilter[i])>-1)
                 {
                     return true;
                 }
@@ -35,11 +103,11 @@ class Employees extends Component {
         return employeesFilterd;
     }
 
-    initializeTable = (employees,optionsFilter) => 
+    initializeTable = (employees,jobTypeFilter,employeeFilter) => 
     {
         if(employees)
         {
-            let employeesFilterd = this.filterEmployees(employees,optionsFilter);
+            let employeesFilterd = this.filterEmployees(employees,jobTypeFilter,employeeFilter);
             
          return employeesFilterd.map((employee,index) => (
             <tr key = {index} className="text-center">
@@ -119,7 +187,7 @@ class Employees extends Component {
         {
             newFilter.push(selectedList[i].value)
         }
-        this.setState({filter: newFilter},() => this.initializeTable(this.state.empArry,this.state.filter));
+        this.setState({jobTypeFilter: newFilter},() => this.initializeTable(this.state.empArry,this.state.jobTypeFilter,this.state.employeeFilter));
     }
 
     onRemoveEmployee(employee) {     
@@ -149,7 +217,7 @@ class Employees extends Component {
                 {
                     this.setState({company_name: data["company_name"],
                                    companyJobTypes: data["roles"],
-                                   filter: data["roles"]});
+                                   jobTypeFilter: data["roles"]});
                 }
             }
         });
@@ -185,9 +253,26 @@ class Employees extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.initializeTable(this.state.empArry,this.state.filter)}
+                            {this.initializeTable(this.state.empArry,this.state.jobTypeFilter,this.state.employeeFilter)}
                         </tbody>
                         </table>
+                        <div>
+                            <label htmlFor="employee_filter"> Filter By Employee </label>   
+                            <Multiselect
+                            id='employee_filterFilter'
+                            options= {this.initializeEmployeeOptions()}
+                            selectedValues={this.state.employeeFilterViewOptions}
+                            selectionLimit={this.state.isemployeeFilterAllChosen === true ? '1' : null}
+                            style={{searchBox: {background: 'white'}}}
+                            displayValue="value"
+                            groupBy="cat"
+                            closeIcon="cancel"
+                            placeholder="Choose Employee"
+                            avoidHighlightFirstOption= {true}
+                            hidePlaceholder={true}
+                            onSelect={this.onSelectOrRemoveEmployee}
+                            onRemove={this.onSelectOrRemoveEmployee}/>
+                        </div>
                         <div>
                             <label htmlFor="job_type_filter">Filter By Job Type</label>   
                             <Multiselect
