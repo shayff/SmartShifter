@@ -292,7 +292,7 @@ export const approveSwitches = data => {
     return axios
         .post("http://localhost:5002/api/v1/shifts_swaps/confirm",{
         "swap_id": data.swapId,
-        "statuses": data.status
+        "status": data.status
         },
         {
             headers: {

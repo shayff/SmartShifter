@@ -105,7 +105,7 @@ class Navbar extends Component {
                         Edit Preferences
                     </Link>
                     <Link to="/generateShifts" className="dropdown-item">
-                        Generate Shifts
+                        Shifts Editor
                     </Link>
                     </div>
                 </li>

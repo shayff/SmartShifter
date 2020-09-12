@@ -140,7 +140,7 @@ class Shifts extends Component {
                                 Edit Employee Preference
                 </button>   
                 <button type="button" className="btn btn-lg btn-primary btn-block"  onClick={() => this.onGenerateShifts(`/generateShifts`)}>
-                                Update And Build Shifts
+                                Shifts Editor
                 </button> 
             </div>
         )
