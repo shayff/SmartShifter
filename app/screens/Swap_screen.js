@@ -25,8 +25,13 @@ export default class Switching_shifts extends Component {
         let toSend = {"statuses" : ["wait_for_swap","wait_for_confirm"]}
 
         let token = await AsyncStorage.getItem('token');
-        const response = await shiftManager_server.get('api/v1/shifts_swaps?statuses=wait_for_confirm&statuses=wait_for_swap', {    //post('/GetShiftsSwaps',toSend, { //get('/api/v1/shifts_swaps', toSend,{
-          headers: {
+        const response = await shiftManager_server.get('api/v1/shifts_swaps', {
+            params: toSend,
+            paramsSerializer: function(params) {
+                const qs = require('qs');
+                return qs.stringify(params, {arrayFormat: 'repeat'})
+            },  
+            headers: {
               Authorization: "Bearer " + token
           }
         }).then(response => {

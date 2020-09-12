@@ -133,15 +133,19 @@ formatDay = (date) =>
     let toSent = {
       "start_date": minDateShift,
       "end_date": maxDateShift,
-    //  "statuses": ["scheduled"]
+      "statuses": ["scheduled"]
     }
 
     let token = await AsyncStorage.getItem('token');
     let _id = await AsyncStorage.getItem('_id');
     
-    let ShiftMonth = await meneger_server.get('/api/v1/shifts?statuses=scheduled',//post('/GetShifts',//get('/api/v1/shifts', //post('/GetShifts',
+    let ShiftMonth = await meneger_server.get('/api/v1/shifts',
      {
           params: toSent,
+          paramsSerializer: function(params) {
+            const qs = require('qs');
+            return qs.stringify(params, {arrayFormat: 'repeat'})
+        },
           headers: {
               Authorization: "Bearer " + token
           }
