@@ -12,17 +12,17 @@ class ShowGeneratedShifts extends Component {
         this.state = {
             dataBuildShifts:{},
             arrBuildShifts:[],
-            sunday:moment().day(7),
-            monday:moment().day(8),
-            tuesday:moment().day(9),
-            wednesday:moment().day(10),
-            thursday:moment().day(11),
-            friday:moment().day(12),
-            saturday:moment().day(13),
+            sunday:moment().day(0),
+            monday:moment().day(1),
+            tuesday:moment().day(2),
+            wednesday:moment().day(3),
+            thursday:moment().day(4),
+            friday:moment().day(5),
+            saturday:moment().day(6),
             success_percentage:0
         }
     }
-     
+
     componentWillUnmount() 
     {
         this._isMounted = false;
@@ -31,17 +31,40 @@ class ShowGeneratedShifts extends Component {
     componentDidMount()
     {
         this._isMounted = true;
-        const minDate = moment().day(7).format('YYYY-MM-DD');
-        const maxDate = moment().day(13).format('YYYY-MM-DD');
+        const currentWeek = this.props.location.state.currentWeek;
+
+        if(this._isMounted)
+        {
+            if(currentWeek)
+            {
+                this.initializeShifts();
+            }
+            else
+            {
+                this.setState({ sunday:moment().day(7),
+                                monday:moment().day(8),
+                                tuesday:moment().day(9),
+                                wednesday:moment().day(10),
+                                thursday:moment().day(11),
+                                friday:moment().day(12),
+                                saturday:moment().day(13)},() => this.initializeShifts());
+            }
+        }
+    };
+
+    initializeShifts()
+    {
         const buildedShifts = this.props.location.state.detail.full_data;
-        
+        const minDate = this.state.sunday.format('YYYY-MM-DD');
+        const maxDate = this.state.saturday.format('YYYY-MM-DD');
+
         if(buildedShifts)
         {
             let parserShifts = [];
             this.parseShifts(buildedShifts,parserShifts,minDate,maxDate);
             if(parserShifts.length !== 0)
             {
-                if (this._isMounted)
+                if(this._isMounted)
                 {
                     this.setState({ arrBuildShifts: parserShifts,
                                     dataBuildShifts: this.props.location.state.detail.data,
@@ -53,7 +76,7 @@ class ShowGeneratedShifts extends Component {
                 alert("The Algorithm Could Not Build The Requested Shifts ")
             }
         }
-    };
+    }
 
     parseShifts(shifts,parserShifts,minDate,maxDate)
     {

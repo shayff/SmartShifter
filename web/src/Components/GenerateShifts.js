@@ -331,7 +331,7 @@ class GenerateShifts extends Component {
         buildShifts(dates).then(buildedShifts => {
             if(buildedShifts.data)
             {
-                this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts})
+                this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts, currentWeek:this.state.isCurrentWeek})
             }
             else
             {

@@ -14,9 +14,6 @@ class EditPreferences extends Component {
          thursday:moment().day(11),
          friday:moment().day(12),
          saturday:moment().day(13),
-         // isCurrentWeek: false,
-         // nextDisabled: true,
-         // previousDisabled: false
       }
 
       this.onSubmit = this.onSubmit.bind(this)
@@ -52,43 +49,6 @@ class EditPreferences extends Component {
          return null
       });
     }
-
-   //  onClickNextWeek()
-   //  {
-   //      if(this.state.isCurrentWeek)
-   //      {
-   //          this.setState({
-   //              sunday: moment(this.state.sunday, "YYYY-MM-DD").add(7, 'days'),
-   //              monday: moment(this.state.monday, "YYYY-MM-DD").add(7, 'days'),
-   //              tuesday: moment(this.state.tuesday, "YYYY-MM-DD").add(7, 'days'),
-   //              wednesday: moment(this.state.wednesday, "YYYY-MM-DD").add(7, 'days'),
-   //              thursday: moment(this.state.thursday, "YYYY-MM-DD").add(7, 'days'),
-   //              friday: moment(this.state.friday, "YYYY-MM-DD").add(7, 'days'),
-   //              saturday: moment(this.state.saturday, "YYYY-MM-DD").add(7, 'days'),
-   //              nextDisabled: true,
-   //              previousDisabled: false,
-   //              isCurrentWeek: false
-   //          });
-   //      }
-   //  }
-
-   //  onClickPreviousWeek(){
-   //     if(!this.state.isCurrentWeek)
-   //      {
-   //          this.setState({
-   //              sunday:moment(this.state.sunday, "YYYY-MM-DD").add(-7, 'days'),
-   //              monday:moment(this.state.monday, "YYYY-MM-DD").add(-7, 'days'),
-   //              tuesday:moment(this.state.tuesday, "YYYY-MM-DD").add(-7, 'days'),
-   //              wednesday:moment(this.state.wednesday, "YYYY-MM-DD").add(-7, 'days'),
-   //              thursday:moment(this.state.thursday, "YYYY-MM-DD").add(-7, 'days'),
-   //              friday:moment(this.state.friday, "YYYY-MM-DD").add(-7, 'days'),
-   //              saturday:moment(this.state.saturday, "YYYY-MM-DD").add(-7, 'days'),
-   //              nextDisabled: false,
-   //              previousDisabled: true,
-   //              isCurrentWeek: true
-   //          });
-   //      }
-   //  }
     
     onSubmit (e) {
       e.preventDefault()
@@ -138,36 +98,64 @@ class EditPreferences extends Component {
 
   parsePreferences(preferences,shifts)
   {
-   switch(preferences)
-   {
-      case 'M1':shifts.sunday.preference.push(0); break;  
-      case 'M2':shifts.monday.preference.push(0); break;  
-      case 'M3':shifts.tuesday.preference.push(0); break;  
-      case 'M4':shifts.wednesday.preference.push(0); break;  
-      case 'M5':shifts.thursday.preference.push(0); break;  
-      case 'M6':shifts.friday.preference.push(0); break;  
-      case 'M7':shifts.saturday.preference.push(0); break;  
-      case 'A1':shifts.sunday.preference.push(1);  break;  
-      case 'A2':shifts.monday.preference.push(1); break;  
-      case 'A3':shifts.tuesday.preference.push(1); break;  
-      case 'A4':shifts.wednesday.preference.push(1); break;  
-      case 'A5':shifts.thursday.preference.push(1); break;  
-      case 'A6':shifts.friday.preference.push(1); break;  
-      case 'A7':shifts.saturday.preference.push(1); break;  
-      case 'E1':shifts.sunday.preference.push(2);  break;  
-      case 'E2':shifts.monday.preference.push(2); break;  
-      case 'E3':shifts.tuesday.preference.push(2); break;  
-      case 'E4':shifts.wednesday.preference.push(2); break;  
-      case 'E5':shifts.thursday.preference.push(2); break;  
-      case 'E6':shifts.friday.preference.push(2); break;  
-      case 'E7':shifts.saturday.preference.push(2); break;  
-      default:;
-   }
+      switch(preferences)
+      {
+         case 'Morning1':shifts.sunday.preference.push(0); break;  
+         case 'Morning2':shifts.monday.preference.push(0); break;  
+         case 'Morning3':shifts.tuesday.preference.push(0); break;  
+         case 'Morning4':shifts.wednesday.preference.push(0); break;  
+         case 'Morning5':shifts.thursday.preference.push(0); break;  
+         case 'Morning6':shifts.friday.preference.push(0); break;  
+         case 'Morning7':shifts.saturday.preference.push(0); break;  
+         case 'Afternoon1':shifts.sunday.preference.push(1);  break;  
+         case 'Afternoon2':shifts.monday.preference.push(1); break;  
+         case 'Afternoon3':shifts.tuesday.preference.push(1); break;  
+         case 'Afternoon4':shifts.wednesday.preference.push(1); break;  
+         case 'Afternoon5':shifts.thursday.preference.push(1); break;  
+         case 'Afternoon6':shifts.friday.preference.push(1); break;  
+         case 'Afternoon7':shifts.saturday.preference.push(1); break;  
+         case 'Evening1':shifts.sunday.preference.push(2);  break;  
+         case 'Evening2':shifts.monday.preference.push(2); break;  
+         case 'Evening3':shifts.tuesday.preference.push(2); break;  
+         case 'Evening4':shifts.wednesday.preference.push(2); break;  
+         case 'Evening5':shifts.thursday.preference.push(2); break;  
+         case 'Evening6':shifts.friday.preference.push(2); break;  
+         case 'Evening7':shifts.saturday.preference.push(2); break;  
+         default:;
+      }
   }
 
-    render () {
-        let btn_class = "btn btn-lg btn-success btn-block btn2";
-        
+  initializeTable(dayPart)
+  {
+      let btn_class = "btn btn-lg btn-success btn-block btn2";
+
+      return(
+         <tr>
+         <th scope="row">
+            <button id={dayPart + "1"} type="button" className= {btn_class} onClick={() => this.onClickButton(dayPart + "1")}>{dayPart}</button>
+         </th>
+         <th scope="row">
+            <button id={dayPart + "2"} type="button" className={btn_class} onClick={() => this.onClickButton(dayPart + "2")}>{dayPart}</button>
+         </th>
+         <th scope="row">
+            <button id={dayPart + "3"} type="button" className={btn_class} onClick={() => this.onClickButton(dayPart + "3")}>{dayPart}</button>
+         </th>
+         <th scope="row">
+            <button id={dayPart + "4"} type="button" className={btn_class} onClick={() => this.onClickButton(dayPart + "4")}>{dayPart}</button>
+         </th>
+         <th scope="row">
+            <button id={dayPart + "5"} type="button" className={btn_class} onClick={() => this.onClickButton(dayPart + "5")}>{dayPart}</button>
+         </th>
+         <th scope="row">
+            <button id={dayPart + "6"} type="button" className={btn_class} onClick={() => this.onClickButton(dayPart + "6")}>{dayPart}</button>
+         </th>
+         <th scope="row">
+            <button id={dayPart + "7"} type="button" className={btn_class} onClick={() => this.onClickButton(dayPart + "7")}>{dayPart}</button>
+         </th>
+         </tr>);
+  }
+
+    render () {        
         return (
             <div className="container" style={{marginBottom: '30px'}}>
                 <form name="myForm8" onSubmit={this.onSubmit}>
@@ -175,27 +163,6 @@ class EditPreferences extends Component {
                     <div className="col-sm-8 mx-auto">
                          <h1 className="text-center">Employee Preferences</h1>                
                     </div><br/>
-                  {/* <table className="table table-borderless">
-                     <thead>                          
-                           <tr>    
-                           <th scope="col">
-                              <button type="button" id= "previous" className="btn btn-lg btn-primary btn-block" disabled={this.state.previousDisabled} onClick={() => this.onClickPreviousWeek()}>
-                                 Previous Week
-                              </button>
-                           </th>                     
-                           <th scope="col"></th>                     
-                           <th scope="col"></th>                     
-                           <th scope="col"></th>                     
-                           <th scope="col"></th>                     
-                           <th scope="col"></th>                     
-                           <th scope="col" >
-                              <button type="button" className="btn btn-lg btn-primary btn-block"  disabled={this.state.nextDisabled} onClick={() => this.onClickNextWeek()}>
-                                 Next Week
-                              </button>
-                           </th>                     
-                           </tr>
-                     </thead>
-                  </table> */}
                     <table className="table table-bordered ">
                         <thead className="thead-dark">                          
                             <tr>    
@@ -209,75 +176,9 @@ class EditPreferences extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                            <th scope="row">
-                               <button id="M1" type="button" className= {btn_class} onClick={() => this.onClickButton("M1")}>Morning</button>
-                            </th>
-                            <th scope="row">
-                               <button id="M2" type="button" className={btn_class} onClick={() => this.onClickButton("M2")}>Morning</button>
-                            </th>
-                            <th scope="row">
-                               <button id="M3" type="button" className={btn_class} onClick={() => this.onClickButton("M3")}>Morning</button>
-                            </th>
-                            <th scope="row">
-                               <button id="M4"  type="button" className={btn_class} onClick={() => this.onClickButton("M4")}>Morning</button>
-                            </th>
-                            <th scope="row">
-                               <button id="M5" type="button" className={btn_class} onClick={() => this.onClickButton("M5")}>Morning</button>
-                            </th>
-                            <th scope="row">
-                               <button id="M6" type="button" className={btn_class} onClick={() => this.onClickButton("M6")}>Morning</button>
-                            </th>
-                            <th scope="row">
-                               <button id="M7"  type="button" className={btn_class} onClick={() => this.onClickButton("M7")}>Morning</button>
-                            </th>
-                            </tr>
-                            <tr>
-                            <th scope="row">
-                               <button id="A1" type="button" className={btn_class} onClick={() => this.onClickButton("A1")}>Afternoon</button>
-                            </th>
-                            <th scope="row">
-                               <button id="A2" type="button" className={btn_class} onClick={() => this.onClickButton("A2")}>Afternoon</button>
-                            </th>
-                            <th scope="row">
-                               <button id="A3" type="button" className={btn_class} onClick={() => this.onClickButton("A3")}>Afternoon</button>
-                            </th>
-                            <th scope="row">
-                               <button id="A4" type="button" className={btn_class} onClick={() => this.onClickButton("A4")}>Afternoon</button>
-                            </th>
-                            <th scope="row">
-                               <button id="A5" type="button" className={btn_class} onClick={() => this.onClickButton("A5")}>Afternoon</button>
-                            </th>
-                            <th scope="row">
-                               <button id="A6" type="button" className={btn_class} onClick={() => this.onClickButton("A6")}>Afternoon</button>
-                            </th>
-                            <th scope="row">
-                               <button id="A7" type="button" className={btn_class} onClick={() => this.onClickButton("A7")}>Afternoon</button>
-                            </th>
-                            </tr>
-                            <tr>
-                            <th scope="row">
-                               <button id="E1" type="button" className={btn_class} onClick={() => this.onClickButton("E1")}>Evening</button>
-                            </th>
-                            <th scope="row">
-                               <button id="E2" type="button" className={btn_class} onClick={() => this.onClickButton("E2")}>Evening</button>
-                            </th>
-                            <th scope="row">
-                               <button id="E3" type="button" className={btn_class} onClick={() => this.onClickButton("E3")}>Evening</button>
-                            </th>                                                           
-                            <th scope="row">
-                               <button id="E4" type="button" className={btn_class} onClick={() => this.onClickButton("E4")}>Evening</button>
-                            </th>
-                            <th scope="row">
-                               <button id="E5" type="button" className={btn_class} onClick={() => this.onClickButton("E5")}>Evening</button>
-                            </th>
-                            <th scope="row">
-                               <button id="E6" type="button" className={btn_class} onClick={() => this.onClickButton("E6")}>Evening</button>
-                            </th>
-                            <th scope="row">
-                               <button id="E7" type="button" className={btn_class} onClick={() => this.onClickButton("E7")}>Evening</button>
-                            </th>
-                            </tr>
+                           {this.initializeTable('Morning')}
+                           {this.initializeTable('Afternoon')}
+                           {this.initializeTable('Evening')}
                         </tbody>
                         </table>
                 </div>

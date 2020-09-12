@@ -95,10 +95,11 @@ class AddEmployee extends Component {
             time_of_joining: moment().format(),
         }
 
-        if(this.validateRegisterForm()) {
-        addEmployee(user).then(res => {
-            this.props.history.push(`/employees`)
-        })}
+        if(this.validateRegisterForm()) 
+        {
+            addEmployee(user).then(res => {
+                this.props.history.push(`/employees`)})
+        }   
     }
 
     render () {
@@ -118,7 +119,7 @@ class AddEmployee extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="rank"> Rank </label>
+                                <label htmlFor="rank">Rank</label>
                                 <input type="number"
                                     min="1" 
                                     max="5"

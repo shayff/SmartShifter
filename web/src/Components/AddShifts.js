@@ -141,7 +141,6 @@ class AddShifts extends Component {
             validate = false;
         }
 
-
         return validate;
     }
 
