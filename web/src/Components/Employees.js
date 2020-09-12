@@ -79,24 +79,29 @@ class Employees extends Component {
         let employeesFilterd = [];
         employeesFilterd = employees.filter((employee) => { 
             if(this.isAllOptionInArray(employeeFilter))
-            {
-                return true;
-            }
-            for(let i=0 ; i<employeeFilter.length; i++)
-            {
-                if(employee['_id'] === employeeFilter[i])
+            { 
+                for(let i=0 ; i<jobTypeFilter.length; i++)
                 {
-                    return true;
+                    if(employee["job_type"].indexOf(jobTypeFilter[i])>-1)
+                    {
+                        return true;
+                    }
                 }
             }
-            for(let i=0 ; i<jobTypeFilter.length; i++)
+            else
             {
-                if(employee["job_type"].indexOf(jobTypeFilter[i])>-1)
+                for(let i=0 ; i<employeeFilter.length; i++)
                 {
-                    return true;
+                    for(let j=0 ; j<jobTypeFilter.length; j++)
+                    {
+                        if(employee['_id'] === employeeFilter[i] && employee["job_type"].indexOf(jobTypeFilter[j])>-1)
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
-
+          
             return false;
         });
 
@@ -262,7 +267,7 @@ class Employees extends Component {
                             id='employee_filterFilter'
                             options= {this.initializeEmployeeOptions()}
                             selectedValues={this.state.employeeFilterViewOptions}
-                            selectionLimit={this.state.isemployeeFilterAllChosen === true ? '1' : null}
+                            selectionLimit={this.state.isEmployeeFilterAllChosen === true ? '1' : null}
                             style={{searchBox: {background: 'white'}}}
                             displayValue="value"
                             groupBy="cat"
