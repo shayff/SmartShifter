@@ -4,7 +4,7 @@ from flask import jsonify
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from .BL.BuildShiftLogic import buildshiftclass
+from .BL.BuildShiftLogic import build_shift_class
 from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
 from .BL.ShiftData import ShiftData
 from .schemas.buildshift import validate_buildShift
@@ -41,7 +41,7 @@ def doBuildShift(user_input):
                 update_pre_scheduled(list_of_shifts, data)
 
             list_of_employees = get_list_of_employees(company_id)
-            shifts = buildshiftclass(list_of_shifts,list_of_employees,dates)
+            shifts = build_shift_class(list_of_shifts, list_of_employees, dates)
             scheduled_shifts = shifts.buildShift()
 
             #Add the employees that already work to the data

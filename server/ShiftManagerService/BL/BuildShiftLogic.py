@@ -6,8 +6,7 @@ rank_of_prefer = 14
 rank_of_available = 11
 rank_of_not = 0
 
-
-class buildshiftclass:
+class build_shift_class:
     def __init__(self,list_of_shifts,list_of_employees,dates):
         self.list_of_employees = list_of_employees
         self.list_of_shifts = list_of_shifts
@@ -15,12 +14,13 @@ class buildshiftclass:
 
     def buildShift(self):
         scheduled_shifts = dict()
+
+        # for each date we loop through each job and run the algorithem
         for date in self.dates:
+
             # get the employess and shift that relevant for current date
-            # Possible to improve by get the list all shift once and filter it each time
             list_of_shifts_by_date = self.get_list_of_shifts(date)
             list_of_employees_by_date = self.get_list_of_employees(date)
-
 
             # check if there is atleast 1 employe and 1 shift
             if list_of_shifts_by_date and list_of_employees_by_date:
@@ -28,26 +28,27 @@ class buildshiftclass:
                 # run alogrithem for each job
                 jobs_list = self.get_list_of_jobs(list_of_shifts_by_date)
                 for job in jobs_list:
-                    listOfShifts = self.filterShiftsByJob(list_of_shifts_by_date, job)
-                    listOfEmployees = self.filterEmployeesByJob(list_of_employees_by_date, job)
-                    if listOfShifts and listOfEmployees:
+
+                    # filter data by job
+                    list_of_shifts_by_job = self.filterShiftsByJob(list_of_shifts_by_date, job)
+                    list_of_employees_by_job = self.filterEmployeesByJob(list_of_employees_by_date, job)
+
+                    # check if there is atleast 1 employe and 1 shift
+                    if list_of_shifts_by_job and list_of_employees_by_job:
                         # build rank matrix
-                        rank_matrix = self.build_rank_matrix(date, listOfShifts, listOfEmployees)
+                        rank_matrix = self.build_rank_matrix(date, list_of_shifts_by_job, list_of_employees_by_job)
 
                         # Run the hungarian algorithm
                         hungarian = Hungarian(rank_matrix, is_profit_matrix=True)
                         hungarian.calculate()
 
                         for employee, shift in hungarian.get_results():
-                            shift_id = listOfShifts[shift]["id"]
-                            employee_id = listOfEmployees[employee]["id"]
+                            shift_id = list_of_shifts_by_job[shift]["id"]
+                            employee_id = list_of_employees_by_job[employee]["id"]
                             print("worker:", employee_id, "scheduled for shift: ", shift_id)
 
                             # add the employe shifted to the scheduled_shifts dict
-                            if shift_id in scheduled_shifts:
-                                scheduled_shifts[shift_id].append(employee_id)
-                            else:
-                                scheduled_shifts[shift_id] = [employee_id]
+                            self.add_to_scheduled_shifts_dict(employee_id, scheduled_shifts, shift_id)
 
                     # add the other shifts (still need to emlpoyees who didn't scheduled
 
@@ -55,15 +56,18 @@ class buildshiftclass:
                 for shift in list_of_shifts_by_date:
                     if shift["id"] not in scheduled_shifts:
                         scheduled_shifts[shift["id"]] = []
-                #print("$")
-                #hungarian_potential = get_hungarian_potential(hungarian)
 
-                #print("$")
                 if hungarian:
                     print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
                     print("-" * 60)
                 #hungarian = None
         return scheduled_shifts
+
+    def add_to_scheduled_shifts_dict(self, employee_id, scheduled_shifts, shift_id):
+        if shift_id in scheduled_shifts:
+            scheduled_shifts[shift_id].append(employee_id)
+        else:
+            scheduled_shifts[shift_id] = [employee_id]
 
     # get list of shifts
     def get_list_of_shifts(self, date):
