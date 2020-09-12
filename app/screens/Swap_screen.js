@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { ActivityIndicator,AsyncStorage,View, FlatList, StyleSheet, Text} from 'react-native';
+import { ActivityIndicator,Alert,AsyncStorage,View, FlatList, StyleSheet, Text} from 'react-native';
 import SwapSingle from '../component/Swap_shift/SwapSingle';
 import shiftManager_server from '../networking/shiftManager_server';
 
@@ -25,7 +25,7 @@ export default class Switching_shifts extends Component {
         let toSend = {"statuses" : ["wait_for_swap","wait_for_confirm"]}
 
         let token = await AsyncStorage.getItem('token');
-        const response = await shiftManager_server.post('/GetShiftsSwaps',toSend, { ///get('/api/v1/shifts_swaps', {params:{"statuses" : ["wait_for_confirm"]},     //post('/GetShiftsSwaps',toSend, { //get('/api/v1/shifts_swaps', toSend,{
+        const response = await shiftManager_server.get('api/v1/shifts_swaps?statuses=wait_for_confirm&statuses=wait_for_swap', {    //post('/GetShiftsSwaps',toSend, { //get('/api/v1/shifts_swaps', toSend,{
           headers: {
               Authorization: "Bearer " + token
           }
@@ -41,8 +41,8 @@ export default class Switching_shifts extends Component {
         }
         return  response.data;
         }).catch(err => {
-        Alert.alert("something get wrong, please try again");
-        this.props.navigation.goBack(null);
+            Alert.alert("something get wrong, please try again");
+            this.props.navigation.goBack(null);
         });
 
         this.setState({massegesData:response});
