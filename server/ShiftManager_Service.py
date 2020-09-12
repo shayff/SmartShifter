@@ -8,14 +8,13 @@ from server.ShiftManagerService.BuildShift import build_shift
 from server.ShiftManagerService.create_shift_swap import doAskShiftSwap
 from server.ShiftManagerService.can_swap_shift import can_swap_shift
 from server.ShiftManagerService.confirm_swap import confirm_shift_swap
-from server.ShiftManagerService.get_shifts import doGetShifts
+from server.ShiftManagerService.get_shifts import get_shifts
 from server.ShiftManagerService.set_shifts_schedule import set_shifts_schedule
-from server.ShiftManagerService.get_shifts_swaps import doGetShiftsSwaps
+from server.ShiftManagerService.get_shifts_swaps import get_shifts_swaps
 from server.ShiftManagerService.delete_shift_swap import delete_shift_swap
 from server.ShiftManagerService.update_shift import update_shift
 from server.ShiftManagerService.delete_shifts import delete_shifts
 from server.ShiftManagerService.create_shift import create_shift
-
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -29,7 +28,6 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 app = Flask(__name__)
-
 cors = CORS(app)
 app.config['SECRET_KEY'] = FlaskConfig["SECRET_KEY"]
 app.config['JWT_SECRET_KEY'] = FlaskConfig["JWT_SECRET_KEY"]
@@ -82,7 +80,7 @@ def ConfirmShiftSwap():
 @jwt_required
 def GetShiftsSwaps():
     statuses = request.args.getlist("statuses")
-    return doGetShiftsSwaps(statuses)
+    return get_shifts_swaps(statuses)
 
 @app.route("/api/v1/shift", methods=['PUT'])
 @jwt_required
@@ -102,13 +100,8 @@ def DeleteShift():
 @app.route("/api/v1/shift_swap/<swap_id>", methods=['DELETE'])
 @jwt_required
 def DeleteShiftSwap(swap_id):
+    swap_id = int(swap_id)
     return delete_shift_swap(swap_id)
-
-#we need here parameters
-@app.route('/GetShifts', methods= ["POST"])
-@jwt_required
-def GetShifts2():
-    return doGetShifts(request.get_json())
 
 @app.route('/api/v1/shifts', methods= ['GET'])
 @jwt_required
@@ -118,7 +111,7 @@ def GetShifts():
         "end_date" : request.args.get("end_date"),
         "statuses" : request.args.getlist("statuses")
     }
-    return doGetShifts(data)
+    return get_shifts(data)
 
 #for dubg
 if __name__== '__main__':

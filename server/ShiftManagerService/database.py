@@ -17,6 +17,9 @@ class Mongo_db:
     def get_user(self, user_id):
         return self.users_collection.find_one({"_id": user_id})
 
+    def get_user_name(self, user_id):
+        return self.users_collection.find_one({"_id": user_id}, {"first_name", "last_name"})
+
     def get_company(self, company_id):
         return self.companies_collection.find_one({"_id": company_id})
 
@@ -31,9 +34,6 @@ class Mongo_db:
 
     def insert_shift(self, company_id, new_shift):
         return self.companies_collection.find_one_and_update({"_id": company_id}, {'$push': {'shifts': new_shift}})
-
-    def get_shift_swap(self, company_id, swap_id):
-        return self.companies_collection.find_one({"_id": company_id},{"shifts_swaps": {"$elemMatch": {"id": swap_id}}})
 
     def delete_prefence_of_company(self, company_id):
         return self.companies_collection.find_one_and_update({"_id": company_id},{'$set': {"prefence_from_manager" : []}})
@@ -64,3 +64,10 @@ class Mongo_db:
     def update_status_of_swap(self, company_id, swap_id, new_status):
         return self.companies_collection.update({"_id": company_id, 'shifts_swaps.id': swap_id},
                                                 {'$set': {'shifts_swaps.$.status': new_status}})
+
+    def remove_shift_swap(self, company_id, swap_id):
+        return self.companies_collection.update_one({"_id": company_id},{"$pull": {"shifts_swaps": {"id": swap_id}}})
+
+    def get_shift(self, company_id, shift_id):
+        doc = self.companies_collection.find_one({"_id": company_id}, {"shifts": {"$elemMatch": {"id": shift_id}}})
+        return doc["shifts"][0]

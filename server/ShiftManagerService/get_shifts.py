@@ -5,7 +5,7 @@ from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employee
 from .BL.ShiftData import ShiftData
 from .schemas.getshifts import validate_GetShifts
 
-def doGetShifts(user_input):
+def get_shifts(user_input):
     data = validate_GetShifts(user_input)
     if data["ok"]:
         data = data["data"]

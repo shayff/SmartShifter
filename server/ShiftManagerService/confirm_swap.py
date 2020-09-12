@@ -19,6 +19,7 @@ def confirm_shift_swap(user_input):
 
             # check if the shift swap exist
             shift_swap = db.get_shift_swap(company_id, data['swap_id'])
+
             if shift_swap:
                 shift_swap = shift_swap['shifts_swaps'][0]
                 if (shift_swap['status'] == 'wait_for_confirm'):
@@ -26,8 +27,6 @@ def confirm_shift_swap(user_input):
 
                         # search for the employees in the given shift
                         employees = db.get_employees_of_shift(company_id, shift_swap['shift_id'])
-                        #shifts = db.get_employees_of_shift(company_id, shift_swap['shift_id'])
-                        #employees = shifts['shifts'][0]['employees']
 
                         # switch the employees
                         employees = [shift_swap["id_employee_can"] if x==shift_swap["id_employee_ask"] else x for x in employees]

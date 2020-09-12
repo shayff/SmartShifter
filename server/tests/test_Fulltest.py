@@ -119,7 +119,7 @@ def create_users(fake,he_fake, num_of_users, users):
                              "phone": he_fake.phone_number().replace('-', ''),
                              "first_name": fake.first_name(),
                              "last_name": fake.last_name(),
-                             "address": fake.address(),
+                             "address": fake.street_name() + ", " + fake.city(),
                              "date_of_birth": fake.date()
                              }),
             content_type='application/json',
@@ -159,7 +159,7 @@ def create_company(fake, users):
                 },
             "roles" : ["waiter"]
         }),
-        content_type='application/json',
+        content_type="application/json",
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
@@ -170,34 +170,32 @@ def create_company(fake, users):
 def add_employees_to_company(num_of_users, users):
     for i in range(1, num_of_users):
         response = comp_app.test_client().post(
-            '/api/v1/company/employee',
-            headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
+            "/api/v1/company/employee",
+            headers={"Authorization": "Bearer {}".format(users[0]["token"])},
             data=json.dumps({
                         "email": users[i]["email"],
                         "rank": random.randint(1, 5),
                         "job_type": ["waiter"]
                                 }),
-            content_type='application/json',
+            content_type="application/json",
         )
         data = json.loads(response.get_data(as_text=True))
         assert response.status_code == 200
         assert data["ok"]
-
-
 
 def send_messages_to_employee(users):
     users_id = [user["id"] for user in users]
     users_id.pop(0)
 
     response = memb_app.test_client().post(
-        '/api/v1/message',
-        headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
+        "/api/v1/message",
+        headers={"Authorization": "Bearer {}".format(users[0]["token"])},
         data=json.dumps({
             "to" : {"employees": users_id},
             "title" : "wellcome to shifter",
             "message" : "Hope you will have fun from this test!"
         }),
-        content_type='application/json',
+        content_type="application/json",
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
@@ -206,8 +204,8 @@ def send_messages_to_employee(users):
 
 def set_prefence_from_manager(users, week):
     response = comp_app.test_client().post(
-        '/api/v1/company/preference/manager',
-        headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
+        "/api/v1/company/preference/manager",
+        headers={"Authorization": "Bearer {}".format(users[0]["token"])},
         data=json.dumps({
             "sunday":
                 {
@@ -239,7 +237,7 @@ def set_prefence_from_manager(users, week):
                 "preference": [0, 1, 2]
             }
         }),
-        content_type='application/json',
+        content_type="application/json",
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
@@ -256,15 +254,14 @@ def set_prefernce_from_workers(num_of_users, users, week):
                          "available": prefer[day]})
 
         response = comp_app.test_client().post(
-            '/api/v1/company/preference/employee',
-            headers={'Authorization': 'Bearer {}'.format(users[i]["token"])},
+            "/api/v1/company/preference/employee",
+            headers={"Authorization": "Bearer {}".format(users[i]["token"])},
             data=json.dumps({"preference": data}),
-            content_type='application/json',
+            content_type="application/json",
         )
         data = json.loads(response.get_data(as_text=True))
         assert response.status_code == 200
         assert data["ok"]
-
 
 def get_rand_prefers():
     available = [[],[],[],[],[],[],[]]
@@ -280,7 +277,6 @@ def get_rand_prefers():
             if (random.randint(1, 10) > 4):
                 prefer[day].append(array.pop())
     return available, prefer
-
 
 def rand_hours_for_shift():
     minutes = [0, 15, 30, 45]
@@ -307,27 +303,6 @@ def rand_hours_for_shift():
     return start, end, daypart
 
 def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelta'):
-    """Convert a datetime.timedelta object or a regular number to a custom-
-    formatted string, just like the stftime() method does for datetime.datetime
-    objects.
-
-    The fmt argument allows custom formatting to be specified.  Fields can
-    include seconds, minutes, hours, days, and weeks.  Each field is optional.
-
-    Some examples:
-        '{D:02}d {H:02}h {M:02}m {S:02}s' --> '05d 08h 04m 02s' (default)
-        '{W}w {D}d {H}:{M:02}:{S:02}'     --> '4w 5d 8:04:02'
-        '{D:2}d {H:2}:{M:02}:{S:02}'      --> ' 5d  8:04:02'
-        '{H}h {S}s'                       --> '72h 800s'
-
-    The inputtype argument allows tdelta to be a regular number instead of the
-    default, which is a datetime.timedelta object.  Valid inputtype strings:
-        's', 'seconds',
-        'm', 'minutes',
-        'h', 'hours',
-        'd', 'days',
-        'w', 'weeks'
-    """
 
     # Convert tdelta to integer seconds.
     if inputtype == 'timedelta':
