@@ -18,7 +18,7 @@ def update_shift(user_input):
 
             # find the relevant shift in db
             shift_id = shift_to_update["id"]
-            shift = db.get_shift(copany_id, shift_id)
+            shift = db.get_shift(company_id, shift_id)
 
             # update only the field that we need to update
             for key, value in shift.items():
