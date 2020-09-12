@@ -60,7 +60,6 @@ def buildShift():
     return doBuildShift(request.get_json())
 
 @app.route('/api/v1/shifts/set', methods=["POST"])
-@app.route('/SetShiftsSchedule', methods= ["POST"])
 @jwt_required
 def SetShiftsSchedule():
     return doSetShiftsSchedule(request.get_json())
@@ -122,7 +121,7 @@ def GetShifts():
     data = {
         "start_date" : request.args.get("start_date"),
         "end_date" : request.args.get("end_date"),
-        "statuses" : request.args.getlist("status")
+        "statuses" : request.args.getlist("statuses")
     }
     return doGetShifts(data)
 

@@ -20,7 +20,6 @@ def doRegister(user_input):
 
          # insert user to db
          db.insert_user(new_user)
-         print(new_user)
          return jsonify({"ok": True, "msg": "user registered successfully", "id": count_id}), 200
       else:
          return jsonify({"ok": False, "msg": 'User with email address or id number already exists'}), 409

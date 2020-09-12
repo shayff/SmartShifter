@@ -24,7 +24,7 @@ def can_swap_shift(userInput):
                                                                    'shifts_swaps.id': data['swap_id']},
                                                                    {'$set': {'shifts_swaps.$.id_employee_can': logged_in_user["_id"]}})
 
-                # Update status to 'wait_for_confirm'
+                # update status to 'wait_for_confirm'
                 doc = db.companies_collection.update({"_id": company_id, 'shifts_swaps.id': data['swap_id']},
                                                       {'$set': {'shifts_swaps.$.status': 'wait_for_confirm'}})
 

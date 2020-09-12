@@ -35,6 +35,9 @@ addshifts_schema = {
         },
         "note": {
             "type": "string"
+        },
+        "status": {
+            "type": "string"
         }
     },
     "required": ["name", "start_time", "end_time", "job_type",	"difficulty", "date", "amount", "day_part"],

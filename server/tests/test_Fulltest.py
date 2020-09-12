@@ -16,7 +16,7 @@ companies_collection = db["companies"]
 
 def test_Fulltest():
     #Settings
-    num_of_users = 10
+    num_of_users = 30
 
     #start_date = datetime.datetime(get_next_sunay())
     start_date = get_next_sunday()
@@ -116,7 +116,7 @@ def create_users(fake,he_fake, num_of_users, users):
             data=json.dumps({"email": user_email,
                              "password": "00000",
                              "id_number": str(random.randint(100000000, 999999999)),
-                             "phone": he_fake.phone_number(),
+                             "phone": he_fake.phone_number().replace('-', ''),
                              "first_name": fake.first_name(),
                              "last_name": fake.last_name(),
                              "address": fake.address(),

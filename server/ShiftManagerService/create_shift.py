@@ -1,7 +1,7 @@
 from server.ShiftManagerService import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from server.CompaniesService.schemas.addshifts import validate_create_shift
+from server.ShiftManagerService.schemas.create_shift import validate_create_shift
 
 def create_shift(user_input):
     data = validate_create_shift(user_input)
