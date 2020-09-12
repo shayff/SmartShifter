@@ -262,6 +262,7 @@ export const listOfEmployees = () => {
         })
 }
 
+
 export const getShifts = date => {
     return axios
         .get("http://localhost:5002/api/v1/shifts",{ 
@@ -269,6 +270,10 @@ export const getShifts = date => {
                 "start_date": date.start_date, 
                 "end_date": date.end_date,
                 "statuses": date.statuses
+        },
+        paramsSerializer: function(params) {
+            const qs = require('qs');
+            return qs.stringify(params, {arrayFormat: 'repeat'})
         },  
         headers:
         {
