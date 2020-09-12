@@ -91,19 +91,16 @@ def updateemployee():
     return update_employee(request.get_json())
 
 @app.route("/api/v1/company/preferences", methods=['GET'])
-@app.route("/companies/GetPreferences", methods=['GET'])
 @jwt_required
 def GetPreferences():
     return get_preferences()
 
 @app.route("/api/v1/company/preference/employee", methods=["POST"])
-@app.route("/companies/PrefenceFromWorker", methods=["POST"])
 @jwt_required
 def PrefenceFromWorker():
     return set_prefence_from_employee(request.get_json())
 
 @app.route("/api/v1/company/preference/manager", methods=["POST"])
-@app.route("/companies/PrefenceFromManager", methods=["POST"])
 @jwt_required
 def PrefenceFromManager():
     return set_prefence_from_manager(request.get_json())

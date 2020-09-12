@@ -5,11 +5,11 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from .BL.BuildShiftLogic import build_shift_class
-from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
+from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts, add_is_shift_full_field
 from .BL.ShiftData import ShiftData
 from .schemas.buildshift import validate_buildShift
 
-def doBuildShift(user_input):
+def build_shift(user_input):
     '''
     This method build the shift scheduled by all given prefernce and relevant data.
     '''
@@ -18,7 +18,8 @@ def doBuildShift(user_input):
     if data["ok"]:
         data = data['data']
 
-        count = 0
+        # init num of employee scheduled
+        count_of_employee_scheduled = 0
 
         # create list of dates we want to work with
         dates = create_list_of_dates(data)
@@ -41,34 +42,34 @@ def doBuildShift(user_input):
             shifts = build_shift_class(list_of_shifts, list_of_employees, dates)
             scheduled_shifts = shifts.buildShift()
 
-            #Add the employees that already work to the data
+            # add the employees that already work to the data
             add_employee_that_already_work(list_of_shifts, scheduled_shifts)
 
-            #Add Full_data information about shifts and employees
-            shift_Scheduled_to_display = dict()
+            # add Full_data information about shifts and employees
+            shift_scheduled_to_display = dict()
             print(scheduled_shifts)
             company = db.companies_collection.find_one({"_id": company_id})
             if(scheduled_shifts):
                 for shift_id in scheduled_shifts:
                     employees_id = scheduled_shifts[shift_id]
 
-                    #count how many employees scheduled
-                    count += len(employees_id)
+                    #count_of_employee_scheduled how many employees scheduled
+                    count_of_employee_scheduled += len(employees_id)
 
                     #find the shift details in the list_of_shifts
                     shift = next(x for x in list_of_shifts if x["id"] == shift_id)
 
                     add_full_data_of_employees_to_shifts(employees_id, shift, shift_data)
                     add_is_shift_full_field(shift)
-                    add_empty_shifts_by_date(shift, shift_Scheduled_to_display)
+                    add_empty_shifts_by_date(shift, shift_scheduled_to_display)
 
-            #sort the shifts
-            sort_shifts_by_start_time(shift_Scheduled_to_display)
+            # sort the shifts
+            sort_shifts_by_start_time(shift_scheduled_to_display)
 
-            #compute the success rate
-            success_rate = get_success_rate(count, total)
-            return jsonify({"ok": True, "msg": 'build shift', "success_rate": success_rate, 'data': scheduled_shifts,
-                            'full_data': shift_Scheduled_to_display}), 200
+            # compute the success rate
+            success_rate = get_success_rate(count_of_employee_scheduled, total)
+            return jsonify({"ok": True, "msg": "build shift", "success_rate": success_rate, "data": scheduled_shifts,
+                            'full_data': shift_scheduled_to_display}), 200
         else:
             return jsonify({"ok": False, "msg": 'User don\'t have company'}), 401
     else:
@@ -87,7 +88,6 @@ def get_success_rate(count, total):
     else:
         return int(count / total * 100)
 
-
 def add_empty_shifts_by_date(shift, shift_Scheduled_to_display):
     '''
     If there is shift we didn't scheduled this method will add it.
@@ -97,23 +97,12 @@ def add_empty_shifts_by_date(shift, shift_Scheduled_to_display):
     else:
         shift_Scheduled_to_display[shift['date']] = [shift]
 
-
 def add_employee_that_already_work(list_of_shifts, scheduled_shifts):
     for shift in list_of_shifts:
         if shift["id"] in scheduled_shifts:
             scheduled_shifts[shift["id"]] += (shift["employees"])
         else:
             scheduled_shifts[shift["id"]] = shift["employees"]
-
-def add_is_shift_full_field(shift):
-    '''
-    This method add check if shift is full and add this field
-    '''
-    if shift['amount'] == len(shift['employees']):
-        shift['is_shift_full'] = 'full'
-    else:
-        shift['is_shift_full'] = 'not_full'
-
 
 def get_list_of_shifts(company_id, dates):
     company = db.get_company(company_id)

@@ -4,10 +4,10 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 import datetime, json
 from bson.objectid import ObjectId
-from server.ShiftManagerService.BuildShift import doBuildShift
+from server.ShiftManagerService.BuildShift import build_shift
 from server.ShiftManagerService.create_shift_swap import doAskShiftSwap
 from server.ShiftManagerService.can_swap_shift import can_swap_shift
-from server.ShiftManagerService.confirm_swap import doConfirmShiftSwap
+from server.ShiftManagerService.confirm_swap import confirm_shift_swap
 from server.ShiftManagerService.get_shifts import doGetShifts
 from server.ShiftManagerService.set_shifts_schedule import set_shifts_schedule
 from server.ShiftManagerService.get_shifts_swaps import doGetShiftsSwaps
@@ -56,7 +56,7 @@ def check_if_token_in_blacklist(decrypted_token):
 @app.route('/api/v1/shifts/build', methods=["POST"])
 @jwt_required
 def buildShift():
-    return doBuildShift(request.get_json())
+    return build_shift(request.get_json())
 
 @app.route('/api/v1/shifts/set', methods=["POST"])
 @jwt_required
@@ -76,10 +76,9 @@ def CanShiftSwap():
 @app.route('/api/v1/shifts_swaps/confirm', methods= ["POST"])
 @jwt_required
 def ConfirmShiftSwap():
-    return doConfirmShiftSwap(request.get_json())
+    return confirm_shift_swap(request.get_json())
 
 @app.route('/api/v1/shifts_swaps', methods= ['GET'])
-@app.route('/GetShiftsSwaps', methods=["POST"])
 @jwt_required
 def GetShiftsSwaps():
     statuses = request.args.getlist("statuses")
@@ -124,5 +123,3 @@ def GetShifts():
 #for dubg
 if __name__== '__main__':
     app.run(debug=True, port=5002)
-
-

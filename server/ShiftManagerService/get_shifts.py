@@ -1,7 +1,7 @@
 from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts
+from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts, add_is_shift_full_field
 from .BL.ShiftData import ShiftData
 from .schemas.getshifts import validate_GetShifts
 
@@ -36,7 +36,6 @@ def doGetShifts(user_input):
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 
-
 def get_shift_by_dates(company_id, data, list_of_shifts, shiftScheduled, user_id):
     shift_data = ShiftData(company_id)
     for shift in list_of_shifts:
@@ -65,19 +64,10 @@ def filter_by_status(data, list_of_shifts):
         list_of_shifts = [x for x in list_of_shifts if x["status"] in statuses]
     return list_of_shifts
 
-def add_is_shift_full_field(shift):
-    '''
-    This method add check if shift is full and add this field
-    '''
-    if shift["amount"] == len(shift['employees']):
-        shift["is_shift_full"] = 'full'
-    else:
-        shift["is_shift_full"] = 'not_full'
 
 def add_is_asked_swap_field(shift,company_id, user_id):
     if user_id in shift["employees"]:
-        doc = db.companies_collection.find_one({"_id": company_id},{"shifts_swaps": {"$elemMatch": {"id_employee_ask": user_id, "shift_id": shift["id"]}}})
-        print(doc)
+        doc = db.get_shift_swap_by_shift_id(company_id, user_id, shift["id"])
         if doc is not None and "shifts_swaps" in doc:
             shift["is_asked_swap"] = True
         else:

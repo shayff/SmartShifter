@@ -12,3 +12,12 @@ def add_full_data_of_employees_to_shifts(employees_id, shift, shift_data):
     for id_employee in employees_id:
         employee_full_details_array.append(shift_data.get_employee_data(id_employee))
     shift['employees'] = employee_full_details_array
+
+def add_is_shift_full_field(shift):
+    '''
+    This method add check if shift is full and add this field
+    '''
+    if shift['amount'] == len(shift['employees']):
+        shift['is_shift_full'] = 'full'
+    else:
+        shift['is_shift_full'] = 'not_full'
