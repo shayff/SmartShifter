@@ -314,6 +314,10 @@ export const getSwitches = data => {
             {      
                 "statuses":data
             },
+            paramsSerializer: function(params) {
+                const qs = require('qs');
+                return qs.stringify(params, {arrayFormat: 'repeat'})
+            },  
             headers:
             {
                 Authorization: "Bearer " + localStorage.usertoken
