@@ -69,7 +69,7 @@ def build_shift(user_input):
             # compute the success rate
             success_rate = get_success_rate(count_of_employee_scheduled, total)
             return jsonify({"ok": True, "msg": "build shift", "success_rate": success_rate, "data": scheduled_shifts,
-                            'full_data': shift_scheduled_to_display}), 200
+                            "full_data": shift_scheduled_to_display}), 200
         else:
             return jsonify({"ok": False, "msg": 'User don\'t have company'}), 401
     else:

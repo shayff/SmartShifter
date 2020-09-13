@@ -15,15 +15,11 @@ companies_collection = db["companies"]
 
 
 def test_Fulltest():
-    #Settings
+    # init data for test
     num_of_users = 10
-
-    #start_date = datetime.datetime(get_next_sunay())
     start_date = get_next_sunday()
-    #Prepare test
     he_fake = Faker("he_IL")
     fake = Faker()
-
     users = []
     week = [start_date.strftime("%Y-%m-%d"),
             (start_date+datetime.timedelta(days=1)).strftime("%Y-%m-%d"),
@@ -50,7 +46,7 @@ def test_Fulltest():
     #5. Set prefernce from manager
     set_prefence_from_manager(users, week)
 
-    #6 Send messages
+    #6. Send messages
     send_messages_to_employee(users)
 
     #7. Set prefernce from workers
@@ -61,23 +57,29 @@ def test_Fulltest():
     create_shifts(fake, users, week)
 
     #9. Run and check builld shift
+    data = run_build_shift(users, week)
+    check_build_shift(data["data"], company_id)
 
+def run_build_shift(users, week):
     response = shift_app.test_client().post(
         '/api/v1/shifts/build',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
         data=json.dumps({
-            "start_date" : week[0],
-	        "end_date" : week[6]
+            "start_date": week[0],
+            "end_date": week[6]
         }),
         content_type='application/json',
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
     assert data["ok"]
-    check_build_shift(data["data"], company_id)
+    return data
+
 
 def get_next_sunday():
     date = datetime.date.today()
+    if date.weekday() == 6:
+        return date + datetime.timedelta(7)
     while date.weekday() != 6:
         date += datetime.timedelta(1)
     return date

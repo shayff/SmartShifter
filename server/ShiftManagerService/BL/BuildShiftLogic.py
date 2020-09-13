@@ -57,10 +57,10 @@ class build_shift_class:
                     if shift["id"] not in scheduled_shifts:
                         scheduled_shifts[shift["id"]] = []
 
-                if hungarian:
-                    print("Build shift for date:", date, "With the total rank:", hungarian.get_total_potential())
+                #if hungarian:
+                    print("Build shift for date:", date)#, "With the total rank:", hungarian.get_total_potential())
                     print("-" * 60)
-                #hungarian = None
+
         return scheduled_shifts
 
     def add_to_scheduled_shifts_dict(self, employee_id, scheduled_shifts, shift_id):
