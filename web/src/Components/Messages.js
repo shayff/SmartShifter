@@ -518,20 +518,22 @@ class Messages extends Component {
                             </svg>} Messages
                     </h1>
                     </div>
-                    <table className="table table-bordered table-hover">
-                        <thead className="thead-dark">
-                            <tr>
-                            <th scope="col" className="text-center">#</th>
-                            <th scope="col" className="text-center">To</th>
-                            <th scope="col" className="text-center">Title</th>
-                            <th scope="col" className="text-center">The Message</th>
-                            <th scope="col" className="text-center">Time Created</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.initializeTable(this.state.messages,this.state.recipientFilter)}  
-                        </tbody>
-                        </table>
+                    <div style = {{overflowY: 'auto', maxHeight:"1120px"}}>
+                        <table className="table table-bordered table-hover">
+                            <thead className="thead-dark">
+                                <tr>
+                                <th scope="col" className="text-center">#</th>
+                                <th scope="col" className="text-center">To</th>
+                                <th scope="col" className="text-center">Title</th>
+                                <th scope="col" className="text-center">The Message</th>
+                                <th scope="col" className="text-center">Time Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.initializeTable(this.state.messages,this.state.recipientFilter)}  
+                            </tbody>
+                            </table>
+                        </div>
                         <div>
                             <label htmlFor="recipient_filter"> Filter By Recipient </label>   
                             <Multiselect

@@ -182,24 +182,26 @@ class SwitchShifts extends Component {
                     <path fillRule="evenodd" d="M2.036 9.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V10h-3.5a.5.5 0 0 1-.5-.5z"/>
                 </svg>} Switching Shifts </h1>
                     </div>
-                    <table className="table table-bordered table-hover">
-                        <thead className="thead-dark">
-                            <tr>
-                            <th scope="col" className="text-center">#</th>
-                            <th scope="col"className="text-center">The Shift</th>
-                            <th scope="col"className="text-center">The One Who Want To Switch The Shift</th>
-                            {this.isWhoWantToGetTheShiftColumVisible()}
-                            <th scope="col" className="text-center">Status Of The Request</th>
-                            <th scope="col" className="text-center">Time Of The Request</th>
-                            <th scope="col" className="text-center"></th>
-                            <th scope="col" className="text-center"></th>
-                            <th scope="col" className="text-center"></th>
-                            </tr>
-                        </thead>
-                            <tbody>
-                                {this.initializeTable(this.state.switchData)}
-                            </tbody>
-                        </table>
+                    <div style = {{overflowY: 'auto', maxHeight:"1120px"}}>
+                        <table className="table table-bordered table-hover">
+                            <thead className="thead-dark">
+                                <tr>
+                                <th scope="col" className="text-center">#</th>
+                                <th scope="col"className="text-center">The Shift</th>
+                                <th scope="col"className="text-center">The One Who Want To Switch The Shift</th>
+                                {this.isWhoWantToGetTheShiftColumVisible()}
+                                <th scope="col" className="text-center">Status Of The Request</th>
+                                <th scope="col" className="text-center">Time Of The Request</th>
+                                <th scope="col" className="text-center"></th>
+                                <th scope="col" className="text-center"></th>
+                                <th scope="col" className="text-center"></th>
+                                </tr>
+                            </thead>
+                                <tbody>
+                                    {this.initializeTable(this.state.switchData)}
+                                </tbody>
+                            </table>
+                        </div>
                         <form name="myForm9">
                             <div className="input-group mb-3">
                                 <select className="custom-select" id="inputGroupSelect02" name="filter" onChange={this.onChange}>
