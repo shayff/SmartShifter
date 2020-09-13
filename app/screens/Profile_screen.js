@@ -119,7 +119,7 @@ export default class Private_profile extends Component {
             }
 
             let token = await AsyncStorage.getItem('token');
-            const response = await member_server.post('/updateprofile',
+            const response = await member_server.put('/api/v1/user',  //post('/updateprofile',
             newDataToSend,
             {
                 headers: {

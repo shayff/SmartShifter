@@ -155,7 +155,7 @@ export default class User_preferences extends Component {
         }
         let token = await AsyncStorage.getItem('token');
 
-        const response = await company_server.post('/companies/PrefenceFromWorker',
+        const response = await company_server.post('/api/v1/company/preference/employee',///companies/PrefenceFromWorker',
         toSend,
         {
             headers: {

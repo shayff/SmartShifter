@@ -21,11 +21,11 @@ export default function Navigator_stack() {
         <Stack.Screen options={{ headerStyle:{backgroundColor: '#f8f8f8'}}} name='Registration' component={SignUp} />
 
         <Stack.Screen name='Cross_screen' component={Cross_screen} options={{ title: 'Home',headerShown: false}}/>
-        <Stack.Screen name='Weekly_shift_arrangement' component={Weekly_shift_arrangement} options={{ title: 'Weekly Shift Arrangement'}}/>
+        <Stack.Screen name='Weekly_shift_arrangement' component={Weekly_shift_arrangement} options={{ title: 'Shift Arrangement'}}/>
         <Stack.Screen name='User_preferences' component={User_preferences} options={{ title: 'User Preferences'}}/>
         <Stack.Screen name='Messages' component={Messages} options={{ title: 'Messages'}}/>
         <Stack.Screen name='Switching_shifts' component={Switching_shifts} options={{ title: 'Switching Shifts'}}/>
-        <Stack.Screen name='Private_profile' component={Private_profile} options={{ title: 'Private Profile'}}/>        
+        <Stack.Screen name='Private_profile' component={Private_profile} options={{ title: 'My Profile'}}/>        
 
       </Stack.Navigator>
     </NavigationContainer>
