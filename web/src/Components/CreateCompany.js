@@ -20,7 +20,7 @@ class CreateCompany extends Component {
         this.onRemoveJobType = this.onRemoveJobType.bind(this)
     }
 
-    onRemoveJobType(selectedList, selectedItem) {
+    onRemoveJobType(selectedList) {
         this.setState({companyJobTypes: selectedList});
     }
 

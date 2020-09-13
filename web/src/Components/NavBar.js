@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import logo from '../assests/SmartShifterLogo.png';
+import logo from '../assets/SmartShifterLogo.png';
 
 class Navbar extends Component {
     logOut (event) {

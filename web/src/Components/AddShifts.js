@@ -130,12 +130,12 @@ class AddShifts extends Component {
 
         if (shift_name === "" || start_time === "" || end_time === ""|| job_type === 0||
         difficulty === ""|| date === "" || amount_of_employees === "" || day_part === 0)
-         {
+        {
           alert("All Fields Must Be Filled");
           validate = false;
         }
 
-        if(amount_of_employees<this.state.employees_for_shift.length)
+        if(amount_of_employees < this.state.employees_for_shift.length)
         {
             alert("Amount Of Employees Must Be Equal Or Bigger Than The Amount Of Requested Employees");
             validate = false;
