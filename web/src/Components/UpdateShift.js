@@ -193,7 +193,7 @@ class UpdateShift extends Component {
             validate = false;
         }
         
-        if(this.isWorkInTheSameHours(date,start_time,end_time,this.state.employees_for_shift))
+        if(this.isHoursOverlapping(date,start_time,end_time,this.state.employees_for_shift))
         {
             alert("One Of The Employees Has Overlapping Work Hours Today Allready" );
         }
@@ -201,7 +201,7 @@ class UpdateShift extends Component {
         return validate;
     }
 
-    isWorkInTheSameHours(date,startTime,endTime,employees)
+    isHoursOverlapping(date,startTime,endTime,employees)
     {
         let shifts = this.state.arrOfShifts;
 
