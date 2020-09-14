@@ -1,44 +1,62 @@
-import React, {useState, Component} from 'react';
-import { ActivityIndicator,AsyncStorage,SafeAreaView, View, FlatList, StyleSheet, Text,TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+import { ActivityIndicator,Alert,AsyncStorage,View, FlatList, StyleSheet, Text} from 'react-native';
 import SwapSingle from '../component/Swap_shift/SwapSingle';
 import shiftManager_server from '../networking/shiftManager_server';
-
+/*
+Shift change screen.
+Displays a list of shifts whose status is:
+"wait_for_swap", "wait_for_confirm"
+When the company manager approves. The shift is deleted from this list
+*/
 export default class Switching_shifts extends Component {
-
-//new
     constructor(inside){
         super(inside);
         this.state = {
             massegesData : {
                 "data":[],
+                "msg":"",
                 "ok":true
             },
             listMasseges : [], 
             thereIsDataFromServer : false,
-            frontText: "loding..." 
-
+            frontText: "",
+            thereIsShiftsSwap: false,
+            MessageDisplay: "",
         }                              
     }
-
+    
+    //System function
     componentDidMount = async () => {
         this.setState({thereIsDataFromServer:false});
-        let toSend = {"statuses" : ["confirmed","wait_for_swap","wait_for_confirm"]}
+        let toSend = {"statuses" : ["wait_for_swap","wait_for_confirm"]}
 
         let token = await AsyncStorage.getItem('token');
-        const response = await shiftManager_server.post('/GetShiftsSwaps',toSend, {
-          headers: {
+        const response = await shiftManager_server.get('api/v1/shifts_swaps', {
+            params: toSend,
+            paramsSerializer: function(params) {
+                const qs = require('qs');
+                return qs.stringify(params, {arrayFormat: 'repeat'})
+            },  
+            headers: {
               Authorization: "Bearer " + token
           }
-      }).then(response => {
+        }).then(response => {
+
+        if (response.data.data.length == 0) // there is no swaps
+        {
+            this.setState({thereIsShiftsSwap:false});
+            this.setState({MessageDisplay:response.data.msg});
+        }
+        else{
+            this.setState({thereIsShiftsSwap:true});
+        }
         return  response.data;
-      }).catch(err => {
-        console.log("EROR "+err.response.data);
+        }).catch(err => {
+            Alert.alert("something went wrong, please try again");
+            this.props.navigation.goBack(null);
+        });
 
-      });
-
-      this.setState({massegesData:response});
-
-      
+        this.setState({massegesData:response});
         if(this.state.massegesData.ok != true)
         {
             Alert.alert("There was a problem receiving the messages, please try again");
@@ -63,32 +81,21 @@ export default class Switching_shifts extends Component {
             {
                 statusFormat= 'confirmed'
             }
-            console.log(statusFormat);
-           
 
             let temp = {date: this.state.massegesData.data[i].shift_details.date,
-                        start_time:this.state.massegesData.data[i].shift_details['start time'],
-                        end_time:this.state.massegesData.data[i].shift_details['end time'],
+                        start_time:this.state.massegesData.data[i].shift_details['start_time'],
+                        end_time:this.state.massegesData.data[i].shift_details['end_time'],
                         Who_asks:this.state.massegesData.data[i].name_employee_ask,
                         status:statusFormat,
-                        id:this.state.massegesData.data[i].id
+                        id:this.state.massegesData.data[i].id,
+                        id_employee_ask:this.state.massegesData.data[i].id_employee_ask
                         };
             updatList.push(temp);
         }
 
         this.setState({listMasseges:updatList});
-
         this.setState({thereIsDataFromServer:true});
-       
-
     }
-
-
-        save_and_exit = () =>
-        {
-        this.props.navigation.goBack(null);
-        }
-
 
         render() { 
             
@@ -98,73 +105,48 @@ export default class Switching_shifts extends Component {
             }
             return(
             <View  style={Styles.content}>
-               
-                    <View style={Styles.container} >
+               { this.state.thereIsShiftsSwap ? (
+                    <View style={Styles.messageFrame} >
                             <FlatList
                                 data={this.state.listMasseges}
                                 keyExtractor={(item, index) => {return item.id.toString();}}
-                                renderItem={({item})=>(<SwapSingle item={item}/>)}
+                                renderItem={({item})=>(<SwapSingle item={item} render_screen = {this.componentDidMount}/>)}
                             />
                     </View>
+               ):(
+                <View style={Styles.messageDisplay} ><Text style={Styles.msgtext} >{this.state.MessageDisplay}</Text></View>
+               )}
             </View>
             );
         }
         
 }
-{/* <SafeAreaView style={Styles.container} >
-<FlatList
-    data={this.state.listMasseges}
-    keyExtractor={(item, index) => {return item.id.toString();}}
-    renderItem={({item})=>(<SwapSingle item={item}/>)}
-/>
-</SafeAreaView>
-     */}
-const Styles = StyleSheet.create({
 
-    container: {
+const Styles = StyleSheet.create({
+    messageFrame: {
         paddingTop:10,
         flex: 1,
         backgroundColor: "#36485f",
         alignItems: 'center'
     },
     center: {
-
         justifyContent: 'center',
         alignItems: 'stretch',
-    },
-    text: {
-        fontSize: 40,
-        paddingTop: 50,
-        paddingBottom:30,
-        color:"#638cb0",
-    },
-    Text2: {
-        alignSelf:'center',
-        color: '#ffff',
-        fontWeight: 'bold',
     },
     content: {
         padding:16,
         backgroundColor:'#36485f',
         flex:1,
     },
-    touchArea: {
-        width: 300,
-        height: 30,
+    msgtext: {
+        color: "#f5fffa",
+        fontSize: 20,
+        fontWeight: "bold",
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#1d9aad',
-    },
-    touchArea2: {
-        width: 200,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#1d9aad',
-    },
-    saveElement: {
-        alignItems: 'center',
-        justifyContent: 'center',
+      },
+    messageDisplay:{
+        alignSelf: 'center',
+        paddingTop: 160,           
     },
 })
 

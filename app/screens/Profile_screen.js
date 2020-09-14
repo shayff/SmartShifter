@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { AsyncStorage,StyleSheet, Button,Text, TextInput , View, Image, ActivityIndicator, TouchableOpacity,ScrollView, Alert } from 'react-native';
 import member_server from '../networking/member_server';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,70 +8,65 @@ export default class Private_profile extends Component {
     constructor(inside){
         super(inside);
         this.state = {
-            profileDataUser:{"id number": "loding...",
-            "phone": "loding...",
-            "first name": "loding...",
-            "last name": "loding...",
-            "date of birth": "loding...",
-            "address": "loding...",
-            "gender": "loding...",
-            "company": 'loding...',
-            "email": "loding...",
+            profileDataUser:{"id number": "",
+            "phone": "",
+            "first name": "",
+            "last name": "",
+            "date of birth": "",
+            "address": "",
+            "gender": "",
+            "company": "",
+            "email": "",
             "password": "",
-            "password to confirm":"******"},
+            "password to confirm":""},
 
             titleBTpasseord : "Confirm first",
             isWriteToConfirmPassword : true,
             titleOldPassword : "Enter password",
             saveText:'not been a change',
             currectAnswer: true,
-            thereIsDataFromServer : false,
-
-
+            thereIsDataFromServer : false
       }
     }
-
-    componentDidMount = async () => {
-        //let data = this.Get_masseges_server_data();
-        //this.setState({massegesData:data});
-
+ 
+    componentDidMount = async () =>
+    {
+        //Communication with the server for display details
         let token = await AsyncStorage.getItem('token');
-        const response = await member_server.get('/profile', {
+        const response = await member_server.get('/api/v1/user/profile', {
           headers: {
               Authorization: "Bearer " + token
           }
       }).then(response => {
         return  response.data;
       }).catch(err => {
-        console.log("EROR "+err.response.data);
-
+        Alert.alert("something went wrong, please try again");
+        this.props.navigation.goBack(null);
       });
 
       let resData = response.data;
       let password = await AsyncStorage.getItem('password');
 
       let details = {
-        "id number": resData["id number"],
+        "id number": resData["id_number"],
         "phone": resData["phone"],
-        "first name": resData["first name"],
-        "last name": resData["last name"],
-        "date of birth": resData["date of birth"],
+        "first name": resData["first_name"],
+        "last name": resData["last_name"],
+        "date of birth": resData["date_of_birth"],
         "gender": resData['gender'],
         "address": resData["address"],
-        "company": resData["company name"],
+        "company": resData["company_name"],
         "email": resData["email"],
         "password": "",
         "password to confirm": "*****"};
 
         this.setState({profileDataUser:details});
         this.setState({thereIsDataFromServer:true});
-
-      }
+    }
     
-    
-      confirm_password = async (data) =>
-      {
-
+    //Functionality for checking whether the user has entered the current password
+    confirm_password = async (data) =>
+    {
         if(this.state.isWriteToConfirmPassword)
         {
             this.refs.oldPassword.setNativeProps({ editable : true });
@@ -79,85 +74,68 @@ export default class Private_profile extends Component {
             this.setState({isWriteToConfirmPassword:false});
             this.refs.oldPassword.focus();
         }
-        else // he press to check password
+        else //press to check password
         {
             let hisPassword = await AsyncStorage.getItem('password');
 
             if(hisPassword == this.state.profileDataUser["password to confirm"])
             {
-                console
                 this.setState({titleBTpasseord:"Edit"});
                 this.setState({currectAnswer:false});
-                
             }
             else
             {
-                Alert.alert("worng password");
+                Alert.alert("wrong password");
                 this.refs.oldPassword.focus();
-
             }
-
         }
-
-      }
-
-
+    }
       
-      save_user_change = async () =>
-      {
-        let ps="null";
-        console.log(this.state.profileDataUser["password"]);
-        if(this.state.profileDataUser["password"] != "") // so he is update password
+    //Functionality for updating user information
+    save_user_change = async () =>
+    {
+        let let_password="null";
+        if(this.state.profileDataUser["password"] != "") //update password
         {
-            ps = this.state.profileDataUser["password"];
+            let_password = this.state.profileDataUser["password"];
             await AsyncStorage.setItem("password",this.state.profileDataUser["password"]);
-        console.log("lo");
-
         }
         else
         {
-
-            ps = await AsyncStorage.getItem('password');
-
+            let_password = await AsyncStorage.getItem('password');
         }
 
         await AsyncStorage.setItem("name",this.state.profileDataUser["first name"]);
 
-
           let newDataToSend = {
               "email":this.state.profileDataUser["email"],
-              "password":ps,
-              "id number":this.state.profileDataUser["id number"],
+              "password":let_password,
+              "id_number":this.state.profileDataUser["id number"],
               "phone":this.state.profileDataUser["phone"],
-              "first name":this.state.profileDataUser["first name"],
-              "last name":this.state.profileDataUser["last name"],
+              "first_name":this.state.profileDataUser["first name"],
+              "last_name":this.state.profileDataUser["last name"],
               "address":this.state.profileDataUser["address"],
               "gender":this.state.profileDataUser["gender"],
-              "date of birth":this.state.profileDataUser["date of birth"]
+              "date_of_birth":this.state.profileDataUser["date of birth"]
             }
 
-            
-
-
-        let token = await AsyncStorage.getItem('token');
-        const response = await member_server.post('/updateprofile',
-        newDataToSend,
+            let token = await AsyncStorage.getItem('token');
+            const response = await member_server.put('/api/v1/user',
+            newDataToSend,
             {
-            headers: {
-                Authorization: "Bearer " + token 
-            }
-      }).then(response => {
-        console.log("update " + response.data.data);
-        return  response.data;
-      }).catch(err => {
-        console.log("EROR "+err.response.data);
-
-      });
+                headers: {
+                    Authorization: "Bearer " + token 
+                }
+            }).then(response => {
+                    return  response.data;
+                }).catch(err => {    
+                Alert.alert("something went wrong, please try again");
+                this.props.navigation.goBack(null); 
+                });
 
       this.props.navigation.goBack(null);
+    }
 
-
-      }
 
     render() {  
         if(this.state.thereIsDataFromServer == false)
@@ -166,10 +144,10 @@ export default class Private_profile extends Component {
         }
         return(
             
-            <View style={Styles.all}>
+            <View style={Styles.frame}>
             <ScrollView style={Styles.container}>
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>ID: </Text>
+                        <Text style={Styles.lineTitle}>ID: </Text>
                         <TextInput style={Styles.TextInput} ref='idNumber' onChangeText={(data) => {this.state.profileDataUser["id number"]=data}}  editable =  {false}>{this.state.profileDataUser["id number"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -179,7 +157,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>First Name: </Text>
+                        <Text style={Styles.lineTitle}>First Name: </Text>
                         <TextInput style={Styles.TextInput} ref='firstName' onChangeText={(data) => {this.state.profileDataUser["first name"]=data}} editable =  {false}>{this.state.profileDataUser["first name"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -189,7 +167,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>Lest Name: </Text>
+                        <Text style={Styles.lineTitle}>Last Name: </Text>
                         <TextInput style={Styles.TextInput} ref='lestName' onChangeText={(data) => {this.state.profileDataUser["last name"]=data}} editable =  {false}>{this.state.profileDataUser["last name"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -199,7 +177,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>Date of birth: </Text>
+                        <Text style={Styles.lineTitle}>Date of birth: </Text>
                         <TextInput style={Styles.TextInput} ref='dateOfBirth' onChangeText={(data) => {this.state.profileDataUser["date of birth"]=data}} editable =  {false}>{this.state.profileDataUser["date of birth"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -209,7 +187,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>address: </Text>
+                        <Text style={Styles.lineTitle}>Address: </Text>
                         <TextInput style={Styles.TextInput} ref='address' onChangeText={(data) => {this.state.profileDataUser["address"]=data}} editable =  {false}>{this.state.profileDataUser["address"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -219,7 +197,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>gender: </Text>
+                        <Text style={Styles.lineTitle}>Gender: </Text>
                         <TextInput style={Styles.TextInput} ref='gender' onChangeText={(data) => {this.state.profileDataUser["gender"]=data}} editable =  {false}>{this.state.profileDataUser["gender"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -229,7 +207,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>Phone: </Text>
+                        <Text style={Styles.lineTitle}>Phone: </Text>
                         <TextInput style={Styles.TextInput} ref='phone' onChangeText={(data) => {this.state.profileDataUser["phone"]=data}} editable =  {false}>{this.state.profileDataUser["phone"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -239,7 +217,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>Email: </Text>
+                        <Text style={Styles.lineTitle}>Email: </Text>
                         <TextInput style={Styles.TextInput} ref='email' onChangeText={(data) => {this.state.profileDataUser["email"]=data}} editable =  {false}>{this.state.profileDataUser["email"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -249,10 +227,9 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.titel}>Company: </Text>
+                        <Text style={Styles.lineTitle}>Company: </Text>
                         <TextInput style={Styles.TextInput} ref='company' onChangeText={(data) => {this.state.profileDataUser["company"]=data}} editable =  {false}>{this.state.profileDataUser["company"]}</TextInput>
                         <Icon.Button
-                            //     name="edit"
                                 backgroundColor="#36485f"
                                 disabled
                                 onPress={(data)=>{this.refs.company.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.company.focus();}}>  
@@ -260,18 +237,18 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.passwordLine}>
-                    <Text style={Styles.titel}>Confirm password: </Text>
+                    <Text style={Styles.lineTitle}>Confirm password: </Text>
                     <TextInput style={Styles.TextInput} secureTextEntry ref='oldPassword' onChangeText={(data) => {this.state.profileDataUser["password to confirm"]=data}} editable =  {false}>{this.state.profileDataUser["password to confirm"]}</TextInput>
                     <Button title={this.state.titleOldPassword} onPress={this.confirm_password}></Button>
                 </View>
                         
                 <View style={Styles.line}>
-                    <Text style={Styles.titel}>New password: </Text>
+                    <Text style={Styles.lineTitle}>New password: </Text>
                     <TextInput style={Styles.TextInput} ref='password' onChangeText={(data) => {this.state.profileDataUser["password"]=data}} editable =  {false}>{this.state.profileDataUser["password"]}</TextInput>
                     <Button disabled ={this.state.currectAnswer} ref="BTpasseord" title={this.state.titleBTpasseord} onPress={(data)=>{this.refs.password.setNativeProps({ editable : true });this.setState({saveText: 'Save change and Exit'}); this.refs.password.focus();}}></Button>
                 </View>
 
-                    <TouchableOpacity style={Styles.sendArea} onPress = {() => this.save_user_change()}>
+                    <TouchableOpacity style={Styles.sendButton} onPress = {() => this.save_user_change()}>
                         <Text ref='saveText' style={Styles.sendText}>{this.state.saveText}</Text>
                     </TouchableOpacity>
             </ScrollView>
@@ -283,7 +260,7 @@ export default class Private_profile extends Component {
 
     
 const Styles = StyleSheet.create({
-    sendArea:
+    sendButton:
     {
         backgroundColor: '#2980b9',
         borderWidth: 1,
@@ -297,7 +274,6 @@ const Styles = StyleSheet.create({
         color: '#ffff',
         fontSize: 16,
         opacity:0.7,
-
     },
     container:
     {
@@ -307,7 +283,6 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 10,
         padding: 4, 
-
     },
     line:
     {
@@ -316,7 +291,6 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 20,
         justifyContent:"space-between",
-     
     },
     passwordLine:
     {
@@ -329,28 +303,22 @@ const Styles = StyleSheet.create({
         borderBottomColor: '#36485f',
         paddingTop:7,
     },
-    secendSubject: {
-        paddingLeft:30,
-        backgroundColor: '#ffff',    
-      },
-      titel: {
+    lineTitle: {
         fontWeight: 'bold',
         fontSize:16,
         color:'#ffff',
-      },
-      sendText: {
+    },
+    sendText: {
           fontWeight: 'bold',
           color: '#ffff',    
           paddingLeft:120,
           fontSize:20,
-         
-      },
-      all:{
+    },
+    frame:{
       backgroundColor: '#2980b9',
        width:412,
        height:610,
-       
-      },
+    },
 });
 
 

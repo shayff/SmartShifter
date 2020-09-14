@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { AsyncStorage,StyleSheet, Text, View, ActivityIndicator,Alert,FlatList} from 'react-native';
 import SingleMessage from '../component/messages/SingleMessage'
 import member_server from '../networking/member_server';
@@ -14,57 +14,63 @@ export default class Messages extends Component {
                 "msg":'',
                 "ok":false
             },
-            listMasseges : [], 
+            listMasseges : [],
+            thereIsMSG: false,
+            MessageDisplay: "",
+        }                           
+    }
 
-        }
-                                    
-      }
 
-      // function that call after the constractor 
-      componentDidMount = async () => {
-   
-
+    componentDidMount = async () => {
+        //Communication with the server to receive messages
         let token = await AsyncStorage.getItem('token');
-        const response = await member_server.get('/getmessage', {
+        const response = await member_server.get('/api/v1/messages', {
           headers: {
               Authorization: "Bearer " + token
           }
-      }).then(response => {
-        console.log("GOOD " + response.data.data);
+        }).then(response => {
+        //An empty list    
+        if (response.data.data.length == 0) 
+        {
+            this.setState({thereIsMSG:false});
+            this.setState({MessageDisplay:response.data.msg});
+        }
+        else{
+            this.setState({thereIsMSG:true});
+        }
         return  response.data;
-      }).catch(err => {
-        console.log("EROR "+err.response.data);
+        }).catch(err => {
+            Alert.alert("something went wrong, please try again");
+            this.props.navigation.goBack(null);
+           });
 
-      });
-      console.log(response);
-
-      this.setState({massegesData:response});
+        this.setState({massegesData:response});
       
-      if(this.state.massegesData.ok != true)
-      {
-          Alert.alert("There was a problem receiving the messages, please try again");
-          this.props.navigation.goBack(null);
-      }
+        if(this.state.massegesData.ok != true)
+        {
+            Alert.alert("There was a problem receiving the messages, please try again");
+            this.props.navigation.goBack(null);
+        }
         
         let updatList=[];
-        console.log(this.state.massegesData.data.length);
         let numberOfMasseges = this.state.massegesData.data.length;
         
+
         for (let i =0; i<numberOfMasseges; i++)
         {
-            let temp = {name_sender: this.state.massegesData.data[i].name_sender,
+            //Initialize the message details
+            let temp = {name_sender: this.state.massegesData.data[i].sender_name,
                         massege:this.state.massegesData.data[i].message,
                         title: this.state.massegesData.data[i].title,
                         time_created: this.state.massegesData.data[i].time_created,
-                        id: this.state.massegesData.data[i]._id};
+                        id: this.state.massegesData.data[i]._id,
+                        is_read: this.state.massegesData.data[i].status};
             updatList.push(temp);
         }
 
         this.setState({listMasseges:updatList});
         this.setState({thereIsDataFromServer:true});
- 
-
-      }
+    }
 
 
     render() {  
@@ -75,45 +81,44 @@ export default class Messages extends Component {
         return(
             
             <View style={Styles.content}>
+                {this.state.thereIsMSG ? (
                 <View>
                     <FlatList
                         data={this.state.listMasseges}
                         keyExtractor={(item, index) => {return item.time_created;}}
                         renderItem={({item})=>(<SingleMessage item={item}/>)}
                     />
-                </View>
-
+                </View>) :
+                (
+                    <View style={Styles.messageDisplay} ><Text style={Styles.msgtext} >{this.state.MessageDisplay}</Text></View> // need styles
+                )} 
             </View>
-
-        
         );
     }
     }
 
     
-    const Styles = StyleSheet.create({
+const Styles = StyleSheet.create({
 
-        Text: {
-            alignSelf:'center',
-            color: '#ffff',
-            fontWeight: 'bold',
+    Text: {
+        alignSelf:'center',
+        color: '#ffff',
+        fontWeight: 'bold',
+    },
+    content: {
+        padding:16,
+        backgroundColor:'#36485f',
+        flex:1,
+    },
+    msgtext: {
+        color: "#f5fffa",
+        fontSize: 20,
+        fontWeight: "bold",
+        alignItems: 'center',
         },
-        content: {
-            padding:16,
-            backgroundColor:'#36485f',
-            flex:1,
-        },
-        saveElement: {
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        touchArea: {
-            width: 200,
-            height: 30,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1d9aad',
-        }
-        
-        })
+    messageDisplay:{
+        alignSelf: 'center',
+        paddingTop: 160,           
+    },
+});
 

@@ -1,31 +1,30 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View,TouchableOpacity } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+
+
+/*
+Button in the main menu
+*/
 
 export default class sbjectSquare extends Component {
 
     render() {  
 return (
-    <View style={Styles.container}>
-            <TouchableOpacity style={Styles.touchArea} onPress={()=>{this.props.fatherProps.navigation.navigate(this.props.nevTo)}}>
-            <View style={Styles.line}>   
-                    <View style={Styles.Center}>          
+    <View style={ this.props.isLogOut ? (Styles.containerLogOut) : (Styles.container)}>
+            <TouchableOpacity style={ this.props.isLogOut ? (Styles.buttonAreaLogOut) : (Styles.buttonArea)} onPress={()=>{this.props.fatherProps.navigation.navigate(this.props.nevTo)}}>
+            <View style={ this.props.isLogOut ? (Styles.lineLogOut) : (Styles.line)}>
+                    <View style={ this.props.isLogOut ? (Styles.CenterLogOut) : (Styles.Center)}>
                         <MaterialIcons name={this.props.Icon} size={40} color="black" />
                     </View> 
-                    <View style={Styles.Center}> 
+                    <View style={ this.props.isLogOut ? (Styles.CenterLogOut) : (Styles.Center)}> 
                         <Text style={Styles.Text}>{this.props.titelName}</Text>
                     </View> 
                 </View>
             </TouchableOpacity>
     </View>
 );
-
-
-
-
-}
-}
+}}
 
 const Styles = StyleSheet.create({
 
@@ -41,27 +40,55 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 1,
         padding: 6, 
-
     },
-    touchArea: {
+    containerLogOut :
+    {
+        alignSelf:'center',
+        backgroundColor: '#fa8072',
+        borderWidth: 2,
+        borderRadius: 10,
+        marginVertical: 1,
+        width:150,
+        height:63,
+        padding: 2, 
+    },
+    buttonArea: {
         textAlign: 'center',
         width: 300,
         height: 50,
-        backgroundColor: '#638cb0',
+    },
+    buttonAreaLogOut: {
+        textAlign: 'center',
+        width:140,
+        height:50,
+        
     },
     line:
     {
-    alignItems: 'center',
-    flexDirection : 'row',
-    paddingTop: 10,
-    backgroundColor:'#638cb0',// צבע רגע של השורה
+        alignItems: 'center',
+        flexDirection : 'row',
+        paddingTop: 10,
+        backgroundColor:'#638cb0',
+    },
+    lineLogOut: {
+        alignItems: 'center',
+        flexDirection : 'row',
+        paddingTop: 10,
+        backgroundColor:'#fa8072',
+        
     },
     Center:
     {
         alignItems: 'stretch',
         paddingLeft:30,
         backgroundColor:"#638cb0",
-        
     },
-
-})
+    CenterLogOut:
+    {
+        borderRadius: 10,
+        paddingLeft:4,
+        backgroundColor:"#fa8072",
+        
+        
+    }
+});

@@ -1,56 +1,52 @@
-import React, {useState, Component} from 'react';
-import { StyleSheet, Text, View, Image, Keyboard ,TouchableWithoutFeedback,ScrollView } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, Text, View, Image,ScrollView } from 'react-native';
 import Regform from '../component/signUp/regForm';
-import global_styles from '../global/global_styles';
 
 export default class SignUp extends Component {
 
     render() {  
         return(
-            
+            <View style={Styles.container}>           
+                <View style={Styles.logo_container}>
+                    <Image style={Styles.image} source={require('../component/login/images/Logo_w.png')}/>
+                    <Text style={Styles.smallTitle, Styles.smallTitle}>Happy to see you joining</Text>
+                </View>
 
-           <View style={Styles.container}>           
-                <View style={global_styles.logo_container}>
-                <Image style={global_styles.image} source={require('../component/login/images/logo.png')}/>
-                <Text style={global_styles.smallTitle, Styles.smallTitle}>Happy to see you joining</Text>
-                </View>
-             <ScrollView >
-                <View style={Styles.reg}>
-                    <Regform fatherProps={this.props}/>
-                </View>
-            </ScrollView>
+                <ScrollView >
+                    <View style={Styles.registration}>
+                        <Regform fatherProps={this.props}/>
+                    </View>
+                </ScrollView>
             </View>
-
-
         );
     }
 }
 
-
 const Styles = StyleSheet.create({
-    container:
+    logo_container:
     {
-        flex:1,
-        backgroundColor:'#36485f',
-        paddingLeft:12,
-        paddingRight:12,
-        
-        paddingTop:15,
-    },
-    reg:
-    {
-        paddingTop : 30,
-        backgroundColor: '#486180',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     smallTitle:
     {
         color: '#fff',
+        opacity: 0.9,
     },
-    logo_container:
+    image:
     {
-        paddingTop:10,
-        alignItems: 'center',
-        justifyContent: 'center',       
+        width: 100,
+        height: 100,
+    },
+    container:
+    {
+        flex:1,
+        backgroundColor:'#36485f',
+    },
+    registration:
+    {
+        paddingTop : 20,
+        backgroundColor: '#486180',
     },
 
 });

@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, {Component} from 'react';
 import { StyleSheet, Text, View, Image} from 'react-native';
 import LoginForm from '../component/login/loginForm';
 
@@ -9,25 +9,21 @@ export default class Login extends Component {
         return(
             
             <View style={Styles.container}>
-                <View style={Styles.bigTitleView}>
-                <Text style={Styles.bigTitle}>Smart Shifter</Text>
-                </View>
                 <View style={Styles.logo_container}>
-                <Image style={Styles.image} source={require('../component/login/images/logo.png')}/>
+                <Image style={Styles.image} source={require('../component/login/images/Logo_w.png')}/>
                 <Text style={Styles.smallTitle}>Make It Simple</Text>
                 </View>
+
                 <View>
                     <LoginForm fatherProps={this.props}/>
                 </View>
             </View>
-        
         );
     }
     }
 
     
     const Styles = StyleSheet.create({
-
     container:
     {
         flex:1,
@@ -37,35 +33,22 @@ export default class Login extends Component {
     {
         color: '#fff',
         opacity: 0.7,
-        paddingTop:8,
-
+        paddingTop:1,
+        paddingBottom:10
     },
-    bigTitleView:
+
+    logo_container:
     {
         paddingTop:15,
         alignItems: 'center',
-
-    },
-    bigTitle:
-    {
-        color: '#fff',
-        fontSize:25,
-        opacity: 1,
-    },
-    logo_container:
-    {
-        paddingTop:10,
-        alignItems: 'center',
         justifyContent: 'center',
         paddingTop:10,
-       
     },
     image:
     {
-        width: 100,
-        height: 100,
+        width: 200,
+        height: 110,
     }
-    
-    });
+});
 
 
