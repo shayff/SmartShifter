@@ -4,7 +4,7 @@ import { MaterialIcons } from '../../node_modules/@expo/vector-icons';
 import shiftManager_server from '../../networking/shiftManager_server';
 
 /*
-Shift replacement message
+Displays shift replacement
 */
 
 export default class SwapSingle extends Component {
