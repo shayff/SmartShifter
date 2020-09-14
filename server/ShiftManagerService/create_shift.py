@@ -10,7 +10,7 @@ def create_shift(user_input):
         logged_in_user = get_jwt_identity()
         user_from_db = db.get_user(logged_in_user["_id"])
 
-        #check if user has company
+        # check if user has company
         if "company" in user_from_db:
             company_id = user_from_db["company"]
 

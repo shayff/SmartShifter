@@ -5,6 +5,9 @@ from .schemas.askshiftswap import validate_askShiftSwap
 from datetime import datetime
 
 def doAskShiftSwap(user_input):
+    '''
+    This method create a new shift swap
+    '''
     data = validate_askShiftSwap(user_input)
     if data["ok"]:
         data = data['data']
@@ -18,31 +21,23 @@ def doAskShiftSwap(user_input):
             # update shifts_swaps id
             doc = db.inc_shifts_swaps_counter(company_id)
 
-            #Check if the user is assigned to this shift
+            # check if the user is assigned to this shift
             shifts = doc["shifts"]
             shift = [x for x in shifts if x["id"] == data["shift_id"]]
-            if logged_in_user["_id"] not in shift[0]["employees"]:
+            if logged_in_user["_id"] in shift[0]["employees"]:
+
+                prepare_shift_swap(data, doc, logged_in_user)
+
+                # insert to db
+                db.insert_shift_swap(company_id, data)
+
+                return jsonify({"ok": True, "msg": 'Created shift swap request successfully'}), 200
+            else:
                 return jsonify({"ok": False, "msg": "wrong shift id, You're not in this shift"}), 401
-
-            prepare_shift_swap(data, doc, logged_in_user)
-
-            # insert to db
-            db.insert_shift_swap(company_id, data)
-            return jsonify({"ok": True, "msg": 'Created shift swap request successfully'}), 200
         else:
             return jsonify({"ok": False, "msg": 'User don\'t have company'}), 401
-
-            #update shift
-            company = db.get_company_shift()
-
-            for x in company['shifts']:
-                if data['shift_id'] == x["id"]:
-                    print(x)
-
-            data.update({'date_shift':shift['date']})
-            data.update({"start_time":shift["start_time"]})
-            data.update({"end_time":shift["end_time"]})
-
+    else:
+        return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
 
 def prepare_shift_swap(data, doc, logged_in_user):
     # update counter shifts swaps id

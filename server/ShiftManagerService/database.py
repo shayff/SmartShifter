@@ -14,8 +14,6 @@ class Mongo_db:
         self.counters_collection = db["counters"]
         self.messages_collection = db["messages"]
 
-
-
     def get_user(self, user_id):
         return self.users_collection.find_one({"_id": user_id})
 
@@ -70,10 +68,6 @@ class Mongo_db:
         return self.companies_collection.find_one_and_update({"_id": company_id, 'shifts_swaps.id': swap_id},
                                                                 {'$unset': {'shifts_swaps.$.id_employee_can': ""}})
 
-    def update_status_of_swap(self, company_id, swap_id, new_status):
-        return self.companies_collection.update({"_id": company_id, 'shifts_swaps.id': swap_id},
-                                                {'$set': {'shifts_swaps.$.status': new_status}})
-
     def get_shift(self, company_id, shift_id):
         doc = self.companies_collection.find_one({"_id": company_id}, {"shifts": {"$elemMatch": {"id": shift_id}}})
         return doc["shifts"][0]
@@ -89,7 +83,6 @@ class Mongo_db:
     def delete_shift_swap(self, company_id, swap_id):
         return self.companies_collection.update_one({"_id": company_id},{"$pull": {"shifts_swaps": {"id": swap_id}}})
 
-
     def delete_shift(self, company_id, shift_id):
         return self.companies_collection.update_one({"_id": company_id}, {"$pull": {"shifts": {"id": shift_id}}})
 
@@ -99,3 +92,11 @@ class Mongo_db:
 
     def insert_shift_swap(self, company_id, shift_swap):
         return self.companies_collection.find_one_and_update({"_id": company_id}, {'$push': {'shifts_swaps': shift_swap}})
+
+    def set_employee_can_swap(self, company_id, user_id, swap_id):
+        return self.companies_collection.find_one_and_update({"_id": company_id, 'shifts_swaps.id': swap_id},
+                                                                {'$set': {'shifts_swaps.$.id_employee_can': user_id}})
+
+    def update_status_of_swap(self, company_id, swap_id, new_status):
+        return self.companies_collection.update({"_id": company_id, 'shifts_swaps.id': swap_id},
+                                                {'$set': {'shifts_swaps.$.status': new_status}})

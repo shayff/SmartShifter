@@ -35,8 +35,6 @@ def get_shifts_swaps(statuses):
 
             # update the shift details
             doc = db.get_shift(company_id, swap["shift_id"])
-            #doc = db.companies_collection.find_one({"_id": company_id}, {"shifts": {"$elemMatch" : {"id":swap["shift_id"]}}})
-            #doc = doc["shifts"][0]
 
             #if its employee or manager
             if (logged_in_user["_id"] not in company["managers"]):

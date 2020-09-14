@@ -15,19 +15,9 @@ companies_collection = db["companies"]
 
 
 def test_Fulltest():
+
     # init data for test
-    num_of_users = 10
-    start_date = get_next_sunday()
-    he_fake = Faker("he_IL")
-    fake = Faker()
-    users = []
-    week = [start_date.strftime("%Y-%m-%d"),
-            (start_date+datetime.timedelta(days=1)).strftime("%Y-%m-%d"),
-            (start_date+datetime.timedelta(days=2)).strftime("%Y-%m-%d"),
-            (start_date+datetime.timedelta(days=3)).strftime("%Y-%m-%d"),
-            (start_date+datetime.timedelta(days=4)).strftime("%Y-%m-%d"),
-            (start_date+datetime.timedelta(days=5)).strftime("%Y-%m-%d"),
-            (start_date+datetime.timedelta(days=6)).strftime("%Y-%m-%d")]
+    fake, he_fake, num_of_users, users, week = init_data_for_test()
 
     #1. Create users
     print("========= Create Usesrs =========")
@@ -60,7 +50,29 @@ def test_Fulltest():
     data = run_build_shift(users, week)
     check_build_shift(data["data"], company_id)
 
+
+def init_data_for_test():
+    # num of user to create
+    num_of_users = 10
+    users = []
+    # init the fake data library
+    he_fake = Faker("he_IL")
+    fake = Faker()
+    start_date = get_next_sunday()  # get the start date
+    week = [start_date.strftime("%Y-%m-%d"),
+            (start_date + datetime.timedelta(days=1)).strftime("%Y-%m-%d"),
+            (start_date + datetime.timedelta(days=2)).strftime("%Y-%m-%d"),
+            (start_date + datetime.timedelta(days=3)).strftime("%Y-%m-%d"),
+            (start_date + datetime.timedelta(days=4)).strftime("%Y-%m-%d"),
+            (start_date + datetime.timedelta(days=5)).strftime("%Y-%m-%d"),
+            (start_date + datetime.timedelta(days=6)).strftime("%Y-%m-%d")]
+    return fake, he_fake, num_of_users, users, week
+
+
 def run_build_shift(users, week):
+    '''
+    This function run the build shift algorithem
+    '''
     response = shift_app.test_client().post(
         '/api/v1/shifts/build',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
@@ -77,6 +89,9 @@ def run_build_shift(users, week):
 
 
 def get_next_sunday():
+    '''
+    This function return the next sunday
+    '''
     date = datetime.date.today()
     if date.weekday() == 6:
         return date + datetime.timedelta(7)
@@ -85,6 +100,9 @@ def get_next_sunday():
     return date
 
 def create_shifts(fake, users, week):
+    '''
+    This function create new shifts
+    '''
     for day in range(7):
         for shift in range(random.randint(2, 4)):
             start, end, daypart = rand_hours_for_shift()
@@ -111,6 +129,9 @@ def create_shifts(fake, users, week):
 
 
 def create_users(fake,he_fake, num_of_users, users):
+    '''
+    This function create new users
+    '''
     for i in range(num_of_users):
         user_email = fake.email()
         response = memb_app.test_client().post(
@@ -134,6 +155,9 @@ def create_users(fake,he_fake, num_of_users, users):
 
 
 def login_users(num_of_users, users):
+    '''
+    This function login to the given users, we do it to save the JWT token for each user.
+    '''
     for i in range(num_of_users):
         response = memb_app.test_client().post(
             '/api/v1/login',
@@ -147,8 +171,10 @@ def login_users(num_of_users, users):
         assert response.status_code == 200
         assert data["ok"]
 
-
 def create_company(fake, users):
+    '''
+    This function create new company
+    '''
     response = comp_app.test_client().post(
         '/api/v1/company',
         headers={'Authorization': 'Bearer {}'.format(users[0]["token"])},
@@ -170,6 +196,9 @@ def create_company(fake, users):
 
 
 def add_employees_to_company(num_of_users, users):
+    '''
+    This function add the given employees to the company
+    '''
     for i in range(1, num_of_users):
         response = comp_app.test_client().post(
             "/api/v1/company/employee",
@@ -186,6 +215,9 @@ def add_employees_to_company(num_of_users, users):
         assert data["ok"]
 
 def send_messages_to_employee(users):
+    '''
+    This function send message to all employees (except the manager)
+    '''
     users_id = [user["id"] for user in users]
     users_id.pop(0)
 
@@ -203,8 +235,10 @@ def send_messages_to_employee(users):
     assert response.status_code == 200
     assert data["ok"]
 
-
 def set_prefence_from_manager(users, week):
+    '''
+    This function send the prefence the manager need from the employees
+    '''
     response = comp_app.test_client().post(
         "/api/v1/company/preference/manager",
         headers={"Authorization": "Bearer {}".format(users[0]["token"])},
@@ -245,8 +279,10 @@ def set_prefence_from_manager(users, week):
     assert response.status_code == 200
     assert data["ok"]
 
-
 def set_prefernce_from_workers(num_of_users, users, week):
+    '''
+    This function set the prefernce of the employee
+    '''
     for i in range(1, num_of_users):
         available, prefer = get_rand_prefers()
         data = []
@@ -266,6 +302,9 @@ def set_prefernce_from_workers(num_of_users, users, week):
         assert data["ok"]
 
 def get_rand_prefers():
+    '''
+    This function randomize the preference for the employees
+    '''
     available = [[],[],[],[],[],[],[]]
     prefer = [[],[],[],[],[],[],[]]
 
@@ -281,6 +320,9 @@ def get_rand_prefers():
     return available, prefer
 
 def rand_hours_for_shift():
+    '''
+    This function randomize start time and end time for shifts
+    '''
     minutes = [0, 15, 30, 45]
     time_of_shift = random.randint(5, 6)
     hour = random.randint(6, 17)
@@ -305,8 +347,7 @@ def rand_hours_for_shift():
     return start, end, daypart
 
 def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelta'):
-
-    # Convert tdelta to integer seconds.
+    # convert time to our format
     if inputtype == 'timedelta':
         remainder = int(tdelta.total_seconds())
     elif inputtype in ['s', 'seconds']:
@@ -332,6 +373,7 @@ def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelt
 
 def check_build_shift(buildshift, company_id):
 
+    # get data of employees and shifs
     company = companies_collection.find_one({"_id": company_id})
     employees_dict = dict()
     for emp in company["employees"]:
@@ -341,17 +383,24 @@ def check_build_shift(buildshift, company_id):
     for shift in company["shifts"]:
         shifts_dict[shift["id"]] = shift
 
+
+    # loop through all shifts
     for shift_id in buildshift:
         employees = buildshift[shift_id]
         shift = shifts_dict[int(shift_id)]
+
+        # loop through all employees in shift
         for emp in employees:
             preference = employees_dict[emp]["preference"]
+
             # find the prefrence for this date
             prefer_of_given_date = next(x for x in preference if x["date"] == shift["date"])
-            # if there is no prefer this is eror
+
+            # if there is no prefer at all this is error
             assert prefer_of_given_date
 
+            # if we do, we save the part of the day the employee gave
             prefer_of_given_date = set(prefer_of_given_date["prefer"] + prefer_of_given_date["available"])
 
-            # check if the employee scheduled ask to work that
+            # check if the shift day part are in employee prefer (if the emplyee ask to work in that part of day)
             assert (set(shift["day_part"]).issubset(prefer_of_given_date))

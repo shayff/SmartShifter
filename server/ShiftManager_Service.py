@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 import datetime, json
 from bson.objectid import ObjectId
-from server.ShiftManagerService.BuildShift import build_shift
+from server.ShiftManagerService.build_shift import build_shift
 from server.ShiftManagerService.create_shift_swap import doAskShiftSwap
 from server.ShiftManagerService.can_swap_shift import can_swap_shift
 from server.ShiftManagerService.confirm_swap import confirm_shift_swap
@@ -113,6 +113,5 @@ def GetShifts():
     }
     return get_shifts(data)
 
-#for dubg
 if __name__== '__main__':
     app.run(debug=True, port=5002)

@@ -7,13 +7,12 @@ from datetime import datetime
 from .BL.BuildShiftLogic import build_shift_class
 from .BL.ShiftsLogic import sort_shifts_by_start_time, add_full_data_of_employees_to_shifts, add_is_shift_full_field
 from .BL.ShiftData import ShiftData
-from .schemas.buildshift import validate_buildShift
+from .schemas.build_shift import validate_buildShift
 
 def build_shift(user_input):
     '''
     This method build the shift scheduled by all given prefernce and relevant data.
     '''
-
     data = validate_buildShift(user_input)
     if data["ok"]:
         data = data['data']

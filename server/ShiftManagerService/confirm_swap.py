@@ -2,7 +2,7 @@ from . import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from datetime import datetime
-from .schemas.confirmshiftswap import validate_confirmShiftSwap
+from .schemas.confirm_shift_swap import validate_confirmShiftSwap
 from server.MembersService.send_message import send_message
 
 def confirm_shift_swap(user_input):

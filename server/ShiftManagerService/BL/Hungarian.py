@@ -1,11 +1,5 @@
-#!/usr/bin/python
 """
 Implementation of the Hungarian (Munkres) Algorithm using Python and NumPy
-References: http://www.ams.jhu.edu/~castello/362/Handouts/hungarian.pdf
-        http://weber.ucsd.edu/~vcrawfor/hungar.pdf
-        http://en.wikipedia.org/wiki/Hungarian_algorithm
-        http://www.public.iastate.edu/~ddoty/HungarianAlgorithm.html
-        http://www.clapper.org/software/python/munkres/
 """
 
 # Module Information.
@@ -427,18 +421,3 @@ class CoverZeros:
         shuffle(row_indices)
         column_index, = np.where(self._choices[row_indices[0]])
         return row_indices[0], column_index[0]
-
-'''
-profit_matrix = [
-        [4,5,4],
-        [8, 1, 1],
-        [6, 2, 1],
-        [1, 2, 20]
-]
-
-hungarian = Hungarian(profit_matrix, is_profit_matrix = True)
-hungarian.calculate()
-print("Calculated value:\t", hungarian.get_total_potential())  # = 543
-print("Results:\n\t", hungarian.get_results())
-print("-" * 80)
-'''

@@ -3,7 +3,6 @@ def sort_shifts_by_start_time(shifts):
         shifts[shifts_by_day].sort(key=lambda x: x["start_time"], reverse=False)
     return
 
-
 def add_full_data_of_employees_to_shifts(employees_id, shift, shift_data):
     '''
     For each employee id we get from DB the name and appened to the employees array of the shift

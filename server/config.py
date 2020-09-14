@@ -5,7 +5,7 @@ MongoConfig ={
 }
 
 FlaskConfig = {
- "SECRET_KEY" : "nP2ks!5!Ha%aa@LK",
+    "SECRET_KEY" : "nP2ks!5!Ha%aa@LK",
     "JWT_SECRET_KEY" : "1asdasd#$$!1ddX"
 }
 

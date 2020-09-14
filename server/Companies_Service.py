@@ -15,10 +15,6 @@ from server.CompaniesService.set_prefence_from_manager import set_prefence_from_
 from server.CompaniesService.update_employee import update_employee
 from server.CompaniesService.set_prefence_from_employee import set_prefence_from_employee
 
-from server.ShiftManagerService.update_shift import update_shift
-from server.ShiftManagerService.delete_shifts import delete_shifts
-from server.ShiftManagerService.create_shift import create_shift
-
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
     def default(self, o):
@@ -37,7 +33,6 @@ app.config['JWT_SECRET_KEY'] = FlaskConfig["JWT_SECRET_KEY"]
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-
 
 jwt = JWTManager(app)
 app.json_encoder = JSONEncoder
@@ -105,7 +100,6 @@ def PrefenceFromWorker():
 def PrefenceFromManager():
     return set_prefence_from_manager(request.get_json())
 
-#for dubg
 if __name__== '__main__':
     app.run(debug=True, port=5001)
 
