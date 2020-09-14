@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getSwitches,approveSwitches } from './UserFunctions'
+import { getSwitches,approveSwitches,deleteSwitch } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 
 class SwitchShifts extends Component {
@@ -63,10 +63,38 @@ class SwitchShifts extends Component {
        });  
    }
 
-    onClickDecision(shiftId,decision) 
+   parseSatuts(status)
+   {
+        let parsedStatus;
+        switch(status)
+        {
+            case 'confirmed':
+            parsedStatus = 'Confirmed';
+            break;
+            case 'wait_for_swap':
+            parsedStatus = 'Wait For Swap';
+            break;
+            case 'wait_for_confirm':
+            parsedStatus = 'Wait For Confirmation';
+            break;
+            default:
+            parsedStatus = '';
+            break;
+        }
+
+        return parsedStatus;
+   }
+
+   onClickDelete(swapId)
+   {
+        deleteSwitch(swapId).then(res => {
+            window.location.reload()});
+   }
+
+    onClickDecision(swapId,decision) 
     {
         const managerDecision={
-            swapId:shiftId,
+            swapId:swapId,
             status:decision
         }
         
@@ -80,15 +108,27 @@ class SwitchShifts extends Component {
          return data.map((switchData,index) => (
             <tr key = {index} >
             <th scope="row" className="text-center"> {index +1}</th>
-            <td className="text-center">{switchData.shift_details.date} {switchData.shift_details["start time"]}-{switchData.shift_details["end time"]}</td>
+            <td className="text-center">{switchData.shift_details.date} {switchData.shift_details["start_time"]}-{switchData.shift_details["end_time"]}</td>
             <td className="text-center">{switchData.name_employee_ask}</td>
             {this.getWhoToGetTheShift(switchData)}
-            <td className="text-center">{switchData.status}</td>
+            <td className="text-center">{this.parseSatuts(switchData.status)}</td>
             <td className="text-center">{switchData.time_created}</td>
             <td>{this.initializeTableApproveButton(switchData)}</td>
             <td>{this.initializeTableDontApproveButtons(switchData)}</td>
+            <td>{this.initializeTableDeleteButton(switchData)}</td>
             </tr>
          ));
+        }
+    }
+
+    initializeTableDeleteButton(switchData)
+    {
+        if(switchData.status !== 'confirmed')
+        {
+            return( 
+            <button type="button" className="btn-lg btn-primary btn-block" onClick={() => this.onClickDelete(switchData.id)}>
+                        Delete Switch
+            </button>)
         }
     }
 
@@ -142,23 +182,26 @@ class SwitchShifts extends Component {
                     <path fillRule="evenodd" d="M2.036 9.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V10h-3.5a.5.5 0 0 1-.5-.5z"/>
                 </svg>} Switching Shifts </h1>
                     </div>
-                    <table className="table table-bordered table-hover">
-                        <thead className="thead-dark">
-                            <tr>
-                            <th scope="col" className="text-center">#</th>
-                            <th scope="col"className="text-center">The Shift</th>
-                            <th scope="col"className="text-center">The One Who Want To Switch The Shift</th>
-                            {this.isWhoWantToGetTheShiftColumVisible()}
-                            <th scope="col" className="text-center">Status Of The Request</th>
-                            <th scope="col" className="text-center">Time Of The Request</th>
-                            <th scope="col" className="text-center"></th>
-                            <th scope="col" className="text-center"></th>
-                            </tr>
-                        </thead>
-                            <tbody>
-                                {this.initializeTable(this.state.switchData)}
-                            </tbody>
-                        </table>
+                    <div style = {{overflowY: 'auto', maxHeight:"1120px"}}>
+                        <table className="table table-bordered table-hover">
+                            <thead className="thead-dark">
+                                <tr>
+                                <th scope="col" className="text-center">#</th>
+                                <th scope="col"className="text-center">The Shift</th>
+                                <th scope="col"className="text-center">The One Who Want To Switch The Shift</th>
+                                {this.isWhoWantToGetTheShiftColumVisible()}
+                                <th scope="col" className="text-center">Status Of The Request</th>
+                                <th scope="col" className="text-center">Time Of The Request</th>
+                                <th scope="col" className="text-center"></th>
+                                <th scope="col" className="text-center"></th>
+                                <th scope="col" className="text-center"></th>
+                                </tr>
+                            </thead>
+                                <tbody>
+                                    {this.initializeTable(this.state.switchData)}
+                                </tbody>
+                            </table>
+                        </div>
                         <form name="myForm9">
                             <div className="input-group mb-3">
                                 <select className="custom-select" id="inputGroupSelect02" name="filter" onChange={this.onChange}>

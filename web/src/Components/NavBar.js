@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import logo from '../assests/SmartShifterLogo.png';
+import logo from '../assets/SmartShifterLogo.png';
 
 class Navbar extends Component {
     logOut (event) {
@@ -56,22 +56,38 @@ class Navbar extends Component {
         )
 
         const userLink = (
-            <ul className="navbar-nav">
+            <ul className="navbar-nav dropdown">
                 <li className="nav-item">
-                    <Link to="/profile" className="nav-link">
+                    <Link to="/profile" className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {<svg style={{marginLeft: '7px'}} width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
                         <path fillRule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                         <path fillRule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
                     </svg>}<br/>Profile
                     </Link>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <Link to="/profile" className="dropdown-item">
+                        Profile
+                    </Link>
+                    <Link to="/updateProfile" className="dropdown-item">
+                        Update Profile
+                    </Link>
+                    </div>
                 </li>
-                <li className="nav-item">
-                    <Link to="/employees" className="nav-link">
+                <li className="nav-item dropdown">
+                    <Link to="/employees" className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {<svg style={{marginLeft: '20px'}} width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-people" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.995-.944v-.002.002zM7.022 13h7.956a.274.274 0 0 0 .014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C13.688 10.629 12.718 10 11 10c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 0 0 .022.004zm7.973.056v-.002.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10c-1.668.02-2.615.64-3.16 1.276C1.163 11.97 1 12.739 1 13h3c0-1.045.323-2.086.92-3zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
                     </svg>}<br/>Employees
                     </Link>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <Link to="/employees" className="dropdown-item">
+                        Employees
+                    </Link>
+                    <Link to="/addEmployee" className="dropdown-item">
+                        Add Employee
+                    </Link>
+                    </div>
                 </li>
                 <li className="nav-item dropdown">
                     <Link to="/shifts" className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,7 +105,7 @@ class Navbar extends Component {
                         Edit Preferences
                     </Link>
                     <Link to="/generateShifts" className="dropdown-item">
-                        Generate Shifts
+                        Shifts Editor
                     </Link>
                     </div>
                 </li>
@@ -109,13 +125,21 @@ class Navbar extends Component {
                     </svg>}<br/>Messages
                     </Link>
                 </li>
-                <li className="nav-item">
-                    <Link to="/settings" className="nav-link">
+                <li className="nav-item dropdown">
+                    <Link to="/settings" className="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {<svg style={{marginLeft: '50px'}} width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-sliders" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fillRule="evenodd" d="M14 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM11.5 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM7 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM4.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9.5 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM11.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
                         <path fillRule="evenodd" d="M9.5 4H0V3h9.5v1zM16 4h-2.5V3H16v1zM9.5 14H0v-1h9.5v1zm6.5 0h-2.5v-1H16v1zM6.5 9H16V8H6.5v1zM0 9h2.5V8H0v1z"/>
                     </svg>}<br/>Company Settings
                     </Link>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <Link to="/settings" className="dropdown-item">
+                        Company Settings
+                    </Link>
+                    <Link to="/updateSettings" className="dropdown-item">
+                        Update Company Settings
+                    </Link>
+                    </div>
                 </li>
                 <li className="nav-item">
                     <a href="/" className="nav-link" onClick={this.logOut.bind(this)}>

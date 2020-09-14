@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { listOfEmployees, updateShift,getSettings } from './UserFunctions'
+import { listOfEmployees, updateShift,getSettings,getShifts } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
@@ -10,6 +10,7 @@ class UpdateShift extends Component {
     constructor() {
         super()
         this.state = {
+            arrOfShifts:[],
             arrEmployees: [],
             shift_name:'',
             start_time:'',
@@ -23,7 +24,9 @@ class UpdateShift extends Component {
             employees_for_shift: [],
             shift_note:'',
             shift_id:'',
-            companyJobTypes: []
+            companyJobTypes: [],
+            inBuild: false,
+            oldDetail:{}
         }
 
         this.onChange = this.onChange.bind(this)
@@ -73,8 +76,36 @@ class UpdateShift extends Component {
 
     ParseEmployeesForShift = (arrEmployees) => { 
         return arrEmployees.map((employee) => (
-        {key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"]}
+        {key:employee["_id"] ,value: employee["first_name"] + ' ' + employee["last_name"]}
         ));
+    }
+
+    GetShifts()
+    {
+        const minDate = moment().day(0).format('YYYY-MM-DD');
+        const maxDate = moment().day(13).format('YYYY-MM-DD');
+
+         const shifts ={
+             start_date: minDate, 
+             end_date: maxDate,
+             statuses: ['scheduled'] 
+         }
+         
+         getShifts(shifts).then(shifts =>{
+         if(shifts){
+             if(shifts.length !== 0)
+             {
+                if (this._isMounted)
+                {
+                    this.setState({ arrOfShifts: shifts});
+                }
+             }
+             else
+             {
+                alert("No Shifts To Show")
+             }
+           }
+         })
     }
 
     componentWillUnmount() 
@@ -86,16 +117,16 @@ class UpdateShift extends Component {
     {
         this._isMounted = true;
         const shift = this.props.location.state.detail;
-        const dayParts = this.ParseDayParts(shift["day part"]);
+        const dayParts = this.ParseDayParts(shift["day_part"]);
         const employeesForShift = this.ParseEmployeesForShift(shift.employees);
         
         if (this._isMounted)
         {
             this.setState({
                 shift_name:shift.name,
-                start_time:shift["start time"],
-                end_time:shift["end time"],
-                job_type:shift["job type"],
+                start_time:shift["start_time"],
+                end_time:shift["end_time"],
+                job_type:shift["job_type"],
                 difficulty:shift.difficulty,
                 date:shift.date,
                 amount_of_employees:shift.amount,
@@ -103,7 +134,9 @@ class UpdateShift extends Component {
                 employees_for_shift: employeesForShift,
                 shift_note:shift.note,
                 shift_id:shift.id,
-                currJobType:shift["job type"]
+                currJobType:shift["job_type"],
+                inBuild: this.props.location.state.inBuild,
+                oldDetail:this.props.location.state.oldDetail
             });
         }
 
@@ -126,11 +159,13 @@ class UpdateShift extends Component {
                 }
             }
          });
+
+         this.GetShifts();
     };
 
     initializeEmployeesOptions = () => { 
         return this.state.arrEmployees.map((employee,index) => (
-        {key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]}
+        {key:employee["_id"] ,value: employee["first_name"] + ' ' + employee["last_name"] ,cat: employee["job_type"]}
         ));
   }
 
@@ -146,19 +181,52 @@ class UpdateShift extends Component {
         let validate = true;
         
         if (shift_name === "" || start_time === "" || end_time === ""|| job_type === 0||
-        difficulty === ""|| date === "" ||amount_of_employees === "" || day_part === 0)
-         {
+            difficulty === ""|| date === "" ||amount_of_employees === "" || day_part === 0 )
+        {
           alert("All Fields Must Be Filled");
           validate = false;
         }
 
-        if(amount_of_employees<this.state.employees_for_shift.length)
+        if(parseInt(amount_of_employees)<this.state.employees_for_shift.length)
         {
             alert("Amount Of Employees Must Be Equal Or Bigger Than The Amount Of Requested Employees");
             validate = false;
         }
+        
+        if(this.isWorkInTheSameHours(date,start_time,end_time,this.state.employees_for_shift))
+        {
+            alert("One Of The Employees Has Overlapping Work Hours Today Allready" );
+        }
 
         return validate;
+    }
+
+    isWorkInTheSameHours(date,startTime,endTime,employees)
+    {
+        let shifts = this.state.arrOfShifts;
+
+        if(shifts[date])
+        {  
+            for(let i=0; i<shifts[date].length; i++)
+            {  
+                for(let j=0; j<employees.length; j++)
+                {
+                    for(let k=0; k<(shifts[date][i])["employees"].length; k++)
+                    {
+                        if((((shifts[date][i])["employees"][k])["_id"] === (employees[j].key)) && 
+                            (shifts[date][i])["id"] !== this.state.shift_id  &&
+                            ((startTime >= (shifts[date][i])["start_time"] && startTime <= (shifts[date][i])["end_time"]) ||
+                            (endTime >= (shifts[date][i])["start_time"] && endTime <= (shifts[date][i])["end_time"]) ||
+                            (startTime <= (shifts[date][i])["start_time"] && endTime >= (shifts[date][i])["end_time"])))
+                        {        
+                            return true
+                        } 
+                    }
+                }     
+            }
+        }
+
+        return false;
     }
 
     initializeOptions = () => { 
@@ -166,6 +234,74 @@ class UpdateShift extends Component {
         this.state.companyJobTypes.map((jobType,index) => (
         options.push({key:index ,value: jobType})));
         return options;
+    }
+
+    parseIdToName(arrOfID)
+    {
+        let employeeFilterd = [];
+        let arrOfNames = [];
+        const listOfEmployees = this.state.arrEmployees;
+
+        employeeFilterd = listOfEmployees.filter((employee) => { 
+            for(let i=0 ; i<arrOfID.length; i++)
+            {
+                if(employee["_id"] === arrOfID[i])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        employeeFilterd.map((employee) => (
+            arrOfNames.push({first_name:employee['first_name'], last_name:employee['last_name'],_id:employee['_id']})));
+
+        return arrOfNames;
+    }
+
+    updateBuildedShift(newShift)
+    {
+        const shifts = this.state.oldDetail.full_data;
+        const minDate = moment().day(7).format('YYYY-MM-DD');
+        const maxDate = moment().day(13).format('YYYY-MM-DD');
+        let j = 0;
+        let startDate = minDate;
+        let full_data = this.state.oldDetail.full_data;
+        let data = this.state.oldDetail.data;
+        let newDetail = {};
+        let copyNewShift = newShift;
+
+        while(startDate <= maxDate)
+        {
+            if(shifts[startDate])
+            {
+                for(let i=0; i<shifts[startDate].length; i++)
+                {
+                    if((shifts[startDate][i])["id"] === newShift["id"])
+                    {
+                        data[newShift["id"]] = newShift.employees;
+                        copyNewShift.employees = this.parseIdToName(newShift.employees);
+                        full_data[startDate][i] = copyNewShift;
+                    }                   
+                }
+            }
+                
+            j++;
+            startDate = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
+        }
+
+        newDetail = 
+        {
+            data: data,
+            full_data: full_data,
+            msg: this.state.oldDetail.msg,
+            ok:this.state.oldDetail.ok,
+            success_rate:this.state.oldDetail.success_rate
+        }
+        
+        updateShift(newShift).then(res => {
+        this.props.history.push(`/showGeneratedShifts`,{ detail: newDetail})})
     }
 
     onSubmit (e) {
@@ -183,23 +319,32 @@ class UpdateShift extends Component {
         }
 
         const newShift = {
+            is_shift_full: parseInt(this.state.amount_of_employees) === this.state.employees_for_shift.length ? 'full':'not_full',
             id: this.state.shift_id,
-            shift_name: this.state.shift_name,
+            name: this.state.shift_name,
             start_time: this.state.start_time,
             end_time: this.state.end_time,
             job_type: this.state.job_type,
             difficulty: parseInt(this.state.difficulty),
             date: this.state.date,
-            amount_of_employees: parseInt(this.state.amount_of_employees),
+            amount: parseInt(this.state.amount_of_employees),
             day_part: dayParts,
-            employees_for_shift: employees,
-            shift_note: this.state.shift_note,
+            employees: employees,
+            note: this.state.shift_note,
         }
 
-         if(this.validateRegisterForm()) {
-            updateShift(newShift).then(res => {
-            this.props.history.push(`/generateShifts`)
-        })}
+        if(this.validateRegisterForm())
+         {
+            if(this.state.inBuild)
+            {
+                this.updateBuildedShift(newShift)
+            }
+            else
+            {
+                updateShift(newShift).then(res => {
+                    this.props.history.push(`/generateShifts`)})
+            }
+        }
     }
 
     render () {
@@ -224,7 +369,7 @@ class UpdateShift extends Component {
                                     className="form-control"
                                     name="date"
                                     value={this.state.date}
-                                    min= {moment().day(7).format('YYYY-MM-DD')}
+                                    min= {moment().day(0).format('YYYY-MM-DD')}
                                     max= {moment().day(13).format('YYYY-MM-DD')}
                                     onChange={this.onChange} />
                             </div>
@@ -307,6 +452,7 @@ class UpdateShift extends Component {
                                 closeIcon="cancel"
                                 placeholder="Update The Employees"
                                 avoidHighlightFirstOption= {true}
+                                selectionLimit={this.state.amount_of_employees}
                                 style={{searchBox: {background: 'white'}}}
                                 hidePlaceholder={true}
                                 closeOnSelect={false}

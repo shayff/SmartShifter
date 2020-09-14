@@ -33,13 +33,13 @@ class Profile extends Component {
             if (this._isMounted)
             {
                 this.setState({
-                first_name:data["first name"],
-                last_name: data["last name"],
+                first_name:data["first_name"],
+                last_name: data["last_name"],
                 email: data["email"],
-                id_number: data["id number"],
+                id_number: data["id_number"],
                 phone: data["phone"],
                 address: data["address"],
-                date_of_birth: data["date of birth"],
+                date_of_birth: data["date_of_birth"],
                 gender:data["gender"]})
                 }
             }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
-import logo from '../assests/SmartShifterLogo.png';
-import conferenceVideo from '../assests/conferenceVideo.mp4';
-import happyPeople from '../assests/happyPeople.mp4';
+import logo from '../assets/SmartShifterLogo.png';
+import conferenceVideo from '../assets/conferenceVideo.mp4';
+import happyPeople from '../assets/happyPeople.mp4';
 
 class Home extends Component {
     render () {

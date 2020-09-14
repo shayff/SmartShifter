@@ -3,15 +3,15 @@ import moment from 'moment'
 
 export const register = newUser => {
     return axios
-        .post("/register", {
-            "first name": newUser.first_name,
-            "last name": newUser.last_name,
+        .post("/api/v1/user", {
+            "first_name": newUser.first_name,
+            "last_name": newUser.last_name,
             "email": newUser.email,
             "password": newUser.password,
-            "id number": newUser.id_number,
+            "id_number": newUser.id_number,
             "phone": newUser.phone,
             "address": newUser.address,
-            "date of birth": newUser.date_of_birth,
+            "date_of_birth": newUser.date_of_birth,
             "gender": newUser.gender
         })
         .then(response => {
@@ -26,8 +26,8 @@ export const register = newUser => {
 
 export const createCompany = data => {
     return axios
-        .post("http://localhost:5001/companies/create",{
-            "company name": data.company_name,
+        .post("http://localhost:5001/api/v1/company",{
+            "company_name": data.company_name,
             "roles": data.companyJobTypes,
             "settings": data.settings,
         },
@@ -48,7 +48,7 @@ export const createCompany = data => {
 
 export const login = user => {
     return axios
-        .post("/login", {
+        .post("/api/v1/login", {
             "email": user.email,
             "password": user.password
         })
@@ -66,7 +66,7 @@ export const login = user => {
 
 export const getProfile = () => {
     return axios
-    .get("/profile",
+    .get("/api/v1/user/profile",
     {
         headers: {
             Authorization: "Bearer " + localStorage.usertoken
@@ -82,14 +82,14 @@ export const getProfile = () => {
 
 export const updateProfile = user => {
     return axios
-        .post("/updateprofile", {
-            "first name": user.first_name,
-            "last name": user.last_name,
+        .put("/api/v1/user", {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "email": user.email, 
-            "id number": user.id_number,
+            "id_number": user.id_number,
             "phone": user.phone,
             "address": user.address,
-            "date of birth": user.date_of_birth,
+            "date_of_birth": user.date_of_birth,
             "gender": user.gender
         }, 
          { headers: {
@@ -105,9 +105,9 @@ export const updateProfile = user => {
 
 export const updatePassword = user => {
     return axios
-        .post("/changepassword", {
+        .put("/api/v1/user/password", {
             "current_password": user.currPassword,
-             "new_password": user.newPassword
+            "new_password": user.newPassword
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken
@@ -122,7 +122,7 @@ export const updatePassword = user => {
 
 export const sendMessage = message => {
     return axios
-        .post("/sendmessage",{
+        .post("/api/v1/message",{
         "to":message.toWho,
         "title":message.title,
         "message":message.textMessage
@@ -158,7 +158,7 @@ export const getSentMessages= () => {
 
 export const getSettings = () => {
     return axios
-    .get("http://localhost:5001/companies/profile",
+    .get("http://localhost:5001/api/v1/company",
     {
         headers: {
             Authorization: "Bearer " + localStorage.usertoken
@@ -174,8 +174,8 @@ export const getSettings = () => {
 
 export const updateSettings= data => {
     return axios
-        .post("http://localhost:5001/companies/update", {
-            "company name": data.company_name,
+        .put("http://localhost:5001/api/v1/company", {
+            "company_name": data.company_name,
             "roles": data.companyJobTypes,
             "settings": data.settings,
         }, 
@@ -192,10 +192,10 @@ export const updateSettings= data => {
 
 export const addEmployee = user => {
     return axios
-        .post("http://localhost:5001/companies/addemployees", {
+        .post("http://localhost:5001/api/v1/company/employee", {
             "email": user.email, 
-            "time of joining": moment().format(),
-            "job type": user.job_type,
+            "time_of_joining": moment().format(),
+            "job_type": user.job_type,
             "rank": parseInt(user.rank)
         }, 
          { headers: {
@@ -211,12 +211,15 @@ export const addEmployee = user => {
 
 export const removeEmployee = user => {
     return axios
-        .post("http://localhost:5001/companies/removeemployees", {
-            "employees": [user["_id"]],
-        }, 
-         { headers: {
-           Authorization: "Bearer " + localStorage.usertoken
-        }}
+        .delete("http://localhost:5001/api/v1/company/employee", 
+         {
+            data:{
+                "employees": [user["_id"]],
+            },
+            headers: {
+                Authorization: "Bearer " + localStorage.usertoken
+            }
+        }
         )
         .then((response) => {
             console.log("Removed Employee")
@@ -227,9 +230,9 @@ export const removeEmployee = user => {
 
 export const updateEmployeeInfo = user => {
     return axios
-        .post("http://localhost:5001/companies/updateemployee", {
+        .put("http://localhost:5001/api/v1/company/employee", {
             "id": parseInt(user.id),
-            "job type": user.job_type,
+            "job_type": user.job_type,
             "rank": parseInt(user.rank),
         }, 
          { headers: {
@@ -245,7 +248,7 @@ export const updateEmployeeInfo = user => {
 
 export const listOfEmployees = () => {
     return axios
-        .get("http://localhost:5001/companies/listofemployees",
+        .get("http://localhost:5001/api/v1/company/employees",
         {
             headers: {
                 Authorization: "Bearer " + localStorage.usertoken
@@ -259,17 +262,23 @@ export const listOfEmployees = () => {
         })
 }
 
+
 export const getShifts = date => {
     return axios
-        .post("http://localhost:5002/GetShifts",{ 
+        .get("http://localhost:5002/api/v1/shifts",{ 
+        params:{
                 "start_date": date.start_date, 
                 "end_date": date.end_date,
                 "statuses": date.statuses
         },
+        paramsSerializer: function(params) {
+            const qs = require('qs');
+            return qs.stringify(params, {arrayFormat: 'repeat'})
+        },  
+        headers:
         {
-            headers: {
-                Authorization: "Bearer " + localStorage.usertoken
-             }
+            Authorization: "Bearer " + localStorage.usertoken
+        }
         })
         .then(response => {
             return response.data.data;
@@ -281,7 +290,7 @@ export const getShifts = date => {
 
 export const approveSwitches = data => {
     return axios
-        .post("http://localhost:5002/ConfirmShiftSwap",{
+        .post("http://localhost:5002/api/v1/shifts_swaps/confirm",{
         "swap_id": data.swapId,
         "status": data.status
         },
@@ -300,13 +309,36 @@ export const approveSwitches = data => {
 
 export const getSwitches = data => {
     return axios
-        .post("http://localhost:5002/GetShiftsSwaps",{
-            "statuses":data
-        },
-        {
-            headers: {
+        .get("http://localhost:5002/api/v1/shifts_swaps",{ 
+            params:
+            {      
+                "statuses":data
+            },
+            paramsSerializer: function(params) {
+                const qs = require('qs');
+                return qs.stringify(params, {arrayFormat: 'repeat'})
+            },  
+            headers:
+            {
                 Authorization: "Bearer " + localStorage.usertoken
-             }
+            }
+        })
+        .then(response => {
+            return response.data.data;
+        })
+        .catch(eror => {
+            console.log(eror)
+        })
+}
+
+export const deleteSwitch = swapId => {
+    return axios
+        .delete("http://localhost:5002/api/v1/shift_swap/" + swapId,
+        {
+            headers:
+            {
+                Authorization: "Bearer " + localStorage.usertoken
+            }
         })
         .then(response => {
             return response.data.data;
@@ -318,7 +350,7 @@ export const getSwitches = data => {
 
 export const submitWantedShift = data => {
     return axios
-        .post("http://localhost:5001/companies/PrefenceFromManager",{
+        .post("http://localhost:5001/api/v1/company/preference/manager",{
             "sunday":data.sunday,
             "monday":data.monday,
             "tuesday":data.tuesday,
@@ -342,15 +374,15 @@ export const submitWantedShift = data => {
 
 export const addShifts = data => {
     return axios
-        .post("http://localhost:5001/companies/addshift",{
+        .post("http://localhost:5002/api/v1/shift",{
             "name": data.shift_name, 
-            "start time": data.start_time,
-            "end time":data.end_time,
-            "job type":data.job_type,
+            "start_time": data.start_time,
+            "end_time":data.end_time,
+            "job_type":data.job_type,
             "difficulty":data.difficulty,
             "date":data.date,
             "amount":data.amount_of_employees,
-            "day part":data.day_part,
+            "day_part":data.day_part,
             "employees":data.employees_for_shift,
             "note":data.shift_note
         },
@@ -369,18 +401,18 @@ export const addShifts = data => {
 
 export const updateShift = data => {
     return axios
-        .post("http://localhost:5001/companies/updateshift",{
+        .put("http://localhost:5002/api/v1/shift",{
             "id": data.id, 
-            "name": data.shift_name, 
-            "start time": data.start_time,
-            "end time":data.end_time,
-            "job type":data.job_type,
+            "name": data.name, 
+            "start_time": data.start_time,
+            "end_time":data.end_time,
+            "job_type":data.job_type,
             "difficulty":data.difficulty,
             "date":data.date,
-            "amount":data.amount_of_employees,
-            "day part":data.day_part,
-            "employees":data.employees_for_shift,
-            "note":data.shift_note,
+            "amount":data.amount,
+            "day_part":data.day_part,
+            "employees":data.employees,
+            "note":data.note,
         },
         {
             headers: {
@@ -397,13 +429,16 @@ export const updateShift = data => {
 
 export const removeShift = id => {
     return axios
-        .post("http://localhost:5001/companies/deleteshift",{
-            "id": id, 
-        },
+        .delete("http://localhost:5002/api/v1/shift",
         {
-            headers: {
+            data:
+            {
+                "id": id
+            },
+            headers: 
+            {
                 Authorization: "Bearer " + localStorage.usertoken
-             }
+            }
         })
         .then(response => {
             console.log("Removed Shift")
@@ -415,7 +450,7 @@ export const removeShift = id => {
 
 export const buildShifts = data => {
     return axios
-        .post("http://localhost:5002/buildshift",{
+        .post("http://localhost:5002/api/v1/shifts/build",{
             "start_date": data.startDate, 
             "end_date": data.endDate
         },
@@ -435,7 +470,7 @@ export const buildShifts = data => {
 
 export const acceptBuildShift = data => {
     return axios
-        .post("http://localhost:5002/SetShiftsSchedule",{
+        .post("http://localhost:5002/api/v1/shifts/set",{
             data
         },
         {

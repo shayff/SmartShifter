@@ -29,12 +29,9 @@ class Register extends Component {
         const passwrod = document.forms["myForm2"]["password"].value;
         const id_number = document.forms["myForm2"]["id_number"].value;
         const phone = document.forms["myForm2"]["phone"].value;
-        //const address = document.forms["myForm2"]["address"].value;
-        //const gedner = document.forms["myForm2"]["gender"].value;
         const date_of_birth = document.forms["myForm2"]["date_of_birth"].value;
         let validate = true;
 
-        //address === "" || gedner === ""
         if (email === "" || passwrod === "" || first_name === ""|| id_number === ""||
              last_name === ""|| phone === "" || date_of_birth === "")
          {
@@ -43,7 +40,7 @@ class Register extends Component {
         }
 
         return validate;
-      }
+    }
 
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })

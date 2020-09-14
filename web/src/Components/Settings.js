@@ -33,7 +33,7 @@ class Settings extends Component {
             if (this._isMounted)
             {
                 this.setState({
-                company_name:data["company name"],
+                company_name:data["company_name"],
                 company_address: data.settings["address"],
                 switch_shifts: data.settings["can_employee_switch_shifts"] === true ? "Yes" : "No" ,
                 amout_of_shifts: data.settings["shifts_required_from_emp"],

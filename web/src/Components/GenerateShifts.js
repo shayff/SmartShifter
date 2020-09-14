@@ -133,7 +133,7 @@ class GenerateShifts extends Component {
     }
 
     onUpdateInfoShift(path, shift) {
-        this.props.history.push(path, { detail: shift})
+        this.props.history.push(path, { detail: shift ,inBuild: false})
    }
 
     initializeTableModal(shift,index)
@@ -147,9 +147,12 @@ class GenerateShifts extends Component {
 
         return(
         <div key = {index} style={{padding:'5px'}}>
-            <button type="button" className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? shiftIsScheduled : shiftIsScheduledButNotOk) : shiftIsNotScheduled} data-toggle="modal" data-target={modalButton}>
-                    {shift.name}<br/>{shift["start time"]}-{shift["end time"]}
-            </button>
+            <button type="button" className={shift.status === 'scheduled' ? (shift.is_shift_full === 'full' ? shiftIsScheduled : shiftIsScheduledButNotOk) : shiftIsNotScheduled} data-toggle="modal" data-target={modalButton}>
+                {shift.name} <br/> {shift["start_time"]} - {shift["end_time"]} <br/> {shift.employees.map((employee,index) => (
+                    <div key = {index}>
+                        {employee["first_name"] + " " + employee["last_name"]}
+                    </div>))}
+           </button>
             <div className="modal fade" data-backdrop="false" id={ModalId} tabIndex="-1" aria-labelledby={modalLabel} aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content">
@@ -173,15 +176,15 @@ class GenerateShifts extends Component {
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Start Time Of The Shift</td>
-                                <td className="table-secondary">{shift["start time"]}</td>
+                                <td className="table-secondary">{shift["start_time"]}</td>
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">End Time Of The Shift</td>
-                                <td className="table-secondary">{shift["end time"]}</td>
+                                <td className="table-secondary">{shift["end_time"]}</td>
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Job Type For The Shift</td>
-                                <td className="table-secondary">{shift["job type"]}</td>
+                                <td className="table-secondary">{shift["job_type"]}</td>
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Difficulty Of The Shift</td>
@@ -189,17 +192,17 @@ class GenerateShifts extends Component {
                             </tr>
                             <tr className="text-center">
                                 <td className="table-primary">Day Part Of The Shift</td>
-                                <td className="table-secondary">{this.ParseDayParts(shift["day part"])}</td>
+                                <td className="table-secondary">{this.ParseDayParts(shift["day_part"])}</td>
                             </tr>
                             <tr className="text-center">
-                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-primary" : "table-danger") : "table-primary"}>Amount Of Employees</td>
-                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-secondary" : "table-danger") : "table-secondary"}>{shift.amount}</td>
+                                <td className={shift.status === 'scheduled' ? (shift.is_shift_full === 'full' ? "table-primary" : "table-danger") : "table-primary"}>Amount Of Employees</td>
+                                <td className={shift.status === 'scheduled' ? (shift.is_shift_full === 'full' ? "table-secondary" : "table-danger") : "table-secondary"}>{shift.amount}</td>
                             </tr>
                             <tr className="text-center">
-                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-primary" : "table-danger") : "table-primary"}>Employees For The Shift</td>
-                                <td className={shift.status === 'scheduled' ? (shift.Is_shift_full === 'full' ? "table-secondary" : "table-danger") : "table-secondary"}>{shift.employees.map((employee,index) => (
+                                <td className={shift.status === 'scheduled' ? (shift.is_shift_full === 'full' ? "table-primary" : "table-danger") : "table-primary"}>Employees For The Shift</td>
+                                <td className={shift.status === 'scheduled' ? (shift.is_shift_full === 'full' ? "table-secondary" : "table-danger") : "table-secondary"}>{shift.employees.map((employee,index) => (
                                     <div key = {index}>
-                                      {employee["first name"] + " " + employee["last name"]}
+                                      {employee["first_name"] + " " + employee["last_name"]}
                                     </div>))}
                                 </td>
                             </tr>
@@ -212,6 +215,9 @@ class GenerateShifts extends Component {
                     </div>
                 </div>
                     <div className="modal-footer">
+                    <button type="button" style ={{visibility: shift.status === 'scheduled' ? 'visible': 'hidden'}} className="btn btn-primary" data-dismiss="modal" onClick={() => this.onSendMessage('/messages',shift)}>
+                            Send Message
+                        </button>
                         <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.onUpdateInfoShift(`/updateShift`,shift)}>
                             Update Shift
                         </button>
@@ -226,6 +232,11 @@ class GenerateShifts extends Component {
                 </div>
             </div>
         </div>)
+    }
+
+    onSendMessage(path, shift)
+    {
+        this.props.history.push(path, { detail: shift, from: "GenerateShifts"})
     }
 
     initializeTable()
@@ -318,9 +329,9 @@ class GenerateShifts extends Component {
         }
 
         buildShifts(dates).then(buildedShifts => {
-            if(buildedShifts.data)
+            if(buildedShifts && buildedShifts.data)
             {
-                this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts})
+                this.props.history.push(`/showGeneratedShifts`, { detail: buildedShifts, currentWeek:this.state.isCurrentWeek})
             }
             else
             {
@@ -333,9 +344,9 @@ class GenerateShifts extends Component {
         return (
             <div className="container" style={{marginBottom: '30px'}}>
             <form name="myForm15" onSubmit={this.onSubmit}>
-            <div className="jumbotron mt-5" style={{display: 'inline-block'}}>
+            <div className="jumbotron mt-5" style={{display: 'inline-block', marginLeft: '-10%'}}>
              <div className="col-sm-8 mx-auto">
-                <h1 className="text-center"> Update And Build Shifts </h1>
+                <h1 className="text-center">Shifts Editor</h1>
              </div>
                 <table className="table table-borderless">
                     <thead>                          
@@ -390,7 +401,11 @@ class GenerateShifts extends Component {
                     </svg>}<br/> Add Shifts 
                 </button> 
                 <button type="button" className="btn btn-lg btn-primary btn-block" onClick={() => this.onRemoveAll()}>
-                               Remove All Displayed Shifts
+                <svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-calendar2-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+                <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+                <path fillRule="evenodd" d="M6.146 8.146a.5.5 0 0 1 .708 0L8 9.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 10l1.147 1.146a.5.5 0 0 1-.708.708L8 10.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 10 6.146 8.854a.5.5 0 0 1 0-.708z"/>
+                </svg><br/> Remove All Displayed Shifts
                 </button>    
                 <button type="submit" className="btn btn-lg btn-primary btn-block">
                                Build Shifts

@@ -11,9 +11,6 @@ class UpdateProfile extends Component {
             first_name: '',
             last_name: '',
             email: '',
-            currPassword: '',
-            newPassword: '',
-            newPasswordTypedAgain: '',
             id_number: '',
             phone: '',
             address: '',
@@ -29,15 +26,11 @@ class UpdateProfile extends Component {
         const first_name = document.forms["myForm4"]["first_name"].value;
         const last_name = document.forms["myForm4"]["last_name"].value;
         const email = document.forms["myForm4"]["email"].value;
-        //const currPassword = document.forms["myForm4"]["currPassword"].value;
         const id_number = document.forms["myForm4"]["id_number"].value;
         const phone = document.forms["myForm4"]["phone"].value;
-        // const address = document.forms["myForm4"]["address"].value;
-        //const gedner = document.forms["myForm4"]["gender"].value;
         const date_of_birth = document.forms["myForm4"]["date_of_birth"].value;
         let validate = true;
 
-        //address === "" || gedner === "" || currPassword === "" 
         if (email === "" || first_name === ""|| id_number === ""|| last_name === ""|| phone === "" || date_of_birth === "")
         {
           alert("All Fields Must Be Filled");
@@ -66,6 +59,33 @@ class UpdateProfile extends Component {
         this.props.history.push(`/updatePassword`)
     }
 
+    componentWillUnmount() 
+    {
+        this._isMounted = false;
+    }
+
+    componentDidMount(){
+        this._isMounted = true;
+
+        getProfile().then(data =>{
+            if(data)
+            {
+                if (this._isMounted)
+                {
+                    this.setState({
+                    first_name:data["first_name"],
+                    last_name: data["last_name"],
+                    email: data["email"],
+                    id_number: data["id_number"],
+                    phone: data["phone"],
+                    address: data["address"],
+                    date_of_birth: data["date_of_birth"],
+                    gender: data["gender"]});
+                }
+            }
+        })
+    }
+
     onSubmit (e) {
         e.preventDefault()
         
@@ -84,33 +104,6 @@ class UpdateProfile extends Component {
         updateProfile(user).then(res => {
             this.props.history.push(`/profile`)
         })}
-    }
-
-    componentWillUnmount() 
-    {
-        this._isMounted = false;
-    }
-
-    componentDidMount(){
-        this._isMounted = true;
-
-        getProfile().then(data =>{
-            if(data)
-            {
-                if (this._isMounted)
-                {
-                    this.setState({
-                    first_name:data["first name"],
-                    last_name: data["last name"],
-                    email: data["email"],
-                    id_number: data["id number"],
-                    phone: data["phone"],
-                    address: data["address"],
-                    date_of_birth: data["date of birth"],
-                    gender: data["gender"]});
-                }
-            }
-        })
     }
     
     render () {

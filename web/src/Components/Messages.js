@@ -100,9 +100,12 @@ class Messages extends Component {
         messagesFilterd = messages.filter((message) => { 
             for(let i=0 ; i<optionsFilter.length; i++)
             {
-                if(message["to"].indexOf(optionsFilter[i])>-1)
+                for(let j=0 ; j<message["to"].length; j++)
                 {
-                    return true;
+                    if((message["to"][j])['_id'] === optionsFilter[i])
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -121,7 +124,7 @@ class Messages extends Component {
         {
             for(let i=0; i<this.state.daysOptions.length; i++)
             {
-                days.push(parseInt(this.state.daysOptions[i]))
+                days.push(this.state.daysOptions[i])
             }
 
             isAllChosen = true;
@@ -131,7 +134,7 @@ class Messages extends Component {
         {
             for(let i=0; i<selectedList.length; i++)
             {
-                days.push(parseInt(selectedList[i].value))
+                days.push(selectedList[i].value)
             }
 
             isAllChosen = false;
@@ -150,11 +153,26 @@ class Messages extends Component {
 
         if(this.isAllOptionInArray(selectedList))
         {
-            for(let i=0; i<this.state.shiftsOptions.length; i++)
+            const shiftsOptions = this.state.shiftsOptions;
+            const minDate = this.state.minDate;
+            const maxDate = this.state.maxDate;
+            let j = 0;
+            let startDate = minDate;
+    
+            while(startDate <= maxDate)
             {
-                shifts.push(parseInt(this.state.shiftsOptions[i]["_id"]))
+                if(shiftsOptions[startDate])
+                {
+                    for(let i=0; i<shiftsOptions[startDate].length; i++)
+                    {
+                        shifts.push(parseInt((shiftsOptions[startDate][i])["id"]))
+                    }
+                }
+                
+                j++;
+                startDate = moment(minDate, "YYYY-MM-DD").add(j, 'days').format('YYYY-MM-DD');
             }
-
+            
             isAllChosen = true;
             showView = [{key:'All' ,value: 'All'}];
         }
@@ -214,7 +232,7 @@ class Messages extends Component {
         {
             for(let i=0; i<this.state.jobsOptions.length; i++)
             {
-                jobs.push(parseInt(this.state.jobsOptions[i]))
+                jobs.push(this.state.jobsOptions[i])
             }
 
             isAllChosen = true;
@@ -224,7 +242,7 @@ class Messages extends Component {
         {
             for(let i=0; i<selectedList.length; i++)
             {
-                jobs.push(parseInt(selectedList[i].value))
+                jobs.push(selectedList[i].value)
             }
 
             isAllChosen = false;
@@ -236,28 +254,29 @@ class Messages extends Component {
                        jobsViewOptions: showView});
     }
 
-    parseIdToName(arrOfID)
+    whoRead(recipients)
     {
-        let employeeFilterd = [];
-        let arrOfNames = [];
-        const listOfEmployees = this.state.arrEmployees;
-
-        employeeFilterd = listOfEmployees.filter((employee) => { 
-            for(let i=0 ; i<arrOfID.length; i++)
+        return recipients.map((recipient,index) =>
+        {
+            if(recipient.is_read)
             {
-                if(employee["_id"] === arrOfID[i])
-                {
-                    return true;
-                }
+                return( <div key={index}  style={{display: 'inline-flex'}}>
+                    <div style={{color:'green',marginRight:'5px'}}>
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-check-all" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M8.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z"/>
+                    </svg></div> {recipient.full_name + ', '}</div>
+                )
             }
-
-            return false;
-        });
-
-        employeeFilterd.map((employee) => (
-            arrOfNames.push(employee["first name"] + ' ' + employee["last name"])));
-
-        return arrOfNames.join(', ');
+            else
+            {
+                return( <div key={index} style={{display: 'inline-flex'}}>
+                    <div style={{color:'red',marginRight:'2px'}}>
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg></div> {recipient.full_name + ', '} </div>
+                )
+            }
+        })        
     }
 
     initializeTable = (userMessages,optionsFilter) => {
@@ -277,7 +296,7 @@ class Messages extends Component {
             return userMessagesFilterd.map((messages,index) => (
                 <tr key = {index} >
                 <th scope="row" className="text-center"> {index + 1}</th>
-                <td className="text-center">{this.parseIdToName(messages["to"])}</td>
+                <td className="text-center">{this.whoRead(messages["to"])}</td>
                 <td className="text-center">{messages["title"]}</td>
                 <td className="text-center">{messages["message"]}</td>
                 <td className="text-center">{messages["time_created"]}</td>
@@ -301,7 +320,7 @@ class Messages extends Component {
                 for(let i=0; i<shifts[startDate].length; i++)
                 {
                     shiftsOptions.push({key:(shifts[startDate][i])["id"] ,value: (shifts[startDate][i]).name + ' ' + 
-                        (shifts[startDate][i])["start time"] + '-' + (shifts[startDate][i])["end time"], cat: (shifts[startDate][i]).date})
+                        (shifts[startDate][i])["start_time"] + '-' + (shifts[startDate][i])["end_time"], cat: (shifts[startDate][i]).date})
                 }
             }
             
@@ -315,7 +334,7 @@ class Messages extends Component {
     initializeEmployeeOptions = () => { 
         let employeeOptions = [{key:'All' ,value: 'All'}]
         this.state.arrEmployees.map((employee) => (
-        employeeOptions.push({key:employee["_id"] ,value: employee["first name"] + ' ' + employee["last name"] ,cat: employee["job type"]})
+        employeeOptions.push({key:employee["_id"] ,value: employee["first_name"] + ' ' + employee["last_name"] ,cat: employee["job_type"]})
         ));
         return employeeOptions;
     }
@@ -325,9 +344,11 @@ class Messages extends Component {
         const message = document.forms["myForm7"]["textMessage"].value;
         const employeeToSend = this.state.employeeToSend.length;
         const shiftsToSend = this.state.shiftsToSend.length;
+        const daysToSend = this.state.daysToSend.length;
+        const jobsToSend = this.state.jobsToSend.length;
         let validate = true;
 
-        if (title === "" || message === "" || (employeeToSend === 0 && shiftsToSend === 0))
+        if (title === "" || message === "" || (employeeToSend === 0 && shiftsToSend === 0 && jobsToSend === 0 && daysToSend === 0))
          {
           alert("All Fields Must Be Filled");
           validate = false;
@@ -404,6 +425,24 @@ class Messages extends Component {
         }
     }
 
+    getDefualtData()
+    {
+        const detail = this.props.location.state.detail;
+        
+        if(this.props.location.state.from === "Employees")
+        {
+            this.setState({employeeToSend: [detail["_id"]],    
+                        employeeViewOptions: [{key:detail["_id"] ,value: detail["first_name"] + ' ' + detail["last_name"] ,cat: detail["job_type"]}],
+                        isEmployeeOptionAllChosen: false});
+        }
+        else
+        {
+            this.setState({shiftsToSend: [detail["id"]],    
+                           shiftsViewOptions: [{key:detail["id"] ,value: detail.name + ' ' + detail["start_time"] + '-' + detail["end_time"], cat: detail.date}],
+                           isShiftOptionAllChosen: false});
+        }
+    }
+
     componentWillUnmount() 
     {
         this._isMounted = false;
@@ -416,7 +455,11 @@ class Messages extends Component {
         this.getShiftsOptions();
         this.getDaysOptions();
         this.getJobsOptions();
-
+        if(this.props.location.state)
+        {
+            this.getDefualtData()
+        }
+        
         getSentMessages().then(userMessages => {
             if (userMessages && userMessages.length !== 0)
             {
@@ -450,13 +493,13 @@ class Messages extends Component {
             {
                 employees: this.state.employeeToSend,
                 shifts: this.state.shiftsToSend,
-                dates:[]
+                dates:this.state.daysToSend,
+                job_type:this.state.jobsToSend
             },
             title: this.state.title,
             textMessage: this.state.textMessage,
         }
-        
-        console.log(message)
+
         if(this.validateMessage()) {
             sendMessage(message).then(res => {
                 window.location.reload(false);
@@ -475,20 +518,22 @@ class Messages extends Component {
                             </svg>} Messages
                     </h1>
                     </div>
-                    <table className="table table-bordered table-hover">
-                        <thead className="thead-dark">
-                            <tr>
-                            <th scope="col" className="text-center">#</th>
-                            <th scope="col" className="text-center">To</th>
-                            <th scope="col" className="text-center">Title</th>
-                            <th scope="col" className="text-center">The Message</th>
-                            <th scope="col" className="text-center">Time Created</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.initializeTable(this.state.messages,this.state.recipientFilter)}  
-                        </tbody>
-                        </table>
+                    <div style = {{overflowY: 'auto', maxHeight:"576px"}}>
+                        <table className="table table-bordered table-hover">
+                            <thead className="thead-dark">
+                                <tr>
+                                <th scope="col" className="text-center">#</th>
+                                <th scope="col" className="text-center">To</th>
+                                <th scope="col" className="text-center">Title</th>
+                                <th scope="col" className="text-center">The Message</th>
+                                <th scope="col" className="text-center">Time Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.initializeTable(this.state.messages,this.state.recipientFilter)}  
+                            </tbody>
+                            </table>
+                        </div>
                         <div>
                             <label htmlFor="recipient_filter"> Filter By Recipient </label>   
                             <Multiselect
@@ -505,7 +550,19 @@ class Messages extends Component {
                             hidePlaceholder={true}
                             onSelect={this.onSelectOrRemoveFilter}
                             onRemove={this.onSelectOrRemoveFilter}/>
+                        </div><br/>
+                        <div style={{color:'red',float:'left'}}>
+                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
                         </div>
+                        <label style={{marginLeft:"10px"}}>An Employee Who Not Confirmed The Reading Of The Message </label><br/>
+                        <div style={{color:'green',float:'left'}}>
+                            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" className="bi bi-check-all" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fillRule="evenodd" d="M8.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14l.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z"/>
+                            </svg>
+                        </div>
+                        <label style={{marginLeft:"10px"}}>An Employee Who Confirmed The Reading Of The Message </label><br/>
                     </div>
                 <form name="myForm7" onSubmit={this.onSubmit}>
                     <div className="input-group mb-3">
