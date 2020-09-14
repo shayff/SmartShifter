@@ -3,6 +3,13 @@ import { ActivityIndicator ,AsyncStorage,StyleSheet, Text, View,TouchableOpacity
 import DaySquare from '../component/userPreferences/daySquare';
 import company_server from '../networking/company_server';
 
+/*
+The screen displays parts of the day, the user selects his preference for its availability on weekdays.
+
+By days, parts of the day: morning 0, noon 1, evening 2.
+Types of preferences: not available, available, preferred.
+You can press the prefer button once a day, it gives the user a better chance of appearing on this shift.
+*/
 export default class User_preferences extends Component {
 
     constructor(inside){
@@ -24,15 +31,16 @@ export default class User_preferences extends Component {
     }
 
     componentDidMount = async () => {
-
+        //Communication with the server, bring the parts on the day the manager requested
         let token = await AsyncStorage.getItem('token');
-        const response = await company_server.get('/api/v1/company/preferences', {//companies/GetPreferences
+        const response = await company_server.get('/api/v1/company/preferences', {
             headers: {
                 Authorization: "Bearer " + token
             }
         }).then(response => {
-            let minShiftsMSG = " Please submit at least " + response.data.minimum_shifts.toString()+ " shifts"; // MSG to Minimum shifts are required
-            this.setState({minimumShifts:minShiftsMSG});
+            // message to Minimum shifts are required
+            let min_Shifts_Message = " Please submit at least " + response.data.minimum_shifts.toString()+ " shifts"; 
+            this.setState({minimumShifts:min_Shifts_Message});
       
             if(response.data.msg != "Successfully")
             {
@@ -40,9 +48,10 @@ export default class User_preferences extends Component {
                 this.setState({menegerSendShift:false});
             }
             else
-            {
+            {   //Initializing variables The information we received from the server
                 this.setState({ShiftsFromManager:response.data.data}, () => this.daysShift());
                 this.setState({menegerSendShift:true});
+                //A message that appears on the screen shows how many shifts the employee must submit
                 Alert.alert(this.state.minimumShifts);
             }
 
@@ -98,8 +107,9 @@ export default class User_preferences extends Component {
         {
             var objectDay = new Date(prefer.dateName);
             var dayName = objectDay.getDay();
-    
-            if(this.state.availability == 2) // if it 'prefer' availability , check that there is no 2 'prefer' shift in the same day
+            
+            // if it 'prefer' availability , check that there is no 2 'prefer' shift in the same day
+            if(this.state.availability == 2)
             {
                 if (this.state.currentSelectShift[dayName].prefereces[0] == 2 || this.state.currentSelectShift[dayName].prefereces[1] == 2 || this.state.currentSelectShift[dayName].prefereces[2] == 2)
                 {
@@ -155,7 +165,7 @@ export default class User_preferences extends Component {
         }
         let token = await AsyncStorage.getItem('token');
 
-        const response = await company_server.post('/api/v1/company/preference/employee',///companies/PrefenceFromWorker',
+        const response = await company_server.post('/api/v1/company/preference/employee',
         toSend,
         {
             headers: {
@@ -208,7 +218,7 @@ export default class User_preferences extends Component {
                         </View>   
 
                         <View style={Styles.line}>
-                            <DaySquare dayName={ 'monday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.monday.date} whichShiftToShowe = {this.state.whichShiftToShowe[1]} clickSelectPreferce = {this.update_select_prefers} />
+                            <DaySquare dayName={ 'Monday'} typeOfAvailabilityColor = {this.state.availability} dateName = {this.state.ShiftsFromManager.monday.date} whichShiftToShowe = {this.state.whichShiftToShowe[1]} clickSelectPreferce = {this.update_select_prefers} />
                         </View>
 
                         <View style={Styles.line}>

@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import { CheckBox,AsyncStorage,StyleSheet, Text, View } from 'react-native';
 import member_server from '../../networking/member_server';
 
+/*
+One message in the message list
+*/
 
 export default class SingleMessage extends Component {
     
@@ -13,22 +16,22 @@ export default class SingleMessage extends Component {
         }                      
       }
 
-
     componentDidMount =  () => {
+
+        //Status of the message
         if (this.props.item.is_read == "read" )
         {
             this.setState({isRead:true});
             this.setState({textIsRead:"You already confirm reading:" });
-
         }
         else
         {
             this.setState({isRead:false});
             this.setState({textIsRead:"Check to confirm reading:" });
-
         }
     }
 
+    //Functionality of read / unread and Communication with the server
     click_to_verify = async () => {
 
         let token = await AsyncStorage.getItem('token');
@@ -37,7 +40,7 @@ export default class SingleMessage extends Component {
             "id" : this.props.item.id,
             "status": "read"
         }
-        const response = await member_server.put('/api/v1/message/status',///updatemessage - post
+        const response = await member_server.put('/api/v1/message/status',
         toSend,
         {
             headers: {

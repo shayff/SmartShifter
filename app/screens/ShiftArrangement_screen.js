@@ -6,6 +6,9 @@ import Moment from 'moment';
 import meneger_server from '../networking/shiftManager_server';
 import SingleShift from '../component/shift_arrangement/singleShift';
 
+/*
+Screen from the time estimate - monthly calendar
+*/
 
 export default class Weekly_shift_arrangement extends Component {
 
@@ -34,89 +37,89 @@ export default class Weekly_shift_arrangement extends Component {
     }
   }
 
-getCurrentDate=()=>{
+  getCurrentDate=()=>{
 
-  var date = new Date().getDate();
-  var month = new Date().getMonth() + 1;
-  var year = new Date().getFullYear();
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
 
-  let res = {
-    'year': year,
-    'month': month,
-    'day': date,
-    'dateString':year+"-"+month+"-"+date
+    let res = {
+      'year': year,
+      'month': month,
+      'day': date,
+      'dateString':year+"-"+month+"-"+date
+    }
+    return res;
   }
-  return res;
-}
-    
-componentDidMount(){
+  
+  componentDidMount(){
 
-  let today = this.getCurrentDate();
-  this.updateShiftInBorde(today);
-}
+    let today = this.getCurrentDate();
+    this.updateShiftInBorde(today);
+  }
 
-_renderHeader = section => {
-  return (
-    <View>
-      <Text style={Styles.AccordionHeader}>{section.title}</Text>
-    </View>
-  );
-};
- 
-_renderContent = section => {
-  return (
-    <View>
-      {section.content.map(item => (
-            <View key={item.id}>
-              <SingleShift item={item}/>
-            </View>
-      ))}
-    </View>
-  );
-};
- 
-_updateSections = activeSections => {
-  this.setState({ activeSections });
-};
+  _renderHeader = section => {
+    return (
+      <View>
+        <Text style={Styles.AccordionHeader}>{section.title}</Text>
+      </View>
+    );
+  };
+  
+  _renderContent = section => {
+    return (
+      <View>
+        {section.content.map(item => (
+              <View key={item.id}>
+                <SingleShift item={item}/>
+              </View>
+        ))}
+      </View>
+    );
+  };
+  
+  _updateSections = activeSections => {
+    this.setState({ activeSections });
+  };
 
-_renderSectionTitle = section => {
-  return (
-    <View></View>
-  );
-};
+  _renderSectionTitle = section => {
+    return (
+      <View></View>
+    );
+  };
 
-formatDay = (date) =>
-{
-  let newMonth=0;
-  let newDay=0;
-
-  if (date.month<10)
+  formatDay = (date) =>
   {
-    newMonth= '0'+date.month;
-  }
-  else
-  {
-    newMonth = date.month;
-  }
+    let newMonth=0;
+    let newDay=0;
 
-  if(date.day < 10)
-  {
-    newDay = '0'+newDay.day;
-  }
-  else
-  {
-    newDay = date.day;
-  }
+    if (date.month<10)
+    {
+      newMonth= '0'+date.month;
+    }
+    else
+    {
+      newMonth = date.month;
+    }
 
-  let res = {
-    'year': date.year,
-    'month': newMonth,
-    'day': newDay,
-    'dateString':date.year+"-"+newMonth+"-"+newDay
-  }
+    if(date.day < 10)
+    {
+      newDay = '0'+newDay.day;
+    }
+    else
+    {
+      newDay = date.day;
+    }
 
-  return res;
-}
+    let res = {
+      'year': date.year,
+      'month': newMonth,
+      'day': newDay,
+      'dateString':date.year+"-"+newMonth+"-"+newDay
+    }
+
+    return res;
+  }
 
   updateShiftInBorde = async (dateSelect) =>
   {
@@ -161,7 +164,7 @@ formatDay = (date) =>
 
     Object.keys(ShiftMonth.data).forEach(function (item) {
 
-      tempMarksDays[item]= {startingDay: true,textColor:'black', color: '#e0ffff', endingDay: true};// color: '#50cebb'
+      tempMarksDays[item]= {startingDay: true,textColor:'black', color: '#e0ffff', endingDay: true};
       let date = ShiftMonth.data[item];
 
       for(let i=0; i<date.length; i++) // passing all the shift in this day

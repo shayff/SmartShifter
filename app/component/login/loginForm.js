@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import { ActivityIndicator,AsyncStorage ,StyleSheet, Alert, Text, View, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import member_server from '../../networking/member_server';
 
+/*
+Login_screen
+*/
 
 export default class LoginForm extends Component {
   constructor(inside){

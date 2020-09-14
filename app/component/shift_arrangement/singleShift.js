@@ -3,6 +3,10 @@ import { AsyncStorage, StyleSheet, Text, View,  TouchableOpacity, Alert} from 'r
 import { MaterialIcons } from '@expo/vector-icons';
 import meneger_server from '../../networking/shiftManager_server';
 
+/*
+The shift change button appears only next to the logged on user name when it appears on the shift.
+After pressing the button, the button becomes inactive.
+*/
 
 export default class SingleShift extends Component {
     
@@ -17,22 +21,22 @@ export default class SingleShift extends Component {
     }
 
     componentDidMount = async () => {
+        //Initializing variables
         let my_id = await AsyncStorage.getItem('_id');
         let isTrueSet = ('true' == await AsyncStorage.getItem('can_employee_switch_shifts'));
-
         this.setState({canSwitch:isTrueSet});
         this.setState({isSendSwap:this.props.item["is asked swap"]});
         this.setState({_id:my_id});
     }
 
-    want_to_swap = async () =>
+    //Communication with the server
+    ask_shift_swap = async () =>
     {
         let toSend = {
             "shift_id": Number(this.props.item.id)
         }
         let token = await AsyncStorage.getItem('token');
-
-        const response = await meneger_server.post('/api/v1/shifts_swaps',///AskShiftSwap'
+        const response = await meneger_server.post('/api/v1/shifts_swaps',
         toSend,
         {
             headers: {
@@ -74,7 +78,7 @@ export default class SingleShift extends Component {
 
                                     <View>{ this.state.canSwitch ? (this.state._id == item._id ?
                                             <View style={Styles.screenContainer} >
-                                                <TouchableOpacity style={this.state.isSendSwap ? Styles.appButtonContainer_disable : Styles.appButtonContainer} disabled={this.state.isSendSwap} onPress={this.want_to_swap}>
+                                                <TouchableOpacity style={this.state.isSendSwap ? Styles.appButtonContainer_disable : Styles.appButtonContainer} disabled={this.state.isSendSwap} onPress={this.ask_shift_swap}>
                                                     <MaterialIcons name="swap-horiz" size={30} color="black" />
                                                     <Text style={Styles.appButtonText}>{'swap'}</Text>
                                                 </TouchableOpacity>

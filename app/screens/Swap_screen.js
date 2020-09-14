@@ -2,7 +2,12 @@ import React, {Component} from 'react';
 import { ActivityIndicator,Alert,AsyncStorage,View, FlatList, StyleSheet, Text} from 'react-native';
 import SwapSingle from '../component/Swap_shift/SwapSingle';
 import shiftManager_server from '../networking/shiftManager_server';
-
+/*
+Shift change screen.
+Displays a list of shifts whose status is:
+"wait_for_swap", "wait_for_confirm"
+When the company manager approves. The shift is deleted from this list
+*/
 export default class Switching_shifts extends Component {
     constructor(inside){
         super(inside);
@@ -19,7 +24,8 @@ export default class Switching_shifts extends Component {
             MessageDisplay: "",
         }                              
     }
-
+    
+    //System function
     componentDidMount = async () => {
         this.setState({thereIsDataFromServer:false});
         let toSend = {"statuses" : ["wait_for_swap","wait_for_confirm"]}

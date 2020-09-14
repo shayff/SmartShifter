@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View,TextInput, TouchableOpacity, Alert,ScrollView } from 'react-native';
 import member_server from '../../networking/member_server';
 
+/*
+registration form
+*/
+
 export default class Regform extends Component {
 
     constructor(inside){
@@ -50,14 +54,12 @@ export default class Regform extends Component {
       }
     }  
 
-    send_to_server = async (data_send) =>
+  send_to_server = async (data_send) =>
   {
     try{
-      const response = await member_server.post('/api/v1/user',data_send);///register///api/v1/user
+      const response = await member_server.post('/api/v1/user',data_send);
       Alert.alert("you have successfully registered");
       this.props.fatherProps.navigation.navigate('Enter_Screen');
- 
-
     }catch(err){
       Alert.alert("something went wrong, please try again");
     }

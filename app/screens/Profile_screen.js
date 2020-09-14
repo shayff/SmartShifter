@@ -28,18 +28,19 @@ export default class Private_profile extends Component {
             thereIsDataFromServer : false
       }
     }
-
+ 
     componentDidMount = async () =>
     {
+        //Communication with the server for display details
         let token = await AsyncStorage.getItem('token');
-        const response = await member_server.get('/api/v1/user/profile', {///profile
+        const response = await member_server.get('/api/v1/user/profile', {
           headers: {
               Authorization: "Bearer " + token
           }
       }).then(response => {
         return  response.data;
       }).catch(err => {
-        Alert.alert("something get wrong, please try again");
+        Alert.alert("something went wrong, please try again");
         this.props.navigation.goBack(null);
       });
 
@@ -63,7 +64,7 @@ export default class Private_profile extends Component {
         this.setState({thereIsDataFromServer:true});
     }
     
-    
+    //Functionality for checking whether the user has entered the current password
     confirm_password = async (data) =>
     {
         if(this.state.isWriteToConfirmPassword)
@@ -73,7 +74,7 @@ export default class Private_profile extends Component {
             this.setState({isWriteToConfirmPassword:false});
             this.refs.oldPassword.focus();
         }
-        else // he press to check password
+        else //press to check password
         {
             let hisPassword = await AsyncStorage.getItem('password');
 
@@ -84,17 +85,17 @@ export default class Private_profile extends Component {
             }
             else
             {
-                Alert.alert("worng password");
+                Alert.alert("wrong password");
                 this.refs.oldPassword.focus();
             }
         }
     }
       
+    //Functionality for updating user information
     save_user_change = async () =>
     {
         let let_password="null";
-        console.log(this.state.profileDataUser["password"]);
-        if(this.state.profileDataUser["password"] != "") // he is update password
+        if(this.state.profileDataUser["password"] != "") //update password
         {
             let_password = this.state.profileDataUser["password"];
             await AsyncStorage.setItem("password",this.state.profileDataUser["password"]);
@@ -119,7 +120,7 @@ export default class Private_profile extends Component {
             }
 
             let token = await AsyncStorage.getItem('token');
-            const response = await member_server.put('/api/v1/user',  //post('/updateprofile',
+            const response = await member_server.put('/api/v1/user',
             newDataToSend,
             {
                 headers: {

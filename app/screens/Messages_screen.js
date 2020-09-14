@@ -20,14 +20,17 @@ export default class Messages extends Component {
         }                           
     }
 
+
     componentDidMount = async () => {
+        //Communication with the server to receive messages
         let token = await AsyncStorage.getItem('token');
-        const response = await member_server.get('/api/v1/messages', {///getmessage
+        const response = await member_server.get('/api/v1/messages', {
           headers: {
               Authorization: "Bearer " + token
           }
         }).then(response => {
-        if (response.data.data.length == 0) // there is no messages
+        //An empty list    
+        if (response.data.data.length == 0) 
         {
             this.setState({thereIsMSG:false});
             this.setState({MessageDisplay:response.data.msg});
@@ -35,7 +38,6 @@ export default class Messages extends Component {
         else{
             this.setState({thereIsMSG:true});
         }
-
         return  response.data;
         }).catch(err => {
             Alert.alert("something went wrong, please try again");
@@ -53,8 +55,10 @@ export default class Messages extends Component {
         let updatList=[];
         let numberOfMasseges = this.state.massegesData.data.length;
         
+
         for (let i =0; i<numberOfMasseges; i++)
         {
+            //Initialize the message details
             let temp = {name_sender: this.state.massegesData.data[i].sender_name,
                         massege:this.state.massegesData.data[i].message,
                         title: this.state.massegesData.data[i].title,

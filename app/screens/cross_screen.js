@@ -22,6 +22,7 @@ export default class Cross_screen extends Component {
     let isTrueSet = ('true' == await AsyncStorage.getItem('can_employee_switch_shifts'));
     this.setState({can_employee_switch:isTrueSet});
     
+    //Adjust the screen in case the user is not associated with the company
     if(company != "null")
       {
         this.setState({isHaveCompany:true});

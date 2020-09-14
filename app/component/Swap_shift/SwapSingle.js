@@ -3,7 +3,9 @@ import {AsyncStorage ,StyleSheet, Text, View, TouchableOpacity,Alert } from 'rea
 import { MaterialIcons } from '../../node_modules/@expo/vector-icons';
 import shiftManager_server from '../../networking/shiftManager_server';
 
-
+/*
+Shift replacement message
+*/
 
 export default class SwapSingle extends Component {
 
@@ -22,7 +24,7 @@ export default class SwapSingle extends Component {
         let _id = await AsyncStorage.getItem('_id');
         let strIDSwap= this.props.item.id_employee_ask.toString();
 
-    
+        //Organization of changing shifts according to statuses
         if(strIDSwap == _id)
         {
             this.setState({itMyShift:true});
@@ -44,11 +46,10 @@ export default class SwapSingle extends Component {
                 this.setState({status_type:true});
                 this.setState({color:'#8fbc8f'});
             }
-
         }
-
-
     }
+
+    //Cancel shift replacement
     Delete_shift_swap= async() =>
     {
         let token = await AsyncStorage.getItem('token');
@@ -67,9 +68,10 @@ export default class SwapSingle extends Component {
       this.props.render_screen();
 
     }
+
+    //Functionality in front of the server, in case of pressing the swap button
     if_wait_to_swap = async() =>
     {
-
         let toSend ={'swap_id':this.props.item.id}
         let token = await AsyncStorage.getItem('token');
         const response = await shiftManager_server.post('/api/v1/shifts_swaps/can_swap',toSend, {
@@ -84,8 +86,6 @@ export default class SwapSingle extends Component {
       });
 
       this.props.render_screen();
-
-
     } 
 
     render() { 

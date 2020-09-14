@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text,Button, View } from 'react-native';
 
+/**
+ Displays the buttons on the userPreferences screen
+*/
 
-export default class 
 
-daySquare extends Component {
+export default class daySquare extends Component {
 
     constructor(inside){
         super(inside);
@@ -16,14 +18,17 @@ daySquare extends Component {
 
       updateSelected = (data)=>
       {
-        if(this.props.whichShiftToShowe[data.typeOfShift]) // if the shift is not null
-        {
-            if(this.props.typeOfAvailabilityColor == 2) // if is prefer
+         // if the shift is not null
+        if(this.props.whichShiftToShowe[data.typeOfShift]) 
+        {   
+            // if is prefer
+            if(this.props.typeOfAvailabilityColor == 2) 
             {
-                if(this.state.colorPrefer[0] != 2 && this.state.colorPrefer[1] != 2 && this.state.colorPrefer[2] != 2) // if there is no 'prefer' shift so can color change
-                  {
+                // if there is no 'prefer' shift so can color change
+                if(this.state.colorPrefer[0] != 2 && this.state.colorPrefer[1] != 2 && this.state.colorPrefer[2] != 2) 
+                {
                     this.updateColor({typeOfShift: data.typeOfShift});
-                  }
+                }
             }
             else
             {
