@@ -9,13 +9,13 @@ class ProtectedRoute extends React.Component {
     render() {
         const Component = this.props.component;
         const isAuthenticated = localStorage.getItem('usertoken');
-        const hasCompany = localStorage.getItem('hasCompany');
-
+        const isManagerOfCompany = localStorage.getItem('isManagerOfCompany');
+        
         if(isAuthenticated)
         {   
             if(Component !== Login && Component !== Register)
             {
-                if(hasCompany === 'true')
+                if(isManagerOfCompany === 'true')
                 {
                     if(Component !== CreateCompany)
                     {
@@ -23,13 +23,18 @@ class ProtectedRoute extends React.Component {
                     }
                     else
                     {
-                        alert("You created already a company")
+                        alert("You Created Already A Company")
                         return <Redirect to={{ pathname: '/' }} />
                     }
                 }
-                else
+                else if(Component === CreateCompany)
                 {
                     return <Component />
+                }
+                else
+                {
+                    alert("You Must Create A Company To See This Page")
+                    return <Redirect to={{ pathname: '/' }} />
                 }
             }
             else

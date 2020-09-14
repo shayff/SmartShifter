@@ -13,6 +13,7 @@ sendmessage_schema = {
                 "dates":{"type" : "array"},
                 "job_type": {"type": "array"}
             },
+
             "additionalProperties": False
 
         },

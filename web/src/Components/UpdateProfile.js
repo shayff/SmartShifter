@@ -11,11 +11,14 @@ class UpdateProfile extends Component {
             first_name: '',
             last_name: '',
             email: '',
-            password: '',
+            currPassword: '',
+            newPassword: '',
+            newPasswordTypedAgain: '',
             id_number: '',
             phone: '',
             address: '',
-            date_of_birth: ''
+            date_of_birth: '',
+            gender: ''
         }
 
         this.onChange = this.onChange.bind(this)
@@ -26,16 +29,17 @@ class UpdateProfile extends Component {
         const first_name = document.forms["myForm4"]["first_name"].value;
         const last_name = document.forms["myForm4"]["last_name"].value;
         const email = document.forms["myForm4"]["email"].value;
-        const passwrod = document.forms["myForm4"]["password"].value;
+        //const currPassword = document.forms["myForm4"]["currPassword"].value;
         const id_number = document.forms["myForm4"]["id_number"].value;
         const phone = document.forms["myForm4"]["phone"].value;
-        const address = document.forms["myForm4"]["address"].value;
+        // const address = document.forms["myForm4"]["address"].value;
+        //const gedner = document.forms["myForm4"]["gender"].value;
         const date_of_birth = document.forms["myForm4"]["date_of_birth"].value;
         let validate = true;
 
-        if (email === "" || passwrod === "" || first_name === ""|| id_number === ""||
-             last_name === ""|| phone === "" ||address === "" || date_of_birth === "")
-         {
+        //address === "" || gedner === "" || currPassword === "" 
+        if (email === "" || first_name === ""|| id_number === ""|| last_name === ""|| phone === "" || date_of_birth === "")
+        {
           alert("All Fields Must Be Filled");
           validate = false;
         }
@@ -43,22 +47,37 @@ class UpdateProfile extends Component {
         return validate;
       }
 
+      initializeGenderOption()
+      {
+        return(
+            <select className="custom-select" id="inputGroupSelect02" name="gender" value={this.state.gender} onChange={this.onChange}>
+            <option value='' hidden>Choose Your Gender</option >
+            <option value="Male">Male</option >
+            <option value="Female">Female</option >
+            </select>)
+      }
+
     onChange (e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
+    onUpdatePassword()
+    {
+        this.props.history.push(`/updatePassword`)
+    }
+
     onSubmit (e) {
         e.preventDefault()
-
+        
         const user = {
             first_name: this.state.first_name,
             last_name: this.state.last_name,
             email: this.state.email,
-            password: this.state.password,
             id_number: this.state.id_number,
             phone: this.state.phone,
             address: this.state.address,
-            date_of_birth: this.state.date_of_birth
+            date_of_birth: this.state.date_of_birth,
+            gender: this.state.gender
         }
 
         if(this.validateRegisterForm()) {
@@ -76,7 +95,8 @@ class UpdateProfile extends Component {
         this._isMounted = true;
 
         getProfile().then(data =>{
-            if(data){
+            if(data)
+            {
                 if (this._isMounted)
                 {
                     this.setState({
@@ -86,7 +106,8 @@ class UpdateProfile extends Component {
                     id_number: data["id number"],
                     phone: data["phone"],
                     address: data["address"],
-                    date_of_birth: data["date of birth"]});
+                    date_of_birth: data["date of birth"],
+                    gender: data["gender"]});
                 }
             }
         })
@@ -94,7 +115,7 @@ class UpdateProfile extends Component {
     
     render () {
         return (
-            <div className="container">
+            <div className="container" style={{marginBottom: '30px'}}>
                 <div className="row">
                     <div className="col-md-6 mt-5 mx-auto">
                         <form name="myForm4" onSubmit={this.onSubmit}>
@@ -116,6 +137,10 @@ class UpdateProfile extends Component {
                                     placeholder="Enter Last Name"
                                     value={this.state.last_name}
                                     onChange={this.onChange} />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="gender">Gender (Option)</label>
+                                {this.initializeGenderOption()}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="id_number">Id Number</label>
@@ -152,7 +177,7 @@ class UpdateProfile extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="address">Address</label>
+                                <label htmlFor="address">Address (Option)</label>
                                 <input type="text"
                                     className="form-control"
                                     name="address"
@@ -170,13 +195,10 @@ class UpdateProfile extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="password">Password </label>
-                                <input type="password"
-                                    minLength="5"
-                                    className="form-control"
-                                    name="password"
-                                    placeholder="Enter Password"
-                                    onChange={this.onChange} />
+                                <label htmlFor="currPassword">Password</label><br/>
+                                <button type="button" className="btn btn-primary" onClick={() => this.onUpdatePassword()}>
+                                    Update Password
+                                </button>
                             </div>
                             <button type="submit" className="btn btn-lg btn-primary btn-block">
                                 Update

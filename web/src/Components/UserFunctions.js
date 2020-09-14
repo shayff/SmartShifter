@@ -11,13 +11,16 @@ export const register = newUser => {
             "id number": newUser.id_number,
             "phone": newUser.phone,
             "address": newUser.address,
-            "date of birth": newUser.date_of_birth
+            "date of birth": newUser.date_of_birth,
+            "gender": newUser.gender
         })
-        .then((response) => {
-            localStorage.setItem('hasCompany', 'false')
-            console.log("Registered")
-             }, (error) => {
+        .then(response => {
+            localStorage.setItem('isManagerOfCompany', 'false')
+            return response.data
+             })
+        .catch(error => {
                 console.log(error)
+                return error.response.data
         })
 }
 
@@ -25,8 +28,8 @@ export const createCompany = data => {
     return axios
         .post("http://localhost:5001/companies/create",{
             "company name": data.company_name,
+            "roles": data.companyJobTypes,
             "settings": data.settings,
-
         },
         {
             headers: {
@@ -34,11 +37,12 @@ export const createCompany = data => {
              }
         })
         .then(response => {
-            localStorage.setItem('hasCompany', 'true')
-            console.log("Created Company")
+            localStorage.setItem('isManagerOfCompany', 'true')
+            return response.data
         })
-        .catch(eror => {
-            console.log(eror)
+        .catch(error => {
+            console.log(error)
+            return error.response.data
         })
 }
 
@@ -51,7 +55,7 @@ export const login = user => {
         .then(response => {
             console.log("Logged In")
             localStorage.setItem('usertoken', response.data.data.token)
-            localStorage.setItem('hasCompany', response.data.data.hasCompany)
+            localStorage.setItem('isManagerOfCompany', response.data.data.isManagerOfCompany)
             return response.data.data
         })
         .catch(eror => {
@@ -82,11 +86,11 @@ export const updateProfile = user => {
             "first name": user.first_name,
             "last name": user.last_name,
             "email": user.email, 
-            "password": user.password,
             "id number": user.id_number,
             "phone": user.phone,
             "address": user.address,
-            "date of birth": user.date_of_birth
+            "date of birth": user.date_of_birth,
+            "gender": user.gender
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken
@@ -99,13 +103,29 @@ export const updateProfile = user => {
         })
 }
 
+export const updatePassword = user => {
+    return axios
+        .post("/changepassword", {
+            "current_password": user.currPassword,
+             "new_password": user.newPassword
+        }, 
+         { headers: {
+           Authorization: "Bearer " + localStorage.usertoken
+        }}
+        )
+        .then((response) => {
+            return response.data.ok;
+             }, (error) => {
+                console.log(error)
+        })
+}
+
 export const sendMessage = message => {
     return axios
         .post("/sendmessage",{
         "to":message.toWho,
         "title":message.title,
-        "message":message.textMessage,
-        "attached":message.attached
+        "message":message.textMessage
         },
         {
             headers: {
@@ -120,9 +140,9 @@ export const sendMessage = message => {
         })
 }
 
-export const getMessages= () => {
+export const getSentMessages= () => {
     return axios
-        .get("/getmessage",
+        .get("/api/v1/messages/sent",
         {
             headers: {
                 Authorization: "Bearer " + localStorage.usertoken
@@ -156,6 +176,7 @@ export const updateSettings= data => {
     return axios
         .post("http://localhost:5001/companies/update", {
             "company name": data.company_name,
+            "roles": data.companyJobTypes,
             "settings": data.settings,
         }, 
          { headers: {
@@ -172,19 +193,10 @@ export const updateSettings= data => {
 export const addEmployee = user => {
     return axios
         .post("http://localhost:5001/companies/addemployees", {
-        //     "first name": user.first_name,
-        //     "last name": user.last_name,
-        //     "gender": user.last_name,
-            // "password": user.password,
-            // "id number": user.id_number,
-            // "phone": user.phone,
-            // "address": user.address,
-            // "date of birth": user.date_of_birth,
-            "employees": [{
             "email": user.email, 
             "time of joining": moment().format(),
-            "job type": [user.job_type],
-            "rank": parseInt(user.rank)}]
+            "job type": user.job_type,
+            "rank": parseInt(user.rank)
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken
@@ -216,16 +228,9 @@ export const removeEmployee = user => {
 export const updateEmployeeInfo = user => {
     return axios
         .post("http://localhost:5001/companies/updateemployee", {
-          //  "first name": user.first_name,
-        //    "last name": user.last_name,
-        //    "gender": user.last_name,
             "id": parseInt(user.id),
-       //     "phone": user.phone,
-      //      "address": user.address,
-      //      "date of birth": user.date_of_birth,
-            "job type": [user.job_type],
+            "job type": user.job_type,
             "rank": parseInt(user.rank),
-        //    "time of joining": moment().format(),
         }, 
          { headers: {
            Authorization: "Bearer " + localStorage.usertoken
@@ -238,7 +243,7 @@ export const updateEmployeeInfo = user => {
         })
 }
 
-export const ListOfEmployees = () => {
+export const listOfEmployees = () => {
     return axios
         .get("http://localhost:5001/companies/listofemployees",
         {
@@ -440,7 +445,7 @@ export const acceptBuildShift = data => {
         })
         .then(response => {
             console.log("Accepted Build Shifts")
-            return response.data.data;
+            return response.data;
         })
         .catch(eror => {
             console.log(eror)
