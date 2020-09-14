@@ -518,7 +518,7 @@ class Messages extends Component {
                             </svg>} Messages
                     </h1>
                     </div>
-                    <div style = {{overflowY: 'auto', maxHeight:"1120px"}}>
+                    <div style = {{overflowY: 'auto', maxHeight:"576px"}}>
                         <table className="table table-bordered table-hover">
                             <thead className="thead-dark">
                                 <tr>

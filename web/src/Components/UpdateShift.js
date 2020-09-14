@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { listOfEmployees, updateShift,getSettings } from './UserFunctions'
+import { listOfEmployees, updateShift,getSettings,getShifts } from './UserFunctions'
 import { withRouter } from 'react-router-dom'
 import { Multiselect } from 'multiselect-react-dropdown'
 import moment from 'moment'
@@ -10,6 +10,7 @@ class UpdateShift extends Component {
     constructor() {
         super()
         this.state = {
+            arrOfShifts:[],
             arrEmployees: [],
             shift_name:'',
             start_time:'',
@@ -79,6 +80,34 @@ class UpdateShift extends Component {
         ));
     }
 
+    GetShifts()
+    {
+        const minDate = moment().day(0).format('YYYY-MM-DD');
+        const maxDate = moment().day(13).format('YYYY-MM-DD');
+
+         const shifts ={
+             start_date: minDate, 
+             end_date: maxDate,
+             statuses: ['scheduled'] 
+         }
+         
+         getShifts(shifts).then(shifts =>{
+         if(shifts){
+             if(shifts.length !== 0)
+             {
+                if (this._isMounted)
+                {
+                    this.setState({ arrOfShifts: shifts});
+                }
+             }
+             else
+             {
+                alert("No Shifts To Show")
+             }
+           }
+         })
+    }
+
     componentWillUnmount() 
     {
         this._isMounted = false;
@@ -130,6 +159,8 @@ class UpdateShift extends Component {
                 }
             }
          });
+
+         this.GetShifts();
     };
 
     initializeEmployeesOptions = () => { 
@@ -161,8 +192,41 @@ class UpdateShift extends Component {
             alert("Amount Of Employees Must Be Equal Or Bigger Than The Amount Of Requested Employees");
             validate = false;
         }
+        
+        if(this.isWorkInTheSameHours(date,start_time,end_time,this.state.employees_for_shift))
+        {
+            alert("One Of The Employees Has Overlapping Work Hours Today Allready" );
+        }
 
         return validate;
+    }
+
+    isWorkInTheSameHours(date,startTime,endTime,employees)
+    {
+        let shifts = this.state.arrOfShifts;
+
+        if(shifts[date])
+        {  
+            for(let i=0; i<shifts[date].length; i++)
+            {  
+                for(let j=0; j<employees.length; j++)
+                {
+                    for(let k=0; k<(shifts[date][i])["employees"].length; k++)
+                    {
+                        if((((shifts[date][i])["employees"][k])["_id"] === (employees[j].key)) && 
+                            (shifts[date][i])["id"] !== this.state.shift_id  &&
+                            ((startTime >= (shifts[date][i])["start_time"] && startTime <= (shifts[date][i])["end_time"]) ||
+                            (endTime >= (shifts[date][i])["start_time"] && endTime <= (shifts[date][i])["end_time"]) ||
+                            (startTime <= (shifts[date][i])["start_time"] && endTime >= (shifts[date][i])["end_time"])))
+                        {        
+                            return true
+                        } 
+                    }
+                }     
+            }
+        }
+
+        return false;
     }
 
     initializeOptions = () => { 
