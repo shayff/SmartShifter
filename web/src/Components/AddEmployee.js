@@ -95,7 +95,6 @@ class AddEmployee extends Component {
             time_of_joining: moment().format(),
         }
 
-        console.log(user)
         if(this.validateRegisterForm()) 
         {
             addEmployee(user).then(res => {
