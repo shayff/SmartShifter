@@ -19,11 +19,11 @@ class AddEmployee extends Component {
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
-        this.onRemoveJobType = this.onRemoveJobType.bind(this)
+        this.onSelectOrRemoveJobType = this.onSelectOrRemoveJobType.bind(this)
     }
 
-    onRemoveJobType(selectedList) {
-        if (this._isMounted)
+    onSelectOrRemoveJobType(selectedList) {
+        if(this._isMounted)
         {
             let jobTypes=[];
             for(let i=0; i<selectedList.length; i++)
@@ -95,6 +95,7 @@ class AddEmployee extends Component {
             time_of_joining: moment().format(),
         }
 
+        console.log(user)
         if(this.validateRegisterForm()) 
         {
             addEmployee(user).then(res => {
@@ -138,7 +139,8 @@ class AddEmployee extends Component {
                                 placeholder="Choose Job Type"
                                 avoidHighlightFirstOption= {true}
                                 hidePlaceholder={true}
-                                onRemove={this.onRemoveJobType}/><br/>
+                                onSelect={this.onSelectOrRemoveJobType}
+                                onRemove={this.onSelectOrRemoveJobType}/><br/>
                             </div>    
                             <button type="submit" className="btn btn-lg btn-primary btn-block">
                                 Add
