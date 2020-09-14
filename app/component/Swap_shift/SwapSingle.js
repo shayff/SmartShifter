@@ -20,9 +20,8 @@ export default class SwapSingle extends Component {
     componentDidMount =  async () => {
 
         let _id = await AsyncStorage.getItem('_id');
-        console.log("_id: "+_id);
         let strIDSwap= this.props.item.id_employee_ask.toString();
-        console.log(" strIDSwap: "+ strIDSwap);
+
     
         if(strIDSwap == _id)
         {
@@ -61,7 +60,7 @@ export default class SwapSingle extends Component {
       }).then(response => {
         return  response.data;
       }).catch(err => {
-        Alert.alert("something get wrong, please try again");
+        Alert.alert("something went wrong, please try again");
         this.props.navigation.goBack(null);
       });
 
@@ -80,7 +79,7 @@ export default class SwapSingle extends Component {
       }).then(response => {
         return  response.data;
       }).catch(err => {
-        Alert.alert("something get wrong, please try again");
+        Alert.alert("something went wrong, please try again");
         this.props.navigation.goBack(null);
       });
 

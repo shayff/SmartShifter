@@ -152,7 +152,7 @@ formatDay = (date) =>
       }).then(response => {
         return  response.data;
       }).catch(err => {
-        Alert.alert("something get wrong, please try again");
+        Alert.alert("something went wrong, please try again");
         this.props.navigation.goBack(null);
       });
     this.setState({dataArrangement:ShiftMonth});

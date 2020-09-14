@@ -51,7 +51,7 @@ export default class User_preferences extends Component {
             return  response.data;
 
         }).catch(err => {
-            Alert.alert("something get wrong, please try again");
+            Alert.alert("something went wrong, please try again");
             this.props.navigation.goBack(null);
             });
     }
@@ -164,7 +164,7 @@ export default class User_preferences extends Component {
         }).then(response => {
             return  response.data;
         }).catch(err => {
-        Alert.alert("something get wrong, please try again");
+        Alert.alert("something went wrong, please try again");
         });
 
         this.props.navigation.goBack(null);

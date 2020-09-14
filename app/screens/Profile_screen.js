@@ -128,7 +128,7 @@ export default class Private_profile extends Component {
             }).then(response => {
                     return  response.data;
                 }).catch(err => {    
-                Alert.alert("something get wrong, please try again");
+                Alert.alert("something went wrong, please try again");
                 this.props.navigation.goBack(null); 
                 });
 
@@ -166,7 +166,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.lineTitle}>Lest Name: </Text>
+                        <Text style={Styles.lineTitle}>Last Name: </Text>
                         <TextInput style={Styles.TextInput} ref='lestName' onChangeText={(data) => {this.state.profileDataUser["last name"]=data}} editable =  {false}>{this.state.profileDataUser["last name"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -186,7 +186,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.lineTitle}>address: </Text>
+                        <Text style={Styles.lineTitle}>Address: </Text>
                         <TextInput style={Styles.TextInput} ref='address' onChangeText={(data) => {this.state.profileDataUser["address"]=data}} editable =  {false}>{this.state.profileDataUser["address"]}</TextInput>
                         <Icon.Button
                                 name="edit"
@@ -196,7 +196,7 @@ export default class Private_profile extends Component {
                 </View>
 
                 <View style={Styles.line}>
-                        <Text style={Styles.lineTitle}>gender: </Text>
+                        <Text style={Styles.lineTitle}>Gender: </Text>
                         <TextInput style={Styles.TextInput} ref='gender' onChangeText={(data) => {this.state.profileDataUser["gender"]=data}} editable =  {false}>{this.state.profileDataUser["gender"]}</TextInput>
                         <Icon.Button
                                 name="edit"

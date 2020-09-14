@@ -49,7 +49,7 @@ export default class SingleMessage extends Component {
         this.setState({textIsRead:"You already confirm reading:" });
         return  response.data;
         }).catch(err => {
-        Alert.alert("something get wrong, please try again");
+        Alert.alert("something went wrong, please try again");
         });
     }
 

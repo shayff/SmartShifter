@@ -59,7 +59,7 @@ export default class Regform extends Component {
  
 
     }catch(err){
-      Alert.alert(response.data.msg);//fix
+      Alert.alert("something went wrong, please try again");
     }
   }
 

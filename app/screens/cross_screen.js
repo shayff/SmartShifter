@@ -20,11 +20,6 @@ export default class Cross_screen extends Component {
     let name = "Welcome "+ firstName;
     let company = await AsyncStorage.getItem('company');
     let isTrueSet = ('true' == await AsyncStorage.getItem('can_employee_switch_shifts'));
-    if(isTrueSet)
-    {
-      console.log("in= "+isTrueSet);
-
-    }
     this.setState({can_employee_switch:isTrueSet});
     
     if(company != "null")
