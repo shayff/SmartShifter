@@ -6,7 +6,7 @@ from jsonschema.exceptions import SchemaError
 update_schema = {
     "type": "object",
     "properties": {
-        "company name": {
+        "company_name": {
             "type": "string"
         },
         "day parts":
@@ -21,14 +21,14 @@ update_schema = {
                       "name": {
                         "type": "string"
                       },
-                        "start time": {
+                        "start_time": {
                         "type": "string"
                       },
-                        "end time": {
+                        "end_time": {
                         "type": "string"
                         }
                     },
-                    "required": ["id","name","start time", "end time"]
+                    "required": ["id","name","start_time", "end_time"]
                   }
                 },
         "shifts":
@@ -52,7 +52,7 @@ def validate_update(data):
     try:
         validate(data, update_schema)
     except ValidationError as e:
-        return {'ok': False, 'msg': e}
+        return {"ok": False, "msg": e}
     except SchemaError as e:
-        return {'ok': False, 'msg': e}
-    return {'ok': True, 'data': data}
+        return {"ok": False, "msg": e}
+    return {"ok": True, 'data': data}

@@ -1,5 +1,5 @@
 from server.config import MongoConfig
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument
 
 class Mongo_db:
     '''
@@ -15,6 +15,50 @@ class Mongo_db:
         self.messages_collection = db["messages"]
 
     def get_user(self,user_id):
-        return self.users_collection.find_one({'_id': user_id})
+        return self.users_collection.find_one({"_id": user_id})
 
+    def get_user_by_email(self, user_email):
+        return self.users_collection.find_one({'email': user_email})
 
+    def get_company(self, company_id):
+        return self.companies_collection.find_one({"_id": company_id})
+
+    def inc_company_counter(self):
+        doc = self.counters_collection.find_one_and_update({"_id": "companyid"}, {"$inc": {"value": 1}},
+                                                         return_document=ReturnDocument.AFTER)
+        return doc['value']
+
+    def update_user_company(self, user_id, company_id):
+        return self.users_collection.find_one_and_update({"_id": user_id}, {'$set': {"company": company_id}})
+
+    def add_employee_to_company(self, company_id, employee_id):
+        return self.companies_collection.find_one_and_update({"_id": company_id},
+                                                 {'$addToSet': {"employees": employee_id}})
+
+    def insert_company(self, new_company):
+        return self.companies_collection.insert_one(new_company)
+
+    def update_user_company(self, company_id, user_id):
+        return self.users_collection.find_one_and_update({"_id": user_id}, { "$set": {"company": company_id}})
+
+    def update_prefence_of_company(self, company_id, data):
+        return self.companies_collection.find_one_and_update({"_id": company_id},
+                                                             {'$set': {"prefence_from_manager": data}})
+
+    def set_prefence_from_employee(self, company_id, user_id, preference):
+        return self.companies_collection.find_one_and_update({"_id": company_id, 'employees.id': user_id},
+                                                             {'$set': {'employees.$.preference': preference}})
+
+    def delete_company_field_for_user(self, user_id):
+        return self.users_collection.find_one_and_update({"_id": user_id}, {"$unset": {"company": ""}})
+
+    def delete_employee_from_company(self, company_id, user_id):
+        return self.companies_collection.find_one_and_update({"_id": company_id},
+                                                             {"$pull": {"employees": {"id": user_id}}})
+
+    def update_company(self, company_id, data):
+        return self.companies_collection.find_one_and_update({"_id": company_id}, {'$set': data})
+
+    def update_employee_in_company(self, company_id, user_id, data):
+        return self.companies_collection.update({"_id": company_id, 'employees.id': user_id},
+                                                {'$set': {'employees.$': data}})

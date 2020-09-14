@@ -12,10 +12,10 @@ updateemployee_schema = {
         "rank":{
             "type": "integer"
         },
-        "job type":{
+        "job_type":{
             "type": "array"
         },
-        "time of joining":{
+        "time_of_joining":{
             "type": "integer"
         }
     },
@@ -27,7 +27,7 @@ def validate_updateemployee(data):
     try:
         validate(data, updateemployee_schema)
     except ValidationError as e:
-        return {'ok': False, 'msg': e}
+        return {"ok": False, "msg": e}
     except SchemaError as e:
-        return {'ok': False, 'msg': e}
-    return {'ok': True, 'data': data}
+        return {"ok": False, "msg": e}
+    return {"ok": True, 'data': data}

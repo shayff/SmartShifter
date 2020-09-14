@@ -11,9 +11,9 @@ sendmessage_schema = {
                 "employees":{"type" : "array"},
                 "shifts":{"type" : "array"},
                 "dates":{"type" : "array"},
-                "job_role": {"type": "array"},
-                "all": {"type" : "boolean"}
-             },
+                "job_type": {"type": "array"}
+            },
+
             "additionalProperties": False
 
         },
@@ -36,7 +36,7 @@ def validate_sendMessage(data):
     try:
         validate(data, sendmessage_schema)
     except ValidationError as e:
-        return {'ok': False, 'msg': e}
+        return {"ok": False, "msg": e}
     except SchemaError as e:
-        return {'ok': False, 'msg': e}
-    return {'ok': True, 'data': data}
+        return {"ok": False, "msg": e}
+    return {"ok": True, 'data': data}

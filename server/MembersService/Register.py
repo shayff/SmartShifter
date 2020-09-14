@@ -1,28 +1,30 @@
+from datetime import datetime
 from . import db
 from flask import jsonify
 from .schemas.register import validate_register
-from datetime import datetime
 
 def doRegister(user_input):
+   '''
+   This method register new user
+   '''
    data = validate_register(user_input)
    if data["ok"]:
       new_user = data["data"]
       new_user['email'] = new_user['email'].lower()
 
-      result_email = db.users_collection.find_one({'email': new_user['email']})
-      # [check] look like id not really work
-      result_id_number = db.users_collection.find_one({'id number': new_user['id number']})
+      result_email = db.get_user_by_email(new_user['email'])
+      result_id_number = db.get_user_by_id_number(new_user["id_number"])
+
       if not result_email:
          count_id = prepare_new_user(new_user)
-         print(count_id)
+
          # insert user to db
-         db.users_collection.insert_one(new_user)
-         print(new_user)
-         return jsonify({'ok': True, 'msg': "user registered successfully", "id": count_id}), 200
+         db.insert_user(new_user)
+         return jsonify({"ok": True, "msg": "user registered successfully", "id": count_id}), 200
       else:
-         return jsonify({'ok': False, 'msg': 'User with email address or id number already exists'}), 409
+         return jsonify({"ok": False, "msg": 'User with email address or id number already exists'}), 409
    else:
-      return jsonify({'ok': False, 'msg': 'Bad request parameters: {}'.format(new_user['msg'])}), 400
+      return jsonify({"ok": False, "msg": 'Bad request parameters: {}'.format(new_user["msg"])}), 400
 
 
 def prepare_new_user(new_user):
@@ -31,7 +33,7 @@ def prepare_new_user(new_user):
    '''
    # update counter Users
    new_user_id = db.inc_users_counter()
-   new_user.update({'_id': new_user_id})
+   new_user.update({"_id": new_user_id})
 
    # update time created and messages
    date = datetime.now()

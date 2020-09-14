@@ -11,10 +11,10 @@ addemployees_schema = {
             "rank": {
                 "type": "integer"
             },
-            "job type": {
+            "job_type": {
                 "type": "array"
             },
-            "time of joining": {
+            "time_of_joining": {
                 "type": "string"
             },
             "preference" : {
@@ -30,7 +30,7 @@ def validate_addemployees(data):
     try:
         validate(data, addemployees_schema)
     except ValidationError as e:
-        return {'ok': False, 'msg': e}
+        return {"ok": False, "msg": e}
     except SchemaError as e:
-        return {'ok': False, 'msg': e}
-    return {'ok': True, 'data': data}
+        return {"ok": False, "msg": e}
+    return {"ok": True, 'data': data}

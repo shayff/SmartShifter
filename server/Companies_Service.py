@@ -1,24 +1,19 @@
-#from config import FlaskConfig
+import datetime, json
+from server.config import FlaskConfig
 from flask import Flask, request, jsonify
-import datetime
-import json
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required
 from bson.objectid import ObjectId
-from server.CompaniesService.Create import doCreate
-from server.CompaniesService.AddEmployees import doAddEmployees
-from server.CompaniesService.RemoveEmployees import doRemoveEmployees
-from server.CompaniesService.ListOfEmployees import doListOfEmployees
-from server.CompaniesService.Update import doUpdate
-from server.CompaniesService.UpdateShift import doUpdateShift
-from server.CompaniesService.addshifts import doAddShifts
-from server.CompaniesService.Profile import doProfile
-from server.CompaniesService.GetPreferences import doGetPreferences
-from server.CompaniesService.PrefenceFromManager import doPrefenceFromManager
-from server.CompaniesService.UpdateEmployee import doUpdateEmployee
-from server.CompaniesService.DeleteShift import doDeleteShift
-from server.CompaniesService.prefenceFromWorker import doPrefenceFromWorker
-from flask_cors import CORS
-
+from server.CompaniesService.create_company import create_company
+from server.CompaniesService.add_employees import add_employees
+from server.CompaniesService.remove_employees_from_company import remove_employees_from_company
+from server.CompaniesService.get_list_of_employees import get_list_of_employees
+from server.CompaniesService.update_company import update_company
+from server.CompaniesService.get_company import get_company
+from server.CompaniesService.get_preferences import get_preferences
+from server.CompaniesService.set_prefence_from_manager import set_prefence_from_manager
+from server.CompaniesService.update_employee import update_employee
+from server.CompaniesService.set_prefence_from_employee import set_prefence_from_employee
 
 class JSONEncoder(json.JSONEncoder):
     ''' extend json-encoder class'''
@@ -33,21 +28,21 @@ class JSONEncoder(json.JSONEncoder):
 
 app = Flask(__name__)
 cors = CORS(app)
-app.config['SECRET_KEY'] = 'JustDemonstrating'
-app.config['JWT_SECRET_KEY'] = '1asdasd#$$!1ddX'
+app.config['SECRET_KEY'] = FlaskConfig["SECRET_KEY"]
+app.config['JWT_SECRET_KEY'] = FlaskConfig["JWT_SECRET_KEY"]
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+
 jwt = JWTManager(app)
 app.json_encoder = JSONEncoder
-
 blacklist = set()
 
 @jwt.unauthorized_loader
 def unauthorized_response(callback):
     return jsonify({
-        'ok': False,
-        'msg': 'Missing Authorization Header'
+        "ok": False,
+        "msg": "Missing Authorization Header"
     }), 401
 
 @jwt.token_in_blacklist_loader
@@ -55,82 +50,57 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route("/api/v1/company", methods=['POST'])
-@app.route("/companies/create", methods=['POST'])
+@app.route("/api/v1/company", methods=["POST"])
 @jwt_required
 def Create():
-    return doCreate(request.get_json())
+    return create_company(request.get_json())
 
-@app.route("/api/v1/company/employee", methods=['POST'])
-@app.route("/companies/addemployees", methods=['POST'])
-@jwt_required
-def AddEmployees():
-    return doAddEmployees(request.get_json())
-
-@app.route("/api/v1/company/employee/<employee_id>", methods=['DELETE'])
-@app.route("/companies/removeemployees", methods=['POST'])
-@jwt_required
-def RemoveEmployees():
-    return doRemoveEmployees(request.get_json())
-
-@app.route("/api/v1/shift/<shift_id>", methods=['PUT'])
-@app.route("/companies/updateshift", methods=['POST'])
-@jwt_required
-def UpdateShift():
-    return doUpdateShift(request.get_json())
-
-@app.route("/api/v1/shift", methods=['POST'])
-@app.route("/companies/addshift", methods=['POST'])
-@jwt_required
-def AddShifts():
-    return doAddShifts(request.get_json())
-
-@app.route("/api/v1/company/shift/<shift_id>", methods=['DELETE'])
-@app.route("/companies/deleteshift", methods=['POST'])
-@jwt_required
-def DeleteShift():
-    return doDeleteShift(request.get_json())
-
-@app.route("/api/v1/company", methods=['PUT'])
-@app.route("/companies/update", methods=['POST'])
-@jwt_required
-def Update():
-    return doUpdate(request.get_json())
-
-@app.route("/api/v1/company/employees", methods=['GET'])
-@app.route("/companies/listofemployees", methods=['GET'])
-@jwt_required
-def ListOfEmployees():
-    return doListOfEmployees()
-
-@app.route("/api/v1/company", methods=['GET'])
-@app.route("/companies/profile", methods=['GET'])
+@app.route("/api/v1/company", methods=["GET"])
 @jwt_required
 def profile():
-    return doProfile()
+    return get_company()
 
-@app.route("/api/v1/company/employee", methods=['PUT'])
-@app.route("/companies/updateemployee", methods=['POST'])
+@app.route("/api/v1/company", methods=["PUT"])
+@jwt_required
+def Update():
+    return update_company(request.get_json())
+
+@app.route("/api/v1/company/employee", methods=["POST"])
+@jwt_required
+def AddEmployees():
+    return add_employees(request.get_json())
+
+@app.route("/api/v1/company/employee", methods=["DELETE"])
+@jwt_required
+def RemoveEmployees():
+    return remove_employees_from_company(request.get_json())
+
+@app.route("/api/v1/company/employees", methods=["GET"])
+@jwt_required
+def ListOfEmployees():
+    return get_list_of_employees()
+
+@app.route("/api/v1/company/employee", methods=["PUT"])
 @jwt_required
 def updateemployee():
-    return doUpdateEmployee(request.get_json())
+    return update_employee(request.get_json())
 
 @app.route("/api/v1/company/preferences", methods=['GET'])
-@app.route("/companies/GetPreferences", methods=['GET'])
 @jwt_required
 def GetPreferences():
-    return doGetPreferences()
+    return get_preferences()
 
-@app.route("/companies/PrefenceFromWorker", methods=['POST'])
+@app.route("/api/v1/company/preference/employee", methods=["POST"])
 @jwt_required
 def PrefenceFromWorker():
-    return doPrefenceFromWorker(request.get_json())
+    return set_prefence_from_employee(request.get_json())
 
-@app.route("/companies/PrefenceFromManager", methods=['POST'])
+@app.route("/api/v1/company/preference/manager", methods=["POST"])
 @jwt_required
 def PrefenceFromManager():
-    return doPrefenceFromManager(request.get_json())
+    return set_prefence_from_manager(request.get_json())
 
-#for dubg
 if __name__== '__main__':
     app.run(debug=True, port=5001)
+
+

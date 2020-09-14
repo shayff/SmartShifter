@@ -13,23 +13,23 @@ register_schema = {
             "type": "string",
             "minLength": 5
         },
-        "id number": {
+        "id_number": {
             "type": "string",
             "minLength": 9
         },
         "phone": {
             "type": "string"
         },
-        "first name": {
+        "first_name": {
             "type": "string"
         },
-        "last name": {
+        "last_name": {
             "type": "string"
         },
         "address": {
             "type": "string"
         },
-        "date of birth": {
+        "date_of_birth": {
             "type": "string"
         },
         "gender":{
@@ -39,10 +39,10 @@ register_schema = {
     "required": [
         "email",
         "password",
-        "id number",
+        "id_number",
         "phone",
-        "first name",
-        "last name",
+        "first_name",
+        "last_name",
     ],
     "additionalProperties": False
 }
@@ -51,7 +51,7 @@ def validate_register(data):
     try:
         validate(data, register_schema)
     except ValidationError as e:
-        return {'ok': False, 'msg': e}
+        return {"ok": False, "msg": e}
     except SchemaError as e:
-        return {'ok': False, 'msg': e}
-    return {'ok': True, 'data': data}
+        return {"ok": False, "msg": e}
+    return {"ok": True, 'data': data}
