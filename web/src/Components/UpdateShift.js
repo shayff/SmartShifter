@@ -193,15 +193,15 @@ class UpdateShift extends Component {
             validate = false;
         }
         
-        if(this.isHoursOverlapping(date,start_time,end_time,this.state.employees_for_shift))
+        if(this.isShiftsOverlapping(date,start_time,end_time,this.state.employees_for_shift))
         {
-            alert("One Of The Employees Has Overlapping Work Hours Today Allready" );
+            alert("One Of The Employees Has Overlapping Work Hours Today Allready");
         }
 
         return validate;
     }
 
-    isHoursOverlapping(date,startTime,endTime,employees)
+    isShiftsOverlapping(date,startTime,endTime,employees)
     {
         let shifts = this.state.arrOfShifts;
 
@@ -213,11 +213,8 @@ class UpdateShift extends Component {
                 {
                     for(let k=0; k<(shifts[date][i])["employees"].length; k++)
                     {
-                        if((((shifts[date][i])["employees"][k])["_id"] === (employees[j].key)) && 
-                            (shifts[date][i])["id"] !== this.state.shift_id  &&
-                            ((startTime >= (shifts[date][i])["start_time"] && startTime <= (shifts[date][i])["end_time"]) ||
-                            (endTime >= (shifts[date][i])["start_time"] && endTime <= (shifts[date][i])["end_time"]) ||
-                            (startTime <= (shifts[date][i])["start_time"] && endTime >= (shifts[date][i])["end_time"])))
+                        if(this.isHoursOverlapping(employees[j].key, ((shifts[date][i])["employees"][k])["_id"], this.state.shift_id,
+                          (shifts[date][i])["id"], startTime, (shifts[date][i])["start_time"], endTime, (shifts[date][i])["end_time"]))
                         {        
                             return true
                         } 
@@ -227,6 +224,14 @@ class UpdateShift extends Component {
         }
 
         return false;
+    }
+    
+    isHoursOverlapping(updatedEmployeeID,shiftEmployeeID,updatedShiftID,shiftID,updatedShiftStartTime,shiftStartTime,updatedShiftEndTime,shiftEndTime)
+    {
+        return ((shiftEmployeeID === updatedEmployeeID) && shiftID !== updatedShiftID  &&
+            ((updatedShiftStartTime >= shiftStartTime && updatedShiftStartTime <= shiftEndTime) ||
+            (updatedShiftEndTime >= shiftStartTime && updatedShiftEndTime <= shiftEndTime) ||
+            (updatedShiftStartTime <= shiftStartTime && updatedShiftEndTime >= shiftEndTime)))
     }
 
     initializeOptions = () => { 
