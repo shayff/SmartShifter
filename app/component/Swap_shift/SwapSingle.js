@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AsyncStorage ,StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {AsyncStorage ,StyleSheet, Text, View, TouchableOpacity,Alert } from 'react-native';
 import { MaterialIcons } from '../../node_modules/@expo/vector-icons';
 import shiftManager_server from '../../networking/shiftManager_server';
 
@@ -70,8 +70,6 @@ export default class SwapSingle extends Component {
     }
     if_wait_to_swap = async() =>
     {
-        this.setState({status_title:"wait for confirm"});
-        this.setState({color:'#f08080'});
 
         let toSend ={'swap_id':this.props.item.id}
         let token = await AsyncStorage.getItem('token');
@@ -85,6 +83,9 @@ export default class SwapSingle extends Component {
         Alert.alert("something get wrong, please try again");
         this.props.navigation.goBack(null);
       });
+
+      this.props.render_screen();
+
 
     } 
 
