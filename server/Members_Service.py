@@ -50,10 +50,6 @@ def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
     return jti in blacklist
 
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
-
 @app.route("/api/v1/login", methods=["POST"])
 def Login():
     return doLogin(request.get_json())
@@ -85,7 +81,6 @@ def profileUpdate():
     return update_user(request.get_json())
 
 @app.route('/api/v1/message', methods=["POST"])
-@jwt_required
 @jwt_required
 def SendMessage():
     return send_message(request.get_json())
