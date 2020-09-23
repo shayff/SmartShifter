@@ -1,6 +1,9 @@
 # SmartShifter
-Smart Shifter is an automatic shift scheduler and shift managment system including a mobile app and web app. 
+![logo](/documentation/images/logo.png)
+    
 
+  
+Smart Shifter is an automatic shift scheduler and shift managment system including a mobile app and web app. 
 
 ## Installation
 
