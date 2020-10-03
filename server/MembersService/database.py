@@ -45,6 +45,10 @@ class Mongo_db:
     def update_user_password(self, user_id, new_password):
         return self.users_collection.find_one_and_update({"_id": user_id}, {"$set" : {'password': new_password}})
 
+    def get_user_name(self, user_id):
+        user_name =  self.users_collection.find_one({"_id": user_id}, {"first_name", "last_name"})
+        return user_name["first_name"] + " " + user_name["last_name"]
+
     def get_message(self, msg_id):
         return self.messages_collection.find_one({"_id": msg_id})
 

@@ -36,7 +36,7 @@ def get_shifts_swaps(statuses):
             # update the shift details
             doc = db.get_shift(company_id, swap["shift_id"])
 
-            #if its employee or manager
+            # if its employee or manager
             if (logged_in_user["_id"] not in company["managers"]):
                 # find job
                 employees = company['employees']
