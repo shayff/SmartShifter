@@ -20,20 +20,24 @@ export default class Weekly_shift_arrangement extends Component {
               {
                   title: 'Morning',
                   content: [],
+                  isInDay:false,
                 },
                 {
                   title: 'Noon',
                   content: [],
+                  isInDay:false,
                 },
                 {
                   title: 'Evening',
                   content:  [],
+                  isInDay:false,
                 },
               ],
           activeSections:[],
           markedDates: {},
           rangeToSelect: ['','select day',''],
           isLodingDataMonth: true,
+          id: '',
     }
   }
 
@@ -56,12 +60,12 @@ export default class Weekly_shift_arrangement extends Component {
 
     let today = this.getCurrentDate();
     this.updateShiftInBorde(today);
-  }
+  } 
 
   _renderHeader = section => {
     return (
       <View>
-        <Text style={Styles.AccordionHeader}>{section.title}</Text>
+        <Text style={section.isInDay ? Styles.InDayAccordionHeader : Styles.notInDayAccordionHeader}>{section.title}</Text>
       </View>
     );
   };
@@ -140,8 +144,8 @@ export default class Weekly_shift_arrangement extends Component {
     }
 
     let token = await AsyncStorage.getItem('token');
-    let _id = await AsyncStorage.getItem('_id');
-    
+    this.setState({id:await AsyncStorage.getItem('_id')});
+    let myID= this.state.id;
     let ShiftMonth = await meneger_server.get('/api/v1/shifts',
      {
           params: toSent,
@@ -172,9 +176,10 @@ export default class Weekly_shift_arrangement extends Component {
         let EmployeesArray = date[i]["employees"];
         for(let i=0; i<EmployeesArray.length;i++)
         {
-          if(EmployeesArray[i]["_id"] == _id)
+
+          if(EmployeesArray[i]["_id"] == myID)
           {
-            tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black',dotColor:'#50cebb', color: '#50cebb', endingDay: true};//dotColor: '#ffff',
+            tempMarksDays[date[i]["date"]] = {marked: true,startingDay: true, textColor:'black',dotColor:'#50cebb', color: '#50cebb', endingDay: true};
           }
         }
       }
@@ -205,14 +210,17 @@ export default class Weekly_shift_arrangement extends Component {
       {
         title: 'Morning',
         content: [],
+        isInDay:false,
       },
       {
         title: 'Noon',
         content: [],
+        isInDay:false,
       },
       {
         title: 'Evening',
         content: [],
+        isInDay:false,
       },
     ];
 
@@ -226,8 +234,11 @@ export default class Weekly_shift_arrangement extends Component {
     }
 
     this.setState({allSections:resSshiftToUpdate});
+
+
     this.setState({isLodingDataMonth:false});
   }
+
 
   put_shift_in_borde = (data) =>
   {
@@ -247,9 +258,10 @@ export default class Weekly_shift_arrangement extends Component {
 
   write_shift_details = (shift) =>
   {
+
     let empArray = shift.shiftDetails["employees"];
 
-    let arryEMP=[]
+    let arryEMP=[];
     for (let i=0; i<empArray.length;i++)
     {
       let tempEMP ={
@@ -257,6 +269,12 @@ export default class Weekly_shift_arrangement extends Component {
         "last name": empArray[i]["last_name"],
         "_id": empArray[i]["_id"],
       } 
+
+      if(empArray[i]["_id"] == this.state.id)
+      {
+        shift.sections.isInDay = true;
+      }
+
       arryEMP.push(tempEMP)
     }
     
@@ -365,7 +383,15 @@ const Styles = StyleSheet.create({
     fontWeight: 'bold',
     color:'#ffff',
   },
-  AccordionHeader:
+  notInDayAccordionHeader:
+  {
+    textAlign: 'center',
+    color:'#ffff',
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor:'#55a5d9',
+  },
+  InDayAccordionHeader:
   {
     textAlign: 'center',
     color:'#ffff',

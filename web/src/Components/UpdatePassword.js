@@ -91,7 +91,6 @@ class UpdatePassword extends Component {
                                     minLength="5"
                                     className="form-control"
                                     name="newPassword"
-                                    autocomplete="off"
                                     autoComplete="new-password"
                                     placeholder="Enter Password"
                                     onChange={this.onChange} />
