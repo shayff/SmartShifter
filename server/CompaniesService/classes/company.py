@@ -35,7 +35,7 @@ class company:
     def __update_employee_full_data(self, employee):
         employee_from_db = db.get_user(employee["id"])
         employee_from_db["job_type"] = employee["job_type"]
-        employee_from_db['rank'] = employee['rank']
+        employee_from_db["rank"] = employee["rank"]
 
         if "password" in employee_from_db:
             del employee_from_db['password']
