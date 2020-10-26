@@ -1,5 +1,5 @@
 import datetime
-from . import db
+from server.MembersService import db
 import json
 
 class user:
@@ -16,8 +16,6 @@ class user:
         self.__delete_field(profile,"password")
         self.__delete_field(profile,"messages")
         return profile
-
-
 
     def get_messages(self):
         list_messages = []

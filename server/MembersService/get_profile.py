@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
-from .user import user
+from server.MembersService.classes.user import user
 
 def get_profile():
     '''
