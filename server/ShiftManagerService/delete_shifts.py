@@ -2,6 +2,7 @@ from server.ShiftManagerService import db
 from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 from server.ShiftManagerService.schemas.deleteshift import validate_deleteshift
+from .BL.shifts_manager_class import ShiftsManager
 
 def delete_shifts(user_input):
     '''
@@ -16,27 +17,12 @@ def delete_shifts(user_input):
         #check if user has company
         if "company" in user_from_db:
             company_id = user_from_db["company"]
-            shift_ids = data["id"]
-
-            # for each shift if exist delete it
-            for shift_id in shift_ids:
-                if is_shift_exist(company_id, shift_id):
-                    delete_shift(company_id, shift_id)
+            shifts_ids_to_delete = data["id"]
+            shifts_manager = ShiftsManager(company_id)
+            shifts_manager.delete_shifts(shifts_ids_to_delete)
 
             return jsonify({"ok": True, "msg": "delete shift successfully"}), 200
         else:
             return jsonify({"ok": False, "msg": "the company not exist"}), 401
     else:
         return jsonify({"ok": False, "msg": "Bad request parameters: {}".format(data["msg"])}), 400
-
-
-def delete_shift(company_id, shift_id):
-    # delete relevant swaps
-    db.delete_shift_swap_by_shift_id(company_id, shift_id)
-
-    # delete the shift
-    db.delete_shift(company_id, shift_id)
-
-def is_shift_exist(company_id, shift_id):
-    doc = db.get_shift_employee(company_id, shift_id)
-    return "shifts" in doc

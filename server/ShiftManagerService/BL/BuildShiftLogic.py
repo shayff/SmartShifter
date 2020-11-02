@@ -1,6 +1,11 @@
 import numpy as np
 from .Hungarian import Hungarian
 
+'''
+
+SHOULD BECOME SHIFT BUILDER WITH PRIVATE MOTEHODS
+'''
+
 #rank of availble/prefer/not availble
 rank_of_prefer = 14
 rank_of_available = 11
